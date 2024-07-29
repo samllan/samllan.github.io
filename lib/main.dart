@@ -59,7 +59,7 @@ class PortfolioPage extends StatelessWidget {
           crossAxisCount: 3, // 3 tiles per row
           crossAxisSpacing: 16.0, // horizontal spacing
           mainAxisSpacing: 16.0, // vertical spacing
-          childAspectRatio: 1.5, // aspect ratio to control height
+          childAspectRatio: 1.5, // aspect ratio to make them square and to control height
         ),
         itemCount: projects.length,
         itemBuilder: (context, index) {
@@ -99,7 +99,12 @@ class ProjectWidgetState extends State<ProjectWidget> {
         onTap: () => _launchURL(widget.project.projectUrl),
         child: Stack(
           children: [
-            Image.asset(widget.project.imageUrl, fit: BoxFit.cover),
+            Positioned.fill(
+              child: Image.asset(
+                widget.project.imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               color: isHovered ? Colors.black54 : Colors.transparent,
