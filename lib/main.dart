@@ -176,11 +176,13 @@ class ProjectWidgetState extends State<ProjectWidget> {
               AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 color: (isHovered || widget.isActive) ? Colors.black54 : Colors.transparent,
-                child: Center(
+                child: Align(
+                  alignment: Alignment.center,
                   child: (isHovered || widget.isActive)
                       ? Text(
                           widget.project.name,
                           style: const TextStyle(color: Colors.white, fontSize: 24),
+                          textAlign: TextAlign.center,
                         )
                       : Container(),
                 ),
