@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:math';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +24,34 @@ class MyApp extends StatelessWidget {
 class PortfolioPage extends StatelessWidget {
   const PortfolioPage({super.key});
 
-  final List<Project> projects = const [
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Portfolio - Samuel Llanwarne'),
+      ),
+      body: ProjectGrid(),
+    );
+  }
+}
+
+class Project {
+  final String name;
+  final String imageUrl;
+  final String projectUrl;
+
+  const Project(this.name, this.imageUrl, this.projectUrl);
+}
+
+class ProjectGrid extends StatefulWidget {
+  const ProjectGrid({super.key});
+
+  @override
+  _ProjectGridState createState() => _ProjectGridState();
+}
+
+class _ProjectGridState extends State<ProjectGrid> {
+  List<Project> projects = const [
     Project('Project 1', 'assets/project1-nice-clear-light-bulbs-eujn90ms9da1bw9j.jpg', 'https://yourusername.github.io/project1'),
     Project('Project 2', 'assets/project2-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project2'),
     Project('Project 3', 'assets/project3-pexels-eberhardgross-443446.jpg', 'https://yourusername.github.io/project3'),
@@ -44,38 +72,30 @@ class PortfolioPage extends StatelessWidget {
     Project('Project 18', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project18'),
     Project('Project 19', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project19'),
     Project('Project 20', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project20'),
-    // Add more projects here
   ];
 
   @override
+  void initState() {
+    super.initState();
+    projects = List.from(projects)..shuffle();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Portfolio - Samuel Llanwarne'),
+    return GridView.builder(
+      padding: const EdgeInsets.all(16.0),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3, // 3 tiles per row
+        crossAxisSpacing: 16.0, // horizontal spacing
+        mainAxisSpacing: 16.0, // vertical spacing
+        childAspectRatio: 1.0, // aspect ratio to make them square
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16.0),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, // 3 tiles per row
-          crossAxisSpacing: 16.0, // horizontal spacing
-          mainAxisSpacing: 16.0, // vertical spacing
-          childAspectRatio: 1.0, // aspect ratio to make them square
-        ),
-        itemCount: projects.length,
-        itemBuilder: (context, index) {
-          return ProjectWidget(project: projects[index]);
-        },
-      ),
+      itemCount: projects.length,
+      itemBuilder: (context, index) {
+        return ProjectWidget(project: projects[index]);
+      },
     );
   }
-}
-
-class Project {
-  final String name;
-  final String imageUrl;
-  final String projectUrl;
-
-  const Project(this.name, this.imageUrl, this.projectUrl);
 }
 
 class ProjectWidget extends StatefulWidget {
@@ -89,6 +109,7 @@ class ProjectWidget extends StatefulWidget {
 
 class ProjectWidgetState extends State<ProjectWidget> {
   bool isHovered = false;
+  bool isTapped = false;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +117,16 @@ class ProjectWidgetState extends State<ProjectWidget> {
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
       child: GestureDetector(
-        onTap: () => _launchURL(widget.project.projectUrl),
+        onTap: () {
+          if (isTapped) {
+            _launchURL(widget.project.projectUrl);
+          } else {
+            setState(() => isTapped = true);
+          }
+        },
+        onLongPress: () {
+          _launchURL(widget.project.projectUrl);
+        },
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -107,9 +137,9 @@ class ProjectWidgetState extends State<ProjectWidget> {
           ),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            color: isHovered ? Colors.black54 : Colors.transparent,
+            color: (isHovered || isTapped) ? Colors.black54 : Colors.transparent,
             child: Center(
-              child: isHovered
+              child: (isHovered || isTapped)
                   ? Text(
                       widget.project.name,
                       style: const TextStyle(color: Colors.white, fontSize: 24),
