@@ -117,19 +117,31 @@ class ProjectWidget extends StatefulWidget {
 class ProjectWidgetState extends State<ProjectWidget> {
   bool isHovered = false;
 
+  void _handleTap() {
+    if (widget.isActive) {
+      _launchURL(widget.project.projectUrl);
+    } else {
+      widget.onProjectTap(widget.project);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (_) => setState(() => isHovered = true),
-      onExit: (_) => setState(() => isHovered = false),
+      onEnter: (_) {
+        if (!widget.isActive) {
+          setState(() => isHovered = true);
+          widget.onProjectTap(widget.project);
+        }
+      },
+      onExit: (_) {
+        if (isHovered) {
+          setState(() => isHovered = false);
+          widget.onProjectTap(null);
+        }
+      },
       child: GestureDetector(
-        onTap: () {
-          if (widget.isActive || isHovered) {
-            _launchURL(widget.project.projectUrl);
-          } else {
-            widget.onProjectTap(widget.project);
-          }
-        },
+        onTap: _handleTap,
         onLongPress: () {
           _launchURL(widget.project.projectUrl);
         },
