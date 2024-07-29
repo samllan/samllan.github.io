@@ -51,7 +51,7 @@ class PortfolioPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Portfolio'),
+        title: const Text('Portfolio - Samuel Llanwarne'),
       ),
       body: GridView.builder(
         padding: const EdgeInsets.all(16.0),
