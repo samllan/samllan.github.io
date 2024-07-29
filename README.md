@@ -30,7 +30,7 @@ git add .github/workflows/deploy.yml
 git commit -m "Add GitHub Action for deployment"  
 git push origin main  
 
-## Thereafter
+## Thereafter 
 
 git add .  
 git commit -m "Describe your changes"  
