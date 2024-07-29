@@ -102,9 +102,11 @@ class ProjectWidgetState extends State<ProjectWidget> {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.asset(
-                widget.project.imageUrl,
-                fit: BoxFit.cover,
+              Positioned.fill(
+                child: Image.asset(
+                  widget.project.imageUrl,
+                  fit: BoxFit.cover,
+                ),
               ),
               AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
