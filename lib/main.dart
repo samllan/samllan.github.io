@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:math';
 
 void main() {
   runApp(const MyApp());
@@ -23,6 +24,26 @@ class MyApp extends StatelessWidget {
 class PortfolioPage extends StatelessWidget {
   const PortfolioPage({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Portfolio - Samuel Llanwarne'),
+      ),
+      body: ProjectGrid(),
+    );
+  }
+}
+
+class Project {
+  final String name;
+  final String imageUrl;
+  final String projectUrl;
+
+  const Project(this.name, this.imageUrl, this.projectUrl);
+}
+
+class ProjectGrid extends StatelessWidget {
   final List<Project> projects = const [
     Project('Project 1', 'assets/project1-nice-clear-light-bulbs-eujn90ms9da1bw9j.jpg', 'https://yourusername.github.io/project1'),
     Project('Project 2', 'assets/project2-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project2'),
@@ -37,45 +58,36 @@ class PortfolioPage extends StatelessWidget {
     Project('Project 11', 'assets/project11-pexels-sohi-807598.jpg', 'https://yourusername.github.io/project11'),
     Project('Project 12', 'assets/project12-pexels-thatguycraig000-1563355.jpg', 'https://yourusername.github.io/project12'),
     Project('Project 13', 'assets/project13-pexels-vladalex94-1402787.jpg', 'https://yourusername.github.io/project13'),
-    Project('Project 14', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project14'),
-    Project('Project 15', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project15'),
-    Project('Project 16', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project16'),
-    Project('Project 17', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project17'),
-    Project('Project 18', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project18'),
-    Project('Project 19', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project19'),
-    Project('Project 20', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project20'),
+    Project('Project 14', 'assets/project14-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project14'),
+    Project('Project 15', 'assets/project15-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project15'),
+    Project('Project 16', 'assets/project16-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project16'),
+    Project('Project 17', 'assets/project17-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project17'),
+    Project('Project 18', 'assets/project18-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project18'),
+    Project('Project 19', 'assets/project19-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project19'),
+    Project('Project 20', 'assets/project20-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project20'),
     // Add more projects here
   ];
 
+  ProjectGrid({super.key}) {
+    projects.shuffle(Random());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Portfolio - Samuel Llanwarne'),
+    return GridView.builder(
+      padding: const EdgeInsets.all(16.0),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3, // 3 tiles per row
+        crossAxisSpacing: 16.0, // horizontal spacing
+        mainAxisSpacing: 16.0, // vertical spacing
+        childAspectRatio: 1.0, // aspect ratio to make them square and to control height
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16.0),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, // 3 tiles per row
-          crossAxisSpacing: 16.0, // horizontal spacing
-          mainAxisSpacing: 16.0, // vertical spacing
-          childAspectRatio: 1.0, // aspect ratio to make them square and to control height
-        ),
-        itemCount: projects.length,
-        itemBuilder: (context, index) {
-          return ProjectWidget(project: projects[index]);
-        },
-      ),
+      itemCount: projects.length,
+      itemBuilder: (context, index) {
+        return ProjectWidget(project: projects[index]);
+      },
     );
   }
-}
-
-class Project {
-  final String name;
-  final String imageUrl;
-  final String projectUrl;
-
-  const Project(this.name, this.imageUrl, this.projectUrl);
 }
 
 class ProjectWidget extends StatefulWidget {
