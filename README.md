@@ -30,6 +30,18 @@ git add .github/workflows/deploy.yml
 git commit -m "Add GitHub Action for deployment"  
 git push origin main  
 
+Then also, create a PAT (Personal Access Token) on GitHub and add it to the repository  
+To do so, go to Main GitHub Settings > Developer settings > Personal access tokens > Generate new token  
+Give it a name, select the repo scope, give read and write permissions, and generate the token  
+Copy the token and go to the repository > Settings > Secrets > New repository secret  
+Name the secret something like 'ACTIONS_ACCESS_TOKEN' and paste the token in the value field  
+Save the secret  
+Go into the repository's deploy.yml file and replace the value of the 'token' field with the secret name  
+Go into the repository > Settings > Actions > General > Allow Read and Write Permissions for GitHub Actions  
+
+Go into the repository > Settings > Pages > Source and select the main branch and the /docs folder
+
+
 ## Thereafter
 
 git add .  
