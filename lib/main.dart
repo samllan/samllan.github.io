@@ -59,7 +59,7 @@ class PortfolioPage extends StatelessWidget {
           crossAxisCount: 3, // 3 tiles per row
           crossAxisSpacing: 16.0, // horizontal spacing
           mainAxisSpacing: 16.0, // vertical spacing
-          childAspectRatio: 1.5, // aspect ratio to make them square and to control height
+          childAspectRatio: 1.0, // aspect ratio to make them square and to control height
         ),
         itemCount: projects.length,
         itemBuilder: (context, index) {
@@ -97,27 +97,29 @@ class ProjectWidgetState extends State<ProjectWidget> {
       onExit: (_) => setState(() => isHovered = false),
       child: GestureDetector(
         onTap: () => _launchURL(widget.project.projectUrl),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8.0), // Optional: Adds rounded corners
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
                 widget.project.imageUrl,
                 fit: BoxFit.cover,
               ),
-            ),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              color: isHovered ? Colors.black54 : Colors.transparent,
-              child: Center(
-                child: isHovered
-                    ? Text(
-                        widget.project.name,
-                        style: const TextStyle(color: Colors.white, fontSize: 24),
-                      )
-                    : Container(),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                color: isHovered ? Colors.black54 : Colors.transparent,
+                child: Center(
+                  child: isHovered
+                      ? Text(
+                          widget.project.name,
+                          style: const TextStyle(color: Colors.white, fontSize: 24),
+                        )
+                      : Container(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
