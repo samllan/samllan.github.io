@@ -24,8 +24,8 @@ class PortfolioPage extends StatelessWidget {
   const PortfolioPage({super.key});
 
   final List<Project> projects = const [
-    Project('Project 1', 'assets/project1.png', 'https://yourusername.github.io/project1'),
-    Project('Project 2', 'assets/project2.png', 'https://yourusername.github.io/project2'),
+    Project('Project 1', 'assets/project1-nice-clear-light-bulbs-eujn90ms9da1bw9j.jpg', 'https://yourusername.github.io/project1'),
+    Project('Project 2', 'assets/project2-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project2'),
     // Add more projects here
   ];
 
@@ -35,9 +35,18 @@ class PortfolioPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('My Portfolio'),
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        children: projects.map((project) => ProjectWidget(project: project)).toList(),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(16.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3, // 3 tiles per row
+          crossAxisSpacing: 16.0, // horizontal spacing
+          mainAxisSpacing: 16.0, // vertical spacing
+          childAspectRatio: 1.5, // aspect ratio to control height
+        ),
+        itemCount: projects.length,
+        itemBuilder: (context, index) {
+          return ProjectWidget(project: projects[index]);
+        },
       ),
     );
   }
