@@ -37,13 +37,13 @@ class PortfolioPage extends StatelessWidget {
     Project('Project 11', 'assets/project11-pexels-sohi-807598.jpg', 'https://yourusername.github.io/project11'),
     Project('Project 12', 'assets/project12-pexels-thatguycraig000-1563355.jpg', 'https://yourusername.github.io/project12'),
     Project('Project 13', 'assets/project13-pexels-vladalex94-1402787.jpg', 'https://yourusername.github.io/project13'),
-    Project('Project 14', 'assets/project14-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project14'),
-    Project('Project 15', 'assets/project15-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project15'),
-    Project('Project 16', 'assets/project16-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project16'),
-    Project('Project 17', 'assets/project17-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project17'),
-    Project('Project 18', 'assets/project18-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project18'),
-    Project('Project 19', 'assets/project19-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project19'),
-    Project('Project 20', 'assets/project20-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project20'),
+    Project('Project 14', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project14'),
+    Project('Project 15', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project15'),
+    Project('Project 16', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project16'),
+    Project('Project 17', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project17'),
+    Project('Project 18', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project18'),
+    Project('Project 19', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project19'),
+    Project('Project 20', 'assets/project1-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project20'),
     // Add more projects here
   ];
 
