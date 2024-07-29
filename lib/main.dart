@@ -92,7 +92,6 @@ class _ProjectGridState extends State<ProjectGrid> {
           project: projects[index],
           isActive: activeProject == projects[index],
           onProjectTap: setActiveProject,
-          onProjectHover: setActiveProject,
         );
       },
     );
@@ -103,14 +102,12 @@ class ProjectWidget extends StatefulWidget {
   final Project project;
   final bool isActive;
   final Function(Project?) onProjectTap;
-  final Function(Project?) onProjectHover;
 
   const ProjectWidget({
     super.key,
     required this.project,
     required this.isActive,
     required this.onProjectTap,
-    required this.onProjectHover,
   });
 
   @override
@@ -120,26 +117,14 @@ class ProjectWidget extends StatefulWidget {
 class ProjectWidgetState extends State<ProjectWidget> {
   bool isHovered = false;
 
-  void _reset() {
-    setState(() {
-      isHovered = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (_) {
-        widget.onProjectHover(widget.project);
-        setState(() => isHovered = true);
-      },
-      onExit: (_) {
-        widget.onProjectHover(null);
-        setState(() => isHovered = false);
-      },
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
       child: GestureDetector(
         onTap: () {
-          if (widget.isActive) {
+          if (widget.isActive || isHovered) {
             _launchURL(widget.project.projectUrl);
           } else {
             widget.onProjectTap(widget.project);
