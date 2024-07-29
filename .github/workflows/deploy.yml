@@ -76,4 +76,4 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'  # Set the Git email for the commit.
           git add docs  # Add the 'docs' directory to the staging area.
           git commit -m 'Deploy built web files in docs folder to GitHub Pages' || echo 'No changes to commit'  # Commit the changes with a message. If there are no changes, print 'No changes to commit'.
-          git push origin main  # Push the changes to the 'main' branch.
+          git push origin main  # Push the changes to the 'main' branch. 
