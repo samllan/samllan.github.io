@@ -69,8 +69,8 @@ jobs:
       # The sixth step commits and pushes the changes to the repository.
       # This step uses Git commands to add, commit, and push the 'docs' directory to the 'main' branch.
       - name: Commit and Push Changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         run: |
           git config --global user.name 'github-actions[bot]'  # Set the Git username for the commit.
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'  # Set the Git email for the commit.
