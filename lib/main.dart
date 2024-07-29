@@ -109,30 +109,25 @@ class ProjectWidgetState extends State<ProjectWidget> {
       onExit: (_) => setState(() => isHovered = false),
       child: GestureDetector(
         onTap: () => _launchURL(widget.project.projectUrl),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8.0), // Optional: Adds rounded corners
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Positioned.fill(
-                child: Image.asset(
-                  widget.project.imageUrl,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                color: isHovered ? Colors.black54 : Colors.transparent,
-                child: Center(
-                  child: isHovered
-                      ? Text(
-                          widget.project.name,
-                          style: const TextStyle(color: Colors.white, fontSize: 24),
-                        )
-                      : Container(),
-                ),
-              ),
-            ],
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(widget.project.imageUrl),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.circular(8.0), // Optional: Adds rounded corners
+          ),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            color: isHovered ? Colors.black54 : Colors.transparent,
+            child: Center(
+              child: isHovered
+                  ? Text(
+                      widget.project.name,
+                      style: const TextStyle(color: Colors.white, fontSize: 24),
+                    )
+                  : Container(),
+            ),
           ),
         ),
       ),
