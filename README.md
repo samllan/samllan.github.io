@@ -17,34 +17,35 @@ samples, guidance on mobile development, and a full API reference.
 
 ## First time set up steps
 
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin https://github.com/your-username/your-username.github.io.git
-git push -u origin main
+git init  
+git add .  
+git commit -m "Initial commit"  
+git remote add origin https://github.com/your-username/your-username.github.io.git  
+git push -u origin main  
 
-mkdir -p .github/workflows
-nano .github/workflows/deploy.yml
+mkdir -p .github/workflows  
+nano .github/workflows/deploy.yml  
 
-git add .github/workflows/deploy.yml
-git commit -m "Add GitHub Action for deployment"
-git push origin main
+git add .github/workflows/deploy.yml  
+git commit -m "Add GitHub Action for deployment"  
+git push origin main  
 
 ## Thereafter
 
-git add .
-git commit -m "Describe your changes"
-git push origin main
+git add .  
+git commit -m "Describe your changes"  
+git push origin main  
 
-### GitHub Actions Trigger:
-
-GitHub detects the push to the main branch.
-The deploy.yml workflow is triggered.
-Workflow Steps:
-
-Checkout the repository: Pulls the latest code from main.
-Set up Flutter: Installs the specified Flutter version.
-Install dependencies: Runs flutter pub get.
-Build web app: Executes flutter build web --release.
-Move build output: Moves the contents of build/web to the docs directory.
-Commit and push changes: Adds, commits, and pushes the changes to the docs directory back to the main branch.
+> ### GitHub Actions Trigger:
+> 
+> GitHub detects the push to the main branch.  
+> The deploy.yml workflow is triggered.  
+> 
+> ### Workflow Steps:
+> 
+> Checkout the repository: Pulls the latest code from main.
+> Set up Flutter: Installs the specified Flutter version.
+> Install dependencies: Runs flutter pub get.
+> Build web app: Executes flutter build web --release.
+> Move build output: Moves the contents of build/web to the docs directory.
+> Commit and push changes: Adds, commits, and pushes the changes to the docs directory back to the main branch.
