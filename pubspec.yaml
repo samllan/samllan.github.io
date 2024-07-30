@@ -59,29 +59,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-
-
-ai2 logo.png
-DRT_pexels-philippedonn-1169754.jpg
-events.webp
-events_old.webp
-explainable_AI.webp
-gen_ai_med_teacher_pexels-cottonbro-7579829.jpg
-heart question mark.webp
-kaggle_health_hackathon.webp
-kaggle_nature_hackathon.webp
-lane_detection.jpg
-reinforcement_learning.webp
-strathclyde boat bulding old.jpg
-strathclyde boat bulding.jpg
-ST_A_bacteria_fluorescent.jpeg
-things_i_learnt_pexels-singkham-178541-1108572.jpg
-trad_ML.webp
-train_game.webp
-vision_transformer.webp
-weather fourier series modelling.webp
-words_full_stack.png
-
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/project1-nice-clear-light-bulbs-eujn90ms9da1bw9j.jpg
