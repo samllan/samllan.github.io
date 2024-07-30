@@ -50,31 +50,53 @@ class ProjectGrid extends StatefulWidget {
   _ProjectGridState createState() => _ProjectGridState();
 }
 
+
+ai2 logo.png
+DRT_pexels-philippedonn-1169754.jpg
+events.webp
+events_old.webp
+explainable_AI.webp
+gen_ai_med_teacher_pexels-cottonbro-7579829.jpg
+heart question mark.webp
+kaggle_health_hackathon.webp
+kaggle_nature_hackathon.webp
+lane_detection.jpg
+reinforcement_learning.webp
+strathclyde boat bulding old.jpg
+strathclyde boat bulding.jpg
+ST_A_bacteria_fluorescent.jpeg
+things_i_learnt_pexels-singkham-178541-1108572.jpg
+trad_ML.webp
+train_game.webp
+vision_transformer.webp
+weather fourier series modelling.webp
+words_full_stack.png
+
 class _ProjectGridState extends State<ProjectGrid> {
   List<Project> projects = const [
-    Project('Project 1', 'assets/project1-nice-clear-light-bulbs-eujn90ms9da1bw9j.jpg', 'https://yourusername.github.io/project1'),
-    Project('Project 2', 'assets/project2-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project2'),
-    Project('Project 3', 'assets/project3-pexels-eberhardgross-443446.jpg', 'https://yourusername.github.io/project3'),
-    Project('Project 4', 'assets/project4-pexels-eberhardgross-443446.jpg', 'https://yourusername.github.io/project4'),
-    Project('Project 5', 'assets/project5-pexels-eberhardgross-1366919.jpg', 'https://yourusername.github.io/project5'),
-    Project('Project 6', 'assets/project6-pexels-eberhardgross-1624496.jpg', 'https://yourusername.github.io/project6'),
-    Project('Project 7', 'assets/project7-pexels-pixabay-33045.jpg', 'https://yourusername.github.io/project7'),
-    Project('Project 8', 'assets/project8-pexels-pixabay-33109.jpg', 'https://yourusername.github.io/project8'),
-    Project('Project 9', 'assets/project9-pexels-pixabay-60597.jpg', 'https://yourusername.github.io/project9'),
-    Project('Project 10', 'assets/project10-pexels-pixabay-326055.jpg', 'https://yourusername.github.io/project10'),
-    Project('Project 11', 'assets/project11-pexels-sohi-807598.jpg', 'https://yourusername.github.io/project11'),
-    Project('Project 12', 'assets/project12-pexels-thatguycraig000-1563355.jpg', 'https://yourusername.github.io/project12'),
-    Project('Project 13', 'assets/project13-pexels-vladalex94-1402787.jpg', 'https://yourusername.github.io/project13'),
-    Project('Project 14', 'assets/project1-nice-clear-light-bulbs-eujn90ms9da1bw9j.jpg', 'https://yourusername.github.io/project1'),
-    Project('Project 15', 'assets/project2-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg', 'https://yourusername.github.io/project2'),
-    Project('Project 16', 'assets/project3-pexels-eberhardgross-443446.jpg', 'https://yourusername.github.io/project3'),
-    Project('Project 17', 'assets/project4-pexels-eberhardgross-443446.jpg', 'https://yourusername.github.io/project4'),
-    Project('Project 18', 'assets/project5-pexels-eberhardgross-1366919.jpg', 'https://yourusername.github.io/project5'),
-    Project('Project 19', 'assets/project6-pexels-eberhardgross-1624496.jpg', 'https://yourusername.github.io/project6'),
-    Project('Project 20', 'assets/project7-pexels-pixabay-33045.jpg', 'https://yourusername.github.io/project7'),
-    Project('Project 21', 'assets/project8-pexels-pixabay-33109.jpg', 'https://yourusername.github.io/project8'),
-    Project('Project 22', 'assets/project9-pexels-pixabay-60597.jpg', 'https://yourusername.github.io/project9'),
-    Project('Project 23', 'assets/project10-pexels-pixabay-326055.jpg', 'https://yourusername.github.io/project10'),
+    Project('St A Tuberculosis', 'assets/St_A_bacteria_fluorescent.jpeg', 'https://yourusername.github.io/project1'),
+    Project('Words Full Stack', 'assets/words_full_stack.png', 'https://yourusername.github.io/project2'),
+    Project('Weather Fourier Modelling', 'assets/weather fourier series modelling.webp', 'https://yourusername.github.io/project3'),
+    Project('What Matters To You?', 'assets/heart question mark.webp', 'https://yourusername.github.io/project4'),
+    Project('Lane Detection', 'assets/lane_detection.jpg', 'https://yourusername.github.io/project5'),
+    Project('Gen AI Med Teacher', 'assets/gen_ai_med_teacher_pexels-cottonbro-7579829.jpg', 'https://yourusername.github.io/project6'),
+    Project('Ice Segmenation', 'assets/ice_segmentation.jpg', 'https://yourusername.github.io/project7'),
+    Project('Durham Radio Telescope', 'assets/DRT_pexels-philippedonn-1169754.jpg', 'https://yourusername.github.io/project8'),
+    Project('AI Society', 'assets/ai2 logo.png', 'https://yourusername.github.io/project9'),
+    Project('AI^2 Society', 'assets/ai2 logo.png', 'https://yourusername.github.io/project10'),
+    Project('Strathclyde Boat Building', 'assets/strathclyde boat bulding.jpg', 'https://yourusername.github.io/project11'),
+    Project('Kaggle Nature', 'assets/kaggle_nature_hackathon.webp', 'https://yourusername.github.io/project12'),
+    Project('Kaggle Health', 'assets/kaggle_health_hackathon.webp', 'https://yourusername.github.io/project13'),
+    Project('xAI', 'assets/explainable_AI.webp', 'https://yourusername.github.io/project1'),
+    Project('trad ML', 'assets/trad_ML.webp', 'https://yourusername.github.io/project2'),
+    Project('ViT', 'assets/vision_transformer.webp', 'https://yourusername.github.io/project3'),
+    Project('Reinforcement Learning', 'assets/reinforcement_learning.webp', 'https://yourusername.github.io/project4'),
+    Project('Things That Helped', 'assets/things_i_learnt_pexels-singkham-178541-1108572.jpg', 'https://yourusername.github.io/project5'),
+    Project('Train Game', 'assets/train_game.webp', 'https://yourusername.github.io/project6'),
+    Project('Events', 'assets/events.webp', 'https://yourusername.github.io/project7'),
+    Project('Paper 1', 'assets/project8-pexels-pixabay-33109.jpg', 'https://yourusername.github.io/project8'),
+    Project('Paper 2', 'assets/project9-pexels-pixabay-60597.jpg', 'https://yourusername.github.io/project9'),
+    Project('Paper 3', 'assets/project10-pexels-pixabay-326055.jpg', 'https://yourusername.github.io/project10'),
     Project('Project 24', 'assets/project11-pexels-sohi-807598.jpg', 'https://yourusername.github.io/project11'),
     Project('Project 25', 'assets/project12-pexels-thatguycraig000-1563355.jpg', 'https://yourusername.github.io/project12'),
     Project('Project 26', 'assets/project13-pexels-vladalex94-1402787.jpg', 'https://yourusername.github.io/project13'),
