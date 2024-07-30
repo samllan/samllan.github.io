@@ -50,28 +50,6 @@ class ProjectGrid extends StatefulWidget {
   _ProjectGridState createState() => _ProjectGridState();
 }
 
-
-ai2 logo.png
-DRT_pexels-philippedonn-1169754.jpg
-events.webp
-events_old.webp
-explainable_AI.webp
-gen_ai_med_teacher_pexels-cottonbro-7579829.jpg
-heart question mark.webp
-kaggle_health_hackathon.webp
-kaggle_nature_hackathon.webp
-lane_detection.jpg
-reinforcement_learning.webp
-strathclyde boat bulding old.jpg
-strathclyde boat bulding.jpg
-ST_A_bacteria_fluorescent.jpeg
-things_i_learnt_pexels-singkham-178541-1108572.jpg
-trad_ML.webp
-train_game.webp
-vision_transformer.webp
-weather fourier series modelling.webp
-words_full_stack.png
-
 class _ProjectGridState extends State<ProjectGrid> {
   List<Project> projects = const [
     Project('St A Tuberculosis', 'assets/St_A_bacteria_fluorescent.jpeg', 'https://yourusername.github.io/project1'),
