@@ -52,13 +52,13 @@ class ProjectGrid extends StatefulWidget {
 
 class _ProjectGridState extends State<ProjectGrid> {
   List<Project> projects = const [
-    Project('St A Tuberculosis', 'assets/St_A_bacteria_fluorescent.jpeg', 'https://yourusername.github.io/project1'),
+    Project('St A Tuberculosis', 'assets/St_A_bacteria_fluorescent.jpg', 'https://yourusername.github.io/project1'),
     Project('Words Full Stack', 'assets/words_full_stack.png', 'https://samllan.github.io/Words'),
     Project('Weather Fourier Modelling', 'assets/weather fourier series modelling.webp', 'https://yourusername.github.io/project3'),
     Project('What Matters To You?', 'assets/heart question mark.webp', 'https://yourusername.github.io/project4'),
     Project('Lane Detection', 'assets/lane_detection.jpg', 'https://yourusername.github.io/project5'),
     Project('Gen AI Med Teacher', 'assets/gen_ai_med_teacher_pexels-cottonbro-7579829.jpg', 'https://yourusername.github.io/project6'),
-    Project('Ice Segmenation', 'assets/ice_segmentation.jpg', 'https://yourusername.github.io/project7'),
+    Project('Ice Segmenation', 'assets/ice_segmentation.png', 'https://yourusername.github.io/project7'),
     Project('Durham Radio Telescope', 'assets/DRT_pexels-philippedonn-1169754.jpg', 'https://yourusername.github.io/project8'),
     Project('AI Society', 'assets/ai2 logo.png', 'https://yourusername.github.io/project9'),
     Project('AI^2 Society', 'assets/ai2 logo.png', 'https://yourusername.github.io/project10'),
