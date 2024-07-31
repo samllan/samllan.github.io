@@ -61,6 +61,19 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/line_art_boat_building.webp
+    - assets/line_art_explainable_AI.webp
+    - assets/line_art_generative_med_AI.webp
+    - assets/line_art_kaggle_health.webp
+    - assets/line_art_kaggle_nature.webp
+    - assets/line_art_lane_detection_car_driving.webp
+    - assets/line_art_question_heart_LLM_survey.webp
+    - assets/line_art_radio_telescope.webp
+    - assets/line_art_reinforcement_learning_demo_project.webp
+    - assets/line_art_st_a_tuberculosis_1.webp
+    - assets/line_art_st_a_tuberculosis_2.webp
+    - assets/line_art_weather_fourier_series.webp
+    - assets/line_art_words.webp
     - assets/project1-nice-clear-light-bulbs-eujn90ms9da1bw9j.jpg
     - assets/project2-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg
     - assets/project3-pexels-eberhardgross-443446.jpg
