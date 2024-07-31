@@ -54,7 +54,7 @@ class _ProjectGridState extends State<ProjectGrid> {
   List<Project> projects = const [
     Project('Computer Vision - Tuberculosis Quantification', 'assets/ST_A_bacteria_fluorescent.jpg', 'https://samllan.github.io/TuberculosisQuantification'),
     Project('Full Stack - Word Map', 'assets/words_full_stack.png', 'https://samllan.github.io/Words'),
-    Project('Fourier Modelling - Weather', 'assets/weather fourier series modelling.webp', 'https://yourusername.github.io/project3'),
+    Project('Fourier Modelling - Weather', 'assets/line_art_weather_fourier_series.webp', 'https://yourusername.github.io/project3'),
     Project('LLM - What Matters To You?', 'assets/line_art_question_heart_LLM_survey.webp', 'https://yourusername.github.io/project4'),
     Project('Computer Vision - Lane Detection', 'assets/lane_detection.jpg', 'https://yourusername.github.io/project5'),
     Project('Generative AI - Med Teacher', 'assets/gen_ai_med_teacher_pexels-cottonbro-7579829.jpg', 'https://yourusername.github.io/project6'),
