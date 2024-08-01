@@ -53,7 +53,7 @@ class ProjectGrid extends StatefulWidget {
 class _ProjectGridState extends State<ProjectGrid> {
   List<Project> projects = const [
     Project('Computer Vision - Tuberculosis Quantification', 'assets/line_art_st_a_tuberculosis_1.webp', 'https://samllan.github.io/TuberculosisQuantification'),
-    Project('Full Stack - Word Map', 'assets/line_art_words.png', 'https://samllan.github.io/Words'),
+    Project('Full Stack - Word Map', 'assets/line_art_words.webp', 'https://samllan.github.io/Words'),
     Project('Fourier Modelling - Weather', 'assets/line_art_weather_fourier_series.webp', 'https://yourusername.github.io/project3'),
     Project('LLM - What Matters To You?', 'assets/line_art_question_heart_LLM_survey.webp', 'https://yourusername.github.io/project4'),
     Project('Computer Vision - Lane Detection', 'assets/line_art_lane_detection_car_driving.webp', 'https://yourusername.github.io/project5'),
