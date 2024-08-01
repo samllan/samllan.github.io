@@ -52,13 +52,13 @@ class ProjectGrid extends StatefulWidget {
 
 class _ProjectGridState extends State<ProjectGrid> {
   List<Project> projects = const [
-    Project('Computer Vision - Tuberculosis Quantification', 'assets/ST_A_bacteria_fluorescent.jpg', 'https://samllan.github.io/TuberculosisQuantification'),
-    Project('Full Stack - Word Map', 'assets/words_full_stack.png', 'https://samllan.github.io/Words'),
+    Project('Computer Vision - Tuberculosis Quantification', 'assets/line_art_st_a_tuberculosis_1.webp', 'https://samllan.github.io/TuberculosisQuantification'),
+    Project('Full Stack - Word Map', 'assets/line_art_words.png', 'https://samllan.github.io/Words'),
     Project('Fourier Modelling - Weather', 'assets/line_art_weather_fourier_series.webp', 'https://yourusername.github.io/project3'),
     Project('LLM - What Matters To You?', 'assets/line_art_question_heart_LLM_survey.webp', 'https://yourusername.github.io/project4'),
-    Project('Computer Vision - Lane Detection', 'assets/lane_detection.jpg', 'https://yourusername.github.io/project5'),
+    Project('Computer Vision - Lane Detection', 'assets/line_art_lane_detection_car_driving.webp', 'https://yourusername.github.io/project5'),
     Project('Generative AI - Med Teacher', 'assets/gen_ai_med_teacher_pexels-cottonbro-7579829.jpg', 'https://yourusername.github.io/project6'),
-    Project('Segmenation Classification - Sea Ice Hackathon', 'assets/ice_segmentation.png', 'https://yourusername.github.io/project7'),
+    Project('Segmenation Classification - Sea Ice Hackathon', 'assets/line_art_sea_ice_segmentation.webp', 'https://yourusername.github.io/project7'),
     Project('Galactic Signal Mapping - Durham Radio Telescope', 'assets/line_art_radio_telescope.webp', 'https://yourusername.github.io/project8'),
     Project('Founder - AI Society', 'assets/AI at Leeds Logo.png', 'https://aisocietyleeds.wordpress.com/'),
     Project('Founder - AI^2 Society', 'assets/ai2 logo.png', 'https://leeds-ai-cdt.github.io/ai_squared/'),

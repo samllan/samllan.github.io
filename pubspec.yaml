@@ -71,6 +71,7 @@ flutter:
     - assets/line_art_question_heart_LLM_survey.webp
     - assets/line_art_radio_telescope.webp
     - assets/line_art_reinforcement_learning_demo_project.webp
+    - assets/line_art_sea_ice_segmentation.webp
     - assets/line_art_st_a_tuberculosis_1.webp
     - assets/line_art_st_a_tuberculosis_2.webp
     - assets/line_art_things_that_helped.webp
@@ -79,6 +80,7 @@ flutter:
     - assets/line_art_vision_transformer_1.webp
     - assets/line_art_weather_fourier_series.webp
     - assets/line_art_words.webp
+    - assets/line_art_words_2.webp
     - assets/project1-nice-clear-light-bulbs-eujn90ms9da1bw9j.jpg
     - assets/project2-3cb45f6e59190e8213ce0a35394d0e11-nice.jpg
     - assets/project3-pexels-eberhardgross-443446.jpg
