@@ -58,11 +58,12 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/line_art_boat_building.webp
     - assets/line_art_explainable_AI.webp
+    - assets/line_art_events_1.webp
     - assets/line_art_generative_med_AI.webp
     - assets/line_art_kaggle_health.webp
     - assets/line_art_kaggle_nature.webp
@@ -72,6 +73,10 @@ flutter:
     - assets/line_art_reinforcement_learning_demo_project.webp
     - assets/line_art_st_a_tuberculosis_1.webp
     - assets/line_art_st_a_tuberculosis_2.webp
+    - assets/line_art_things_that_helped.webp
+    - assets/line_art_trad_ML.webp
+    - assets/line_art_train_game.webp
+    - assets/line_art_vision_transformer_1.webp
     - assets/line_art_weather_fourier_series.webp
     - assets/line_art_words.webp
     - assets/project1-nice-clear-light-bulbs-eujn90ms9da1bw9j.jpg
