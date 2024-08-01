@@ -57,7 +57,7 @@ class _ProjectGridState extends State<ProjectGrid> {
     Project('Fourier Modelling - Weather', 'assets/line_art_weather_fourier_series.webp', 'https://yourusername.github.io/project3'),
     Project('LLM - What Matters To You?', 'assets/line_art_question_heart_LLM_survey.webp', 'https://yourusername.github.io/project4'),
     Project('Computer Vision - Lane Detection', 'assets/line_art_lane_detection_car_driving.webp', 'https://yourusername.github.io/project5'),
-    Project('Generative AI - Med Teacher', 'assets/gen_ai_med_teacher_pexels-cottonbro-7579829.jpg', 'https://yourusername.github.io/project6'),
+    Project('Generative AI - Med Teacher', 'assets/line_art_generative_med_AI.webp', 'https://yourusername.github.io/project6'),
     Project('Segmenation Classification - Sea Ice Hackathon', 'assets/line_art_sea_ice_segmentation.webp', 'https://yourusername.github.io/project7'),
     Project('Galactic Signal Mapping - Durham Radio Telescope', 'assets/line_art_radio_telescope.webp', 'https://yourusername.github.io/project8'),
     Project('Founder - AI Society', 'assets/AI at Leeds Logo.png', 'https://aisocietyleeds.wordpress.com/'),
