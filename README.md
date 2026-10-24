@@ -33,9 +33,10 @@ The former live version is preserved at branch
 `rollback/pre-static-portfolio-2026-10-24` (commit
 `92e9e2fbb4190012ada714958831e69f0cc764af`).
 
-The migration is one release commit. To undo it, revert that commit and push the
-resulting commit to `main`. GitHub Pages republishes the previous site while
-preserving subsequent history. Avoid resetting or force-pushing main.
+The migration and follow-up fixes are ordinary release commits. To roll back,
+restore the saved branch's source and `docs/` as a new commit on `main`, then
+push. GitHub Pages republishes the previous site while preserving the history.
+Avoid resetting or force-pushing main.
 
 ## Attribution
 
