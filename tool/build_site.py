@@ -1,10 +1,13 @@
 """Build the static portfolio using only Python's standard library."""
 import argparse
+import hashlib
 from html import escape
 from pathlib import Path
 import shutil
 
 ROOT = Path(__file__).resolve().parents[1]
+STYLE_VERSION = hashlib.sha256((ROOT / 'tool' / 'style.css').read_bytes()).hexdigest()[:10]
+SCRIPT_VERSION = hashlib.sha256((ROOT / 'tool' / 'experiments.js').read_bytes()).hexdigest()[:10]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--output', default='docs', help='Output directory (default: docs)')
 OUT = ROOT / parser.parse_args().output
@@ -95,7 +98,7 @@ def document(title, description, body, prefix='', script=''):
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{escape(title)} — Samuel Llanwarne</title><meta name="description" content="{escape(description, quote=True)}">
-<link rel="stylesheet" href="{prefix}style.css"></head><body><a class="skip" href="#main">Skip to content</a>
+<link rel="stylesheet" href="{prefix}style.css?v={STYLE_VERSION}"></head><body><a class="skip" href="#main">Skip to content</a>
 {header(prefix)}{body}<footer><span>Samuel Llanwarne</span><span>Curiosity, made useful.</span><a href="https://github.com/samllan">Find me on GitHub ↗</a></footer>{script}</body></html>'''
 
 
@@ -123,7 +126,7 @@ for p in PROJECTS:
     cards.append(f'''<a class="card {p['colour']} {p['id']}" href="projects/{p['id']}.html">{img}<div class="shade"></div><div class="card-copy"><span class="eyebrow">{p['category']}</span><h3>{p['title']}</h3><p>{p['line']}</p><span class="card-arrow" aria-hidden="true">↗</span></div></a>''')
     links = ''.join(f'<a class="button" href="{url}">{label} ↗</a>' for label, url in p['links'])
     body = f'''<main id="main" class="project"><a class="back" href="../index.html#work">← All work</a><section class="project-intro"><p class="eyebrow">{p['category']}</p><h1>{p['title']}</h1><p class="project-line">{p['line']}</p><p class="intro">{p['intro']}</p>{f'<div class="actions">{links}</div>' if links else ''}</section>{visual(p)}<div class="project-facts"><section><h2>The aim</h2><p>{p['goal']}</p></section><section><h2>The work</h2><p>{p['work']}</p></section><section><h2>What exists</h2><p>{p['result']}</p></section></div><aside class="takeaway"><span class="eyebrow">The useful insight</span><p>{p['lesson']}</p></aside><a class="back" href="../index.html#work">← Explore the other projects</a></main>'''
-    script = '<script src="../experiments.js" defer></script>' if p['id'] in ('weather', 'music') else ''
+    script = f'<script src="../experiments.js?v={SCRIPT_VERSION}" defer></script>' if p['id'] in ('weather', 'music') else ''
     (OUT / 'projects' / f'{p["id"]}.html').write_text(document(p['title'], p['line'], body, '../', script), encoding='utf-8')
 
 body = f'''<main id="main"><section class="hero"><p class="eyebrow">Physics. AI. Useful things.</p><h1>Follow the curiosity.<br><em>Make something useful.</em></h1><p>I’m Samuel. I explore signals, build products and bring people together.<br>A selection of the things I’ve made, investigated and helped shape.</p><a class="text-link" href="#work">Explore the work ↓</a></section><section id="work" class="work"><div class="section-label"><h2>Selected work</h2><span>Research · Products · Community · Creative technology</span></div><div class="grid">{''.join(cards)}</div></section><section id="about" class="about"><p class="eyebrow">A connected set of interests</p><h2>From a signal<br>to something you can use.</h2><div><p>My background spans physics and astronomy at Durham, computer science at St Andrews, and doctoral research in medical image analysis at Leeds.</p><p>I’m interested in how ideas become understandable and useful: an image reconstructed from a waveform, a map that reveals a relationship, or a product that makes an everyday action easier.</p><p>My recent products combine my own concepts and design direction with AI-assisted development. Collaborative and research projects identify their context and contribution on their individual pages.</p></div></section></main>'''
