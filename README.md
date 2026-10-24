@@ -1,63 +1,46 @@
-# main_portfolio_repo
+# Samuel Llanwarne's portfolio
 
-A new Flutter project.
+[Public website](https://samllan.github.io/)
 
-## Getting Started
+Eight project stories covering products, research, community and creative technology.
+Static HTML, with browser demonstrations for Fourier modelling and Music Note Rain.
+Experimental work is labelled as such.
 
-This project is a starting point for a Flutter application.
+## Edit and build
 
-A few resources to get you started if this is your first Flutter project:
+- `tool/build_site.py`: content and shared HTML layout.
+- `tool/style.css`: responsive presentation.
+- `tool/experiments.js`: browser demonstrations.
+- `tool/music-demo.json`: 36 notes from Music Note Rain's composed sample.
+- `site/assets/`: selected images; no private recordings or model checkpoints.
+- `site/flutter_service_worker.js`: retires caches from the former Flutter site.
+- `docs/`: generated, committed public website.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Requires Python 3.9+; no third-party Python packages:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```sh
+python tool/build_site.py
+python -m http.server 8937 --bind 127.0.0.1 --directory docs
+```
 
-## First Time Set Up
+Check changed pages and demonstrations before committing source and `docs/`
+together. GitHub Pages automatically publishes `main` → `/docs`. No Flutter build
+or separate hosting service is needed. Historical Flutter source remains in Git.
 
-git init  
-git add .  
-git commit -m "Initial commit"  
-git remote add origin https://github.com/your-username/your-username.github.io.git  
-git push -u origin main  
+## Publication and rollback
 
-mkdir -p .github/workflows  
-nano .github/workflows/deploy.yml  
+The former live version is preserved at branch
+`rollback/pre-static-portfolio-2026-10-24` (commit
+`92e9e2fbb4190012ada714958831e69f0cc764af`).
 
-git add .github/workflows/deploy.yml  
-git commit -m "Add GitHub Action for deployment"  
-git push origin main  
+The migration is one release commit. To undo it, revert that commit and push the
+resulting commit to `main`. GitHub Pages republishes the previous site while
+preserving subsequent history. Avoid resetting or force-pushing main.
 
-Then also, create a PAT (Personal Access Token) on GitHub and add it to the repository  
-To do so, go to Main GitHub Settings > Developer settings > Personal access tokens > Generate new token  
-Give it a name, select the repo scope, give read and write permissions, and generate the token  
-Copy the token and go to the repository > Settings > Secrets > New repository secret  
-Name the secret something like 'ACTIONS_ACCESS_TOKEN' and paste the token in the value field  
-Save the secret  
-Go into the repository's deploy.yml file and replace the value of the 'token' field with the secret name  
-Go into the repository > Settings > Actions > General > Allow Read and Write Permissions for GitHub Actions  
+## Attribution
 
-Go into the repository > Settings > Pages > Source and select the main branch and the /docs folder
-
-
-## Thereafter
-
-git add .  
-git commit -m "Describe your changes"  
-git push origin main  
-
-> ### GitHub Actions Trigger:
-> 
-> GitHub detects the push to the main branch.  
-> The deploy.yml workflow is triggered.  
-> 
-> ### Workflow Steps:
-> 
-> Checkout the repository: Pulls the latest code from main.
-> Set up Flutter: Installs the specified Flutter version.
-> Install dependencies: Runs flutter pub get.
-> Build web app: Executes flutter build web --release.
-> Move build output: Moves the contents of build/web to the docs directory.
-> Commit and push changes: Adds, commits, and pushes the changes to the docs directory back to the main branch.
+Word Map: equal collaboration with Nina Sushko (interface/design), with Samuel
+responsible for data and application logic. Incidental AI: four-person hackathon
+team. Field II experiments build on examples by Jørgen Arendt Jensen. Recent
+independent products use AI-assisted implementation under Samuel's product and
+design direction. Individual pages explain their context and evidence limits.

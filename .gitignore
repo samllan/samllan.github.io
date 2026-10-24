@@ -42,3 +42,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Local review material and internal evidence inventory
+/preview/
+/review/
+/PORTFOLIO_AUDIT.md
+__pycache__/
