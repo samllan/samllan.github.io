@@ -2,7 +2,7 @@
 
 [Public website](https://samllan.github.io/)
 
-Eleven project stories covering products, research, community and creative technology.
+Thirteen project stories covering products, research, community and creative technology.
 Static HTML, with browser demonstrations for Fourier modelling and Music Note Rain.
 Experimental work is labelled as such.
 
@@ -16,6 +16,7 @@ Experimental work is labelled as such.
 - `site/assets/`: selected images; no private recordings or model checkpoints.
 - `site/flutter_service_worker.js`: retires caches from the former Flutter site.
 - `docs/`: generated, committed public website.
+- `RESEARCH_STORY_CANDIDATES.md`: scored talking points and image candidates for all 13 panels.
 
 Requires Python 3.9+; no third-party Python packages:
 
