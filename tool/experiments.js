@@ -1,4 +1,8 @@
 'use strict';
+const laneReveal = document.querySelector('#lane-reveal');
+if (laneReveal) laneReveal.addEventListener('input', () => {
+  document.querySelector('#lane-overlay').style.clipPath = `inset(0 ${100-Number(laneReveal.value)}% 0 0)`;
+});
 const ns = 'http://www.w3.org/2000/svg';
 function el(tag, attrs, parent) { const item = document.createElementNS(ns, tag); for (const [k,v] of Object.entries(attrs)) item.setAttribute(k,v); parent.append(item); return item; }
 const plot = document.querySelector('#fourier');

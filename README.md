@@ -2,7 +2,7 @@
 
 [Public website](https://samllan.github.io/)
 
-Eight project stories covering products, research, community and creative technology.
+Eleven project stories covering products, research, community and creative technology.
 Static HTML, with browser demonstrations for Fourier modelling and Music Note Rain.
 Experimental work is labelled as such.
 
@@ -12,6 +12,7 @@ Experimental work is labelled as such.
 - `tool/style.css`: responsive presentation.
 - `tool/experiments.js`: browser demonstrations.
 - `tool/music-demo.json`: 36 notes from Music Note Rain's composed sample.
+- `tool/lane_demo.py`: optional regeneration of the educational lane overlay (NumPy/Pillow).
 - `site/assets/`: selected images; no private recordings or model checkpoints.
 - `site/flutter_service_worker.js`: retires caches from the former Flutter site.
 - `docs/`: generated, committed public website.
