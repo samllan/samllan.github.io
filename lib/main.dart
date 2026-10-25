@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:math';
 
 void main() {
   runApp(const MyApp());
@@ -13,9 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Portfolio',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: const PortfolioPage(),
     );
   }
@@ -27,9 +24,7 @@ class PortfolioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Portfolio - Samuel Llanwarne'),
-      ),
+      appBar: AppBar(title: const Text('Portfolio - Samuel Llanwarne')),
       body: ProjectGrid(),
     );
   }
@@ -52,26 +47,106 @@ class ProjectGrid extends StatefulWidget {
 
 class _ProjectGridState extends State<ProjectGrid> {
   List<Project> projects = const [
-    Project('Computer Vision - Tuberculosis Quantification', 'assets/line_art_st_a_tuberculosis_1.webp', 'https://samllan.github.io/TuberculosisQuantification'),
-    Project('Full Stack - Word Map', 'assets/line_art_words.webp', 'https://samllan.github.io/Words'),
-    Project('Fourier Modelling - Weather', 'assets/line_art_weather_fourier_series.webp', 'https://yourusername.github.io/project3'),
-    Project('LLM - What Matters To You?', 'assets/line_art_question_heart_LLM_survey.webp', 'https://yourusername.github.io/project4'),
-    Project('Computer Vision - Lane Detection', 'assets/line_art_lane_detection_car_driving.webp', 'https://yourusername.github.io/project5'),
-    Project('Generative AI - Med Teacher', 'assets/line_art_generative_med_AI.webp', 'https://yourusername.github.io/project6'),
-    Project('Segmenation Classification - Sea Ice Hackathon', 'assets/line_art_sea_ice_segmentation.webp', 'https://yourusername.github.io/project7'),
-    Project('Galactic Signal Mapping - Durham Radio Telescope', 'assets/line_art_radio_telescope.webp', 'https://yourusername.github.io/project8'),
-    Project('Founder - AI Society', 'assets/AI at Leeds Logo.png', 'https://aisocietyleeds.wordpress.com/'),
-    Project('Founder - AI^2 Society', 'assets/ai2 logo.png', 'https://leeds-ai-cdt.github.io/ai_squared/'),
-    Project('Engineering - Strathclyde Boat Record Holder', 'assets/strathclyde boat bulding.jpg', 'https://yourusername.github.io/project11'),
-    Project('Kaggle Nature', 'assets/kaggle_nature_hackathon.webp', 'https://yourusername.github.io/project12'),
-    Project('Kaggle Health', 'assets/kaggle_health_hackathon.webp', 'https://yourusername.github.io/project13'),
-    Project('xAI', 'assets/line_art_explainable_AI.webp', 'https://yourusername.github.io/project14'),
-    Project('trad ML', 'assets/line_art_trad_ML.webp', 'https://yourusername.github.io/project2'),
-    Project('ViT', 'assets/line_art_vision_transformer_1.webp', 'https://yourusername.github.io/project3'),
-    Project('Reinforcement Learning', 'assets/line_art_reinforcement_learning_demo_project.webp', 'https://yourusername.github.io/project4'),
-    Project('Things That Helped', 'assets/line_art_things_that_helped.webp', 'https://yourusername.github.io/project5'),
-    Project('Train Game', 'assets/train_game.webp', 'https://yourusername.github.io/project6'),
-    Project('Events', 'assets/line_art_events_1.webp', 'https://yourusername.github.io/project7'),
+    Project(
+      'Computer Vision - Tuberculosis Quantification',
+      'assets/line_art_st_a_tuberculosis_1.webp',
+      'https://samllan.github.io/TuberculosisQuantification',
+    ),
+    Project(
+      'Full Stack - Word Map',
+      'assets/line_art_words.webp',
+      'https://samllan.github.io/Words',
+    ),
+    Project(
+      'Fourier Modelling - Weather',
+      'assets/line_art_weather_fourier_series.webp',
+      'https://yourusername.github.io/project3',
+    ),
+    Project(
+      'LLM - What Matters To You?',
+      'assets/line_art_question_heart_LLM_survey.webp',
+      'https://yourusername.github.io/project4',
+    ),
+    Project(
+      'Computer Vision - Lane Detection',
+      'assets/line_art_lane_detection_car_driving.webp',
+      'https://yourusername.github.io/project5',
+    ),
+    Project(
+      'Generative AI - Med Teacher',
+      'assets/line_art_generative_med_AI.webp',
+      'https://yourusername.github.io/project6',
+    ),
+    Project(
+      'Segmenation Classification - Sea Ice Hackathon',
+      'assets/line_art_sea_ice_segmentation.webp',
+      'https://yourusername.github.io/project7',
+    ),
+    Project(
+      'Galactic Signal Mapping - Durham Radio Telescope',
+      'assets/line_art_radio_telescope.webp',
+      'https://yourusername.github.io/project8',
+    ),
+    Project(
+      'Founder - AI Society',
+      'assets/AI at Leeds Logo.png',
+      'https://aisocietyleeds.wordpress.com/',
+    ),
+    Project(
+      'Founder - AI^2 Society',
+      'assets/ai2 logo.png',
+      'https://leeds-ai-cdt.github.io/ai_squared/',
+    ),
+    Project(
+      'Engineering - Strathclyde Boat Record Holder',
+      'assets/strathclyde boat bulding.jpg',
+      'https://yourusername.github.io/project11',
+    ),
+    Project(
+      'Kaggle Nature',
+      'assets/kaggle_nature_hackathon.webp',
+      'https://yourusername.github.io/project12',
+    ),
+    Project(
+      'Kaggle Health',
+      'assets/kaggle_health_hackathon.webp',
+      'https://yourusername.github.io/project13',
+    ),
+    Project(
+      'xAI',
+      'assets/line_art_explainable_AI.webp',
+      'https://yourusername.github.io/project14',
+    ),
+    Project(
+      'trad ML',
+      'assets/line_art_trad_ML.webp',
+      'https://yourusername.github.io/project2',
+    ),
+    Project(
+      'ViT',
+      'assets/line_art_vision_transformer_1.webp',
+      'https://yourusername.github.io/project3',
+    ),
+    Project(
+      'Reinforcement Learning',
+      'assets/line_art_reinforcement_learning_demo_project.webp',
+      'https://yourusername.github.io/project4',
+    ),
+    Project(
+      'Things That Helped',
+      'assets/line_art_things_that_helped.webp',
+      'https://yourusername.github.io/project5',
+    ),
+    Project(
+      'Train Game',
+      'assets/train_game.webp',
+      'https://yourusername.github.io/project6',
+    ),
+    Project(
+      'Events',
+      'assets/line_art_events_1.webp',
+      'https://yourusername.github.io/project7',
+    ),
     // Project('Paper 1', 'assets/project8-pexels-pixabay-33109.jpg', 'https://yourusername.github.io/project8'),
     // Project('Paper 2', 'assets/project9-pexels-pixabay-60597.jpg', 'https://yourusername.github.io/project9'),
     // Project('Paper 3', 'assets/project10-pexels-pixabay-326055.jpg', 'https://yourusername.github.io/project10'),
@@ -81,18 +156,10 @@ class _ProjectGridState extends State<ProjectGrid> {
     // Add more projects here
   ];
 
-  Project? activeProject;
-
   @override
   void initState() {
     super.initState();
     projects = List.from(projects)..shuffle();
-  }
-
-  void setActiveProject(Project? project) {
-    setState(() {
-      activeProject = project;
-    });
   }
 
   @override
@@ -107,89 +174,45 @@ class _ProjectGridState extends State<ProjectGrid> {
       ),
       itemCount: projects.length,
       itemBuilder: (context, index) {
-        return ProjectWidget(
-          project: projects[index],
-          isActive: activeProject == projects[index],
-          onProjectTap: setActiveProject,
-        );
+        return ProjectWidget(project: projects[index]);
       },
     );
   }
 }
 
-class ProjectWidget extends StatefulWidget {
+class ProjectWidget extends StatelessWidget {
   final Project project;
-  final bool isActive;
-  final Function(Project?) onProjectTap;
 
-  const ProjectWidget({
-    super.key,
-    required this.project,
-    required this.isActive,
-    required this.onProjectTap,
-  });
-
-  @override
-  ProjectWidgetState createState() => ProjectWidgetState();
-}
-
-class ProjectWidgetState extends State<ProjectWidget> {
-  bool isHovered = false;
-
-  void _handleTap() {
-    if (widget.isActive) {
-      _launchURL(widget.project.projectUrl);
-    } else {
-      widget.onProjectTap(widget.project);
-    }
-  }
+  const ProjectWidget({super.key, required this.project});
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) {
-        if (!widget.isActive) {
-          setState(() => isHovered = true);
-          widget.onProjectTap(widget.project);
-        }
-      },
-      onExit: (_) {
-        if (isHovered) {
-          setState(() => isHovered = false);
-          widget.onProjectTap(null);
-        }
-      },
-      child: GestureDetector(
-        onTap: _handleTap,
-        onLongPress: () {
-          _launchURL(widget.project.projectUrl);
-        },
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8.0), // Ensures both image and overlay have rounded corners
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Image.asset(
-                widget.project.imageUrl,
-                fit: BoxFit.cover,
-              ),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                color: (isHovered || widget.isActive) ? Colors.black54 : Colors.transparent,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: (isHovered || widget.isActive)
-                      ? Text(
-                          widget.project.name,
-                          style: const TextStyle(color: Colors.white, fontSize: 24),
-                          textAlign: TextAlign.center,
-                        )
-                      : Container(),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8.0),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(project.imageUrl, fit: BoxFit.cover),
+          const ColoredBox(color: Colors.black54),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => _launchURL(project.projectUrl),
+              hoverColor: Colors.white10,
+              focusColor: Colors.white24,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    project.name,
+                    style: const TextStyle(color: Colors.white, fontSize: 24),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -202,7 +225,6 @@ class ProjectWidgetState extends State<ProjectWidget> {
     }
   }
 }
-
 
 // class _ProjectGridState extends State<ProjectGrid> {
 //   List<Project> projects = const [
@@ -258,3 +280,4 @@ class ProjectWidgetState extends State<ProjectWidget> {
 //     );
 //   }
 // }
+
