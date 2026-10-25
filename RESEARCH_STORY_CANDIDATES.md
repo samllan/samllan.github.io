@@ -2,6 +2,8 @@
 
 Reviewed 25 October 2026. Evidence bank for all 13 portfolio panels. Scores and image ideas are planning notes, not public-facing achievement claims. Tuberculosis and radio astronomy pages prepared from this evidence; publication status is recorded in the local portfolio audit.
 
+Image update: `site/assets/word-map-screen.png` is now a captured screenshot of the original live Word Map. Its project page includes this image; the community and medical hackathon pages also use their existing logo/illustration with captions.
+
 Ratings estimate how impressive and useful a point is to a general industry audience, given current evidence. 5 = lead story; 4 = strong supporting evidence; 3 = worthwhile detail; 2 = secondary; 1 = omit. These are editorial judgments, not research rankings.
 
 ## St Andrews tuberculosis
