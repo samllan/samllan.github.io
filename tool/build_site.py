@@ -182,13 +182,19 @@ def visual(p):
     return picture + '<div class="flow" aria-label="Project concept">' + ''.join(f'<div><strong>{a}</strong><span>{b}</span></div>' for a, b in steps) + '</div>'
 
 
+def work_card(href, classes, category, title, line, image):
+    art = f'<img src="assets/{image}" alt="" loading="lazy">' if image else '<div class="note-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>'
+    return f'''<a class="card {classes}" href="{href}">{art}<div class="shade"></div><div class="card-copy"><span class="eyebrow">{category}</span><h3>{title}</h3><p>{line}</p><span class="card-arrow" aria-hidden="true">↗</span></div></a>'''
+
+
 cards = []
 for p in PROJECTS:
-    img = f'<img src="assets/{p["image"]}" alt="" loading="lazy">' if p['image'] else '<div class="note-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>'
-    cards.append(f'''<a class="card {p['colour']} {p['id']}" href="projects/{p['id']}.html">{img}<div class="shade"></div><div class="card-copy"><span class="eyebrow">{p['category']}</span><h3>{p['title']}</h3><p>{p['line']}</p><span class="card-arrow" aria-hidden="true">↗</span></div></a>''')
+    cards.append(work_card(f"projects/{p['id']}.html", f"{p['colour']} {p['id']}", p['category'], p['title'], p['line'], p['image']))
     links = ''.join(f'<a class="button" href="{url}">{label} ↗</a>' for label, url in p['links'])
     if p['id'] == 'phd':
         links += '<a class="button" href="../research/">Explore the research logbook →</a>'
+        cards.append(work_card('research/', 'green research-logbook', 'Research tools · Interactive', 'The PhD logbook',
+                               'Browse the goals, experiments and code behind my doctorate.', 'research-logbook.svg'))
     body = f'''<main id="main" class="project"><a class="back" href="../index.html#work">← All work</a><section class="project-intro"><p class="eyebrow">{p['category']}</p><h1>{p['title']}</h1><p class="project-line">{p['line']}</p><p class="intro">{p['intro']}</p>{f'<div class="actions">{links}</div>' if links else ''}</section>{visual(p)}<div class="project-facts"><section><h2>The aim</h2><p>{p['goal']}</p></section><section><h2>The work</h2><p>{p['work']}</p></section><section><h2>What exists</h2><p>{p['result']}</p></section></div><aside class="takeaway"><span class="eyebrow">What I learnt</span><p>{p['lesson']}</p></aside><a class="back" href="../index.html#work">← Explore the other projects</a></main>'''
     script = f'<script src="../experiments.js?v={SCRIPT_VERSION}" defer></script>' if p['id'] in ('weather', 'music', 'lanes') else ''
     (OUT / 'projects' / f'{p["id"]}.html').write_text(document(p['title'], p['line'], body, '../', script), encoding='utf-8')
@@ -215,7 +221,7 @@ for name in ('logbook.css', 'logbook.js'):
     shutil.copyfile(research / name, public_research / name)
     versions[name] = hashlib.sha256((research / name).read_bytes()).hexdigest()[:10]
 (public_research / 'index.html').write_text(document(
-    'PhD research logbook',
+    'The PhD logbook',
     'A browsable record of the research questions, code and experiments behind the doctoral thesis.',
     (research / 'logbook.html').read_text(encoding='utf-8'), '../',
     f'<script src="logbook.js?v={versions["logbook.js"]}" defer></script>',
