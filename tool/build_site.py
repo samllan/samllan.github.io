@@ -134,11 +134,11 @@ def header(prefix=''):
     return f'<header><a class="brand" href="{prefix}index.html">Samuel Llanwarne</a><nav aria-label="Main"><a href="{prefix}index.html#work">Work</a><a href="{prefix}index.html#about">About</a><a href="https://github.com/samllan">GitHub ↗</a></nav></header>'
 
 
-def document(title, description, body, prefix='', script=''):
+def document(title, description, body, prefix='', script='', stylesheet=''):
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{escape(title)} — Samuel Llanwarne</title><meta name="description" content="{escape(description, quote=True)}">
-<link rel="stylesheet" href="{prefix}style.css?v={STYLE_VERSION}"></head><body><a class="skip" href="#main">Skip to content</a>
+<link rel="stylesheet" href="{prefix}style.css?v={STYLE_VERSION}">{stylesheet}</head><body><a class="skip" href="#main">Skip to content</a>
 {header(prefix)}{body}<footer><span>Samuel Llanwarne</span><span>Research and personal projects</span><a href="https://github.com/samllan">Find me on GitHub ↗</a></footer>{script}</body></html>'''
 
 
@@ -184,6 +184,8 @@ for p in PROJECTS:
     img = f'<img src="assets/{p["image"]}" alt="" loading="lazy">' if p['image'] else '<div class="note-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>'
     cards.append(f'''<a class="card {p['colour']} {p['id']}" href="projects/{p['id']}.html">{img}<div class="shade"></div><div class="card-copy"><span class="eyebrow">{p['category']}</span><h3>{p['title']}</h3><p>{p['line']}</p><span class="card-arrow" aria-hidden="true">↗</span></div></a>''')
     links = ''.join(f'<a class="button" href="{url}">{label} ↗</a>' for label, url in p['links'])
+    if p['id'] == 'phd':
+        links += '<a class="button" href="../research/">Explore the research logbook →</a>'
     body = f'''<main id="main" class="project"><a class="back" href="../index.html#work">← All work</a><section class="project-intro"><p class="eyebrow">{p['category']}</p><h1>{p['title']}</h1><p class="project-line">{p['line']}</p><p class="intro">{p['intro']}</p>{f'<div class="actions">{links}</div>' if links else ''}</section>{visual(p)}<div class="project-facts"><section><h2>The aim</h2><p>{p['goal']}</p></section><section><h2>The work</h2><p>{p['work']}</p></section><section><h2>What exists</h2><p>{p['result']}</p></section></div><aside class="takeaway"><span class="eyebrow">What I learnt</span><p>{p['lesson']}</p></aside><a class="back" href="../index.html#work">← Explore the other projects</a></main>'''
     script = f'<script src="../experiments.js?v={SCRIPT_VERSION}" defer></script>' if p['id'] in ('weather', 'music', 'lanes') else ''
     (OUT / 'projects' / f'{p["id"]}.html').write_text(document(p['title'], p['line'], body, '../', script), encoding='utf-8')
@@ -200,4 +202,20 @@ body = f'''<main id="main">
 for name in ('style.css', 'experiments.js', 'music-demo.json'):
     destination = OUT / 'assets' / name if name.endswith('.json') else OUT / name
     shutil.copyfile(ROOT / 'tool' / name, destination)
-print(f'Built {len(PROJECTS)} project pages and a homepage in {OUT}')
+
+research = ROOT / 'site' / 'research'
+public_research = OUT / 'research'
+shutil.copytree(research / 'examples', public_research / 'examples', dirs_exist_ok=True,
+                ignore=shutil.ignore_patterns('__pycache__', 'crops', '*.pyc'))
+versions = {}
+for name in ('logbook.css', 'logbook.js'):
+    shutil.copyfile(research / name, public_research / name)
+    versions[name] = hashlib.sha256((research / name).read_bytes()).hexdigest()[:10]
+(public_research / 'index.html').write_text(document(
+    'PhD research logbook',
+    'A browsable record of the research questions, code and experiments behind the doctoral thesis.',
+    (research / 'logbook.html').read_text(encoding='utf-8'), '../',
+    f'<script src="logbook.js?v={versions["logbook.js"]}" defer></script>',
+    f'<link rel="stylesheet" href="logbook.css?v={versions["logbook.css"]}">',
+), encoding='utf-8')
+print(f'Built {len(PROJECTS)} project pages, the research logbook and a homepage in {OUT}')
