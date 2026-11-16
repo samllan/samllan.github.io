@@ -1,6 +1,7 @@
 const logbook = document.querySelector('.lab');
+const content = logbook.querySelector('.lab-content');
 const goals = [...logbook.querySelectorAll('[data-goal]')];
-const goalLinks = [...logbook.querySelectorAll('.lab-goals a')];
+const goalLinks = [...logbook.querySelectorAll('.lab-goals a[href^="#"]')];
 
 function selectGoal() {
   const active = goals.find(goal => `#${goal.id}` === location.hash) || document.querySelector('#crop');
@@ -9,6 +10,7 @@ function selectGoal() {
     if (link.hash === `#${active.id}`) link.setAttribute('aria-current', 'location');
     else link.removeAttribute('aria-current');
   });
+  content.scrollTop = 0;
 }
 
 logbook.classList.add('enhanced');
@@ -52,6 +54,10 @@ logbook.querySelectorAll('.lab-file').forEach(link => {
   link.addEventListener('click', async event => {
     if (!dialog.showModal || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
+    if (link.dataset.openGoal && location.hash !== `#${link.dataset.openGoal}`) {
+      location.hash = link.dataset.openGoal;
+      selectGoal();
+    }
     previewRequest?.abort();
     const request = new AbortController();
     previewRequest = request;

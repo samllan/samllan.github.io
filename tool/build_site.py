@@ -134,12 +134,15 @@ def header(prefix=''):
     return f'<header><a class="brand" href="{prefix}index.html">Samuel Llanwarne</a><nav aria-label="Main"><a href="{prefix}index.html#work">Work</a><a href="{prefix}index.html#about">About</a><a href="https://github.com/samllan">GitHub ↗</a></nav></header>'
 
 
-def document(title, description, body, prefix='', script='', stylesheet=''):
+def document(title, description, body, prefix='', script='', stylesheet='', *, site_chrome=True):
+    top = header(prefix) if site_chrome else ''
+    bottom = ('<footer><span>Samuel Llanwarne</span><span>Research and personal projects</span>'
+              '<a href="https://github.com/samllan">Find me on GitHub ↗</a></footer>') if site_chrome else ''
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{escape(title)} — Samuel Llanwarne</title><meta name="description" content="{escape(description, quote=True)}">
 <link rel="stylesheet" href="{prefix}style.css?v={STYLE_VERSION}">{stylesheet}</head><body><a class="skip" href="#main">Skip to content</a>
-{header(prefix)}{body}<footer><span>Samuel Llanwarne</span><span>Research and personal projects</span><a href="https://github.com/samllan">Find me on GitHub ↗</a></footer>{script}</body></html>'''
+{top}{body}{bottom}{script}</body></html>'''
 
 
 def visual(p):
@@ -217,5 +220,6 @@ for name in ('logbook.css', 'logbook.js'):
     (research / 'logbook.html').read_text(encoding='utf-8'), '../',
     f'<script src="logbook.js?v={versions["logbook.js"]}" defer></script>',
     f'<link rel="stylesheet" href="logbook.css?v={versions["logbook.css"]}">',
+    site_chrome=False,
 ), encoding='utf-8')
 print(f'Built {len(PROJECTS)} project pages, the research logbook and a homepage in {OUT}')
