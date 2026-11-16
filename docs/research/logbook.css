@@ -10,14 +10,18 @@
 .lab-intro h1, .lab-goal h2, .lab-demo h3 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; }
 .lab-intro h1 { margin: 5px 0 9px; font-size: clamp(40px, 6vw, 76px); line-height: 1.02; letter-spacing: -.035em; }
 .lab-intro p:not(.eyebrow) { max-width: 54ch; margin: 0; color: #536052; line-height: 1.6; }
+.lab-intro p.lab-date-note { margin-top: 9px; font-size: 12px; }
 .lab-source { flex: none; color: var(--lab-green); font-size: 13px; font-weight: 700; padding-bottom: 4px; }
-.lab-layout { display: grid; grid-template-columns: minmax(180px, 231px) minmax(0, 1fr); gap: 36px; border-top: 1px solid var(--lab-rule); }
-.lab-goals { display: flex; flex-direction: column; align-self: start; position: sticky; top: 0; gap: 4px; padding: 22px 18px 0 0; }
+.lab-layout { display: grid; grid-template-columns: minmax(180px, 249px) minmax(0, 1fr); gap: 32px; border-top: 1px solid var(--lab-rule); }
+.lab-goals { display: block; align-self: start; position: sticky; top: 0; padding: 22px 16px 10px 0; border-right: 1px solid var(--lab-rule); }
 .lab-goals .eyebrow { margin: 0 0 8px 10px; color: #627065; }
-.lab-goals a { padding: 9px 10px; border-radius: 3px; color: #38463c; font-weight: 600; }
+.lab-goals ul { list-style: none; margin: 0; padding: 0; }
+.lab-goals ul ul { margin: 2px 0 3px 12px; padding-left: 6px; border-left: 1px solid var(--lab-rule); }
+.lab-goals li + li { margin-top: 2px; }
+.lab-goals a { display: block; padding: 7px 10px; border-radius: 3px; color: #38463c; font-weight: 600; line-height: 1.4; }
+.lab-goals ul ul a { font-weight: 500; }
 .lab-goals a:hover { text-decoration: underline; }
-.lab-goals a[aria-current] { color: #204633; background: #e4ebe0; }
-.lab-goals .child-goal { margin-left: 13px; padding-left: 11px; border-left: 1px solid var(--lab-rule); font-weight: 500; }
+.lab-goals a[aria-current] { color: #204633; background: #e4ebe0; font-weight: 700; }
 .lab-content { min-width: 0; }
 .lab-goal { padding: 26px 0 16px; }
 .lab-goal + .lab-goal:not([hidden]) { border-top: 1px solid var(--lab-rule); }
@@ -27,10 +31,11 @@
 .lab-lede { max-width: 74ch; color: #536052; margin: 10px 0 23px; line-height: 1.58; }
 .lab-files { width: 100%; border-collapse: collapse; table-layout: fixed; border-top: 1px solid var(--lab-rule); }
 .lab-files th { padding: 9px 14px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .13em; color: #4f6355; background: #ecefe7; text-align: left; }
-.lab-files th:first-child { width: 36%; }
+.lab-files th:first-child { width: 44%; }
 .lab-files td { padding: 11px 14px; border-bottom: 1px solid var(--lab-rule); vertical-align: top; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
 .lab-files td:first-child { background: #fbf9f2; }
-.lab-files td small { display: block; color: #576559; font-size: 11px; margin-top: 3px; }
+.lab-files td code { font: 600 0.93em 'Cascadia Code', Consolas, monospace; }
+.lab-files td small { display: inline-block; color: #576559; font-size: 12px; }
 .lab-file { color: var(--lab-green); font-weight: 700; text-decoration-color: #8eaa95; }
 .lab-file:hover { text-decoration-thickness: 2px; }
 .lab-next { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 19px; font-size: 14px; color: var(--lab-green); }
@@ -69,10 +74,12 @@
 
 @media (max-width: 620px) {
   .lab-layout { display: block; }
-  .lab-goals { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; position: static; padding: 12px 0 14px; border-bottom: 1px solid var(--lab-rule); }
-  .lab-goals .eyebrow { flex-basis: 100%; margin: 0 0 3px; }
-  .lab-goals a { padding: 6px 8px; }
-  .lab-goals .child-goal { margin-left: 0; padding-left: 8px; border-left: 0; }
+  .lab-goals { position: static; padding: 12px 0 14px; border-right: 0; border-bottom: 1px solid var(--lab-rule); }
+  .lab-goals .eyebrow { margin: 0 0 5px; }
+  .lab-goals > ul { columns: 2; column-gap: 10px; }
+  .lab-goals > ul > li { break-inside: avoid; }
+  .lab-goals ul ul { margin-left: 8px; }
+  .lab-goals a { padding: 5px 7px; font-size: 12px; }
   .lab-goal { padding-top: 19px; }
   .lab-files th, .lab-files td { padding: 8px; }
   .lab-demo { padding: 12px; }

@@ -5,6 +5,7 @@
       <p class="eyebrow">University of Leeds · Doctoral research</p>
       <h1 id="lab-title">PhD research logbook</h1>
       <p>From preparing large medical images to comparing models and inspecting their results. Follow the research questions through the code, experiments and decisions.</p>
+      <p class="lab-date-note">Script dates refer to the saved research versions behind each example. Guide dates refer to publication.</p>
     </div>
     <a class="lab-source" href="https://github.com/samllan/samllan.github.io/tree/main/site/research/examples">Browse the code on GitHub ↗</a>
   </section>
@@ -12,14 +13,32 @@
   <div class="lab-layout">
     <nav class="lab-goals" aria-label="Research goals">
       <p class="eyebrow">Research goals</p>
-      <a href="#question">Frame the question</a>
-      <a href="#prepare">Prepare the images</a>
-      <a class="child-goal" href="#crop">Crop and label images</a>
-      <a class="child-goal" href="#storage">Reduce storage</a>
-      <a class="child-goal" href="#features">Learn image features</a>
-      <a href="#compare">Compare grading models</a>
-      <a href="#interpret">Compare subtype models</a>
-      <a href="#limits">Record what remains open</a>
+      <ul>
+        <li><a href="#question">Frame the question</a></li>
+        <li>
+          <a href="#prepare">Prepare the images</a>
+          <ul>
+            <li><a href="#crop">Crop and label images</a></li>
+            <li>
+              <a href="#storage">Reduce storage</a>
+              <ul><li><a href="#cost">Estimate representation costs</a></li></ul>
+            </li>
+            <li>
+              <a href="#features">Learn image features</a>
+              <ul><li><a href="#feature-export">Export feature vectors</a></li></ul>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#compare">Compare grading models</a>
+          <ul><li><a href="#validation">Summarise validation by fold</a></li></ul>
+        </li>
+        <li>
+          <a href="#interpret">Compare subtype models</a>
+          <ul><li><a href="#explain">Explain individual predictions</a></li></ul>
+        </li>
+        <li><a href="#limits">Record what remains open</a></li>
+      </ul>
     </nav>
 
     <div class="lab-content">
@@ -28,8 +47,8 @@
         <h2>What can the images tell us?</h2>
         <p class="lab-lede">The thesis asks how much useful information can be learned from medical images at three scales, from individual cells to patches and tissue cores.</p>
         <table class="lab-files">
-          <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
-          <tbody><tr><td><a class="lab-file" href="examples/research_questions.md">Research questions</a><small>Reading guide · Chapter 1</small></td><td>Set out the two prediction questions and the engineering problem of making the image collections practical to work with.</td></tr></tbody>
+          <thead><tr><th scope="col">File</th><th scope="col">Outcome</th></tr></thead>
+          <tbody><tr><td><a class="lab-file" href="examples/research_questions.md"><code>research_questions.md</code></a> <small>(Nov 2026)</small></td><td>Sets out the two prediction questions and the engineering problem of making the image collections practical to work with.</td></tr></tbody>
         </table>
       </section>
 
@@ -38,9 +57,9 @@
         <h2>How do you make large images workable?</h2>
         <p class="lab-lede">I built a preparation pipeline that turned large scans into labelled views of the same material at different scales.</p>
         <table class="lab-files">
-          <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
+          <thead><tr><th scope="col">File</th><th scope="col">Outcome</th></tr></thead>
           <tbody>
-            <tr><td><a class="lab-file" href="examples/prepare_image_regions.py">Prepare image regions</a><small>Python</small></td><td>Turn a grid or a set of clicks into labelled crops that retain their original coordinates.</td></tr>
+            <tr><td><a class="lab-file" href="examples/prepare_image_regions.py"><code>prepare_image_regions.py</code></a> <small>(Aug 2020–Nov 2023)</small></td><td>Produces labelled crop and tile bounds that point back to their positions in the source image.</td></tr>
           </tbody>
         </table>
         <div class="lab-next"><a href="#crop">Explore cropping and labelling →</a><a href="#storage">Explore image storage →</a><a href="#features">Explore feature learning →</a></div>
@@ -52,10 +71,10 @@
         <p class="lab-lede">Drawing rectangles worked but took time. Automatic detection missed or partly cropped some examples. I built a tool where the user marks a centre and the software handles the crop and label.</p>
 
         <table class="lab-files">
-          <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
+          <thead><tr><th scope="col">File</th><th scope="col">Outcome</th></tr></thead>
           <tbody>
-            <tr><td><a class="lab-file" href="examples/prepare_image_regions.py">Prepare image regions</a><small>Python</small></td><td>Keep crops the same size near the edges while recording exactly where each one came from.</td></tr>
-            <tr><td><a class="lab-file" href="examples/crop_benchmark.csv">Cropping benchmark</a><small>CSV · thesis Table 2.5</small></td><td>The thesis comparison reports 6 seconds per sample for rectangles and 3 seconds for point-and-click. Both recorded precision and recall of 1.00 for extraction in that comparison.</td></tr>
+            <tr><td><a class="lab-file" href="examples/prepare_image_regions.py"><code>prepare_image_regions.py</code></a> <small>(Aug 2020–Nov 2023)</small></td><td>Turns a click into a labelled square crop. Shifting the bounds inward near the image edge keeps each crop the same size.</td></tr>
+            <tr><td><a class="lab-file" href="examples/crop_benchmark.csv"><code>crop_benchmark.csv</code></a> <small>(2026 thesis)</small></td><td>Records the Table 2.5 comparison of 6 seconds per sample for rectangles and 3 seconds for point-and-click. Both methods recorded precision and recall of 1.00 for extraction in that comparison.</td></tr>
           </tbody>
         </table>
 
@@ -75,10 +94,20 @@
         <h2>How much storage can encoding save?</h2>
         <p class="lab-lede">I compared image encodings to make the patch collection practical to store and move. The thesis reports a change from 26.94 GB of PNG patches to 3.63 GB in WebP.</p>
         <p class="lab-lede">The comparison held the source patches fixed and measured the storage difference between encodings. See Chapter 2, pp. 71–72.</p>
-        <div class="lab-next">
-          <a class="lab-file" href="examples/compare_image_encodings.py">Compare encodings on a generated patch</a>
-          <a class="lab-file" href="examples/estimate_representation_cost.py">Estimate storage for patches and vectors</a>
-        </div>
+        <table class="lab-files">
+          <thead><tr><th scope="col">File</th><th scope="col">Outcome</th></tr></thead>
+          <tbody><tr><td><a class="lab-file" href="examples/compare_image_encodings.py"><code>compare_image_encodings.py</code></a> <small>(Apr 2024)</small></td><td>Reports byte size and decoded pixel differences for PNG and WebP on the same generated patch. The two measurements show the storage and fidelity trade-off.</td></tr></tbody>
+        </table>
+      </section>
+
+      <section id="cost" class="lab-goal" data-goal>
+        <p class="eyebrow">Chapters 2 and 4 · Representation costs</p>
+        <h2>What does each representation cost?</h2>
+        <p class="lab-lede">I checked how much storage was needed to keep the same regions as image patches or as feature vectors.</p>
+        <table class="lab-files">
+          <thead><tr><th scope="col">File</th><th scope="col">Outcome</th></tr></thead>
+          <tbody><tr><td><a class="lab-file" href="examples/estimate_representation_cost.py"><code>estimate_representation_cost.py</code></a> <small>(Apr 2026)</small></td><td>Estimates bytes per region and total bytes for raw RGB patches and fixed-length vectors using the same region count.</td></tr></tbody>
+        </table>
       </section>
 
       <section id="features" class="lab-goal" data-goal>
@@ -86,13 +115,22 @@
         <h2>Can two views teach the same features?</h2>
         <p class="lab-lede">I investigated ways to turn images into smaller sets of numbers. In the Barlow Twins experiments, the model learns from two altered views of the same image. The objective rewards features that agree across the views and penalises features that duplicate one another.</p>
         <table class="lab-files">
-          <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
-          <tbody><tr><td><a class="lab-file" href="examples/learn_image_features.py">Learn image features</a><small>Python</small></td><td>Compare features across two views and see why duplicating a feature increases the loss even when the views agree.</td></tr></tbody>
+          <thead><tr><th scope="col">File</th><th scope="col">Outcome</th></tr></thead>
+          <tbody><tr><td><a class="lab-file" href="examples/learn_image_features.py"><code>learn_image_features.py</code></a> <small>(Oct 2025)</small></td><td>Reports the agreement and total loss for two encoded views. The example shows how duplicated features raise the total loss even when the views agree.</td></tr></tbody>
         </table>
         <div class="lab-next">
-          <a class="lab-file" href="examples/export_feature_vectors.py">Export features with their source coordinates</a>
           <a href="https://proceedings.mlr.press/v139/zbontar21a.html">Original Barlow Twins paper ↗</a>
         </div>
+      </section>
+
+      <section id="feature-export" class="lab-goal" data-goal>
+        <p class="eyebrow">Chapter 2 · Feature export</p>
+        <h2>How do features stay tied to the image?</h2>
+        <p class="lab-lede">Each vector needs a stable link to the region it describes so the features can be traced back after export.</p>
+        <table class="lab-files">
+          <thead><tr><th scope="col">File</th><th scope="col">Outcome</th></tr></thead>
+          <tbody><tr><td><a class="lab-file" href="examples/export_feature_vectors.py"><code>export_feature_vectors.py</code></a> <small>(Sep–Oct 2025)</small></td><td>Writes a CSV that keeps each feature vector alongside its region ID and coordinates. It checks that each region has one vector of the expected length.</td></tr></tbody>
+        </table>
       </section>
 
       <section id="compare" class="lab-goal" data-goal>
@@ -100,12 +138,21 @@
         <h2>Which model changes are worth keeping?</h2>
         <p class="lab-lede">I compared configurations against supplied expert scores and measured the trade-offs in error, training time and memory. One set of comparisons used nine configurations, three folds and three seeds.</p>
         <table class="lab-files">
-          <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
+          <thead><tr><th scope="col">File</th><th scope="col">Outcome</th></tr></thead>
           <tbody>
-            <tr><td><a class="lab-file" href="examples/compare_experiments.py">Compare experiments</a><small>Python</small></td><td>Verify run coverage and compare error, time and memory against the baseline on the same fold and seed.</td></tr>
+            <tr><td><a class="lab-file" href="examples/compare_experiments.py"><code>compare_experiments.py</code></a> <small>(Sep 2026)</small></td><td>Checks that the expected runs are present and reports percentage changes in error, time and memory against baseline runs matched by fold and seed.</td></tr>
           </tbody>
         </table>
-        <div class="lab-next"><a class="lab-file" href="examples/summarise_validation.py">Summarise grading and subtype predictions by fold</a></div>
+      </section>
+
+      <section id="validation" class="lab-goal" data-goal>
+        <p class="eyebrow">Chapters 3 and 4 · Validation</p>
+        <h2>Which folds performed differently?</h2>
+        <p class="lab-lede">I examined the results by validation fold to see where performance varied across splits of the data.</p>
+        <table class="lab-files">
+          <thead><tr><th scope="col">File</th><th scope="col">Outcome</th></tr></thead>
+          <tbody><tr><td><a class="lab-file" href="examples/summarise_validation.py"><code>summarise_validation.py</code></a> <small>(Feb–Sep 2026)</small></td><td>Reports grading error and subtype accuracy by fold, using separate sets of example predictions for the two tasks.</td></tr></tbody>
+        </table>
       </section>
 
       <section id="interpret" class="lab-goal" data-goal>
@@ -113,10 +160,20 @@
         <h2>What can subtype models tell us?</h2>
         <p class="lab-lede">I compared representations for predicting supplied subtype labels and investigated which parts of an image contributed to the models’ predictions.</p>
         <table class="lab-files">
-          <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
+          <thead><tr><th scope="col">File</th><th scope="col">Outcome</th></tr></thead>
+          <tbody><tr><td><a class="lab-file" href="examples/summarise_validation.py"><code>summarise_validation.py</code></a> <small>(Feb–Sep 2026)</small></td><td>Uses recorded subtype labels and predictions to calculate accuracy separately for each fold, so differences between folds stay visible.</td></tr></tbody>
+        </table>
+      </section>
+
+      <section id="explain" class="lab-goal" data-goal>
+        <p class="eyebrow">Chapter 4 · Model explanation</p>
+        <h2>How do regions affect a prediction?</h2>
+        <p class="lab-lede">I held the model fixed and asked how its scores changed when different regions were dimmed.</p>
+        <table class="lab-files">
+          <thead><tr><th scope="col">File</th><th scope="col">Outcome</th></tr></thead>
           <tbody>
-            <tr><td><a class="lab-file" href="examples/explain_prediction.py">Explain a prediction</a><small>Python</small></td><td>Fit one brightness mask per class and see how dimming the same regions changes each score in an illustrative model.</td></tr>
-            <tr><td><a class="lab-file" href="examples/model_explanations.md">Reading model explanations</a><small>Reading guide · Chapter 4</small></td><td>Explain what a visual explanation can show about a prediction, and what additional evidence would be needed to interpret it medically.</td></tr>
+            <tr><td><a class="lab-file" href="examples/explain_prediction.py"><code>explain_prediction.py</code></a> <small>(Feb 2026)</small></td><td>Returns one brightness mask per class and compares the original and masked scores from the same illustrative model.</td></tr>
+            <tr><td><a class="lab-file" href="examples/model_explanations.md"><code>model_explanations.md</code></a> <small>(Nov 2026)</small></td><td>Explains what a mask reveals about the model’s response and the evidence needed to interpret it medically.</td></tr>
           </tbody>
         </table>
       </section>
@@ -126,8 +183,8 @@
         <h2>What would we need to test next?</h2>
         <p class="lab-lede">The thesis establishes results within the study design. It identifies independent external validation as a next step.</p>
         <table class="lab-files">
-          <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
-          <tbody><tr><td><a class="lab-file" href="examples/research_limits.md">Research limits and next tests</a><small>Reading guide · Chapter 5</small></td><td>Record what the internal comparisons support and what would need to be tested across new laboratories and populations.</td></tr></tbody>
+          <thead><tr><th scope="col">File</th><th scope="col">Outcome</th></tr></thead>
+          <tbody><tr><td><a class="lab-file" href="examples/research_limits.md"><code>research_limits.md</code></a> <small>(Nov 2026)</small></td><td>Records what the internal comparisons support and what would need to be tested across new laboratories and populations.</td></tr></tbody>
         </table>
       </section>
     </div>
