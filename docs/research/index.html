@@ -79,6 +79,10 @@
         <h2>How much storage can encoding save?</h2>
         <p class="lab-lede">I compared image encodings to make the patch collection practical to store and move. The thesis reports a change from 26.94 GB of PNG patches to 3.63 GB in WebP.</p>
         <p class="lab-lede">The comparison held the source patches fixed and measured the storage difference between encodings. See Chapter 2, pp. 71–72.</p>
+        <div class="lab-next">
+          <a class="lab-file" href="examples/compare_image_encodings.py">Compare encodings on a generated patch</a>
+          <a class="lab-file" href="examples/estimate_representation_cost.py">Estimate storage for patches and vectors</a>
+        </div>
       </section>
 
       <section id="features" class="lab-goal" data-goal>
@@ -89,7 +93,10 @@
           <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
           <tbody><tr><td><a class="lab-file" href="examples/learn_image_features.py">Learn image features</a><small>Python</small></td><td>Compare features across two views and see why duplicating a feature increases the loss even when the views agree.</td></tr></tbody>
         </table>
-        <div class="lab-next"><a href="https://proceedings.mlr.press/v139/zbontar21a.html">Original Barlow Twins paper ↗</a></div>
+        <div class="lab-next">
+          <a class="lab-file" href="examples/export_feature_vectors.py">Export features with their source coordinates</a>
+          <a href="https://proceedings.mlr.press/v139/zbontar21a.html">Original Barlow Twins paper ↗</a>
+        </div>
       </section>
 
       <section id="compare" class="lab-goal" data-goal>
@@ -102,6 +109,7 @@
             <tr><td><a class="lab-file" href="examples/compare_experiments.py">Compare experiments</a><small>Python</small></td><td>Verify run coverage and compare error, time and memory against the baseline on the same fold and seed.</td></tr>
           </tbody>
         </table>
+        <div class="lab-next"><a class="lab-file" href="examples/summarise_validation.py">Summarise grading and subtype predictions by fold</a></div>
       </section>
 
       <section id="interpret" class="lab-goal" data-goal>
