@@ -20,6 +20,7 @@
       <a href="#prepare">Prepare the images</a>
       <a class="child-goal" href="#crop">Crop and label images</a>
       <a class="child-goal" href="#storage">Reduce storage</a>
+      <a class="child-goal" href="#features">Learn image features</a>
       <a href="#compare">Compare grading models</a>
       <a href="#interpret">Compare subtype models</a>
       <a href="#limits">Record what remains open</a>
@@ -43,10 +44,11 @@
         <table class="lab-files">
           <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
           <tbody>
+            <tr><td><a class="lab-file" href="examples/tile_image.py">Tile an image</a><small>Python · source revision Nov 2023</small></td><td>Divide an image into consistently sized patches, keeping coordinates so each one can be located in the original.</td></tr>
             <tr><td><a class="lab-file" href="examples/footprint.py">Representation footprint</a><small>Python · runnable example</small></td><td>Calculate how the storage requirement changes when each image is represented by a fixed-length vector.</td></tr>
           </tbody>
         </table>
-        <div class="lab-next"><a href="#crop">Explore cropping and labelling →</a><a href="#storage">Explore image storage →</a></div>
+        <div class="lab-next"><a href="#crop">Explore cropping and labelling →</a><a href="#storage">Explore image storage →</a><a href="#features">Explore feature learning →</a></div>
       </section>
 
       <section id="crop" class="lab-goal" data-goal>
@@ -83,6 +85,17 @@
           <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
           <tbody><tr><td><a class="lab-file" href="examples/compare_image_formats.py">Compare image formats</a><small>Python · source revision Apr 2024</small></td><td>Encode the same image both ways and report bytes and pixel differences. The example uses generated pixels and measures image changes directly.</td></tr></tbody>
         </table>
+      </section>
+
+      <section id="features" class="lab-goal" data-goal>
+        <p class="eyebrow">Chapter 2 · Data reduction</p>
+        <h2>Can two views teach the same features?</h2>
+        <p class="lab-lede">I investigated ways to turn images into smaller sets of numbers. In the Barlow Twins experiments, the model learns from two altered views of the same image. The objective rewards features that agree across the views and penalises features that duplicate one another.</p>
+        <table class="lab-files">
+          <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
+          <tbody><tr><td><a class="lab-file" href="examples/barlow_twins_loss.py">Inspect the Barlow Twins loss</a><small>Python · generated vectors</small></td><td>Compare two examples with perfect agreement between views and see why duplicating a feature still increases the loss.</td></tr></tbody>
+        </table>
+        <div class="lab-next"><a href="https://proceedings.mlr.press/v139/zbontar21a.html">Original Barlow Twins paper ↗</a></div>
       </section>
 
       <section id="compare" class="lab-goal" data-goal>
@@ -129,4 +142,4 @@
     <div class="preview-links"><a id="preview-open" target="_blank" rel="noopener">Open file ↗</a><a id="preview-download" download>Download</a></div>
   </dialog>
 </main>
-<footer><span>Samuel Llanwarne</span><span>Research and personal projects</span><a href="https://github.com/samllan">Find me on GitHub ↗</a></footer><script src="logbook.js?v=bd3e89ff2f" defer></script></body></html>
+<footer><span>Samuel Llanwarne</span><span>Research and personal projects</span><a href="https://github.com/samllan">Find me on GitHub ↗</a></footer><script src="logbook.js?v=a43df2c23c" defer></script></body></html>

@@ -23,8 +23,8 @@ def read_runs(csv_path):
     return runs
 
 
-def compare(runs, baseline, folds, seeds):
-    experiments = sorted({name for name, _, _ in runs})
+def compare(runs, baseline, folds, seeds, experiments=None):
+    experiments = sorted(set(experiments) if experiments else {name for name, _, _ in runs})
     if baseline not in experiments:
         raise ValueError(f'Baseline {baseline!r} is missing.')
     pairs = list(product(folds, seeds))
@@ -44,7 +44,9 @@ if __name__ == '__main__':
     parser.add_argument('--baseline', default='baseline')
     parser.add_argument('--folds', type=int, nargs='+', default=[0, 1])
     parser.add_argument('--seeds', type=int, nargs='+', default=[7, 12])
+    parser.add_argument('--experiments', nargs='+', help='Expected experiment names, including the baseline')
     args = parser.parse_args()
     print('Experiment  Change in error, seconds, and peak memory (MB)')
-    for name, *deltas in compare(read_runs(args.results), args.baseline, sorted(set(args.folds)), sorted(set(args.seeds))):
+    for name, *deltas in compare(read_runs(args.results), args.baseline, sorted(set(args.folds)),
+                                sorted(set(args.seeds)), args.experiments):
         print(f'{name:<10}  {deltas[0]:+7.3f}  {deltas[1]:+9.2f}  {deltas[2]:+18.1f}')

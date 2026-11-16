@@ -3,7 +3,7 @@ const goals = [...logbook.querySelectorAll('[data-goal]')];
 const goalLinks = [...logbook.querySelectorAll('.lab-goals a')];
 
 function selectGoal() {
-  const active = goals.find(goal => `#${goal.id}` === location.hash) || goals[2];
+  const active = goals.find(goal => `#${goal.id}` === location.hash) || document.querySelector('#crop');
   goals.forEach(goal => { goal.hidden = goal !== active; });
   goalLinks.forEach(link => {
     if (link.hash === `#${active.id}`) link.setAttribute('aria-current', 'location');
