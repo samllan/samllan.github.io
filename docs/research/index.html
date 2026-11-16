@@ -44,8 +44,7 @@
         <table class="lab-files">
           <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
           <tbody>
-            <tr><td><a class="lab-file" href="examples/tile_image.py">Tile an image</a><small>Python · source revision Nov 2023</small></td><td>Divide an image into consistently sized patches, keeping coordinates so each one can be located in the original.</td></tr>
-            <tr><td><a class="lab-file" href="examples/footprint.py">Representation footprint</a><small>Python · runnable example</small></td><td>Calculate how the storage requirement changes when each image is represented by a fixed-length vector.</td></tr>
+            <tr><td><a class="lab-file" href="examples/prepare_image_regions.py">Prepare image regions</a><small>Python</small></td><td>Turn a grid or a set of clicks into labelled crops that retain their original coordinates.</td></tr>
           </tbody>
         </table>
         <div class="lab-next"><a href="#crop">Explore cropping and labelling →</a><a href="#storage">Explore image storage →</a><a href="#features">Explore feature learning →</a></div>
@@ -59,9 +58,7 @@
         <table class="lab-files">
           <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
           <tbody>
-            <tr><td><a class="lab-file" href="examples/crop_from_points.py">Crop from points</a><small>Python · source versions 2020–2023</small></td><td>Turn recorded centres into consistent image regions. Save each crop under its label and record its bounds.</td></tr>
-            <tr><td><a class="lab-file" href="examples/clicks.csv">Example clicks</a><small>CSV · synthetic</small></td><td>Supply labelled coordinates so someone can rerun the example without repeating the clicks.</td></tr>
-            <tr><td><a class="lab-file" href="examples/example_grid.png">Example image</a><small>PNG · generated artwork</small></td><td>Provide a shareable input with shapes in different positions, including one near the edge.</td></tr>
+            <tr><td><a class="lab-file" href="examples/prepare_image_regions.py">Prepare image regions</a><small>Python</small></td><td>Keep crops the same size near the edges while recording exactly where each one came from.</td></tr>
             <tr><td><a class="lab-file" href="examples/crop_benchmark.csv">Cropping benchmark</a><small>CSV · thesis Table 2.5</small></td><td>The thesis comparison reports 6 seconds per sample for rectangles and 3 seconds for point-and-click. Both recorded precision and recall of 1.00 for extraction in that comparison.</td></tr>
           </tbody>
         </table>
@@ -81,10 +78,7 @@
         <p class="eyebrow">Chapter 2 · Data reduction</p>
         <h2>How much storage can encoding save?</h2>
         <p class="lab-lede">I compared image encodings to make the patch collection practical to store and move. The thesis reports a change from 26.94 GB of PNG patches to 3.63 GB in WebP.</p>
-        <table class="lab-files">
-          <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
-          <tbody><tr><td><a class="lab-file" href="examples/compare_image_formats.py">Compare image formats</a><small>Python · source revision Apr 2024</small></td><td>Encode the same image both ways and report bytes and pixel differences. The example uses generated pixels and measures image changes directly.</td></tr></tbody>
-        </table>
+        <p class="lab-lede">The comparison held the source patches fixed and measured the storage difference between encodings. See Chapter 2, pp. 71–72.</p>
       </section>
 
       <section id="features" class="lab-goal" data-goal>
@@ -93,7 +87,7 @@
         <p class="lab-lede">I investigated ways to turn images into smaller sets of numbers. In the Barlow Twins experiments, the model learns from two altered views of the same image. The objective rewards features that agree across the views and penalises features that duplicate one another.</p>
         <table class="lab-files">
           <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
-          <tbody><tr><td><a class="lab-file" href="examples/barlow_twins_loss.py">Inspect the Barlow Twins loss</a><small>Python · generated vectors</small></td><td>Compare two examples with perfect agreement between views and see why duplicating a feature still increases the loss.</td></tr></tbody>
+          <tbody><tr><td><a class="lab-file" href="examples/learn_image_features.py">Learn image features</a><small>Python</small></td><td>Compare features across two views and see why duplicating a feature increases the loss even when the views agree.</td></tr></tbody>
         </table>
         <div class="lab-next"><a href="https://proceedings.mlr.press/v139/zbontar21a.html">Original Barlow Twins paper ↗</a></div>
       </section>
@@ -105,8 +99,7 @@
         <table class="lab-files">
           <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
           <tbody>
-            <tr><td><a class="lab-file" href="examples/compare_runs.py">Compare paired runs</a><small>Python · source revision Sep 2026</small></td><td>Check that the experiment grid is complete, then compare each run with the baseline on the same fold and seed.</td></tr>
-            <tr><td><a class="lab-file" href="examples/example_runs.csv">Example run results</a><small>CSV · synthetic</small></td><td>Show a trade-off that accuracy alone would miss. In this example, the compact variant gives up a little accuracy while reducing time and memory.</td></tr>
+            <tr><td><a class="lab-file" href="examples/compare_experiments.py">Compare experiments</a><small>Python</small></td><td>Verify run coverage and compare error, time and memory against the baseline on the same fold and seed.</td></tr>
           </tbody>
         </table>
       </section>
@@ -118,8 +111,7 @@
         <table class="lab-files">
           <thead><tr><th scope="col">File or work</th><th scope="col">Outcome</th></tr></thead>
           <tbody>
-            <tr><td><a class="lab-file" href="examples/footprint.py">Representation footprint</a><small>Python · simplified calculation</small></td><td>Make one engineering cost comparable across representations on the same number of inputs.</td></tr>
-            <tr><td><a class="lab-file" href="examples/classwise_dimming.py">Class-wise dimming</a><small>Python · source revision Feb 2026</small></td><td>Fit a separate mask for each class and inspect how dimming the same regions changes the scores in a toy model.</td></tr>
+            <tr><td><a class="lab-file" href="examples/explain_prediction.py">Explain a prediction</a><small>Python</small></td><td>Fit one brightness mask per class and see how dimming the same regions changes each score in an illustrative model.</td></tr>
             <tr><td><a class="lab-file" href="examples/model_explanations.md">Reading model explanations</a><small>Reading guide · Chapter 4</small></td><td>Explain what a visual explanation can show about a prediction, and what additional evidence would be needed to interpret it medically.</td></tr>
           </tbody>
         </table>
@@ -142,4 +134,4 @@
     <div class="preview-links"><a id="preview-open" target="_blank" rel="noopener">Open file ↗</a><a id="preview-download" download>Download</a></div>
   </dialog>
 </main>
-<footer><span>Samuel Llanwarne</span><span>Research and personal projects</span><a href="https://github.com/samllan">Find me on GitHub ↗</a></footer><script src="logbook.js?v=a43df2c23c" defer></script></body></html>
+<footer><span>Samuel Llanwarne</span><span>Research and personal projects</span><a href="https://github.com/samllan">Find me on GitHub ↗</a></footer><script src="logbook.js?v=1695c4a01d" defer></script></body></html>

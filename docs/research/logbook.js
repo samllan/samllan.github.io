@@ -17,6 +17,8 @@ selectGoal();
 
 const dialog = document.querySelector('#file-preview');
 const previewContent = document.querySelector('#preview-content');
+const previewOpen = document.querySelector('#preview-open');
+const sourceDirectory = document.querySelector('.lab-source').href.replace('/tree/', '/blob/');
 let previewRequest;
 
 function filePreview(text, url) {
@@ -54,7 +56,9 @@ logbook.querySelectorAll('.lab-file').forEach(link => {
     const request = new AbortController();
     previewRequest = request;
     document.querySelector('#preview-title').textContent = link.textContent;
-    document.querySelector('#preview-open').href = link.href;
+    const isScript = link.href.endsWith('.py');
+    previewOpen.href = isScript ? `${sourceDirectory}/${link.href.split('/').pop()}` : link.href;
+    previewOpen.textContent = isScript ? 'Open on GitHub ↗' : 'Open file ↗';
     document.querySelector('#preview-download').href = link.href;
     previewContent.textContent = 'Loading file…';
     dialog.showModal();
@@ -73,7 +77,7 @@ logbook.querySelectorAll('.lab-file').forEach(link => {
       const text = await response.text();
       if (!request.signal.aborted) previewContent.replaceChildren(filePreview(text, link.href));
     } catch (error) {
-      if (!request.signal.aborted) previewContent.textContent = 'Preview unavailable. Use Open file or Download.';
+      if (!request.signal.aborted) previewContent.textContent = 'Preview unavailable. Use the links below.';
     }
   });
 });

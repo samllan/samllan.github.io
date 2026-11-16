@@ -1,9 +1,0 @@
-experiment,fold,seed,error,seconds,peak_memory_mb
-baseline,0,7,0.315,51,92
-baseline,0,12,0.311,54,93
-baseline,1,7,0.329,55,91
-baseline,1,12,0.324,54,95
-compact,0,7,0.322,29,60
-compact,0,12,0.320,28,59
-compact,1,7,0.334,31,59
-compact,1,12,0.330,29,61
