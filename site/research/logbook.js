@@ -4,7 +4,7 @@ const goals = [...logbook.querySelectorAll('[data-goal]')];
 const goalLinks = [...logbook.querySelectorAll('.lab-goals a[href^="#"]')];
 
 function selectGoal() {
-  const active = goals.find(goal => `#${goal.id}` === location.hash) || document.querySelector('#crop');
+  const active = goals.find(goal => `#${goal.id}` === location.hash) || goals[0];
   goals.forEach(goal => { goal.hidden = goal !== active; });
   goalLinks.forEach(link => {
     if (link.hash === `#${active.id}`) link.setAttribute('aria-current', 'location');
@@ -69,7 +69,7 @@ logbook.querySelectorAll('.lab-file').forEach(link => {
     previewContent.textContent = 'Loading file…';
     dialog.showModal();
 
-    if (link.href.endsWith('.png')) {
+  if (link.href.endsWith('.png') || link.href.endsWith('.svg')) {
       const image = new Image();
       image.alt = link.textContent;
       image.src = link.href;

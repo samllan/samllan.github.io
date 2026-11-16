@@ -1,0 +1,266 @@
+[
+  {
+    "title": "Start here",
+    "goals": [
+      {
+        "id": "question",
+        "title": "What did the PhD investigate?",
+        "description": "I built a way to work with large scans of lymphoma tissue at three scales: cores, patches and cells. The thesis asks how well these images can reproduce assessors’ grading scores and predict the supplied subtype labels. The code examples use generated inputs.",
+        "files": [
+          ["research_questions.md","Nov 2026","Sets out the grading and subtype questions, and the engineering problem of making the image data practical to work with."],
+          ["README.md","Nov 2026","Shows how to run a single example or reproduce the grading figure and its intermediate files."]
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Make the images usable",
+    "goals": [
+      {
+        "id": "crop",
+        "title": "Mark and label tissue regions",
+        "description": "I compared drawing rectangles with marking a centre and letting the software position a fixed-size crop. The click tool halved the reported extraction time per sample in this comparison.",
+        "files": [
+          ["prepare_image_regions.py","Aug 2020–Nov 2023","Turns clicks or a grid into labelled image bounds. It shifts edge crops inward so they stay the same size."],
+          ["crop_benchmark.csv","2026 thesis","Records the thesis comparison of six seconds per sample for rectangles and three seconds for clicks, alongside extraction precision and recall."],
+          ["record_crop_marks.py","2020–2023","Writes a CSV of labelled click centres and rectangle bounds for one scan."]
+        ]
+      },
+      {
+        "id": "prepare",
+        "title": "Extract crops and preserve their coordinates",
+        "description": "The crop is a smaller image with a record of the scan, label and source bounds it came from. That record lets a reader go back to the right place in a scan.",
+        "files": [
+          ["extract_labelled_crops.py","2020–2023","Extracts one image per labelled region and writes a CSV linking crop names to the original pixel bounds."],
+          ["map_crop_to_scan.py","2020–2023","Converts a box drawn inside a crop back into coordinates on the original scan, including the downsampling factor."]
+        ]
+      },
+      {
+        "id": "patches",
+        "title": "Build and inspect patch datasets",
+        "description": "A grid turns a core into smaller patches. Coverage checks and counts help reveal empty regions and cores whose patch data are missing.",
+        "files": [
+          ["filter_tissue_patches.py","2023–2025","Produces a patch list with tissue coverage and rejects patches that contain too much background."],
+          ["summarise_patch_counts.py","2023–2026","Reports patch counts per core and identifies cores with no saved patches."],
+          ["extract_patch_images.py","2023–2025","Saves accepted patches and writes a manifest with their source core, coordinates and measured coverage."]
+        ]
+      },
+      {
+        "id": "cells",
+        "title": "Build cell-level datasets",
+        "description": "Cell extracts offer a different view of the same tissue. The durable dataset needs a cell identifier, the parent core, coordinates and the measurements used downstream.",
+        "files": [
+          ["index_segmented_cells.py","2021–2026","Indexes segmented cells by core and records where each cell sits on the source scan."],
+          ["package_cell_arrays.py","2021–2025","Writes aligned arrays of cell IDs, coordinates and features into a portable example dataset."],
+          ["summarise_cells_by_core.py","2026 thesis","Summarises how many cell instances each core contributes and shows whether a few cores dominate the dataset."]
+        ]
+      },
+      {
+        "id": "storage",
+        "title": "Check, bundle and compress datasets",
+        "description": "I compared storage and access trade-offs so the same image collections could be used in repeated experiments. The thesis reports that WebP reduced patch storage from 26.94 GB to 3.63 GB.",
+        "files": [
+          ["compare_image_encodings.py","Apr 2024","Measures file size and decoded pixel differences for PNG and WebP on the same generated patch."],
+          ["audit_dataset_structure.py","2024–2025","Flags files that are missing, unexpected or the wrong shape before training begins."],
+          ["measure_storage_reads.py","2024–2025","Times equivalent byte reads from separate files and a single bundled file for a small local comparison."]
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Learn smaller representations",
+    "goals": [
+      {
+        "id": "autoencoder",
+        "title": "Learn by reconstructing images",
+        "description": "I trained networks to reconstruct their input through a small set of numbers. Checking reconstruction mistakes helped show what information the representation preserved.",
+        "files": [
+          ["fit_linear_autoencoder.py","2021–2024","Fits a small linear reconstruction model and prints the compact codes for generated image patches."],
+          ["score_reconstructions.py","2021–2024","Reports reconstruction error per example and ranks the cases the model reconstructed least accurately."],
+          ["compare_bottleneck_sizes.py","2021–2024","Compares reconstruction error and storage as the same input passes through narrower or wider bottlenecks."]
+        ]
+      },
+      {
+        "id": "features",
+        "title": "Learn features from two views",
+        "description": "I compared two transformed versions of a patch and trained a shared encoder to keep useful signals while reducing repeated information in the feature vector.",
+        "files": [
+          ["learn_image_features.py","Oct 2025","Reports agreement and redundancy terms for paired feature vectors in an illustrative Barlow Twins calculation."],
+          ["prepare_paired_views.py","2023–2025","Generates two independently augmented views of each synthetic patch and retains the source ID for pairing."],
+          ["audit_feature_variation.py","2023–2025","Flags feature columns that barely vary across patches and pairs of columns that carry almost the same signal."]
+        ]
+      },
+      {
+        "id": "frozen-features",
+        "title": "Extract features with existing models",
+        "description": "Pretrained encoders gave me a fixed comparison point. The pipeline had to keep feature dimensions and patch ordering clear so those outputs could be reused.",
+        "files": [
+          ["batch_frozen_features.py","2024–2025","Runs a fixed encoder on small batches and returns one feature vector per identified patch."],
+          ["compare_encoder_dimensions.py","2025","Builds a side-by-side table of vector dimensions and storage required for alternate fixed encoders."],
+          ["standardise_encoder_inputs.py","2024–2025","Converts an RGB image to the size and channel normalisation expected by a fixed encoder."]
+        ]
+      },
+      {
+        "id": "feature-benchmarks",
+        "title": "Test which features are useful",
+        "description": "I compared representations on downstream tasks and measured how well examples grouped in the resulting feature space. The thesis distinguishes the external image benchmark from the lymphoma experiments.",
+        "files": [
+          ["benchmark_frozen_features.py","2025–2026","Fits a simple classifier on training features and reports held-out accuracy for each feature representation."],
+          ["measure_feature_separation.py","2021–2026","Reports silhouette scores for examples with known groups to distinguish overlap from separation in feature space."],
+          ["project_feature_space.py","2021–2025","Fits a two-dimensional projection to feature vectors so group overlap can be plotted and examined."]
+        ]
+      },
+      {
+        "id": "feature-export",
+        "title": "Link feature vectors to the source image",
+        "description": "I saved features with the identifiers and coordinates needed to reuse them. Joining by ID matters when files have been sorted or exported in a different order.",
+        "files": [
+          ["export_feature_vectors.py","Sep–Oct 2025","Writes features to a CSV alongside the original region IDs and coordinates, checking that every vector has the expected length."],
+          ["align_features_to_regions.py","2025","Joins features to region metadata by ID and reports any missing or extra regions."],
+          ["check_feature_cache.py","2025","Checks a cached feature array against its encoder name, ID order and recorded vector size before reuse."]
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Predict grading scores",
+    "goals": [
+      {
+        "id": "grading-splits",
+        "title": "Prepare reference grades and splits",
+        "description": "The grading target combines available assessor ratings. In Chapter 3, samples from the same tissue core stayed in the same fold. The example shows how to keep groups together and inspect the assignments before training.",
+        "files": [
+          ["prepare_reference_grades.py","2026 thesis","Averages available assessor grades per example and keeps the number and spread of ratings alongside the reference."],
+          ["assign_validation_folds.py","2024–2025","Assigns each known group to one held-out fold and writes split memberships that can be inspected before training."]
+        ]
+      },
+      {
+        "id": "grading-models",
+        "title": "Train and compare graders at three scales",
+        "description": "The research compared core, patch and cell representations for the same grading task. The small examples fit separate baseline models and keep a prediction for each held-out sample.",
+        "files": [
+          ["train_scale_graders.py","2022–2026","Fits a small independent grader on each scale using the same training IDs, and returns predictions by scale."],
+          ["save_held_out_grades.py","2025–2026","Writes one out-of-fold prediction per sample and image scale, with its fold and reference grade."],
+          ["summarise_errors_by_grade.py","2026 thesis","Reports signed and absolute errors by reference grade to show where predictions run high or low."]
+        ]
+      },
+      {
+        "id": "compare",
+        "title": "Test changes against matched baseline runs",
+        "description": "Changing one setting at a time makes results easier to interpret. I compared runs on matching folds and seeds, and the thesis describes cases where the settings or controls needed closer checks.",
+        "files": [
+          ["compare_experiments.py","Sep 2026","Compares error, runtime and memory against baseline runs matched by fold and seed."],
+          ["plan_matched_runs.py","2025–2026","Produces a schedule of baseline and single-change runs with shared folds and seeds."],
+          ["verify_run_configuration.py","2026","Flags a run when the settings recorded at startup differ from the settings intended by the experiment plan."]
+        ]
+      },
+      {
+        "id": "agreement",
+        "title": "Compare model error with assessor disagreement",
+        "description": "Assessors can give different grades to the same example. Reporting this on matched samples gives context for the distance between the model prediction and the averaged reference grade.",
+        "files": [
+          ["compare_assessor_errors.py","2026","Reports matched sample counts, assessor-to-assessor disagreement, and model error against the mean grade on those same samples."],
+          ["score_ordinal_agreement.py","2026","Computes quadratic-weighted kappa for paired ordinal grades while accounting for the expected agreement from the grade frequencies."]
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Predict the supplied subtype labels",
+    "goals": [
+      {
+        "id": "subtype-cohort",
+        "title": "Prepare the subtype dataset",
+        "description": "The subtype experiment depends on matching supplied labels to usable images and recording which examples pass the data checks. The thesis describes the limits of the available reference metadata.",
+        "files": [
+          ["join_subtype_labels.py","2026","Matches supplied labels to image IDs and lists missing or unrecognised labels for review."],
+          ["audit_cohort_filters.py","2026 thesis","Records which synthetic specimens pass each eligibility rule and why the other specimens are excluded."]
+        ]
+      },
+      {
+        "id": "interpret",
+        "title": "Compare models that combine patches",
+        "description": "A model has to turn many patch measurements into one specimen prediction. I tested different ways to combine the measurements and explored how to batch specimens with varying patch counts.",
+        "files": [
+          ["pool_patch_evidence.py","2022–2026","Compares mean, maximum and attention-weighted summaries of the same group of patch features."],
+          ["batch_variable_patch_sets.py","2026 thesis","Groups specimens of similar patch counts into batches and reports how many dummy slots each batch needs."],
+          ["predict_subtypes_from_bags.py","2026 thesis","Fits an illustrative binary classifier on pooled training specimens and produces subtype scores on held-out specimens."]
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Check performance across folds",
+        "description": "Looking at each held-out fold shows variation hidden by a single overall score. The thesis reports internal validation and identifies independent evaluation as further work.",
+        "files": [
+          ["summarise_validation.py","Feb–Sep 2026","Reports grading error and subtype accuracy by fold using two sets of example predictions."],
+          ["evaluate_subtype_roc.py","2026","Calculates subtype ROC points and area under the curve across score thresholds, keeping tied scores together."],
+          ["compare_fold_class_recall.py","2026","Reports the fraction of each subtype detected in each fold, along with the number of examples behind each figure."]
+        ]
+      },
+      {
+        "id": "cost",
+        "title": "Compare accuracy, runtime and memory",
+        "description": "A wider model may improve one measure while costing more time or storage. I compared these trade-offs so choices could reflect the computing resources available for the research.",
+        "files": [
+          ["estimate_representation_cost.py","Apr 2026","Compares the storage required for raw RGB patches and fixed-length feature vectors for the same number of regions."],
+          ["rank_accuracy_compute_tradeoffs.py","2026","Finds models for which no alternative improves accuracy, time and memory together."],
+          ["audit_compute_measurements.py","2026","Reports missing timing or memory measurements for individual model and fold pairs before comparing their costs."]
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Inspect and reproduce the findings",
+    "goals": [
+      {
+        "id": "heatmaps",
+        "title": "Map scores back onto the image",
+        "description": "I made plots at different scales to see where scores fell on the tissue. Keeping coordinates and colour scales consistent makes overlays easier to compare.",
+        "files": [
+          ["map_patch_scores.py","2024–2025","Places patch scores on an image grid and averages overlapping patches, leaving uncovered pixels marked as missing."],
+          ["render_score_overlay.py","2024–2026","Creates a transparent heatmap overlay with the same colour scale across examples and no colour over uncovered image areas."],
+          ["summarise_overlay_coverage.py","2026","Reports the share of a reference region covered by patch scores and the spread of scores there."]
+        ]
+      },
+      {
+        "id": "explain",
+        "title": "Test what happens when regions are dimmed",
+        "description": "I held the model fixed and measured how its scores changed when different parts of the input were dimmed. These changes describe model behaviour in the experiment.",
+        "files": [
+          ["explain_prediction.py","Feb 2026","Returns a brightness mask per class and compares original and masked scores from the same illustrative model."],
+          ["model_explanations.md","Nov 2026","Summarises what model masks can tell us and what validation of their meaning would require."],
+          ["test_mask_score_changes.py","2026","Compares model scores after applying an explanation mask and a uniform mask with the same average dimming."]
+        ]
+      },
+      {
+        "id": "run-results",
+        "title": "Collect and check completed runs",
+        "description": "Repeated experiments produce separate files. A reliable summary needs stable run identifiers and a way to spot missing, duplicate or unfinished results before aggregating them.",
+        "files": [
+          ["collect_fold_results.py","2026","Combines one metrics row per run and flags duplicate run IDs before aggregation."],
+          ["find_incomplete_runs.py","2026","Distinguishes missing runs from runs that started but failed or never saved their final metrics."]
+        ]
+      },
+      {
+        "id": "figures",
+        "title": "Rebuild tables and figures from saved results",
+        "description": "The thesis figures can be traced back to prediction tables and run comparisons. The synthetic replay below takes small generated inputs through the grading workflow and regenerates a figure.",
+        "files": [
+          ["build_grading_table.py","2025–2026","Builds a comparison table from saved out-of-fold predictions with one error summary per image scale."],
+          ["render_grading_figure.py","2026","Renders the comparison table as a labelled SVG figure that can be regenerated from the prediction file."],
+          ["run_grading_example.py","2026 thesis","Runs the synthetic grading workflow end to end and saves the splits, held-out predictions, assessor comparison and regenerated figure."],
+          ["bin_patch_distribution.py","2026","Turns saved per-core patch counts into a histogram table for the patch distribution figure."],
+          ["grading_figure.svg","Nov 2026","A figure generated by the grading example. The bars use synthetic scores and can be regenerated from the example predictions."]
+        ]
+      },
+      {
+        "id": "limits",
+        "title": "Record what needs another test",
+        "description": "The thesis sets out what the internal comparisons support and what better-controlled and independent testing would need to establish.",
+        "files": [
+          ["research_limits.md","Nov 2026","Records the limits of the internal comparisons and what independent validation would need."]
+        ]
+      }
+    ]
+  }
+]

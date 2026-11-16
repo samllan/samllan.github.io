@@ -5,6 +5,8 @@ from html import escape
 from pathlib import Path
 import shutil
 
+from render_logbook import render_logbook
+
 ROOT = Path(__file__).resolve().parents[1]
 STYLE_VERSION = hashlib.sha256((ROOT / 'tool' / 'style.css').read_bytes()).hexdigest()[:10]
 SCRIPT_VERSION = hashlib.sha256((ROOT / 'tool' / 'experiments.js').read_bytes()).hexdigest()[:10]
@@ -223,7 +225,7 @@ for name in ('logbook.css', 'logbook.js'):
 (public_research / 'index.html').write_text(document(
     'The PhD logbook',
     'A browsable record of the research questions, code and experiments behind the doctoral thesis.',
-    (research / 'logbook.html').read_text(encoding='utf-8'), '../',
+    render_logbook(research), '../',
     f'<script src="logbook.js?v={versions["logbook.js"]}" defer></script>',
     f'<link rel="stylesheet" href="logbook.css?v={versions["logbook.css"]}">',
     site_chrome=False,

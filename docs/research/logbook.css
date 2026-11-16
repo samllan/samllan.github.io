@@ -14,6 +14,8 @@
 .lab-layout { display: grid; grid-template-columns: clamp(250px, 28vw, 345px) minmax(0, 1fr); }
 .lab-goals { display: block; padding: 22px 17px 14px; border-right: 1px solid var(--lab-rule); background: #f0eee7; }
 .lab-goals h2 { margin: 0 10px 9px; font-size: 13px; font-weight: 700; color: #536052; }
+.lab-group { margin: 20px 10px 4px; font-size: 12px; font-weight: 700; color: #536052; }
+.lab-group:first-of-type { margin-top: 11px; }
 .lab-date-note { max-width: 29ch; margin: 16px 10px 3px; color: #536052; font-size: 12px; line-height: 1.5; }
 .lab-goals ul { list-style: none; margin: 0; padding: 0; }
 .lab-goals ul ul { margin: 2px 0 3px 12px; padding-left: 6px; border-left: 1px solid var(--lab-rule); }
@@ -24,6 +26,7 @@
 .lab-goals .lab-script code { font: 12px/1.4 'Cascadia Code', Consolas, monospace; overflow-wrap: anywhere; }
 .lab-goals a:hover { text-decoration: underline; }
 .lab-goals a[aria-current] { color: #204633; background: #e4ebe0; font-weight: 700; }
+.lab.enhanced .lab-goals a:not([aria-current]) + .lab-script-list { display: none; }
 .lab-content { min-width: 0; padding: 26px clamp(18px, 4vw, 56px) 36px; }
 .lab-goal { padding-bottom: 16px; }
 .lab-goal + .lab-goal:not([hidden]) { border-top: 1px solid var(--lab-rule); }
