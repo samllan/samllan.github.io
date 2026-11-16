@@ -218,12 +218,4 @@ for name in ('logbook.css', 'logbook.js'):
     f'<script src="logbook.js?v={versions["logbook.js"]}" defer></script>',
     f'<link rel="stylesheet" href="logbook.css?v={versions["logbook.css"]}">',
 ), encoding='utf-8')
-scripts_page = public_research / 'scripts'
-scripts_page.mkdir(exist_ok=True)
-(scripts_page / 'index.html').write_text(document(
-    'PhD script inventory',
-    'Published and proposed scripts with the outputs that represent each PhD workflow.',
-    (research / 'script_inventory.html').read_text(encoding='utf-8'), '../../',
-    stylesheet=f'<link rel="stylesheet" href="../logbook.css?v={versions["logbook.css"]}">',
-), encoding='utf-8')
-print(f'Built {len(PROJECTS)} project pages, the research logbook, script inventory and a homepage in {OUT}')
+print(f'Built {len(PROJECTS)} project pages, the research logbook and a homepage in {OUT}')

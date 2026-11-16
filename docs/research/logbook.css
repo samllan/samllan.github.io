@@ -11,11 +11,6 @@
 .lab-intro h1 { margin: 5px 0 9px; font-size: clamp(40px, 6vw, 76px); line-height: 1.02; letter-spacing: -.035em; }
 .lab-intro p:not(.eyebrow) { max-width: 54ch; margin: 0; color: #536052; line-height: 1.6; }
 .lab-source { flex: none; color: var(--lab-green); font-size: 13px; font-weight: 700; padding-bottom: 4px; }
-.lab-inventory-link { display: inline-block; margin-top: 13px; color: var(--lab-green); font-weight: 700; }
-.script-inventory .lab-goal { max-width: 960px; }
-.script-inventory .lab-goal h2 { margin-bottom: 12px; font-size: clamp(25px, 3vw, 35px); }
-.script-inventory .lab-files th:first-child { width: 42%; }
-.script-inventory .lab-files code { overflow-wrap: anywhere; }
 .lab-layout { display: grid; grid-template-columns: minmax(180px, 231px) minmax(0, 1fr); gap: 36px; border-top: 1px solid var(--lab-rule); }
 .lab-goals { display: flex; flex-direction: column; align-self: start; position: sticky; top: 0; gap: 4px; padding: 22px 18px 0 0; }
 .lab-goals .eyebrow { margin: 0 0 8px 10px; color: #627065; }
