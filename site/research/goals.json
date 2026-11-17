@@ -6,6 +6,7 @@
         "id": "question",
         "title": "What did the PhD investigate?",
         "description": "I built a way to work with large scans of lymphoma tissue at three scales: cores, patches and cells. The thesis asks how well these images can reproduce assessors’ grading scores and predict the supplied subtype labels. The code examples use generated inputs.",
+        "related": ["crop","grading-splits","subtype-cohort"],
         "files": [
           ["research_questions.md","Nov 2026","Sets out the grading and subtype questions, and the engineering problem of making the image data practical to work with."],
           ["README.md","Nov 2026","Shows how to run a single example or reproduce the grading figure and its intermediate files."]
@@ -20,6 +21,7 @@
         "id": "crop",
         "title": "Mark and label tissue regions",
         "description": "I compared drawing rectangles with marking a centre and letting the software position a fixed-size crop. The click tool halved the reported extraction time per sample in this comparison.",
+        "related": ["prepare","cells"],
         "files": [
           ["prepare_image_regions.py","Aug 2020–Nov 2023","Turns clicks or a grid into labelled image bounds. It shifts edge crops inward so they stay the same size."],
           ["crop_benchmark.csv","2026 thesis","Records the thesis comparison of six seconds per sample for rectangles and three seconds for clicks, alongside extraction precision and recall."],
@@ -49,7 +51,9 @@
         "id": "cells",
         "title": "Build cell-level datasets",
         "description": "Cell extracts offer a different view of the same tissue. The durable dataset needs a cell identifier, the parent core, coordinates and the measurements used downstream.",
+        "related": ["autoencoder","features"],
         "files": [
+          ["extract_cell_crops.py","2023–2026","Labels separated regions in a synthetic image, then extracts size-filtered cell crops with their source coordinates."],
           ["index_segmented_cells.py","2021–2026","Indexes segmented cells by core and records where each cell sits on the source scan."],
           ["package_cell_arrays.py","2021–2025","Writes aligned arrays of cell IDs, coordinates and features into a portable example dataset."],
           ["summarise_cells_by_core.py","2026 thesis","Summarises how many cell instances each core contributes and shows whether a few cores dominate the dataset."]
@@ -77,7 +81,8 @@
         "files": [
           ["fit_linear_autoencoder.py","2021–2024","Fits a small linear reconstruction model and prints the compact codes for generated image patches."],
           ["score_reconstructions.py","2021–2024","Reports reconstruction error per example and ranks the cases the model reconstructed least accurately."],
-          ["compare_bottleneck_sizes.py","2021–2024","Compares reconstruction error and storage as the same input passes through narrower or wider bottlenecks."]
+          ["compare_bottleneck_sizes.py","2021–2024","Compares reconstruction error and storage as the same input passes through narrower or wider bottlenecks."],
+          ["score_variational_reconstruction.py","2026 thesis","Reports reconstruction loss and latent regularisation separately for a generated batch."]
         ]
       },
       {
@@ -87,7 +92,8 @@
         "files": [
           ["learn_image_features.py","Oct 2025","Reports agreement and redundancy terms for paired feature vectors in an illustrative Barlow Twins calculation."],
           ["prepare_paired_views.py","2023–2025","Generates two independently augmented views of each synthetic patch and retains the source ID for pairing."],
-          ["audit_feature_variation.py","2023–2025","Flags feature columns that barely vary across patches and pairs of columns that carry almost the same signal."]
+          ["audit_feature_variation.py","2023–2025","Flags feature columns that barely vary across patches and pairs of columns that carry almost the same signal."],
+          ["fit_shared_view_encoder.py","2026 thesis","Fits one tiny shared encoder to two generated views and records a decreasing Barlow Twins objective."]
         ]
       },
       {
@@ -107,7 +113,8 @@
         "files": [
           ["benchmark_frozen_features.py","2025–2026","Fits a simple classifier on training features and reports held-out accuracy for each feature representation."],
           ["measure_feature_separation.py","2021–2026","Reports silhouette scores for examples with known groups to distinguish overlap from separation in feature space."],
-          ["project_feature_space.py","2021–2025","Fits a two-dimensional projection to feature vectors so group overlap can be plotted and examined."]
+          ["project_feature_space.py","2021–2025","Fits a two-dimensional projection to feature vectors so group overlap can be plotted and examined."],
+          ["check_bag_classifier_on_known_signal.py","2026 thesis","Compares mean pooling with an instance-sensitive score on a generated bag task with a known signal."]
         ]
       },
       {
@@ -129,6 +136,7 @@
         "id": "grading-splits",
         "title": "Prepare reference grades and splits",
         "description": "The grading target combines available assessor ratings. In Chapter 3, samples from the same tissue core stayed in the same fold. The example shows how to keep groups together and inspect the assignments before training.",
+        "related": ["grading-models","sampling"],
         "files": [
           ["prepare_reference_grades.py","2026 thesis","Averages available assessor grades per example and keeps the number and spread of ratings alongside the reference."],
           ["assign_validation_folds.py","2024–2025","Assigns each known group to one held-out fold and writes split memberships that can be inspected before training."]
@@ -148,10 +156,22 @@
         "id": "compare",
         "title": "Test changes against matched baseline runs",
         "description": "Changing one setting at a time makes results easier to interpret. I compared runs on matching folds and seeds, and the thesis describes cases where the settings or controls needed closer checks.",
+        "related": ["agreement","cluster-runs"],
         "files": [
           ["compare_experiments.py","Sep 2026","Compares error, runtime and memory against baseline runs matched by fold and seed."],
           ["plan_matched_runs.py","2025–2026","Produces a schedule of baseline and single-change runs with shared folds and seeds."],
-          ["verify_run_configuration.py","2026","Flags a run when the settings recorded at startup differ from the settings intended by the experiment plan."]
+          ["verify_run_configuration.py","2026","Flags a run when the settings recorded at startup differ from the settings intended by the experiment plan."],
+          ["summarise_matched_training_traces.py","2026 thesis","Summarises the same final epoch window in each matched run and reports validation score alongside elapsed time."]
+        ]
+      },
+      {
+        "id": "sampling",
+        "title": "Choose which training examples to revisit",
+        "description": "Chapter 3 used hybrid sampling to balance grade frequency and focus on examples with higher loss. Appendix A also tested how the grading models responded to independent Gaussian noise.",
+        "related": ["compare"],
+        "files": [
+          ["weight_grading_examples.py","2026 thesis","Combines label frequency, current loss and previous sampling weights using the coefficients from Appendix A."],
+          ["probe_grading_model_with_noise.py","2026 thesis","Compares a fixed model's null scores for synthetic signal bags and matched Gaussian noise at the same input boundary."]
         ]
       },
       {
@@ -172,6 +192,7 @@
         "id": "subtype-cohort",
         "title": "Prepare the subtype dataset",
         "description": "The subtype experiment depends on matching supplied labels to usable images and recording which examples pass the data checks. The thesis describes the limits of the available reference metadata.",
+        "related": ["interpret"],
         "files": [
           ["join_subtype_labels.py","2026","Matches supplied labels to image IDs and lists missing or unrecognised labels for review."],
           ["audit_cohort_filters.py","2026 thesis","Records which synthetic specimens pass each eligibility rule and why the other specimens are excluded."]
@@ -181,10 +202,21 @@
         "id": "interpret",
         "title": "Compare models that combine patches",
         "description": "A model has to turn many patch measurements into one specimen prediction. I tested different ways to combine the measurements and explored how to batch specimens with varying patch counts.",
+        "related": ["subtype-ablations","validation"],
         "files": [
           ["pool_patch_evidence.py","2022–2026","Compares mean, maximum and attention-weighted summaries of the same group of patch features."],
           ["batch_variable_patch_sets.py","2026 thesis","Groups specimens of similar patch counts into batches and reports how many dummy slots each batch needs."],
           ["predict_subtypes_from_bags.py","2026 thesis","Fits an illustrative binary classifier on pooled training specimens and produces subtype scores on held-out specimens."]
+        ]
+      },
+      {
+        "id": "subtype-ablations",
+        "title": "Test spatial positions and model hierarchy",
+        "description": "The Chapter 4 ablations examined whether position, hierarchy or masking changed the model. These examples expose the individual operations on small generated inputs.",
+        "related": ["cost","explain"],
+        "files": [
+          ["compare_spatial_attention.py","2026 thesis","Holds the query, keys and values fixed while comparing attention with and without 2D rotary positions and padding."],
+          ["compare_flat_and_hierarchical_pooling.py","2026 thesis","Compares pooling all cells together with pooling within patches first, and checks that empty or padded patches do not contribute."]
         ]
       },
       {
@@ -229,7 +261,18 @@
         "files": [
           ["explain_prediction.py","Feb 2026","Returns a brightness mask per class and compares original and masked scores from the same illustrative model."],
           ["model_explanations.md","Nov 2026","Summarises what model masks can tell us and what validation of their meaning would require."],
-          ["test_mask_score_changes.py","2026","Compares model scores after applying an explanation mask and a uniform mask with the same average dimming."]
+          ["test_mask_score_changes.py","2026","Compares model scores after applying an explanation mask and a uniform mask with the same average dimming."],
+          ["compare_patch_perturbations.py","2026 thesis","Measures class scores after removing a patch and after repeating only that patch, using the same fixed scoring rule."]
+        ]
+      },
+      {
+        "id": "cluster-runs",
+        "title": "Plan and resume experiment jobs",
+        "description": "Many comparisons required the same combinations of model, fold and seed. A job manifest makes that plan inspectable. A checkpoint lets a stopped run continue from completed work.",
+        "related": ["run-results","figures"],
+        "files": [
+          ["build_cluster_run_manifest.py","2026 thesis","Writes a reusable run manifest with a stable ID for every configuration, fold and seed."],
+          ["resume_chunked_experiment.py","2026 archive","Saves results one chunk at a time and resumes after the last committed chunk when interrupted."]
         ]
       },
       {
@@ -250,7 +293,8 @@
           ["render_grading_figure.py","2026","Renders the comparison table as a labelled SVG figure that can be regenerated from the prediction file."],
           ["run_grading_example.py","2026 thesis","Runs the synthetic grading workflow end to end and saves the splits, held-out predictions, assessor comparison and regenerated figure."],
           ["bin_patch_distribution.py","2026","Turns saved per-core patch counts into a histogram table for the patch distribution figure."],
-          ["grading_figure.svg","Nov 2026","A figure generated by the grading example. The bars use synthetic scores and can be regenerated from the example predictions."]
+          ["grading_figure.svg","Nov 2026","A figure generated by the grading example. The bars use synthetic scores and can be regenerated from the example predictions."],
+          ["verify_report_assets.py","2026 archive","Checks that a report's figures and tables are present and records checksums for the exact files to publish."]
         ]
       },
       {
@@ -259,6 +303,28 @@
         "description": "The thesis sets out what the internal comparisons support and what better-controlled and independent testing would need to establish.",
         "files": [
           ["research_limits.md","Nov 2026","Records the limits of the internal comparisons and what independent validation would need."]
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Adjacent benchmark work",
+    "goals": [
+      {
+        "id": "pcam-bags",
+        "title": "Build benchmark bags",
+        "description": "The archive includes a separate PatchCamelyon benchmark branch. The runnable example uses generated patches and preserves membership for each bag.",
+        "related": ["pcam-benchmarks"],
+        "files": [
+          ["build_benchmark_bags.py","2026 archive","Produces reproducible positive and negative bag manifests with stable patch IDs and a separate seed for each split."]
+        ]
+      },
+      {
+        "id": "pcam-benchmarks",
+        "title": "Compare encoders on fixed benchmark bags",
+        "description": "The archive compares representations while keeping the benchmark protocol consistent. This example uses numerical features in place of pretrained embeddings and reports illustrative scores.",
+        "files": [
+          ["compare_benchmark_encoders.py","2026 archive","Uses fixed training and test bag manifests to compare two encoders with the same pooling rule and metric."]
         ]
       }
     ]

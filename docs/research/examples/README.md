@@ -20,6 +20,16 @@ For instance, ridge regression illustrates the grading workflow and a linear
 autoencoder illustrates reconstruction. The historical extraction figures in
 [`crop_benchmark.csv`](crop_benchmark.csv) come from thesis Table 2.5.
 
+Run `python weight_grading_examples.py` to reproduce the sample-weight
+calculation in Appendix A, or `python probe_grading_model_with_noise.py` to
+see the structure of its independent Gaussian-noise probe. For the subtype
+model investigation, `python compare_spatial_attention.py` and
+`python compare_flat_and_hierarchical_pooling.py` isolate position and pooling.
+
+The separate PatchCamelyon archive work is illustrated by
+`build_benchmark_bags.py` and `compare_benchmark_encoders.py`. They use
+generated patch IDs and stand-in encoder outputs.
+
 The original archive includes [CLAM](https://github.com/mahmoodlab/CLAM)
 split tooling. The fold example illustrates the grouping described in the
 thesis with newly written code.

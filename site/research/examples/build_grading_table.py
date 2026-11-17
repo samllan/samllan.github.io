@@ -4,16 +4,24 @@ import csv
 from collections import defaultdict
 from io import StringIO
 from pathlib import Path
+from math import isfinite
 from statistics import mean
 
 
 def build_table(predictions):
     errors = defaultdict(dict)
+    references = {}
     for row in csv.DictReader(predictions):
         scale, sample = row["scale"], row["sample"]
         if sample in errors[scale]:
             raise ValueError(f"Repeated held-out prediction: {scale}/{sample}")
-        errors[scale][sample] = abs(float(row["prediction"]) - float(row["reference"]))
+        reference, prediction = float(row["reference"]), float(row["prediction"])
+        if not isfinite(reference) or not isfinite(prediction):
+            raise ValueError(f"Invalid grade for {scale}/{sample}")
+        assignment = row["fold"], reference
+        if references.setdefault(sample, assignment) != assignment:
+            raise ValueError(f"Inconsistent fold or reference grade for {sample}")
+        errors[scale][sample] = abs(prediction - reference)
     first = next(iter(errors.values()), {})
     if not first or any(samples.keys() != first.keys() for samples in errors.values()):
         raise ValueError("The table requires the same nonempty sample set for all scales")

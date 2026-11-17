@@ -11,6 +11,7 @@ def render_logbook(research):
     crop_demo = (research / "crop_demo.html").read_text(encoding="utf-8")
     navigation, tables = [], []
     goal_ids, script_names = set(), set()
+    titles = {goal["id"]: goal["title"] for group in groups for goal in group["goals"]}
 
     for group in groups:
         label = escape(group["title"])
@@ -44,6 +45,11 @@ def render_logbook(research):
 
             rows_html = "\n      ".join(rows)
             demo_html = crop_demo if key == "crop" else ""
+            related = goal.get("related", ())
+            links = "".join(
+                f'<a href="#{target}">{escape(titles[target])} →</a>' for target in related
+            )
+            onward = f'<nav class="lab-next" aria-label="Related goals">{links}</nav>\n' if links else ""
             tables.append(f'''<section id="{key}" class="lab-goal" data-goal>
   <p class="eyebrow">{label}</p>
   <h2>{title}</h2>
@@ -54,7 +60,7 @@ def render_logbook(research):
       {rows_html}
     </tbody>
   </table>
-{demo_html}</section>''')
+{demo_html}{onward}</section>''')
         navigation.append("</ul>")
 
     missing = {path.name for path in examples.glob("*.py")} - script_names

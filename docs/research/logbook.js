@@ -69,7 +69,7 @@ logbook.querySelectorAll('.lab-file').forEach(link => {
     previewContent.textContent = 'Loading file…';
     dialog.showModal();
 
-  if (link.href.endsWith('.png') || link.href.endsWith('.svg')) {
+    if (link.href.endsWith('.png') || link.href.endsWith('.svg')) {
       const image = new Image();
       image.alt = link.textContent;
       image.src = link.href;

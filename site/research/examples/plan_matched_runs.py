@@ -3,6 +3,11 @@ from itertools import product
 
 
 def plan_runs(baseline, changes, folds, seeds):
+    folds, seeds = tuple(folds), tuple(seeds)
+    if not folds or not seeds or len(set(folds)) != len(folds) or len(set(seeds)) != len(seeds):
+        raise ValueError("Provide distinct folds and seeds")
+    if {"configuration", "fold", "seed"} & baseline.keys():
+        raise ValueError("Model settings cannot override run identifiers")
     configurations = {"baseline": baseline}
     for name, (key, value) in changes.items():
         if name in configurations or key not in baseline or baseline[key] == value:
