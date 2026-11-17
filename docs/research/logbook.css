@@ -51,6 +51,10 @@
 .lab-path li::before { content: ''; position: absolute; inset: 10px auto auto -21px; width: 7px; height: 7px; border-radius: 50%; background: #4e7560; }
 .lab-path a { color: #2d5541; font-weight: 650; }
 .lab-path p { max-width: 72ch; margin: 2px 0 0; color: #536052; line-height: 1.45; }
+.lab-figure { margin: 0 0 17px; max-width: 720px; }
+.lab-figure img { display: block; max-width: 100%; height: auto; border-radius: 5px; }
+.lab-figure figcaption { margin-top: 6px; color: #536052; font-size: 13px; }
+.lab-output-content .lab-figure { margin-bottom: 8px; }
 .lab-story { max-width: 78ch; margin: 0; border-block: 1px solid var(--lab-rule); padding: 5px 0; }
 .lab-story div { display: grid; grid-template-columns: 7.3rem minmax(0, 1fr); gap: 10px; padding: 7px 0; }
 .lab-story dt { color: #2d5541; font-weight: 650; }

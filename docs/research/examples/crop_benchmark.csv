@@ -1,3 +1,5 @@
-approach,seconds_per_sample,precision,recall,source
-Manual rectangles,6,1.00,1.00,Thesis Table 2.5
-Point-and-click,3,1.00,1.00,Thesis Table 2.5
+approach,seconds_per_sample,precision,recall,manual_intervention,source
+Hough transform,0.06,0.91,0.89,Moderate,Thesis Table 2.5
+Grid method,0.5,0.98,1.00,Moderate,Thesis Table 2.5
+Manual rectangles,6,1.00,1.00,High,Thesis Table 2.5
+Point-and-click,3,1.00,1.00,High,Thesis Table 2.5

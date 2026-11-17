@@ -8,6 +8,21 @@ import re
 from urllib.parse import quote
 
 
+CROP_COLUMNS = (
+    ("approach", "Approach"), ("seconds_per_sample", "Seconds per sample"),
+    ("precision", "Precision"), ("recall", "Recall"), ("manual_intervention", "Manual intervention"),
+)
+STORY_LABELS = (("tried", "What I tried"), ("found", "What I found"), ("next", "Decision or next step"))
+
+
+def figure_markup(figure):
+    filename, alt, caption = figure
+    return (
+        f'<figure class="lab-figure"><img src="examples/{quote(filename)}" alt="{escape(alt, quote=True)}" '
+        f'loading="lazy"><figcaption>{escape(caption)}</figcaption></figure>'
+    )
+
+
 def example_markup(examples, filename, captured):
     suffix = Path(filename).suffix
     path = f"examples/{escape(filename, quote=True)}"
@@ -17,14 +32,12 @@ def example_markup(examples, filename, captured):
         with (examples / filename).open(encoding="utf-8", newline="") as stream:
             reader = csv.DictReader(stream)
             rows = "".join(
-                "<tr>" + "".join(f"<td>{escape(row[key])}</td>" for key in
-                                  ("approach", "seconds_per_sample", "precision", "recall")) + "</tr>"
+                "<tr>" + "".join(f"<td>{escape(row[key])}</td>" for key, _ in CROP_COLUMNS) + "</tr>"
                 for row in reader
             )
+        headings = "".join(f'<th scope="col">{label}</th>' for _, label in CROP_COLUMNS)
         return ('<table class="lab-result-table"><caption>Thesis Table 2.5</caption><thead><tr>'
-                '<th scope="col">Approach</th><th scope="col">Seconds per sample</th>'
-                '<th scope="col">Precision</th><th scope="col">Recall</th>'
-                f'</tr></thead><tbody>{rows}</tbody></table>')
+                f'{headings}</tr></thead><tbody>{rows}</tbody></table>')
     if suffix != ".py":
         text = (examples / filename).read_text(encoding="utf-8")
         return f'<pre{" data-markdown" if suffix == ".md" else ""}>{escape(text)}</pre>'
@@ -37,8 +50,10 @@ def example_markup(examples, filename, captured):
     if filename == "run_grading_example.py":
         return ('<img src="examples/grading_figure.svg" alt="Grading workflow figure for its 36 synthetic predictions">'
                 f'<pre>{escape(output)}</pre>')
-    note = '<p>Timings depend on the machine and filesystem cache.</p>' if filename == "measure_storage_reads.py" else ""
-    return f'{note}<pre>{escape(output)}</pre>'
+    note = captured.get("note")
+    note_html = f'<p>{escape(note)}</p>' if note else ""
+    visual = figure_markup(captured["figure"]) if "figure" in captured else ""
+    return f'{visual}{note_html}<pre>{escape(output)}</pre>'
 
 
 def narrative(goal, targets):
@@ -49,6 +64,8 @@ def narrative(goal, targets):
         return "#" + key + ("/" + quote(name, safe="") if marker else "")
 
     blocks = []
+    if "figure" in goal:
+        blocks.append(figure_markup(goal["figure"]))
     if goal.get("path"):
         steps = "".join(
             f'<li><a href="{route(target)}">{escape(label)}</a><p>{escape(detail)}</p></li>'
@@ -60,7 +77,7 @@ def narrative(goal, targets):
     if story:
         items = "".join(
             f'<div><dt>{label}</dt><dd>{escape(story[key])}</dd></div>'
-            for key, label in (("tried", "What I tried"), ("found", "What I found"), ("next", "Decision or next step"))
+            for key, label in STORY_LABELS
         )
         blocks.append(f'<dl class="lab-story">{items}</dl>')
         if story.get("source"):
@@ -134,7 +151,9 @@ def render_logbook(research, *, project=None):
                     f'<small>({escape(date)})</small></td><td>{escape(outcome)}{label_html}</td></tr>'
                 )
                 markup = example_markup(examples, filename, captured)
-                outputs.append(f'<template data-file="{escape(filename, quote=True)}">{markup}</template>')
+                kind = ("Thesis benchmark" if filename == "crop_benchmark.csv"
+                        else "Research notes" if filename.endswith(".md") else "Synthetic example")
+                outputs.append(f'<template data-file="{escape(filename, quote=True)}" data-kind="{kind}">{markup}</template>')
 
             scripts = '<ul class="lab-script-list">' + "\n".join(script_links) + "</ul>" if script_links else ""
             sidebar[key] = title, scripts

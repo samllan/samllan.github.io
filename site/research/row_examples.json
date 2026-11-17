@@ -92,16 +92,18 @@
     "stdout": "0,ABC,1,1.0\n0,GCB,1,0.0\n1,ABC,1,0.0\n1,GCB,1,1.0"
   },
   "compare_image_encodings.py": {
-    "quantity": "2 encodings of the same generated patch",
-    "stdout": "Format     Bytes   Mean channel difference\nPNG          129                      0.00\nWebP         174                      1.95"
+    "quantity": "One synthetic patch · PNG 129 B, WebP 174 B",
+    "stdout": "Format     Bytes   Mean channel difference\nPNG          129                      0.00\nWebP         174                      1.95",
+    "note": "The synthetic patch is a single small input. The thesis storage values measure the whole patch collection."
   },
   "compare_patch_perturbations.py": {
     "quantity": "3 patches · 2 perturbations per patch",
     "stdout": "Patch 0: remove [ 0.133 -0.183], repeat [-0.267  0.367]\nPatch 1: remove [ 0.083 -0.033], repeat [-0.167  0.067]\nPatch 2: remove [-0.217  0.217], repeat [ 0.433 -0.433]"
   },
   "compare_spatial_attention.py": {
-    "quantity": "2 valid patches · scores 0.500 and 0.369",
-    "stdout": "Positions False: pooled score 0.500\nPositions True: pooled score 0.369"
+    "quantity": "One generated input · pooled scores 0.500 and 0.369",
+    "stdout": "Positions False: pooled score 0.500\nPositions True: pooled score 0.369",
+    "note": "The two values are pooled scores from the same generated input with positions off and on. They show a change in the calculation."
   },
   "crop_benchmark.csv": {
     "quantity": "Thesis Table 2.5 · 6 s → 3 s per sample · precision and recall 1.00"
@@ -179,7 +181,8 @@
   },
   "measure_storage_reads.py": {
     "quantity": "12,288 bytes read by each method",
-    "stdout": "files: 12288 bytes in 11.244 ms\nbundle: 12288 bytes in 10.052 ms"
+    "stdout": "files: 12288 bytes in 11.244 ms\nbundle: 12288 bytes in 10.052 ms",
+    "note": "Timings depend on the machine and filesystem cache."
   },
   "package_cell_arrays.py": {
     "quantity": "2 cells · 2 coordinates and 1 feature each",
@@ -227,11 +230,16 @@
   },
   "render_grading_figure.py": {
     "quantity": "3 scales in one SVG figure",
-    "stdout": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 680 219\" role=\"img\">\n<title>Mean absolute grading error (synthetic example)</title>\n<rect width=\"100%\" height=\"100%\" rx=\"8\" fill=\"#f8f6ed\"/>\n<g font-family=\"system-ui, sans-serif\" fill=\"#243e31\">\n<text x=\"24\" y=\"35\" font-size=\"21\">Mean absolute grading error (synthetic example)</text>\n<text x=\"24\" y=\"79\" font-size=\"15\">core</text>\n<rect x=\"142\" y=\"61\" width=\"330\" height=\"24\" rx=\"3\" fill=\"#e2e8dc\"/>\n<rect x=\"142\" y=\"61\" width=\"330.0\" height=\"24\" rx=\"3\" fill=\"#527c67\"/>\n<text x=\"490\" y=\"79\" font-size=\"14\">0.350 (n=6)</text>\n<text x=\"24\" y=\"122\" font-size=\"15\">patch</text>\n<rect x=\"142\" y=\"104\" width=\"330\" height=\"24\" rx=\"3\" fill=\"#e2e8dc\"/>\n<rect x=\"142\" y=\"104\" width=\"226.3\" height=\"24\" rx=\"3\" fill=\"#527c67\"/>\n<text x=\"490\" y=\"122\" font-size=\"14\">0.240 (n=6)</text>\n<text x=\"24\" y=\"165\" font-size=\"15\">cell</text>\n<rect x=\"142\" y=\"147\" width=\"330\" height=\"24\" rx=\"3\" fill=\"#e2e8dc\"/>\n<rect x=\"142\" y=\"147\" width=\"301.7\" height=\"24\" rx=\"3\" fill=\"#527c67\"/>\n<text x=\"490\" y=\"165\" font-size=\"14\">0.320 (n=6)</text>\n</g></svg>"
+    "stdout": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 680 261\" role=\"img\">\n<title>Mean absolute grading error (synthetic rerun)</title>\n<rect width=\"100%\" height=\"100%\" rx=\"8\" fill=\"#f8f6ed\"/>\n<g font-family=\"system-ui, sans-serif\" fill=\"#243e31\">\n<text x=\"24\" y=\"33\" font-size=\"21\">Mean absolute grading error</text>\n<text x=\"24\" y=\"55\" font-size=\"13\">Synthetic rerun · lower is better</text>\n<text x=\"24\" y=\"90\" font-size=\"15\">Core</text>\n<rect x=\"142\" y=\"72\" width=\"330\" height=\"24\" rx=\"3\" fill=\"#e2e8dc\"/>\n<rect x=\"142\" y=\"72\" width=\"288.7\" height=\"24\" rx=\"3\" fill=\"#527c67\"/>\n<text x=\"490\" y=\"90\" font-size=\"14\">0.350 (n=6)</text>\n<text x=\"24\" y=\"127\" font-size=\"15\">Patch</text>\n<rect x=\"142\" y=\"109\" width=\"330\" height=\"24\" rx=\"3\" fill=\"#e2e8dc\"/>\n<rect x=\"142\" y=\"109\" width=\"198.0\" height=\"24\" rx=\"3\" fill=\"#527c67\"/>\n<text x=\"490\" y=\"127\" font-size=\"14\">0.240 (n=6)</text>\n<text x=\"24\" y=\"164\" font-size=\"15\">Cell</text>\n<rect x=\"142\" y=\"146\" width=\"330\" height=\"24\" rx=\"3\" fill=\"#e2e8dc\"/>\n<rect x=\"142\" y=\"146\" width=\"264.0\" height=\"24\" rx=\"3\" fill=\"#527c67\"/>\n<text x=\"490\" y=\"164\" font-size=\"14\">0.320 (n=6)</text>\n<path d=\"M142 183h330\" stroke=\"#718477\"/>\n<path d=\"M142 183v5\" stroke=\"#718477\"/>\n<text x=\"142\" y=\"206\" text-anchor=\"middle\" font-size=\"13\">0</text>\n<path d=\"M307 183v5\" stroke=\"#718477\"/>\n<text x=\"307\" y=\"206\" text-anchor=\"middle\" font-size=\"13\">0.2</text>\n<path d=\"M472 183v5\" stroke=\"#718477\"/>\n<text x=\"472\" y=\"206\" text-anchor=\"middle\" font-size=\"13\">0.4</text>\n<text x=\"307\" y=\"231\" text-anchor=\"middle\" font-size=\"13\">Grade points</text>\n</g></svg>"
   },
   "render_score_overlay.py": {
     "quantity": "64 × 48 pixel overlay",
-    "stdout": "Rendered (64, 48) RGBA"
+    "stdout": "Rendered (64, 48) RGBA",
+    "figure": [
+      "score_overlay_example.png",
+      "The same input with outlined patches on the left and patch scores overlaid on the right.",
+      "Synthetic patch scores. The overlap averages 0.30 and 0.80 to 0.55. Uncoloured areas have no score."
+    ]
   },
   "research_questions.md": {
     "quantity": "2 prediction tasks · 3 image scales"
@@ -241,7 +249,7 @@
     "stdout": "Interrupted after the first committed chunk\nResumed results: [4, 9, 16]"
   },
   "run_grading_example.py": {
-    "quantity": "3 folds · 36 held-out predictions · 1 figure",
+    "quantity": "12 synthetic cases × 3 image scales · 36 held-out predictions",
     "stdout": "[('cell', 12, 0.39392411533457666), ('core', 12, 0.48858962935568573), ('patch', 12, 0.20219014829686496)]"
   },
   "save_held_out_grades.py": {

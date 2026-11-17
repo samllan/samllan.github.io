@@ -1,18 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 219" role="img">
-<title>Mean absolute grading error (synthetic example)</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 261" role="img">
+<title>Mean absolute grading error (synthetic rerun)</title>
 <rect width="100%" height="100%" rx="8" fill="#f8f6ed"/>
 <g font-family="system-ui, sans-serif" fill="#243e31">
-<text x="24" y="35" font-size="21">Mean absolute grading error (synthetic example)</text>
-<text x="24" y="79" font-size="15">cell</text>
-<rect x="142" y="61" width="330" height="24" rx="3" fill="#e2e8dc"/>
-<rect x="142" y="61" width="266.1" height="24" rx="3" fill="#527c67"/>
-<text x="490" y="79" font-size="14">0.394 (n=12)</text>
-<text x="24" y="122" font-size="15">core</text>
-<rect x="142" y="104" width="330" height="24" rx="3" fill="#e2e8dc"/>
-<rect x="142" y="104" width="330.0" height="24" rx="3" fill="#527c67"/>
-<text x="490" y="122" font-size="14">0.489 (n=12)</text>
-<text x="24" y="165" font-size="15">patch</text>
-<rect x="142" y="147" width="330" height="24" rx="3" fill="#e2e8dc"/>
-<rect x="142" y="147" width="136.6" height="24" rx="3" fill="#527c67"/>
-<text x="490" y="165" font-size="14">0.202 (n=12)</text>
+<text x="24" y="33" font-size="21">Mean absolute grading error</text>
+<text x="24" y="55" font-size="13">Synthetic rerun · lower is better</text>
+<text x="24" y="90" font-size="15">Cell</text>
+<rect x="142" y="72" width="330" height="24" rx="3" fill="#e2e8dc"/>
+<rect x="142" y="72" width="260.0" height="24" rx="3" fill="#527c67"/>
+<text x="490" y="90" font-size="14">0.394 (n=12)</text>
+<text x="24" y="127" font-size="15">Core</text>
+<rect x="142" y="109" width="330" height="24" rx="3" fill="#e2e8dc"/>
+<rect x="142" y="109" width="322.5" height="24" rx="3" fill="#527c67"/>
+<text x="490" y="127" font-size="14">0.489 (n=12)</text>
+<text x="24" y="164" font-size="15">Patch</text>
+<rect x="142" y="146" width="330" height="24" rx="3" fill="#e2e8dc"/>
+<rect x="142" y="146" width="133.4" height="24" rx="3" fill="#527c67"/>
+<text x="490" y="164" font-size="14">0.202 (n=12)</text>
+<path d="M142 183h330" stroke="#718477"/>
+<path d="M142 183v5" stroke="#718477"/>
+<text x="142" y="206" text-anchor="middle" font-size="13">0</text>
+<path d="M307 183v5" stroke="#718477"/>
+<text x="307" y="206" text-anchor="middle" font-size="13">0.25</text>
+<path d="M472 183v5" stroke="#718477"/>
+<text x="472" y="206" text-anchor="middle" font-size="13">0.5</text>
+<text x="307" y="231" text-anchor="middle" font-size="13">Grade points</text>
 </g></svg>

@@ -73,9 +73,7 @@ function selectRow(link, reveal = false) {
     const guide = example.querySelector('[data-markdown]');
     if (guide) guide.replaceWith(filePreview(guide.textContent, link.href));
     panel.querySelector('.lab-output-content').replaceChildren(example);
-    panel.querySelector('.lab-output-kind').textContent = filename === 'crop_benchmark.csv'
-      ? 'Thesis benchmark'
-      : filename.endsWith('.md') ? 'Research notes' : 'Synthetic example';
+    panel.querySelector('.lab-output-kind').textContent = template.dataset.kind;
     panel.querySelector('.lab-output-title').textContent = filename;
     panel.querySelector('[data-preview]').href = link.href;
     panel.querySelector('.lab-share-link').href = '#' + goal.id + '/' + encodeURIComponent(filename);
@@ -208,6 +206,7 @@ function setupCropDemo() {
   const undo = document.querySelector('#crop-undo');
   const download = document.querySelector('#crop-download');
   const status = document.querySelector('#crop-status');
+  const coordinates = document.querySelector('#crop-coordinates');
   const sceneContext = scene.getContext('2d');
   const previewContext = preview.getContext('2d');
   const marks = [];
@@ -246,8 +245,10 @@ function setupCropDemo() {
     drawScene();
     previewContext.clearRect(0, 0, size, size);
     const count = marks.length;
-    if (count) previewContext.drawImage(source, ...cropPosition(marks[count - 1]), size, size, 0, 0, size, size);
+    const mark = marks.at(-1);
+    if (mark) previewContext.drawImage(source, ...cropPosition(mark), size, size, 0, 0, size, size);
     status.textContent = count ? `${count} crop${count === 1 ? '' : 's'} marked` : 'No crops marked';
+    coordinates.textContent = mark ? `Centre (${mark.x}, ${mark.y}) px` : '';
     undo.disabled = download.disabled = count === 0;
   }
 
@@ -285,7 +286,7 @@ function setupCropDemo() {
     const url = URL.createObjectURL(new Blob([['label,x,y', ...rows].join('\n') + '\n'], { type: 'text/csv' }));
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'clicks.csv';
+    link.download = 'marked-centres.csv';
     link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
