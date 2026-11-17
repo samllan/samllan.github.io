@@ -8,6 +8,8 @@ from pathlib import Path
 import re
 from urllib.parse import quote
 
+from leaf_visuals import leaf_visuals
+
 
 CROP_COLUMNS = (
     ("approach", "Approach"), ("seconds_per_sample", "Seconds per sample"),
@@ -114,7 +116,7 @@ def narrative(goal, targets, examples):
     if goal.get("start"):
         starters = "".join(f'<a href="{route(target)}">{escape(label)} →</a>' for label, target in goal["start"])
         blocks.append(f'<div class="lab-start">{starters}</div>')
-    if "figure" in goal and goal["id"] != "question":
+    if "figure" in goal:
         blocks.append(figure_markup(goal["figure"]))
     if goal.get("path"):
         steps = "".join(
@@ -182,68 +184,119 @@ def labelled_values(values):
 
 
 def visual_pair(filename, examples, demo, captured):
-    if filename == "research_questions.md":
-        return (figure_markup(("image_scales.png", "Generated examples of a scan, a core, a patch and a cell crop",
-                               "From a whole scan to a small region. These images are generated.")), "")
-    if filename == "prepare_image_regions.py" and demo:
-        return demo.split("<!-- output panel -->", 1)
-    if filename == "render_score_overlay.py":
-        return (
-            figure_markup(("score_overlay_input.png", "Two outlined patches on a generated image",
-                           "The patch scores are 0.30 and 0.80. The rectangles overlap.")),
-            figure_markup(("score_overlay_output.png", "Heatmap of the same overlapping patches, with unscored pixels hatched",
-                           "The overlap is 0.55. Hatching marks pixels with no score.")),
-        )
-    if filename == "crop_benchmark.csv":
-        with (examples / filename).open(encoding="utf-8", newline="") as stream:
-            rows = list(csv.DictReader(stream))
-        chart = "".join(
-            f'<li><span>{escape(row["approach"])}</span>'
-            f'<meter min="0" max="6" value="{float(row["seconds_per_sample"]):g}" aria-label="{escape(row["approach"], quote=True)}"></meter>'
-            f'<strong>{escape(row["seconds_per_sample"])} s</strong></li>'
-            for row in rows
-        )
-        return ('<p class="lab-card-note">Each method was scored on speed, precision, recall and manual intervention.</p>',
-                f'<p class="lab-card-note">Thesis Table 2.5 · seconds per sample</p><ul class="lab-bars">{chart}</ul>'
-                '<p class="lab-card-note">Rectangles and point-and-click both reached 1.00 precision and recall.</p>')
-    if filename == "bin_patch_distribution.py":
-        rows = list(csv.DictReader(captured["stdout"].splitlines()))
-        highest = max(int(row["cores"]) for row in rows)
-        bars = []
-        for row in rows:
-            low, high, count = row["lower_inclusive"], row["upper_exclusive"], int(row["cores"])
-            label = f"{low}+" if high == "None" else f"{low}–{int(high) - 1}"
-            bars.append(f'<li><span>{label} patches</span><meter min="0" max="{highest}" value="{count}" '
-                        f'aria-label="Cores with {label} patches"></meter><strong>{count}</strong></li>')
-        return ("", '<p class="lab-card-note">Number of cores in each range</p>'
-                    '<ul class="lab-bars">' + "".join(bars) + "</ul>")
-    if filename == "run_grading_example.py":
-        with (examples / "grading_case_trace.csv").open(encoding="utf-8", newline="") as stream:
-            case = dict(list(csv.reader(stream))[1:])
-        with (examples / "grading_predictions.csv").open(encoding="utf-8", newline="") as stream:
-            predictions = {
-                row["scale"]: (float(row["reference"]), float(row["prediction"]))
-                for row in csv.DictReader(stream) if row["sample"] == case["Case"]
-            }
-        scales = ("core", "patch", "cell")
-        selector = "".join(
-            f'<option value="{scale}"{" selected" if scale == "patch" else ""}>{scale.title()}</option>'
-            for scale in scales
-        )
-        panels = "".join(
-            f'<div data-scale-result="{scale}"{" hidden" if scale != "patch" else ""}>'
-            + labelled_values((("Reference", f"{ref:.3f}"), ("Prediction", f"{pred:.3f}"),
-                               ("Absolute error", f"{abs(ref - pred):.3f}"))) + "</div>"
-            for scale in scales for ref, pred in [predictions[scale]]
-        )
-        return (labelled_values((("Case", case["Case"]), ("Held-out fold", case["Validation fold"]),
-                                ("Assessor A", case["Assessor A"]), ("Assessor B", case["Assessor B"]))),
-                f'<label class="lab-scale-picker">Image scale <select data-image-scale>{selector}</select></label>'
-                f'<div aria-live="polite">{panels}</div>')
-    return "", ""
+    return leaf_visuals(filename, examples, demo, captured)
 
 
-def render_leaf(goal, file, details, snapshots, examples, demo, context, downstream, labels):
+def breadcrumb_markup(ancestors):
+    if not ancestors:
+        return ""
+    links = ' <span class="lab-crumb-sep" aria-hidden="true">/</span> '.join(
+        f'<a href="#{escape(target, quote=True)}">{escape(label)}</a>' for target, label in ancestors
+    )
+    return f'<nav class="lab-kicker" aria-label="Breadcrumb">{links}</nav>'
+
+
+def render_group_overview(group_id, group, titles):
+    label = group["title"]
+    total_files = sum(len(goal["files"]) for goal in group["goals"])
+    steps = []
+    for index, goal in enumerate(group["goals"], start=1):
+        key = goal["id"]
+        parent = goal.get("parent")
+        parent_note = f' <small class="lab-step-sub">(under {escape(titles[parent])})</small>' if parent else ""
+        story = goal.get("story", {})
+        finding = (
+            f'<p class="lab-step-outcome"><strong>Key finding:</strong> {escape(story["found"])}</p>'
+            if "found" in story else ""
+        )
+        file_pills = "".join(
+            f'<li><a href="{leaf_href(f"{key}/{filename}")}"><code>{escape(filename)}</code> '
+            f'<small>({escape(date_label(date))})</small></a></li>'
+            for filename, date, _ in goal["files"]
+        )
+        steps.append(
+            f'<li class="lab-walkthrough-step">'
+            f'<div class="lab-step-head">'
+            f'<a class="lab-step-link" href="#{escape(key, quote=True)}">{index}. {escape(goal["title"])} →</a>'
+            f'{parent_note}'
+            f'<span class="lab-step-meta">{len(goal["files"])} {"entry" if len(goal["files"]) == 1 else "entries"}</span>'
+            f'</div>'
+            f'<p class="lab-step-question">{escape(goal["description"])}</p>'
+            f'{finding}'
+            f'<ul class="lab-inline-files">{file_pills}</ul>'
+            f'</li>'
+        )
+    markup = f"""<section id="{escape(group_id, quote=True)}" class="lab-goal" data-group-section>
+<article class="lab-experiment lab-goal-overview" data-group-overview>
+  <div class="lab-experiment-head">
+    <p class="lab-kicker">Section overview</p>
+    <h2 tabindex="-1">{escape(label)}</h2>
+    <p class="lab-lede">This section groups {len(group["goals"])} research goals and {total_files} experiment records. Select any goal below to read its narrative walkthrough, or jump directly to an individual script.</p>
+  </div>
+  <div class="lab-walkthrough-section" role="region" aria-label="Goals in this section">
+    <h3>Goals and experiments in this section</h3>
+    <ol class="lab-walkthrough">{"".join(steps)}</ol>
+  </div>
+</article>
+</section>"""
+    return "\n".join(line.rstrip() for line in markup.splitlines())
+
+
+def render_goal_overview(ancestors, goal, titles, descriptions, children, details, snapshots, context):
+    key = goal["id"]
+    kicker = breadcrumb_markup(ancestors)
+    steps = []
+    for index, (filename, date, outcome) in enumerate(goal["files"], start=1):
+        target = f"{key}/{filename}"
+        detail = details.get(filename, {})
+        leaf_title = detail.get("title", filename)
+        framing = detail.get("framing", "")
+        question_html = (
+            f'<p class="lab-step-question"><strong>Why this step:</strong> {escape(framing)}</p>'
+            if framing and framing != goal["description"] else ""
+        )
+        quantity = snapshots.get(filename, {}).get("quantity", "")
+        badge_html = f'<span class="lab-step-badge">{escape(quantity)}</span>' if quantity else ""
+        steps.append(
+            f'<li class="lab-walkthrough-step">'
+            f'<div class="lab-step-head">'
+            f'<a class="lab-step-link" href="{leaf_href(target)}">{index}. {escape(leaf_title)} →</a>'
+            f'<span class="lab-step-meta"><code>{escape(filename)}</code> · {escape(date_label(date))}</span>'
+            f"</div>"
+            f"{question_html}"
+            f'<p class="lab-step-outcome"><strong>What came out:</strong> {escape(outcome)}</p>'
+            f"{badge_html}</li>"
+        )
+    subgoals_html = ""
+    if children.get(key):
+        sub_items = "".join(
+            f'<li><a href="#{escape(child, quote=True)}">{escape(titles[child])} →</a>'
+            f'<p>{escape(descriptions[child])}</p></li>'
+            for child in children[key]
+        )
+        subgoals_html = (
+            '<div class="lab-subgoals" role="region" aria-label="Next sub-goals in this branch">'
+            f'<h3>Next steps in this branch</h3><ul class="lab-path">{sub_items}</ul></div>'
+        )
+    context_block = f'<div class="lab-goal-context">{context}</div>' if context else ""
+    markup = f"""<article class="lab-experiment lab-goal-overview" data-goal-overview>
+  <div class="lab-experiment-head">
+    {kicker}
+    <h2 tabindex="-1">{escape(goal["title"])}</h2>
+    <p class="lab-lede">{escape(goal["description"])}</p>
+  </div>
+  {context_block}
+  <div class="lab-walkthrough-section" role="region" aria-label="Narrative walkthrough of experiments">
+    <h3>Narrative walkthrough ({len(goal["files"])} {"entry" if len(goal["files"]) == 1 else "entries"})</h3>
+    <p class="lab-card-note">Follow the steps below in sequence, or open any entry to inspect its input, output and code.</p>
+    <ol class="lab-walkthrough">{"".join(steps)}</ol>
+  </div>
+  {subgoals_html}
+</article>"""
+    return "\n".join(line.rstrip() for line in markup.splitlines())
+
+
+def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, context, downstream, labels):
     key = goal["id"]
     filename, date, outcome = file
     target = f"{key}/{filename}"
@@ -286,9 +339,10 @@ def render_leaf(goal, file, details, snapshots, examples, demo, context, downstr
              if context else "")
     source_action = "View source" if filename.endswith(".py") else "Open original file"
     experiment = escape(target, quote=True)
+    kicker = breadcrumb_markup([*ancestors, (key, goal["title"])])
     markup = f"""<article class="lab-experiment" id="{experiment}" data-experiment="{escape(filename, quote=True)}">
   <div class="lab-experiment-head">
-    {f'<p class="lab-kicker">{escape(goal["title"])}</p>' if title != goal["title"] else ""}
+    {kicker}
     <h2 tabindex="-1">{escape(title)}</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -315,7 +369,6 @@ def render_leaf(goal, file, details, snapshots, examples, demo, context, downstr
     {method_html}<p>{escape(outcome)}</p>
     <div class="lab-next">
       <a data-preview href="{path}">{source_action} ↗</a>
-      <a href="{leaf_href(target)}">Link to this entry</a>
     </div>
     {extra}{story}
   </section>
@@ -344,6 +397,7 @@ def render_logbook(research, *, project=None):
     goal_ids, file_names = set(), set()
     goals = [goal for group in groups for goal in group["goals"]]
     titles = {goal["id"]: goal["title"] for goal in goals}
+    descriptions = {goal["id"]: goal["description"] for goal in goals}
     targets = {goal["id"]: {file[0] for file in goal["files"]} for goal in goals}
     labels = {goal["id"] + "/" + file[0]: details.get(file[0], {}).get("title", file[0])
               for goal in goals for file in goal["files"]}
@@ -356,7 +410,13 @@ def render_logbook(research, *, project=None):
 
     for group in groups:
         label = escape(group["title"])
-        children, sidebar = defaultdict(list), {}
+        group_id = (
+            "section-" + re.sub(r"[^a-z0-9]+", "-", group["title"].casefold()).strip("-")
+            if group["title"] else ""
+        )
+        if group_id:
+            panels.append(render_group_overview(group_id, group, titles))
+        children, sidebar, parents = defaultdict(list), {}, {}
         for goal in group["goals"]:
             key, title = goal["id"], escape(goal["title"])
             if key in goal_ids:
@@ -366,6 +426,22 @@ def render_logbook(research, *, project=None):
             if parent is not None and parent not in sidebar:
                 raise ValueError(f"Parent of {key} must be an earlier goal in the same group")
             children[parent].append(key)
+            parents[key] = parent
+            sidebar[key] = None
+
+        def goal_ancestors(key):
+            chain = []
+            current = parents.get(key)
+            while current is not None:
+                chain.append((current, titles[current]))
+                current = parents.get(current)
+            chain.reverse()
+            if group_id:
+                chain.insert(0, (group_id, group["title"]))
+            return chain
+
+        for goal in group["goals"]:
+            key, title = goal["id"], escape(goal["title"])
             if not goal["files"]:
                 raise ValueError(f"Goal needs an entry: {key}")
             default_file = goal.get("default_file", goal["files"][0][0])
@@ -377,6 +453,10 @@ def render_logbook(research, *, project=None):
                             for target in goal.get("related", ()) if target not in featured)
             if links:
                 context += f'<nav class="lab-next" aria-label="Related goals">{links}</nav>'
+            ancestors = goal_ancestors(key)
+            overview = render_goal_overview(
+                ancestors, goal, titles, descriptions, children, details, snapshots, context
+            )
             script_links, leaves = [], []
             for file in goal["files"]:
                 filename, date, _ = file
@@ -392,32 +472,41 @@ def render_logbook(research, *, project=None):
                     f'<code>{escape(filename)}</code> <small>({escape(date_label(date))})</small></a></li>'
                 )
                 leaf_context = context if filename == default_file else ""
-                leaves.append(render_leaf(goal, file, details.get(filename, {}), snapshots,
+                leaves.append(render_leaf(ancestors, goal, file, details.get(filename, {}), snapshots,
                                           examples, demo, leaf_context, downstream, labels))
             sidebar[key] = title, "".join(script_links)
             default = escape(default_file, quote=True)
             panels.append(f'<section id="{key}" class="lab-goal" data-goal>\n'
-                          f'<div data-default-file="{default}">{"".join(leaves)}</div>\n</section>')
+                          f'{overview}\n<div data-default-file="{default}">{"".join(leaves)}</div>\n</section>')
 
         def branch(parent):
             items = []
             for key in children[parent]:
                 title, scripts = sidebar[key]
                 items.append(
-                    f'<li><a href="#{key}">{title}</a>'
+                    f'<li class="lab-node"><div class="lab-row">'
                     f'<button type="button" class="lab-branch-toggle" aria-label="Entries under {title}" '
                     f'aria-expanded="true" aria-controls="branch-{key}" hidden></button>'
-                    f'<div id="branch-{key}"><ul class="lab-script-list">{scripts}</ul>'
+                    f'<a class="lab-node-link" href="#{key}">{title}</a></div>'
+                    f'<div id="branch-{key}" class="lab-children"><ul class="lab-script-list">{scripts}</ul>'
                 )
                 if children[key]:
                     items.append(f'<ul class="lab-branch">{branch(key)}</ul>')
                 items.append("</div></li>")
             return "".join(items)
 
-        tree_class = "lab-tree lab-group-tree" if label else "lab-tree"
-        tree = f'<ul class="{tree_class}">{branch(None)}</ul>'
         if label:
-            tree = f'<details class="lab-group"><summary>{label}</summary>{tree}</details>'
+            tree = (
+                f'<ul class="lab-tree lab-group">'
+                f'<li class="lab-node lab-group-node"><div class="lab-row">'
+                f'<button type="button" class="lab-branch-toggle" aria-label="Goals under {label}" '
+                f'aria-expanded="true" aria-controls="branch-{group_id}" hidden></button>'
+                f'<a class="lab-node-link lab-group-link" href="#{group_id}">{label}</a></div>'
+                f'<div id="branch-{group_id}" class="lab-children">'
+                f'<ul class="lab-group-tree">{branch(None)}</ul></div></li></ul>'
+            )
+        else:
+            tree = f'<ul class="lab-tree">{branch(None)}</ul>'
         navigation.append(tree)
     missing = {path.name for path in examples.glob("*.py")} - file_names
     if missing:

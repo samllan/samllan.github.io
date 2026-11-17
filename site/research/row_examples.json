@@ -159,6 +159,10 @@
     "quantity": "2 cells linked to their scan coordinates",
     "stdout": "{'core': 'C1', 'cell': 1, 'scan_x': 669, 'scan_y': 498}\n{'core': 'C1', 'cell': 2, 'scan_x': 701, 'scan_y': 550}"
   },
+  "interpolate_core_grid.py": {
+    "quantity": "4 grid slots · 0.5 s/sample in thesis · 1 drifted core (5.8 px)",
+    "stdout": "1A: projected (20, 20), observed (20, 20), drift 0.0 px, box (5, 5, 35, 35)\n2A: projected (23, 50), observed (23, 50), drift 0.0 px, box (8, 35, 38, 65)\n3A: projected (26, 80), observed (26, 80), drift 0.0 px, box (11, 65, 41, 95)\n2B: projected (53, 47), observed (58, 44), drift 5.8 px, box (38, 32, 68, 62)"
+  },
   "join_subtype_labels.py": {
     "quantity": "3 images checked · 1 accepted label",
     "stdout": "([('a', 'R1', 'ABC')], [('b', 'R2', 'unrecognised'), ('c', 'R3', 'missing')])"
@@ -282,6 +286,10 @@
   "score_variational_reconstruction.py": {
     "quantity": "Reconstruction 0.387 · regularisation 0.083",
     "stdout": "Reconstruction 0.387 | KL 0.083 | total 0.429"
+  },
+  "select_core_rectangles.py": {
+    "quantity": "2 hand-drawn boxes · 6 s/sample in thesis · variable crop sizes",
+    "stdout": "1A: bounds (720, 880, 5600, 6000), size 4880x5120 px\n1B: bounds (6560, 800, 11720, 5720), size 5160x4920 px"
   },
   "standardise_encoder_inputs.py": {
     "quantity": "3 RGB channels resized to 8 × 8 pixels",

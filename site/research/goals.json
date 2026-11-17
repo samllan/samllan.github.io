@@ -27,11 +27,13 @@
         "title": "Mark and label tissue regions",
         "description": "How could I make labelling tissue cores faster while keeping extraction reliable?",
         "related": ["prepare","cells"],
-        "story": {"tried":"I compared two computer-assisted approaches, hand-drawn boxes and a tool that turns a person’s click into a fixed-size crop.","found":"Point-and-click took 3 seconds per core versus 6 for hand-drawn boxes. Both recorded precision and recall of 1.00 in the thesis comparison. Precision tracks how many extracted cores were correct. Recall tracks how many target cores were extracted.","next":"I chose point-and-click for the fixed-size crops and the shorter manual extraction time. A repeat study across annotators and scan types would test how well the result transfers.","source":"Submitted thesis, Table 2.5, p. 70. The values are from the extraction comparison."},
+        "story": {"tried":"I compared four ways to locate tissue cores on a slide: automated Hough circle detection, two-click tilted grid interpolation, hand-drawn bounding boxes and a tool that turns one click into a fixed-size crop.","found":"Hough took 0.06 seconds per core with precision 0.91 and recall 0.89. The tilted grid took 0.5 seconds with precision 0.98 and recall 1.00. Hand-drawn rectangles and point-and-click both reached 1.00 on precision (valid selections) and recall (target cores found), and point-and-click halved the time from 6 to 3 seconds per core.","next":"I chose point-and-click for the uniform fixed-size crops and the shorter manual extraction time. A repeat study across annotators and scan types would test how well the result transfers.","source":"Submitted thesis, Table 2.5, p. 70, and the August 2020 annotation scripts."},
         "next_label": "Decision",
         "default_file": "crop_benchmark.csv",
-        "links": [["Try marking a core","crop/prepare_image_regions.py"],["See how crops were extracted","prepare"]],
+        "links": [["Compare the four methods","crop/crop_benchmark.csv"],["Try marking a core","crop/prepare_image_regions.py"],["See how crops were extracted","prepare"]],
         "files": [
+          ["select_core_rectangles.py","Aug 2020","Scales hand-drawn preview boxes to full-scan coordinates, reaching 1.00 precision and recall at 6 seconds per sample while leaving each crop a slightly different size."],
+          ["interpolate_core_grid.py","Aug 2020","Projects a tilted microarray grid from two corner clicks in 0.5 seconds per sample, showing how a core that sits off the grid line reduces precision to 0.98."],
           ["prepare_image_regions.py","Aug 2020–Nov 2023","Turns clicks or a grid into labelled image bounds. It shifts edge crops inward so they stay the same size."],
           ["crop_benchmark.csv","2026 thesis","Compares four extraction methods by time, precision, recall and level of manual intervention in thesis Table 2.5."],
           ["record_crop_marks.py","2020–2023","Writes a CSV of labelled click centres and rectangle bounds for one scan."]

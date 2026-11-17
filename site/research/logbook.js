@@ -1,11 +1,12 @@
 const logbook = document.querySelector('.lab');
 const content = logbook.querySelector('.lab-content');
-const goals = [...logbook.querySelectorAll('[data-goal]')];
+const goals = [...logbook.querySelectorAll('[data-goal], [data-group-section]')];
 const tree = logbook.querySelector('.lab-goals');
 const cropDemo = document.querySelector('.lab-demo');
 const browseGoals = document.querySelector('.lab-nav-toggle');
 let activeExperiment;
 let focusOnNavigation = false;
+let toggledByRowClick = false;
 
 function showGoalMenu(open) {
   logbook.toggleAttribute('data-nav-open', open);
@@ -21,10 +22,13 @@ function setBranch(button, open) {
 }
 
 function revealNavigation(link) {
+  if (!toggledByRowClick && link?.previousElementSibling?.matches('.lab-branch-toggle')) {
+    setBranch(link.previousElementSibling, true);
+  }
   for (let item = link?.parentElement; item && item !== tree; item = item.parentElement) {
-    if (item.matches('details.lab-group')) item.open = true;
     if (item.id.startsWith('branch-')) {
-      setBranch(item.previousElementSibling, true);
+      const toggle = tree.querySelector(`[aria-controls="${item.id}"]`);
+      if (toggle) setBranch(toggle, true);
     }
   }
   if (tree.clientHeight) {
@@ -38,26 +42,37 @@ function revealNavigation(link) {
 
 function selectExperiment() {
   const [key, encodedFile] = location.hash.slice(1).split('/');
-  const goal = goals.find(item => item.id === key) || goals[0];
+  const goal = goals.find(item => item.id === key) || goals.find(item => item.hasAttribute('data-goal'));
   let filename;
   try { filename = decodeURIComponent(encodedFile || ''); } catch { filename = ''; }
+  const overview = goal.querySelector('[data-goal-overview], [data-group-overview]');
   const entries = [...goal.querySelectorAll('[data-experiment]')];
-  const selected = entries.find(item => item.dataset.experiment === filename)
-    || entries.find(item => item.dataset.experiment === goal.firstElementChild.dataset.defaultFile);
-  if (activeExperiment && activeExperiment !== selected) closeEditor(activeExperiment);
+  const defaultFile = goal.querySelector('[data-default-file]')?.dataset.defaultFile;
+  const selectedLeaf = filename
+    ? (entries.find(item => item.dataset.experiment === filename)
+      || entries.find(item => item.dataset.experiment === defaultFile))
+    : null;
+  const selected = selectedLeaf || overview || entries[0];
+  if (activeExperiment && activeExperiment !== selected && activeExperiment.hasAttribute('data-experiment')) {
+    closeEditor(activeExperiment);
+  }
   goals.forEach(item => { item.hidden = item !== goal; });
+  if (overview) overview.hidden = selected !== overview;
   for (const item of entries) item.hidden = item !== selected;
   tree.querySelector('[aria-current]')?.removeAttribute('aria-current');
-  const link = [...tree.querySelectorAll('.lab-script')].find(item => decodeURIComponent(item.hash.slice(1)) === selected.id);
+  const link = selectedLeaf
+    ? [...tree.querySelectorAll('.lab-script')].find(item => decodeURIComponent(item.hash.slice(1)) === selectedLeaf.id)
+    : tree.querySelector(`a[href="#${goal.id}"]`);
   link?.setAttribute('aria-current', 'page');
   revealNavigation(link);
   if (selected !== activeExperiment || focusOnNavigation) {
     content.scrollTop = 0;
-    if (focusOnNavigation) selected.querySelector('h2').focus({ preventScroll: true });
+    if (focusOnNavigation) selected.querySelector('h2')?.focus({ preventScroll: true });
     if (matchMedia('(max-width: 700px)').matches) window.scrollTo(0, 0);
   }
   activeExperiment = selected;
   focusOnNavigation = false;
+  toggledByRowClick = false;
 }
 
 function framingKey(entry) {
@@ -209,6 +224,13 @@ logbook.addEventListener('click', event => {
     previewFile(link);
   } else if (link?.getAttribute('href')?.startsWith('#')) {
     event.preventDefault();
+    if (link.matches('.lab-node-link')) {
+      const toggle = link.previousElementSibling;
+      if (toggle?.matches('.lab-branch-toggle')) {
+        setBranch(toggle, toggle.getAttribute('aria-expanded') !== 'true');
+        toggledByRowClick = true;
+      }
+    }
     focusOnNavigation = true;
     showGoalMenu(false);
     if (link.hash !== location.hash) history.pushState(null, '', link.hash);
@@ -220,6 +242,7 @@ dialog.addEventListener('close', () => previewRequest?.abort());
 function setupCropDemo() {
   const scene = document.querySelector('#crop-image');
   const preview = document.querySelector('#crop-preview');
+  const edge = document.querySelector('#crop-edge');
   const undo = document.querySelector('#crop-undo');
   const download = document.querySelector('#crop-download');
   const status = document.querySelector('#crop-status');
@@ -267,7 +290,9 @@ function setupCropDemo() {
     status.textContent = count ? `${count} crop${count === 1 ? '' : 's'} marked` : 'No crops marked';
     if (mark) {
       const [left, top] = cropPosition(mark);
-      coordinates.textContent = `Core ${count} · Centre (${mark.x}, ${mark.y}) px · Bounds (${left}, ${top}) to (${left + size}, ${top + size}) px`;
+      const shifted = left !== mark.x - size / 2 || top !== mark.y - size / 2;
+      const note = shifted ? ' (shifted inward from edge to keep 96 × 96 size)' : '';
+      coordinates.textContent = `Core ${count} · Centre (${mark.x}, ${mark.y}) px · Bounds (${left}, ${top}) to (${left + size}, ${top + size}) px${note}`;
     } else {
       coordinates.textContent = '';
     }
@@ -302,6 +327,11 @@ function setupCropDemo() {
     }
   });
 
+  edge?.addEventListener('click', () => {
+    keepInImage(24, 32);
+    marks.push({ ...cursor });
+    updateCrop();
+  });
   undo.addEventListener('click', () => { marks.pop(); updateCrop(); });
   download.addEventListener('click', () => {
     const rows = marks.map((mark, index) => {
@@ -322,6 +352,9 @@ function setupCropDemo() {
   source.src = 'examples/example_grid.png';
 }
 
-if (!location.hash) tree.querySelector('details.lab-group')?.setAttribute('open', '');
+if (!location.hash) {
+  const firstGroupToggle = tree.querySelector('.lab-group .lab-branch-toggle');
+  if (firstGroupToggle) setBranch(firstGroupToggle, true);
+}
 if (cropDemo) setupCropDemo();
 selectExperiment();
