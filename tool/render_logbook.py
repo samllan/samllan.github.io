@@ -199,43 +199,43 @@ def breadcrumb_markup(ancestors):
 def render_group_overview(group_id, group, titles):
     label = group["title"]
     total_files = sum(len(goal["files"]) for goal in group["goals"])
-    steps = []
+    summary = group.get(
+        "summary",
+        f"This section groups {len(group['goals'])} research goals and {total_files} experiment records.",
+    )
+    rows = []
     for index, goal in enumerate(group["goals"], start=1):
         key = goal["id"]
         parent = goal.get("parent")
-        parent_note = f' <small class="lab-step-sub">(under {escape(titles[parent])})</small>' if parent else ""
+        prefix = "↳ " if parent else f"{index}. "
+        parent_note = f'<div class="lab-step-sub">Under {escape(titles[parent])}</div>' if parent else ""
         story = goal.get("story", {})
-        finding = (
-            f'<p class="lab-step-outcome"><strong>Key finding:</strong> {escape(story["found"])}</p>'
-            if "found" in story else ""
-        )
+        finding = story.get("found", "")
+        finding_html = f'<div class="lab-arc-finding">{escape(finding)}</div>' if finding else ""
         file_pills = "".join(
-            f'<li><a href="{leaf_href(f"{key}/{filename}")}"><code>{escape(filename)}</code> '
-            f'<small>({escape(date_label(date))})</small></a></li>'
-            for filename, date, _ in goal["files"]
+            f'<li><a href="{leaf_href(f"{key}/{filename}")}"><code>{escape(filename)}</code></a></li>'
+            for filename, _, _ in goal["files"]
         )
-        steps.append(
-            f'<li class="lab-walkthrough-step">'
-            f'<div class="lab-step-head">'
-            f'<a class="lab-step-link" href="#{escape(key, quote=True)}">{index}. {escape(goal["title"])} →</a>'
-            f'{parent_note}'
-            f'<span class="lab-step-meta">{len(goal["files"])} {"entry" if len(goal["files"]) == 1 else "entries"}</span>'
-            f'</div>'
-            f'<p class="lab-step-question">{escape(goal["description"])}</p>'
-            f'{finding}'
-            f'<ul class="lab-inline-files">{file_pills}</ul>'
-            f'</li>'
+        rows.append(
+            f"<tr>"
+            f'<td><a class="lab-step-link" href="#{escape(key, quote=True)}">{prefix}{escape(goal["title"])} →</a>{parent_note}</td>'
+            f"<td>{escape(goal['description'])}</td>"
+            f'<td>{finding_html}<ul class="lab-inline-files">{file_pills}</ul></td>'
+            f"</tr>"
         )
     markup = f"""<section id="{escape(group_id, quote=True)}" class="lab-goal" data-group-section>
 <article class="lab-experiment lab-goal-overview" data-group-overview>
   <div class="lab-experiment-head">
     <p class="lab-kicker">Section overview</p>
     <h2 tabindex="-1">{escape(label)}</h2>
-    <p class="lab-lede">This section groups {len(group["goals"])} research goals and {total_files} experiment records. Select any goal below to read its narrative walkthrough, or jump directly to an individual script.</p>
+    <p class="lab-lede">{escape(summary)}</p>
   </div>
   <div class="lab-walkthrough-section" role="region" aria-label="Goals in this section">
-    <h3>Goals and experiments in this section</h3>
-    <ol class="lab-walkthrough">{"".join(steps)}</ol>
+    <table class="lab-result-table lab-arc-table">
+      <caption>Narrative arc across {len(group["goals"])} goals ({total_files} experiments)</caption>
+      <thead><tr><th scope="col">Goal</th><th scope="col">Question tested</th><th scope="col">Outcome &amp; scripts</th></tr></thead>
+      <tbody>{"".join(rows)}</tbody>
+    </table>
   </div>
 </article>
 </section>"""
@@ -245,38 +245,33 @@ def render_group_overview(group_id, group, titles):
 def render_goal_overview(ancestors, goal, titles, descriptions, children, details, snapshots, context):
     key = goal["id"]
     kicker = breadcrumb_markup(ancestors)
-    steps = []
+    rows = []
     for index, (filename, date, outcome) in enumerate(goal["files"], start=1):
         target = f"{key}/{filename}"
         detail = details.get(filename, {})
         leaf_title = detail.get("title", filename)
-        framing = detail.get("framing", "")
-        question_html = (
-            f'<p class="lab-step-question"><strong>Why this step:</strong> {escape(framing)}</p>'
-            if framing and framing != goal["description"] else ""
-        )
         quantity = snapshots.get(filename, {}).get("quantity", "")
-        badge_html = f'<span class="lab-step-badge">{escape(quantity)}</span>' if quantity else ""
-        steps.append(
-            f'<li class="lab-walkthrough-step">'
-            f'<div class="lab-step-head">'
-            f'<a class="lab-step-link" href="{leaf_href(target)}">{index}. {escape(leaf_title)} →</a>'
-            f'<span class="lab-step-meta"><code>{escape(filename)}</code> · {escape(date_label(date))}</span>'
-            f"</div>"
-            f"{question_html}"
-            f'<p class="lab-step-outcome"><strong>What came out:</strong> {escape(outcome)}</p>'
-            f"{badge_html}</li>"
+        badge_html = f'<div class="lab-arc-badge"><span class="lab-step-badge">{escape(quantity)}</span></div>' if quantity else ""
+        rows.append(
+            f"<tr>"
+            f'<td><a class="lab-step-link" href="{leaf_href(target)}">{index}. {escape(leaf_title)} →</a>'
+            f'<div class="lab-step-meta"><code>{escape(filename)}</code> · {escape(date_label(date))}</div></td>'
+            f"<td>{escape(outcome)}{badge_html}</td>"
+            f"</tr>"
         )
     subgoals_html = ""
     if children.get(key):
-        sub_items = "".join(
-            f'<li><a href="#{escape(child, quote=True)}">{escape(titles[child])} →</a>'
-            f'<p>{escape(descriptions[child])}</p></li>'
+        sub_rows = "".join(
+            f'<tr><td><a class="lab-step-link" href="#{escape(child, quote=True)}">↳ {escape(titles[child])} →</a></td>'
+            f"<td>{escape(descriptions[child])}</td></tr>"
             for child in children[key]
         )
         subgoals_html = (
             '<div class="lab-subgoals" role="region" aria-label="Next sub-goals in this branch">'
-            f'<h3>Next steps in this branch</h3><ul class="lab-path">{sub_items}</ul></div>'
+            '<table class="lab-result-table lab-arc-table">'
+            '<caption>Follow-on sub-goals in this branch</caption>'
+            '<thead><tr><th scope="col">Sub-goal</th><th scope="col">Question tested</th></tr></thead>'
+            f"<tbody>{sub_rows}</tbody></table></div>"
         )
     context_block = f'<div class="lab-goal-context">{context}</div>' if context else ""
     markup = f"""<article class="lab-experiment lab-goal-overview" data-goal-overview>
@@ -287,9 +282,11 @@ def render_goal_overview(ancestors, goal, titles, descriptions, children, detail
   </div>
   {context_block}
   <div class="lab-walkthrough-section" role="region" aria-label="Narrative walkthrough of experiments">
-    <h3>Narrative walkthrough ({len(goal["files"])} {"entry" if len(goal["files"]) == 1 else "entries"})</h3>
-    <p class="lab-card-note">Follow the steps below in sequence, or open any entry to inspect its input, output and code.</p>
-    <ol class="lab-walkthrough">{"".join(steps)}</ol>
+    <table class="lab-result-table lab-arc-table">
+      <caption>Experiments in this step ({len(goal["files"])} {"entry" if len(goal["files"]) == 1 else "entries"})</caption>
+      <thead><tr><th scope="col">Step &amp; script</th><th scope="col">What it did &amp; found</th></tr></thead>
+      <tbody>{"".join(rows)}</tbody>
+    </table>
   </div>
   {subgoals_html}
 </article>"""

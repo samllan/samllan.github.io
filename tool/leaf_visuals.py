@@ -1,4 +1,4 @@
-"""Structured input and output visuals for each experiment leaf in the logbook."""
+"""Colourful SVG visuals and compact tables for each experiment leaf."""
 import csv
 from html import escape
 from urllib.parse import quote
@@ -48,6 +48,74 @@ def figure_tag(filename, alt, caption, *size):
     )
 
 
+def svg_swatches(title, swatches, *, note=""):
+    """Render a row of labelled colour-coded tiles or mini grids."""
+    width = max(280, 92 * len(swatches))
+    parts = [
+        f'<svg viewBox="0 0 {width} 86" class="lab-diagram" role="img" aria-label="{escape(title, quote=True)}">',
+        f'<rect width="{width}" height="86" rx="6" fill="#f7f4ea"/>',
+        f'<text x="12" y="18" font-size="11" fill="#244035" font-weight="bold">{escape(title)}</text>',
+    ]
+    for i, (label, sublabel, fill, stroke) in enumerate(swatches):
+        x = 12 + i * 90
+        parts.extend((
+            f'<rect x="{x}" y="26" width="76" height="34" rx="4" fill="{fill}" stroke="{stroke}" stroke-width="2"/>',
+            f'<text x="{x + 38}" y="47" text-anchor="middle" font-size="11" fill="#1b3126" font-weight="bold">{escape(label)}</text>',
+            f'<text x="{x + 38}" y="74" text-anchor="middle" font-size="9.5" fill="#4b5c51">{escape(sublabel)}</text>',
+        ))
+    parts.append("</svg>")
+    foot = f'<p class="lab-card-note">{escape(note)}</p>' if note else ""
+    return "".join(parts) + foot
+
+
+def svg_hbars(title, bars, *, max_val=1.0, note=""):
+    """Render a colourful horizontal bar chart with custom bar colours."""
+    height = 34 + len(bars) * 28
+    parts = [
+        f'<svg viewBox="0 0 320 {height}" class="lab-diagram" role="img" aria-label="{escape(title, quote=True)}">',
+        f'<rect width="320" height="{height}" rx="6" fill="#f7f4ea"/>',
+        f'<text x="12" y="19" font-size="11" fill="#244035" font-weight="bold">{escape(title)}</text>',
+    ]
+    for i, (label, val, text_val, color) in enumerate(bars):
+        y = 28 + i * 26
+        w = max(3.0, min(1.0, val / max_val)) * 136 if max_val else 3.0
+        parts.extend((
+            f'<text x="12" y="{y + 13}" font-size="10.5" fill="#244035">{escape(label)}</text>',
+            f'<rect x="118" y="{y + 2}" width="136" height="14" rx="3" fill="#e2e8dc"/>',
+            f'<rect x="118" y="{y + 2}" width="{w:.1f}" height="14" rx="3" fill="{color}"/>',
+            f'<text x="260" y="{y + 13}" font-size="10.5" fill="#1b3126" font-weight="bold">{escape(text_val)}</text>',
+        ))
+    parts.append("</svg>")
+    foot = f'<p class="lab-card-note">{escape(note)}</p>' if note else ""
+    return "".join(parts) + foot
+
+
+def svg_diverging_bars(title, rows, *, scale=1.0, note=""):
+    """Zero-centred diverging bar chart (left = negative/coral, right = positive/teal)."""
+    height = 36 + len(rows) * 28
+    mid = 185
+    span = 70
+    parts = [
+        f'<svg viewBox="0 0 320 {height}" class="lab-diagram" role="img" aria-label="{escape(title, quote=True)}">',
+        f'<rect width="320" height="{height}" rx="6" fill="#f7f4ea"/>',
+        f'<text x="12" y="19" font-size="11" fill="#244035" font-weight="bold">{escape(title)}</text>',
+        f'<line x1="{mid}" y1="26" x2="{mid}" y2="{height - 6}" stroke="#536052" stroke-width="1.5"/>',
+    ]
+    for i, (label, signed_val, display) in enumerate(rows):
+        y = 28 + i * 26
+        w = min(1.0, abs(signed_val) / scale) * span
+        x = mid if signed_val >= 0 else mid - w
+        color = "#2f6f55" if signed_val >= 0 else "#b3472a"
+        parts.extend((
+            f'<text x="12" y="{y + 13}" font-size="10.5" fill="#244035">{escape(label)}</text>',
+            f'<rect x="{x:.1f}" y="{y + 2}" width="{max(2.0, w):.1f}" height="14" rx="2" fill="{color}"/>',
+            f'<text x="262" y="{y + 13}" font-size="10" fill="{color}" font-weight="bold">{escape(display)}</text>',
+        ))
+    parts.append("</svg>")
+    foot = f'<p class="lab-card-note">{escape(note)}</p>' if note else ""
+    return "".join(parts) + foot
+
+
 def leaf_visuals(filename, examples, demo, captured):
     # --- Overview ---
     if filename == "research_questions.md":
@@ -57,13 +125,21 @@ def leaf_visuals(filename, examples, demo, captured):
             "Synthetic schematic: one whole-slide scan branches into a 5,000 × 5,000 px core (C01), patches and individual cells.",
         )
         out = (
-            '<div class="lab-route-cards">'
-            '<div class="lab-route-card"><p class="lab-card-note"><strong>1. Make the images usable</strong> — Can whole-slide scans be turned into traceable, compact regions that are practical to store and train on?</p>'
-            '<p class="lab-next"><a href="#crop/crop_benchmark.csv">Extraction benchmark (6 s → 3 s) →</a><a href="#storage/compare_image_encodings.py">WebP storage (26.94 → 3.63 GB) →</a></p></div>'
-            '<div class="lab-route-card"><p class="lab-card-note"><strong>2. Match assessor grades</strong> — How closely can models trained on cores, patches or cells reproduce expert staining scores on held-out cases?</p>'
-            '<p class="lab-next"><a href="#figures/run_grading_example.py">End-to-end grading case S02 →</a><a href="#agreement/compare_assessor_errors.py">Model vs assessor gap →</a></p></div>'
-            '<div class="lab-route-card"><p class="lab-card-note"><strong>3. Predict supplied subtypes</strong> — Which image representations best separate the supplied ABC and GCB subtype labels, and what drives their scores?</p>'
-            '<p class="lab-next"><a href="#validation/summarise_validation.py">Fold-by-fold subtype validation →</a><a href="#explain/test_mask_score_changes.py">Dimming & perturbation checks →</a></p></div>'
+            svg_swatches(
+                "Three biological scales tested across two clinical tasks",
+                (
+                    ("Core view", "5,000 × 5,000 px", "#e6c5d4", "#8a4b68"),
+                    ("Patch view", "224 × 224 px tiles", "#d5e5dc", "#205841"),
+                    ("Cell view", "9.1M single cells", "#f7e7ba", "#8a5a19"),
+                ),
+            )
+            + '<div class="lab-route-cards">'
+            '<div class="lab-route-card"><p class="lab-card-note"><strong>1. Prepare tissue scales</strong> — Can multi-gigabyte scans become traceable, compact regions on disk?</p>'
+            '<p class="lab-next"><a href="#crop/crop_benchmark.csv">1-click cropping (6 s → 3 s) →</a><a href="#storage/compare_image_encodings.py">WebP compression (−86.5%) →</a></p></div>'
+            '<div class="lab-route-card"><p class="lab-card-note"><strong>2. Task 1: Staining grades</strong> — Which scale best matches expert IHC scores (0–3)?</p>'
+            '<p class="lab-next"><a href="#figures/run_grading_example.py">Trace Case S02 to chart →</a><a href="#agreement/compare_assessor_errors.py">0.238 model MAE vs 0.382 rater gap →</a></p></div>'
+            '<div class="lab-route-card"><p class="lab-card-note"><strong>3. Task 2: Subtype labels</strong> — Which pooled representations best separate ABC vs GCB subtypes?</p>'
+            '<p class="lab-next"><a href="#validation/summarise_validation.py">0.992 AUC subtype validation →</a><a href="#explain/test_mask_score_changes.py">Dimming & perturbation controls →</a></p></div>'
             "</div>"
         )
         return inp, out
@@ -71,6 +147,14 @@ def leaf_visuals(filename, examples, demo, captured):
     if filename == "README.md":
         if (examples / "trial_waits.csv").is_file():
             return (
+                svg_swatches(
+                    "Four JSON/Markdown files define any logbook project",
+                    (
+                        ("project.json", "Title & links", "#e2e8dc", "#205841"),
+                        ("goals.json", "Tree & stories", "#d5e5dc", "#205841"),
+                        ("leaf_details", "Inputs & links", "#f7e7ba", "#8a5a19"),
+                    ),
+                ),
                 mini_table(
                     "Files that define a logbook project folder",
                     ("Project file", "Role"),
@@ -81,12 +165,18 @@ def leaf_visuals(filename, examples, demo, captured):
                         ("row_examples.json", "Stores captured script outputs and headline metric badges."),
                     ),
                 ),
-                "",
             )
         inp = (
             '<p class="lab-card-note"><strong>Dependencies</strong> · Python 3.9+ with NumPy and Pillow:</p>'
             '<pre class="lab-command">python -m pip install numpy pillow\npython run_grading_example.py --output grading-demo</pre>'
-            '<p class="lab-card-note">Run from <code>site/research/examples/</code> to rebuild the synthetic splits, out-of-fold predictions, case trace and SVG chart.</p>'
+            + svg_swatches(
+                "One command replays the full grading pipeline",
+                (
+                    ("1. Splits", "splits.csv", "#e2e8dc", "#527c67"),
+                    ("2. Predict", "36 held-out rows", "#d5e5dc", "#205841"),
+                    ("3. Chart", "grading_figure.svg", "#f7e7ba", "#8a5a19"),
+                ),
+            )
         )
         out = mini_table(
             "First files to inspect after running the grading example",
@@ -100,8 +190,42 @@ def leaf_visuals(filename, examples, demo, captured):
         )
         return inp, out
 
+    # --- Pilot example ---
+    if filename == "trial_waits.csv":
+        return (
+            svg_hbars(
+                "Observed visitor wait times (minutes, lower is faster)",
+                (("Paper list (AM)", 8.0, "8 min median", "#8a5a19"), ("Arrival list (PM)", 4.0, "4 min median", "#205841")),
+                max_val=10.0,
+            ),
+            mini_table(
+                "Recorded wait times (fictional pilot)",
+                ("Method", "Session", "Observed waits (min)", "Median"),
+                (("Paper list", "Morning", "7, 8, 9, 12", "8 min"), ("Prepared arrival list", "Afternoon", "3, 4, 4, 6", "4 min")),
+            ),
+        )
+    if filename == "summarise_waits.py":
+        return (
+            svg_swatches(
+                "Two groups of 4 observations",
+                (("Paper list", "7, 8, 9, 12 min", "#f7e7ba", "#8a5a19"), ("Prepared list", "3, 4, 4, 6 min", "#d5e5dc", "#205841")),
+            ),
+            svg_hbars(
+                "Recomputed median wait from CSV",
+                (("Paper list", 8.0, "8 min (n=4)", "#8a5a19"), ("Prepared list", 4.0, "4 min (n=4)", "#205841")),
+                max_val=10.0,
+                note="The session notes show the two methods ran at different times of day.",
+            ),
+        )
     if filename == "decision.md":
         return (
+            svg_swatches(
+                "Confounded pilot vs balanced follow-up design",
+                (
+                    ("Pilot 1", "AM vs PM (confounded)", "#f5d0c5", "#b3472a"),
+                    ("Pilot 2", "Matched time slots", "#d5e5dc", "#205841"),
+                ),
+            ),
             mini_table(
                 "What changed between the first pilot summary and the review",
                 ("Stage", "Observation", "Conclusion"),
@@ -111,84 +235,78 @@ def leaf_visuals(filename, examples, demo, captured):
                 ),
                 highlight_row=1,
             ),
-            "",
         )
 
-    # --- Pilot example ---
-    if filename == "trial_waits.csv":
-        return (
-            stat_cards((("Paper list", "4 arrivals (morning)"), ("Arrival list", "4 arrivals (afternoon)")),
-                       note="Each row records one fictional visitor wait in minutes."),
-            mini_table(
-                "Recorded wait times (fictional pilot)",
-                ("Method", "Session", "Observed waits (min)", "Median (min)"),
-                (
-                    ("Paper list", "Morning", "7, 8, 9, 12", "8.5 / 8"),
-                    ("Prepared arrival list", "Afternoon", "3, 4, 4, 6", "4.0"),
-                ),
-            ),
-        )
-    if filename == "summarise_waits.py":
-        return (
-            mini_table("Grouped observations", ("Method", "n", "Waits (min)"),
-                       (("Paper list", "4", "7, 8, 9, 12"), ("Prepared list", "4", "3, 4, 4, 6"))),
-            stat_cards((("Paper list median", "8 min (n=4)"), ("Prepared list median", "4 min (n=4)")),
-                       note="The session notes show the two methods ran at different times of day."),
-        )
-
-    # --- Goal: crop (Mark and label tissue regions) ---
+    # --- Goal: crop (Locate tissue cores) ---
     if filename == "select_core_rectangles.py":
         inp = (
-            '<svg viewBox="0 0 320 120" class="lab-diagram" role="img" aria-label="Two hand-drawn boxes of slightly different sizes around tissue cores">'
-            '<rect width="320" height="120" rx="6" fill="#f7f4ea"/>'
-            '<circle cx="78" cy="62" r="34" fill="#c98ca7" opacity="0.85"/>'
-            '<rect x="38" y="24" width="78" height="82" fill="none" stroke="#205841" stroke-width="2" stroke-dasharray="4 2"/>'
-            '<text x="42" y="20" font-size="11" fill="#205841" font-weight="bold">1A · 122 × 128 preview px</text>'
-            '<circle cx="222" cy="60" r="34" fill="#c98ca7" opacity="0.85"/>'
-            '<rect x="180" y="22" width="84" height="76" fill="none" stroke="#8a5a19" stroke-width="2" stroke-dasharray="4 2"/>'
-            '<text x="184" y="18" font-size="11" fill="#8a5a19" font-weight="bold">1B · 129 × 123 preview px</text>'
+            '<svg viewBox="0 0 320 116" class="lab-diagram" role="img" aria-label="Two hand-drawn boxes of slightly different sizes around tissue cores">'
+            '<rect width="320" height="116" rx="6" fill="#f7f4ea"/>'
+            '<circle cx="78" cy="60" r="32" fill="#c98ca7" opacity="0.85"/>'
+            '<rect x="38" y="24" width="76" height="80" fill="none" stroke="#205841" stroke-width="2" stroke-dasharray="4 2"/>'
+            '<text x="40" y="19" font-size="10.5" fill="#205841" font-weight="bold">1A · 122 × 128 preview px</text>'
+            '<circle cx="222" cy="58" r="32" fill="#c98ca7" opacity="0.85"/>'
+            '<rect x="178" y="22" width="84" height="74" fill="none" stroke="#8a5a19" stroke-width="2" stroke-dasharray="4 2"/>'
+            '<text x="180" y="17" font-size="10.5" fill="#8a5a19" font-weight="bold">1B · 129 × 123 preview px</text>'
             "</svg>"
             '<p class="lab-card-note">Preview zoom: <code>1.25×</code> · Scan multiplier: <code>50×</code> (scale factor <code>40×</code>).</p>'
         )
-        out = mini_table(
-            "Scaled full-scan bounds from hand-drawn boxes (generated example)",
-            ("Core", "Preview box (x, y, w, h)", "Full-scan bounds (px)", "Resulting crop size"),
-            (
-                ("1A", "(18, 22, 122, 128)", "(720, 880, 5600, 6000)", "4,880 × 5,120 px"),
-                ("1B", "(164, 20, 129, 123)", "(6560, 800, 11720, 5720)", "5,160 × 4,920 px"),
-            ),
-            note="Thesis Table 2.5: manual rectangles reached 1.00 precision and 1.00 recall at 6 s per sample, but every box had slightly different dimensions.",
+        out = (
+            svg_swatches(
+                "Resulting full-scan crops have uneven pixel dimensions",
+                (
+                    ("Core 1A", "4,880 × 5,120 px (tall)", "#e6c5d4", "#205841"),
+                    ("Core 1B", "5,160 × 4,920 px (wide)", "#f7e7ba", "#8a5a19"),
+                    ("6 s / core", "1.00 prec & recall", "#e2e8dc", "#527c67"),
+                ),
+            )
+            + mini_table(
+                "Scaled full-scan bounds from hand-drawn boxes",
+                ("Core", "Preview (x, y, w, h)", "Full-scan bounds (px)", "Crop size"),
+                (
+                    ("1A", "(18, 22, 122, 128)", "(720, 880, 5600, 6000)", "4,880 × 5,120 px"),
+                    ("1B", "(164, 20, 129, 123)", "(6560, 800, 11720, 5720)", "5,160 × 4,920 px"),
+                ),
+            )
         )
         return inp, out
 
     if filename == "interpolate_core_grid.py":
         inp = (
-            '<svg viewBox="0 0 320 132" class="lab-diagram" role="img" aria-label="Tilted microarray grid projected from two reference corners, showing one drifted core">'
-            '<rect width="320" height="132" rx="6" fill="#f7f4ea"/>'
-            '<line x1="55" y1="24" x2="67" y2="108" stroke="#6b8577" stroke-width="1.5" stroke-dasharray="3 3"/>'
-            '<circle cx="55" cy="24" r="13" fill="#c98ca7"/><circle cx="55" cy="24" r="3" fill="#1b3126"/>'
-            '<text x="74" y="28" font-size="11" fill="#1b3126">1A corner click (20, 20)</text>'
-            '<circle cx="61" cy="66" r="13" fill="#c98ca7"/>'
-            '<rect x="46" y="51" width="30" height="30" fill="none" stroke="#205841" stroke-width="1.5"/>'
-            '<circle cx="67" cy="108" r="13" fill="#c98ca7"/><circle cx="67" cy="108" r="3" fill="#1b3126"/>'
-            '<text x="86" y="112" font-size="11" fill="#1b3126">3A corner click (26, 80)</text>'
-            '<circle cx="222" cy="56" r="13" fill="#c98ca7"/>'
-            '<rect x="195" y="47" width="30" height="30" fill="none" stroke="#b3472a" stroke-width="2"/>'
-            '<text x="176" y="39" font-size="11" fill="#b3472a" font-weight="bold">2B drifted core (5.8 px off grid)</text>'
+            '<svg viewBox="0 0 320 126" class="lab-diagram" role="img" aria-label="Tilted microarray grid projected from two reference corners, showing one drifted core">'
+            '<rect width="320" height="126" rx="6" fill="#f7f4ea"/>'
+            '<line x1="55" y1="22" x2="67" y2="104" stroke="#6b8577" stroke-width="1.5" stroke-dasharray="3 3"/>'
+            '<circle cx="55" cy="22" r="12" fill="#c98ca7"/><circle cx="55" cy="22" r="3" fill="#1b3126"/>'
+            '<text x="72" y="26" font-size="10.5" fill="#1b3126">1A corner click (20, 20)</text>'
+            '<circle cx="61" cy="63" r="12" fill="#c98ca7"/>'
+            '<rect x="46" y="48" width="30" height="30" fill="none" stroke="#205841" stroke-width="1.5"/>'
+            '<circle cx="67" cy="104" r="12" fill="#c98ca7"/><circle cx="67" cy="104" r="3" fill="#1b3126"/>'
+            '<text x="84" y="108" font-size="10.5" fill="#1b3126">3A corner click (26, 80)</text>'
+            '<circle cx="222" cy="54" r="12" fill="#c98ca7"/>'
+            '<rect x="195" y="45" width="30" height="30" fill="none" stroke="#b3472a" stroke-width="2"/>'
+            '<text x="172" y="38" font-size="10.5" fill="#b3472a" font-weight="bold">2B drifted core (5.8 px off grid)</text>'
             "</svg>"
-            '<p class="lab-card-note">Two reference clicks set the slide tilt θ and spacing; boxes are projected across rows and columns.</p>'
         )
-        out = mini_table(
-            "Projected grid slots vs observed core centres (generated example)",
-            ("Core", "Projected centre", "Observed centre", "Centre drift", "Projected box (l, t, r, b)"),
-            (
-                ("1A", "(20, 20)", "(20, 20)", "0.0 px", "(5, 5, 35, 35)"),
-                ("2A", "(23, 50)", "(23, 50)", "0.0 px", "(8, 35, 38, 65)"),
-                ("3A", "(26, 80)", "(26, 80)", "0.0 px", "(11, 65, 41, 95)"),
-                ("2B", "(53, 47)", "(58, 44)", "5.8 px (clipped)", "(38, 32, 68, 62)"),
-            ),
-            highlight_row=3,
-            note="Thesis Table 2.5: grid projection took 0.5 s per sample with 1.00 recall, while off-grid cores reduced precision to 0.98.",
+        out = (
+            svg_hbars(
+                "Centre drift from projected grid slot (px)",
+                (
+                    ("Core 1A (on-grid)", 0.0, "0.0 px", "#205841"),
+                    ("Core 2A (on-grid)", 0.0, "0.0 px", "#205841"),
+                    ("Core 3A (on-grid)", 0.0, "0.0 px", "#205841"),
+                    ("Core 2B (drifted)", 5.8, "5.8 px (clipped)", "#b3472a"),
+                ),
+                max_val=6.0,
+            )
+            + mini_table(
+                "Projected grid slots vs observed core centres",
+                ("Core", "Projected", "Observed", "Drift", "Box (l, t, r, b)"),
+                (
+                    ("1A–3A", "On axis", "On axis", "0.0 px", "Centred 30 × 30 px"),
+                    ("2B", "(53, 47)", "(58, 44)", "5.8 px", "(38, 32, 68, 62) · clipped"),
+                ),
+                highlight_row=1,
+            )
         )
         return inp, out
 
@@ -205,776 +323,807 @@ def leaf_visuals(filename, examples, demo, captured):
         with (examples / filename).open(encoding="utf-8", newline="") as stream:
             rows = list(csv.DictReader(stream))
         inp = (
-            '<p class="lab-card-note">Each method was evaluated on four criteria in Thesis Table 2.5 (p. 70):</p>'
-            '<ul class="lab-card-list">'
-            "<li><strong>Seconds per sample:</strong> human and compute time required per core.</li>"
-            "<li><strong>Precision (1 − wrong selections):</strong> share of extracted regions that were valid target cores.</li>"
-            "<li><strong>Recall (1 − missed cores):</strong> share of target cores on the slide that were successfully extracted.</li>"
-            "<li><strong>Manual intervention:</strong> how much human guidance each slide required.</li>"
-            "</ul>"
-            '<p class="lab-card-note">The Hough transform result is preserved from Thesis Table 2.5 (its original script is not in the archive). '
-            "Rectangle, grid and point-and-click scripts are preserved in the August 2020 archive and shown as adjacent leaves.</p>"
+            svg_swatches(
+                "Four core-extraction strategies evaluated in Thesis Table 2.5",
+                (
+                    ("Hough", "0.06 s · auto circles", "#f5d0c5", "#b3472a"),
+                    ("Tilted grid", "0.5 s · 2 corner clicks", "#f7e7ba", "#8a5a19"),
+                    ("1-click crop", "3 s · 1.00 prec/recall", "#d5e5dc", "#205841"),
+                ),
+                note="Precision = share of extracted regions that were valid cores (no wrong selections). Recall = share of target cores found (no missed cores).",
+            )
         )
-        chart = metric_bars(
-            "Thesis Table 2.5 · seconds per sample (lower is faster)",
-            [(r["approach"], float(r["seconds_per_sample"]), f'{r["seconds_per_sample"]} s') for r in rows],
-            max_value=6,
+        chart = svg_hbars(
+            "Thesis Table 2.5 · Seconds per sample vs accuracy",
+            (
+                ("Hough (0.89 rec)", 0.06, "0.06 s", "#b3472a"),
+                ("Grid (0.98 prec)", 0.5, "0.5 s", "#8a5a19"),
+                ("Rectangles (1.00)", 6.0, "6.0 s", "#527c67"),
+                ("1-click (1.00 ★)", 3.0, "3.0 s", "#205841"),
+            ),
+            max_val=6.0,
         )
         table = mini_table(
-            "Point-and-click halved time vs rectangles (6 s → 3 s) at 1.00 precision and recall; Hough was fastest (0.06 s) and missed more cores (recall 0.89)",
-            ("Approach", "Seconds / sample", "Precision (valid selections)", "Recall (cores found)", "Manual intervention"),
+            "Point-and-click halved manual time (6 s → 3 s) at 1.00 precision and recall",
+            ("Approach", "Time / core", "Precision", "Recall", "Manual effort"),
             [(r["approach"], f'{r["seconds_per_sample"]} s', r["precision"], r["recall"], r["manual_intervention"]) for r in rows],
             highlight_row=3,
-            note="Source: Submitted thesis, Table 2.5, p. 70.",
         )
         return inp, chart + table
 
     if filename == "record_crop_marks.py":
         inp = (
-            '<svg viewBox="0 0 288 126" class="lab-diagram" role="img" aria-label="96 by 72 scan showing Point A at (20, 16) and Rectangle B from (64, 44) to (88, 68)">'
-            '<rect x="12" y="10" width="192" height="104" rx="4" fill="#f5f0e2" stroke="#9ab0a2"/>'
-            '<circle cx="52" cy="36" r="14" fill="#c98ca7" opacity="0.8"/>'
+            '<svg viewBox="0 0 288 118" class="lab-diagram" role="img" aria-label="96 by 72 scan showing Point A at (20, 16) and Rectangle B from (64, 44) to (88, 68)">'
+            '<rect x="12" y="10" width="192" height="98" rx="4" fill="#f5f0e2" stroke="#9ab0a2"/>'
+            '<circle cx="52" cy="36" r="14" fill="#c98ca7" opacity="0.85"/>'
             '<line x1="46" y1="36" x2="58" y2="36" stroke="#1b3126" stroke-width="2"/>'
             '<line x1="52" y1="30" x2="52" y2="42" stroke="#1b3126" stroke-width="2"/>'
-            '<text x="69" y="40" font-size="11" fill="#1b3126" font-weight="bold">A · point (20, 16)</text>'
-            '<circle cx="164" cy="86" r="15" fill="#c98ca7" opacity="0.8"/>'
-            '<rect x="140" y="70" width="48" height="34" fill="none" stroke="#205841" stroke-width="2"/>'
-            '<text x="92" y="65" font-size="11" fill="#205841" font-weight="bold">B · rectangle (64, 44)–(88, 68)</text>'
+            '<text x="69" y="40" font-size="10.5" fill="#1b3126" font-weight="bold">A · point (20, 16)</text>'
+            '<circle cx="164" cy="82" r="14" fill="#c98ca7" opacity="0.85"/>'
+            '<rect x="140" y="66" width="48" height="32" fill="none" stroke="#205841" stroke-width="2"/>'
+            '<text x="90" y="62" font-size="10.5" fill="#205841" font-weight="bold">B · rect (64, 44)–(88, 68)</text>'
             "</svg>"
-            '<p class="lab-card-note">Scan size: <code>96 × 72 px</code> · Coordinates use inclusive <code>(x, y)</code> and exclusive <code>(right, bottom)</code>.</p>'
         )
-        out = mini_table(
-            "Saved annotation CSV rows (2 marks on demo-scan)",
-            ("image", "label", "kind", "x", "y", "right", "bottom"),
-            (
-                ("demo-scan", "A", "point", "20", "16", "— (blank)", "— (blank)"),
-                ("demo-scan", "B", "rectangle", "64", "44", "88", "68"),
-            ),
-            highlight_row=0,
-            note="Point rows leave right and bottom blank because fixed-size bounds are computed later during crop extraction.",
+        out = (
+            svg_swatches(
+                "Two annotation schemas stored in one CSV",
+                (
+                    ("Row A · point", "(x=20, y=16, blank, blank)", "#f7e7ba", "#8a5a19"),
+                    ("Row B · rect", "(64, 44, right=88, bottom=68)", "#d5e5dc", "#205841"),
+                ),
+            )
+            + mini_table(
+                "Saved annotation CSV rows (demo-scan, 96 × 72 px)",
+                ("image", "label", "kind", "x", "y", "right", "bottom"),
+                (
+                    ("demo-scan", "A", "point", "20", "16", "— (blank)", "— (blank)"),
+                    ("demo-scan", "B", "rectangle", "64", "44", "88", "68"),
+                ),
+                highlight_row=0,
+                note="Point rows leave right/bottom blank until fixed-size bounds are computed during extraction.",
+            )
         )
         return inp, out
 
-    # --- Goal: prepare (Extract crops and preserve their coordinates) ---
+    # --- Goal: prepare (Extract traceable crops) ---
     if filename == "extract_labelled_crops.py":
         inp = (
-            '<svg viewBox="0 0 280 120" class="lab-diagram" role="img" aria-label="32 by 24 source scan with two labelled crop boxes">'
-            '<rect x="16" y="12" width="160" height="96" rx="4" fill="#b57594"/>'
+            '<svg viewBox="0 0 280 112" class="lab-diagram" role="img" aria-label="32 by 24 source scan with two labelled crop boxes">'
+            '<rect x="16" y="12" width="160" height="88" rx="4" fill="#b57594"/>'
             '<rect x="26" y="24" width="50" height="40" fill="none" stroke="#fffae7" stroke-width="2"/>'
-            '<text x="28" y="21" font-size="10" fill="#fffae7" font-weight="bold">rectangle (2,3)–(12,13)</text>'
-            '<rect x="121" y="44" width="40" height="32" fill="none" stroke="#f9ecb2" stroke-width="2"/>'
-            '<text x="102" y="40" font-size="10" fill="#f9ecb2" font-weight="bold">crop-01 (21,8)–(29,16)</text>'
-            '<rect x="200" y="18" width="36" height="36" rx="3" fill="#b57594" stroke="#205841" stroke-width="2"/>'
-            '<text x="200" y="66" font-size="10" fill="#244035">crop-001.png</text>'
-            '<rect x="200" y="74" width="30" height="30" rx="3" fill="#b57594" stroke="#205841" stroke-width="2"/>'
-            '<text x="200" y="115" font-size="10" fill="#244035">crop-002.png</text>'
+            '<text x="26" y="20" font-size="10" fill="#fffae7" font-weight="bold">rectangle (2,3)–(12,13)</text>'
+            '<rect x="121" y="42" width="40" height="32" fill="none" stroke="#f9ecb2" stroke-width="2"/>'
+            '<text x="96" y="38" font-size="10" fill="#f9ecb2" font-weight="bold">crop-01 (21,8)–(29,16)</text>'
             "</svg>"
         )
-        out = mini_table(
-            "Generated crops.csv manifest linking each file back to demo-scan",
-            ("image", "label", "file", "left (px)", "top (px)", "right (px)", "bottom (px)"),
-            (
-                ("demo-scan", "rectangle", "crop-001.png", "2", "3", "12", "13"),
-                ("demo-scan", "crop-01", "crop-002.png", "21", "8", "29", "16"),
-            ),
-            highlight_row=1,
-            note="Row 2 locates crop-002.png at (21, 8) to (29, 16) on demo-scan (an 8 × 8 px region).",
+        out = (
+            svg_swatches(
+                "Extracted image files paired with crops.csv manifest",
+                (
+                    ("crop-001.png", "10 × 10 px from (2, 3)", "#e6c5d4", "#205841"),
+                    ("crop-002.png", "8 × 8 px from (21, 8)", "#e6c5d4", "#8a5a19"),
+                ),
+            )
+            + mini_table(
+                "Generated crops.csv manifest",
+                ("image", "label", "file", "Bounds (l, t, r, b)"),
+                (
+                    ("demo-scan", "rectangle", "crop-001.png", "(2, 3, 12, 13)"),
+                    ("demo-scan", "crop-01", "crop-002.png", "(21, 8, 29, 16)"),
+                ),
+                highlight_row=1,
+            )
         )
         return inp, out
 
     if filename == "map_crop_to_scan.py":
         inp = (
-            '<svg viewBox="0 0 320 118" class="lab-diagram" role="img" aria-label="Downsampled crop box mapped by 4x scale and offset onto the full scan">'
-            '<rect x="14" y="20" width="84" height="76" rx="4" fill="#e2e8dc" stroke="#527c67"/>'
-            '<rect x="34" y="38" width="36" height="36" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
-            '<text x="14" y="15" font-size="11" fill="#244035" font-weight="bold">Crop (1×) · box 20 × 20 px</text>'
-            '<text x="22" y="88" font-size="10" fill="#244035">(10, 8) to (30, 28)</text>'
-            '<text x="112" y="58" font-size="13" fill="#205841" font-weight="bold">×4 scale</text>'
-            '<text x="105" y="74" font-size="10" fill="#536052">+ (1200, 800)</text>'
-            '<rect x="178" y="14" width="128" height="90" rx="4" fill="#f5f0e2" stroke="#527c67"/>'
-            '<rect x="214" y="34" width="56" height="52" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
-            '<text x="178" y="11" font-size="11" fill="#244035" font-weight="bold">Full scan · box 80 × 80 px</text>'
-            '<text x="188" y="98" font-size="10" fill="#244035">(1240, 832) to (1320, 912)</text>'
+            '<svg viewBox="0 0 310 106" class="lab-diagram" role="img" aria-label="Downsampled crop box mapped by 4x scale and offset">'
+            '<rect x="14" y="18" width="84" height="72" rx="4" fill="#e2e8dc" stroke="#527c67"/>'
+            '<rect x="34" y="34" width="36" height="36" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
+            '<text x="14" y="13" font-size="10.5" fill="#244035" font-weight="bold">4× downsampled crop · box 20 × 20 px</text>'
+            '<text x="112" y="50" font-size="12" fill="#205841" font-weight="bold">×4 scale</text>'
+            '<text x="108" y="66" font-size="10" fill="#536052">+ (1200, 800)</text>'
+            '<rect x="190" y="14" width="106" height="80" rx="4" fill="#f5f0e2" stroke="#527c67"/>'
+            '<rect x="216" y="30" width="54" height="48" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
+            '<text x="190" y="11" font-size="10.5" fill="#244035" font-weight="bold">Full scan · 80 × 80 px</text>'
             "</svg>"
         )
-        out = mini_table(
-            "Coordinate mapping from 4× downsampled crop to full scan",
-            ("Coordinate", "Local crop (px)", "× 4 downsample", "+ Crop origin (px)", "Full-scan pixel"),
-            (
-                ("Left / Top", "(10, 8)", "(40, 32)", "+ (1200, 800)", "(1240, 832)"),
-                ("Right / Bottom", "(30, 28)", "(120, 112)", "+ (1200, 800)", "(1320, 912)"),
-                ("Box dimensions", "20 × 20 px", "80 × 80 px", "—", "80 × 80 px"),
-            ),
-            highlight_row=2,
+        out = (
+            svg_hbars(
+                "Pixel width before and after ×4 scan mapping",
+                (("Local crop box", 20, "20 × 20 px", "#8a5a19"), ("Full-scan box", 80, "80 × 80 px", "#205841")),
+                max_val=80,
+            )
+            + mini_table(
+                "Coordinate transformation: Scan = Origin + 4 × Local",
+                ("Corner", "Local (px)", "× 4 scale", "+ Origin (1200, 800)", "Full-scan (px)"),
+                (("Left / Top", "(10, 8)", "(40, 32)", "+ (1200, 800)", "(1240, 832)"), ("Right / Bottom", "(30, 28)", "(120, 112)", "+ (1200, 800)", "(1320, 912)")),
+            )
         )
         return inp, out
 
-    # --- Goal: patches (Build and inspect patch datasets) ---
+    # --- Goal: patches (Tile into patches) ---
     if filename == "filter_tissue_patches.py":
         inp = (
-            '<svg viewBox="0 0 280 108" class="lab-diagram" role="img" aria-label="8 grid squares over a binary tissue mask with kept and skipped squares marked">'
-            '<rect x="16" y="16" width="144" height="72" fill="#eef1eb" stroke="#9ab0a2"/>'
-            '<rect x="16" y="16" width="81" height="72" fill="#c98ca7" opacity="0.8"/>'
+            '<svg viewBox="0 0 280 100" class="lab-diagram" role="img" aria-label="8 grid squares over a binary tissue mask">'
+            '<rect x="16" y="14" width="144" height="72" fill="#eef1eb" stroke="#9ab0a2"/>'
+            '<rect x="16" y="14" width="81" height="72" fill="#c98ca7" opacity="0.85"/>'
             '<g fill="none" stroke="#244035" stroke-width="1.2">'
-            '<rect x="16" y="16" width="36" height="36"/><rect x="52" y="16" width="36" height="36"/>'
-            '<rect x="88" y="16" width="36" height="36"/><rect x="124" y="16" width="36" height="36"/>'
-            '<rect x="16" y="52" width="36" height="36"/><rect x="52" y="52" width="36" height="36"/>'
-            '<rect x="88" y="52" width="36" height="36"/><rect x="124" y="52" width="36" height="36"/>'
+            '<rect x="16" y="14" width="36" height="36"/><rect x="52" y="14" width="36" height="36"/>'
+            '<rect x="88" y="14" width="36" height="36"/><rect x="124" y="14" width="36" height="36"/>'
+            '<rect x="16" y="50" width="36" height="36"/><rect x="52" y="50" width="36" height="36"/>'
+            '<rect x="88" y="50" width="36" height="36"/><rect x="124" y="50" width="36" height="36"/>'
             "</g>"
-            '<text x="23" y="38" font-size="10" fill="#1b3126" font-weight="bold">100%</text>'
-            '<text x="59" y="38" font-size="10" fill="#1b3126" font-weight="bold">100%</text>'
-            '<text x="97" y="38" font-size="10" fill="#b3472a" font-weight="bold">25%</text>'
-            '<text x="135" y="38" font-size="10" fill="#536052">0%</text>'
-            '<text x="23" y="74" font-size="10" fill="#1b3126" font-weight="bold">100%</text>'
-            '<text x="59" y="74" font-size="10" fill="#1b3126" font-weight="bold">100%</text>'
-            '<text x="97" y="74" font-size="10" fill="#b3472a" font-weight="bold">25%</text>'
-            '<text x="135" y="74" font-size="10" fill="#536052">0%</text>'
-            '<text x="172" y="38" font-size="11" fill="#205841" font-weight="bold">Threshold ≥ 50%</text>'
-            '<text x="172" y="56" font-size="10" fill="#4b5c51">4 kept (100%)</text>'
-            '<text x="172" y="72" font-size="10" fill="#b3472a">4 skipped (25%, 0%)</text>'
+            '<text x="23" y="36" font-size="10" fill="#1b3126" font-weight="bold">100%</text>'
+            '<text x="59" y="36" font-size="10" fill="#1b3126" font-weight="bold">100%</text>'
+            '<text x="97" y="36" font-size="10" fill="#b3472a" font-weight="bold">25%</text>'
+            '<text x="135" y="36" font-size="10" fill="#536052">0%</text>'
+            '<text x="172" y="36" font-size="11" fill="#205841" font-weight="bold">Rule: tissue ≥ 50%</text>'
+            '<text x="172" y="54" font-size="10" fill="#205841">✓ 4 squares kept</text>'
+            '<text x="172" y="70" font-size="10" fill="#b3472a">✕ 4 squares skipped</text>'
             "</svg>"
         )
-        out = mini_table(
-            "Tissue coverage filter across 8 grid squares (threshold ≥ 50%)",
-            ("Patch ID", "Bounds (px)", "Tissue coverage", "Decision (≥ 50% rule)"),
+        out = svg_hbars(
+            "Measured tissue coverage across the 4 grid columns (threshold = 50%)",
             (
-                ("patch-x0-y0, patch-x0-y4", "x=0..4", "100% (16/16 px)", "Keep"),
-                ("patch-x4-y0, patch-x4-y4", "x=4..8", "100% (16/16 px)", "Keep"),
-                ("patch-x8-y0, patch-x8-y4", "x=8..12", "25% (4/16 px)", "Skip (below 50% threshold)"),
-                ("patch-x12-y0, patch-x12-y4", "x=12..16", "0% (0/16 px)", "Skip"),
+                ("x=0 (2 patches)", 100, "100% · Keep", "#205841"),
+                ("x=4 (2 patches)", 100, "100% · Keep", "#205841"),
+                ("x=8 (2 patches)", 25, "25% · Skip", "#b3472a"),
+                ("x=12 (2 patches)", 0, "0% · Skip", "#8a998e"),
             ),
-            highlight_row=2,
+            max_val=100,
+            note="Columns x=8 (25% tissue) and x=12 (0% background) fall below the 50% threshold and are rejected.",
         )
         return inp, out
 
     if filename == "summarise_patch_counts.py":
-        inp = mini_table(
-            "Expected cores vs saved patch manifest",
-            ("Expected core ID", "Saved patch records in manifest"),
-            (("A", "x0-y0, x16-y0"), ("B", "None recorded"), ("C", "x0-y0")),
-            highlight_row=1,
+        inp = svg_swatches(
+            "Expected cohort cores vs saved patch manifest",
+            (
+                ("Core A", "2 patches saved", "#d5e5dc", "#205841"),
+                ("Core B", "0 patches (alert!)", "#f5d0c5", "#b3472a"),
+                ("Core C", "1 patch saved", "#d5e5dc", "#205841"),
+            ),
         )
-        out = metric_bars(
-            "Saved patches per expected core (including zero-count cores)",
-            (("Core A", 2, "2 patches"), ("Core B (missing)", 0, "0 patches"), ("Core C", 1, "1 patch")),
-            max_value=2,
-            note="Keeping Core B at 0 verifies that the core was expected in the cohort but produced no usable patches above the tissue threshold.",
+        out = svg_hbars(
+            "Retained patch count per expected core (keeping B = 0 visible)",
+            (
+                ("Core A", 2, "2 patches", "#205841"),
+                ("Core B (empty)", 0.05, "0 patches ⚠", "#b3472a"),
+                ("Core C", 1, "1 patch", "#205841"),
+            ),
+            max_val=2,
+            note="Keeping Core B at 0 verifies it was expected in the cohort but yielded no patches above the tissue threshold.",
         )
         return inp, out
 
     if filename == "extract_patch_images.py":
         inp = (
-            '<svg viewBox="0 0 280 104" class="lab-diagram" role="img" aria-label="16 by 16 core split into four 8 by 8 patches alongside the two accepted thumbnails">'
-            '<rect x="14" y="14" width="72" height="72" fill="#eef1eb" stroke="#9ab0a2"/>'
-            '<rect x="14" y="14" width="54" height="36" fill="#bd7896"/>'
-            '<line x1="50" y1="14" x2="50" y2="86" stroke="#244035" stroke-width="1.2"/>'
-            '<line x1="14" y1="50" x2="86" y2="50" stroke="#244035" stroke-width="1.2"/>'
-            '<text x="14" y="11" font-size="10" fill="#244035" font-weight="bold">core-1 (16 × 16 px)</text>'
-            '<rect x="116" y="22" width="44" height="44" fill="#bd7896" stroke="#205841" stroke-width="2"/>'
-            '<text x="112" y="79" font-size="10" fill="#244035">patch-x0-y0 (100%)</text>'
-            '<rect x="196" y="22" width="44" height="44" fill="#eef1eb" stroke="#205841" stroke-width="2"/>'
-            '<rect x="196" y="22" width="22" height="44" fill="#bd7896"/>'
-            '<text x="192" y="79" font-size="10" fill="#244035">patch-x8-y0 (50%)</text>'
+            '<svg viewBox="0 0 280 96" class="lab-diagram" role="img" aria-label="16 by 16 core split into four 8 by 8 patches">'
+            '<rect x="14" y="12" width="72" height="72" fill="#eef1eb" stroke="#9ab0a2"/>'
+            '<rect x="14" y="12" width="54" height="36" fill="#bd7896"/>'
+            '<line x1="50" y1="12" x2="50" y2="84" stroke="#244035" stroke-width="1.2"/>'
+            '<line x1="14" y1="48" x2="86" y2="48" stroke="#244035" stroke-width="1.2"/>'
+            '<rect x="114" y="18" width="44" height="44" fill="#bd7896" stroke="#205841" stroke-width="2"/>'
+            '<text x="108" y="76" font-size="10" fill="#244035">patch-x0-y0 (100%)</text>'
+            '<rect x="194" y="18" width="44" height="44" fill="#eef1eb" stroke="#205841" stroke-width="2"/>'
+            '<rect x="194" y="18" width="22" height="44" fill="#bd7896"/>'
+            '<text x="188" y="76" font-size="10" fill="#244035">patch-x8-y0 (50%)</text>'
             "</svg>"
         )
         out = mini_table(
-            "Saved patches.csv manifest (accepted patches ≥ 50% tissue)",
-            ("core", "file", "left", "top", "right", "bottom", "tissue_fraction"),
+            "Saved patches.csv manifest linking each PNG back to core-1",
+            ("core", "file", "Bounds (l, t, r, b)", "tissue_fraction"),
             (
-                ("core-1", "patch-x0-y0.png", "0", "0", "8", "8", "1.00 (100%)"),
-                ("core-1", "patch-x8-y0.png", "8", "0", "16", "8", "0.50 (50%)"),
+                ("core-1", "patch-x0-y0.png", "(0, 0, 8, 8)", "1.00 (100%)"),
+                ("core-1", "patch-x8-y0.png", "(8, 0, 16, 8)", "0.50 (50%)"),
             ),
-            note="The filename patch-x8-y0.png and bounds (8, 0, 16, 8) place the 50%-tissue square back on the top-right quadrant of core-1.",
+            note="The top-right square patch-x8-y0.png keeps its exact (8, 0, 16, 8) bounds and 0.50 coverage.",
         )
         return inp, out
 
-    # --- Goal: cells (Build cell-level datasets) ---
+    # --- Goal: cells (Segment single cells) ---
     if filename == "extract_cell_crops.py":
         inp = (
-            '<svg viewBox="0 0 290 105" class="lab-diagram" role="img" aria-label="Segmented cell regions with two accepted 8x8 cell crops and size filter bounds">'
-            '<rect x="14" y="14" width="128" height="76" rx="4" fill="#dcdcdc" stroke="#9ab0a2"/>'
-            '<circle cx="50" cy="46" r="10" fill="#7d4e6d"/>'
-            '<rect x="34" y="30" width="32" height="32" fill="none" stroke="#205841" stroke-width="2"/>'
-            '<text x="34" y="26" font-size="10" fill="#205841" font-weight="bold">Cell 1 (5 px)</text>'
-            '<circle cx="102" cy="58" r="10" fill="#7d4e6d"/>'
-            '<rect x="86" y="42" width="32" height="32" fill="none" stroke="#205841" stroke-width="2"/>'
-            '<text x="84" y="38" font-size="10" fill="#205841" font-weight="bold">Cell 2 (5 px)</text>'
-            '<circle cx="24" cy="78" r="2.5" fill="#888"/>'
-            '<text x="160" y="32" font-size="11" fill="#244035" font-weight="bold">Allowed width: 3–7 px</text>'
-            '<text x="160" y="50" font-size="10" fill="#205841">✓ Cell 1 & Cell 2 → 8 × 8 px crops</text>'
-            '<text x="160" y="68" font-size="10" fill="#b3472a">✕ 1–2 px speck or >7 px clump skipped</text>'
+            '<svg viewBox="0 0 290 98" class="lab-diagram" role="img" aria-label="Segmented cell regions with two accepted 8x8 cell crops">'
+            '<rect x="14" y="12" width="128" height="72" rx="4" fill="#dcdcdc" stroke="#9ab0a2"/>'
+            '<circle cx="50" cy="44" r="10" fill="#7d4e6d"/>'
+            '<rect x="34" y="28" width="32" height="32" fill="none" stroke="#205841" stroke-width="2"/>'
+            '<circle cx="102" cy="54" r="10" fill="#7d4e6d"/>'
+            '<rect x="86" y="38" width="32" height="32" fill="none" stroke="#205841" stroke-width="2"/>'
+            '<circle cx="24" cy="74" r="2.5" fill="#b3472a"/>'
+            '<text x="156" y="30" font-size="10.5" fill="#244035" font-weight="bold">Width filter: 3–7 px</text>'
+            '<text x="156" y="48" font-size="10" fill="#205841">✓ Cell 1 &amp; 2 (5 px) → 8×8 crop</text>'
+            '<text x="156" y="66" font-size="10" fill="#b3472a">✕ Artefact speck (&lt;3 px) skipped</text>'
             "</svg>"
         )
-        out = mini_table(
-            "Extracted 8 × 8 px cell crops with full-scan centres (origin 240, 520)",
-            ("Instance", "Local centre (px)", "Scan origin offset", "Full-scan centre (px)", "Crop shape"),
-            (
-                ("Cell 1", "(9.0, 10.0)", "+ (240, 520)", "(249.0, 530.0)", "8 × 8 px"),
-                ("Cell 2", "(22.0, 14.0)", "+ (240, 520)", "(262.0, 534.0)", "8 × 8 px"),
-            ),
+        out = (
+            svg_swatches(
+                "Extracted 8 × 8 px cell crops linked to full-scan centres",
+                (
+                    ("Cell 1 (8×8)", "Scan (249.0, 530.0)", "#e6c5d4", "#205841"),
+                    ("Cell 2 (8×8)", "Scan (262.0, 534.0)", "#e6c5d4", "#205841"),
+                ),
+            )
+            + mini_table(
+                "Cell crop records (scan origin = 240, 520)",
+                ("Instance", "Local centre", "Full-scan centre", "Crop size"),
+                (("Cell 1", "(9.0, 10.0)", "(249.0, 530.0)", "8 × 8 px"), ("Cell 2", "(22.0, 14.0)", "(262.0, 534.0)", "8 × 8 px")),
+            )
         )
         return inp, out
 
     if filename == "index_segmented_cells.py":
-        inp = mini_table(
-            "Core origin and local cell detections (relative to top-left of core C1)",
-            ("Core ID", "Core scan origin (x, y)", "Cell ID", "Local offset in core (x, y)"),
-            (
-                ("C1", "(640, 480) px", "Cell 1", "(29, 18) px"),
-                ("C1", "(640, 480) px", "Cell 2", "(61, 70) px"),
-            ),
+        inp = (
+            '<svg viewBox="0 0 290 92" class="lab-diagram" role="img" aria-label="Core C1 at scan origin (640, 480) containing Cell 1 and Cell 2">'
+            '<rect x="12" y="10" width="266" height="72" rx="4" fill="#f7f4ea" stroke="#9ab0a2"/>'
+            '<rect x="110" y="18" width="90" height="56" rx="3" fill="#e6c5d4" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="18" y="30" font-size="10" fill="#536052">Scan (0, 0)</text>'
+            '<text x="114" y="30" font-size="9.5" fill="#1b3126" font-weight="bold">Core C1 (640, 480)</text>'
+            '<circle cx="136" cy="42" r="4" fill="#205841"/><text x="143" y="45" font-size="9.5" fill="#205841">Cell 1 (+29,+18)</text>'
+            '<circle cx="158" cy="62" r="4" fill="#8a5a19"/><text x="165" y="65" font-size="9.5" fill="#8a5a19">Cell 2 (+61,+70)</text>'
+            "</svg>"
         )
         out = mini_table(
-            "Indexed cell coordinates on the full scan (origin = top-left scan pixel 0, 0)",
-            ("Cell key", "Core ID", "scan_x (px)", "scan_y (px)", "Calculation"),
+            "Global scan coordinates (Scan = Core Origin + Local Cell Offset)",
+            ("Cell key", "Core origin", "Local offset", "Global scan (x, y)"),
             (
-                ("C1 · Cell 1", "C1", "669", "498", "640 + 29, 480 + 18"),
-                ("C1 · Cell 2", "C1", "701", "550", "640 + 61, 480 + 70"),
+                ("C1 · Cell 1", "(640, 480)", "+ (29, 18)", "(669, 498) px"),
+                ("C1 · Cell 2", "(640, 480)", "+ (61, 70)", "(701, 550) px"),
             ),
         )
         return inp, out
 
     if filename == "package_cell_arrays.py":
-        inp = mini_table(
-            "Aligned cell records before packaging (2 cells)",
-            ("Row", "identifiers", "xy (scan px)", "features (float32)"),
-            (("0", "C1-1", "[7, 6]", "[0.3]"), ("1", "C1-2", "[9, 3]", "[0.8]")),
+        inp = svg_swatches(
+            "Three aligned per-cell arrays before packaging",
+            (
+                ("identifiers", "['C1-1', 'C1-2']", "#e2e8dc", "#527c67"),
+                ("xy coords", "[[7, 6], [9, 3]]", "#d5e5dc", "#205841"),
+                ("features", "[[0.3], [0.8]]", "#f7e7ba", "#8a5a19"),
+            ),
         )
         out = mini_table(
-            "Compressed archive arrays and round-trip check",
-            ("Array name", "Shape", "Dtype", "Row 0 value (round-trip check)"),
+            "Compressed NPZ archive arrays and row-0 alignment check",
+            ("Array key", "Shape", "Dtype", "Row 0 value"),
             (
                 ("identifiers", "(2,)", "str", "'C1-1'"),
                 ("xy", "(2, 2)", "int", "[7, 6]"),
                 ("features", "(2, 1)", "float32", "[0.3]"),
             ),
-            note="Reading row 0 across all three arrays returns Cell C1-1 at [7, 6] with feature [0.3].",
+            note="Reading index 0 across all three arrays recovers Cell C1-1 at (7, 6) with feature 0.3.",
         )
         return inp, out
 
     if filename == "summarise_cells_by_core.py":
-        inp = stat_cards(
-            (("Expected cores", "A, B, C"), ("Indexed cells", "A, A, A, B (4 total)")),
-            note="Core A contributes 3 of the 4 cells (75%), while Core C contributes 0.",
+        inp = svg_swatches(
+            "4 indexed cells spread unevenly across 3 expected cores",
+            (
+                ("Core A", "3 cells (75% share)", "#f7e7ba", "#8a5a19"),
+                ("Core B", "1 cell (25% share)", "#d5e5dc", "#205841"),
+                ("Core C", "0 cells (empty!)", "#f5d0c5", "#b3472a"),
+            ),
         )
-        out = metric_bars(
-            "Cell count per core (showing concentration and zero-cell cores)",
-            (("Core A (75% share)", 3, "3 cells"), ("Core B (25% share)", 1, "1 cell"), ("Core C (empty)", 0, "0 cells")),
-            max_value=3,
-            note="Total = 4 cells, median = 1 cell/core, largest core share = 75%. Reporting only total cells would hide that Core A dominates and Core C is empty.",
+        out = svg_hbars(
+            "Cell count per core (revealing 75% concentration in Core A)",
+            (
+                ("Core A (dominates)", 3, "3 cells (75%)", "#8a5a19"),
+                ("Core B", 1, "1 cell (25%)", "#205841"),
+                ("Core C (empty)", 0.08, "0 cells ⚠", "#b3472a"),
+            ),
+            max_val=3,
+            note="Total = 4 cells, median = 1 cell/core. A total count alone hides that Core A supplies 75% of the dataset.",
         )
         return inp, out
 
-    # --- Goal: storage (Check, bundle and compress datasets) ---
+    # --- Goal: storage (Compress & audit storage) ---
     if filename == "compare_image_encodings.py":
-        inp = stat_cards(
-            (("Generated input", "48 × 48 RGB gradient patch"), ("WebP setting", "Quality 75")),
-            note="Both encodings are decoded back to RGB pixels so file size is paired with pixel fidelity.",
-        )
-        out = mini_table(
-            "Encoding comparison across scopes (single tiny synthetic patch vs full thesis collection)",
-            ("Scope", "PNG size", "WebP size", "Mean channel diff (0–255)"),
+        inp = svg_swatches(
+            "Same 48 × 48 RGB patch encoded as lossless PNG vs WebP (Q=75)",
             (
-                ("One 48 × 48 synthetic gradient patch", "129 B", "174 B", "0.00 (PNG) vs 1.95 (WebP)"),
-                ("Thesis patch collection (229,683 patches)", "26.94 GB", "3.63 GB (−86.5%)", "Evaluated in Thesis Ch. 2, p. 72"),
+                ("Original RGB", "48 × 48 gradient", "#e6c5d4", "#527c67"),
+                ("Decoded PNG", "Diff = 0.00 / 255", "#d5e5dc", "#205841"),
+                ("Decoded WebP", "Diff = 1.95 / 255", "#f7e7ba", "#8a5a19"),
             ),
-            highlight_row=1,
-            note="A tiny smooth gradient compresses into 129 B with PNG's predictor, smaller than WebP's container header. On the 229,683 histological patches, WebP cut storage from 26.94 GB to 3.63 GB.",
+        )
+        out = (
+            svg_hbars(
+                "Thesis collection storage (229,683 patches): 86.5% reduction",
+                (("PNG collection", 26.94, "26.94 GB", "#8a5a19"), ("WebP collection", 3.63, "3.63 GB (−86.5%)", "#205841")),
+                max_val=27.0,
+                note="On 1 tiny smooth synthetic patch, PNG is 129 B vs 174 B (WebP container header); across 229,683 histology patches, WebP saved 23.31 GB.",
+            )
         )
         return inp, out
 
     if filename == "audit_dataset_structure.py":
-        inp = mini_table(
-            "Expected manifest vs observed storage arrays",
-            ("Dataset key", "Expected shape", "Observed in storage"),
+        inp = svg_swatches(
+            "Pre-flight audit comparing manifest against storage arrays",
             (
-                ("A", "(10, 64)", "(10, 32)"),
-                ("B", "(8, 64)", "Not found"),
-                ("spillover", "Not in manifest", "(1, 64)"),
+                ("Array A · ⚠ Shape", "(10, 32) vs (10, 64)", "#f7e7ba", "#8a5a19"),
+                ("Array B · ✕ Missing", "Absent from disk", "#f5d0c5", "#b3472a"),
+                ("spillover · ! Extra", "Unlisted (1, 64)", "#f5d0c5", "#b3472a"),
             ),
         )
         out = mini_table(
-            "Three dataset faults surfaced before training",
-            ("Issue type", "Affected key", "Observed vs expected", "Action before training"),
+            "Three dataset faults caught before launching training",
+            ("Fault", "Key", "Observed vs expected", "Action"),
             (
-                ("Wrong shape", "A", "(10, 32) vs expected (10, 64)", "Re-export A with all 64 feature columns."),
-                ("Missing file", "B", "Absent vs expected (8, 64)", "Run extraction for B or check why it was skipped."),
-                ("Unexpected file", "spillover", "(1, 64) not in manifest", "Quarantine or remove unindexed array."),
+                ("⚠ Wrong shape", "A", "(10, 32) vs (10, 64)", "Re-export A with all 64 feature columns."),
+                ("✕ Missing file", "B", "Absent vs (8, 64)", "Run extraction for B before training."),
+                ("! Unexpected file", "spillover", "Unlisted (1, 64)", "Remove or quarantine unindexed file."),
             ),
         )
         return inp, out
 
     if filename == "measure_storage_reads.py":
         inp = (
-            '<svg viewBox="0 0 300 88" class="lab-diagram" role="img" aria-label="20 separate 4 KB files compared with one contiguous bundle file">'
-            '<rect x="12" y="14" width="24" height="24" rx="2" fill="#e2e8dc" stroke="#527c67"/>'
-            '<rect x="42" y="14" width="24" height="24" rx="2" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
-            '<rect x="72" y="14" width="24" height="24" rx="2" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
-            '<rect x="102" y="14" width="24" height="24" rx="2" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
-            '<text x="136" y="30" font-size="11" fill="#244035">Separate files: open <code>2.bin</code>, <code>5.bin</code>, <code>9.bin</code></text>'
-            '<rect x="12" y="52" width="114" height="24" rx="2" fill="#e2e8dc" stroke="#527c67"/>'
-            '<rect x="30" y="52" width="18" height="24" fill="#c98ca7"/><rect x="60" y="52" width="18" height="24" fill="#c98ca7"/><rect x="96" y="52" width="18" height="24" fill="#c98ca7"/>'
-            '<text x="136" y="68" font-size="11" fill="#244035">Single bundle: seek inside <code>bundle.bin</code></text>'
+            '<svg viewBox="0 0 300 84" class="lab-diagram" role="img" aria-label="20 separate 4 KB files compared with one contiguous bundle file">'
+            '<rect x="12" y="12" width="24" height="22" rx="2" fill="#e2e8dc" stroke="#527c67"/>'
+            '<rect x="42" y="12" width="24" height="22" rx="2" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
+            '<rect x="72" y="12" width="24" height="22" rx="2" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
+            '<rect x="102" y="12" width="24" height="22" rx="2" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
+            '<text x="136" y="27" font-size="10.5" fill="#244035">20 files: open <code>2.bin</code>, <code>5.bin</code>, <code>9.bin</code></text>'
+            '<rect x="12" y="48" width="114" height="22" rx="2" fill="#e2e8dc" stroke="#527c67"/>'
+            '<rect x="30" y="48" width="18" height="22" fill="#c98ca7"/><rect x="60" y="48" width="18" height="22" fill="#c98ca7"/><rect x="96" y="48" width="18" height="22" fill="#c98ca7"/>'
+            '<text x="136" y="63" font-size="10.5" fill="#244035">1 bundle: seek inside <code>bundle.bin</code></text>'
             "</svg>"
         )
-        out = mini_table(
-            "Local read comparison for 3 chunks × 4,096 B = 12,288 bytes",
-            ("Storage layout", "Chunks read", "Total bytes verified", "Recorded local time"),
-            (
-                ("Separate files (0.bin … 19.bin)", "Indices 2, 5, 9", "12,288 B", "11.244 ms"),
-                ("Single bundled file (bundle.bin)", "Indices 2, 5, 9", "12,288 B", "10.052 ms"),
-            ),
-            note="Both layouts return the same 12,288 bytes. Single-run timings vary with OS and filesystem caching.",
+        out = svg_hbars(
+            "Local read time for 3 chunks = 12,288 bytes (single run)",
+            (("Separate files", 11.244, "11.24 ms (12,288 B)", "#8a5a19"), ("Single bundle", 10.052, "10.05 ms (12,288 B)", "#205841")),
+            max_val=12.0,
+            note="Both layouts return the exact same 12,288 bytes; timings vary across machines and OS caches.",
         )
         return inp, out
 
-    # --- Goal: autoencoder (Learn by reconstructing images) ---
+    # --- Goal: autoencoder (Autoencoder reconstruction) ---
     if filename == "fit_linear_autoencoder.py":
-        inp = mini_table(
-            "Three 3-value input patches compressed to a 2-number code (linear SVD demo)",
-            ("Sample", "Original 3 values", "Compressed 2-number code"),
-            (
-                ("Patch 1", "[0.100, 0.200, 0.300]", "[-0.436, -0.253]"),
-                ("Patch 2", "[0.600, 0.900, 0.800]", "[ 0.550, -0.123]"),
-                ("Patch 3", "[0.800, 0.200, 0.400]", "[-0.114,  0.376]"),
-            ),
+        inp = (
+            '<svg viewBox="0 0 300 84" class="lab-diagram" role="img" aria-label="3-value patches compressed through a 2-number bottleneck and decoded">'
+            '<rect x="14" y="14" width="76" height="56" rx="4" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.5"/>'
+            '<text x="52" y="38" text-anchor="middle" font-size="10.5" fill="#1b3126" font-weight="bold">Input (3×3)</text>'
+            '<text x="52" y="54" text-anchor="middle" font-size="9.5" fill="#244035">3 values/patch</text>'
+            '<text x="102" y="45" font-size="13" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="118" y="22" width="64" height="40" rx="4" fill="#f7e7ba" stroke="#8a5a19" stroke-width="2"/>'
+            '<text x="150" y="41" text-anchor="middle" font-size="10.5" fill="#1b3126" font-weight="bold">Code (3×2)</text>'
+            '<text x="150" y="54" text-anchor="middle" font-size="9" fill="#4b5c51">2 numbers</text>'
+            '<text x="192" y="45" font-size="13" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="208" y="14" width="78" height="56" rx="4" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="247" y="38" text-anchor="middle" font-size="10.5" fill="#1b3126" font-weight="bold">Decoded</text>'
+            '<text x="247" y="54" text-anchor="middle" font-size="9.5" fill="#205841">3 values rebuilt</text>'
+            "</svg>"
         )
         out = mini_table(
-            "Reconstructed values decoded from the 2-number codes",
-            ("Sample", "2-number code", "Decoded 3 values", " Note"),
+            "Original 3-value patches, compact 2-number codes and decoded values",
+            ("Patch", "Original (3 values)", "2-number code", "Decoded (3 values)"),
             (
-                ("Patch 1", "[-0.436, -0.253]", "[0.100, 0.200, 0.300]", "3 points span a 2D plane around their mean"),
-                ("Patch 2", "[ 0.550, -0.123]", "[0.600, 0.900, 0.800]", "Tiny linear analogue of the thesis autoencoders"),
-                ("Patch 3", "[-0.114,  0.376]", "[0.800, 0.200, 0.400]", "See score_reconstructions.py for held-out error"),
+                ("Patch 1", "[0.1, 0.2, 0.3]", "[-0.436, -0.253]", "[0.10, 0.20, 0.30]"),
+                ("Patch 2", "[0.6, 0.9, 0.8]", "[+0.550, -0.123]", "[0.60, 0.90, 0.80]"),
+                ("Patch 3", "[0.8, 0.2, 0.4]", "[-0.114, +0.376]", "[0.80, 0.20, 0.40]"),
             ),
         )
         return inp, out
 
     if filename == "score_reconstructions.py":
-        inp = mini_table(
-            "Original vs reconstructed arrays with largest pixel residual highlighted",
-            ("Sample ID", "Original array", "Reconstructed array", "Per-value residuals"),
+        inp = svg_swatches(
+            "Original vs reconstructed pairs (highlighting Sample b's 0.2 residual)",
             (
-                ("a", "[0.0, 1.0]", "[0.1, 0.9]", "[-0.1, +0.1]"),
-                ("b (largest residual)", "[0.2, 0.4]", "[0.4, 0.4]", "[-0.2,  0.0]"),
+                ("Sample a", "[0.0, 1.0] → [0.1, 0.9]", "#d5e5dc", "#205841"),
+                ("Sample b (worst)", "[0.2, 0.4] → [0.4, 0.4]", "#f5d0c5", "#b3472a"),
             ),
-            highlight_row=1,
         )
-        out = mini_table(
-            "Samples ranked worst-first by mean squared reconstruction error (MSE)",
-            ("Rank", "Sample ID", "Mean squared error", "Inspection priority"),
+        out = svg_hbars(
+            "Samples ranked worst-first by mean squared reconstruction error",
             (
-                ("1 (inspect first)", "b", "0.020", "Largest error (residual 0.2 on value 1)"),
-                ("2", "a", "0.010", "Smaller uniform residual (0.1 on both values)"),
+                ("1. Sample b (inspect)", 0.020, "MSE 0.020", "#b3472a"),
+                ("2. Sample a", 0.010, "MSE 0.010", "#205841"),
             ),
-            highlight_row=0,
+            max_val=0.022,
+            note="Ranking by MSE brings Sample b (with the 0.20 miss on its first value) to the top of the review queue.",
         )
         return inp, out
 
     if filename == "compare_bottleneck_sizes.py":
-        inp = stat_cards(
-            (("Training set", "3 patches × 3 values"), ("Held-out test set", "2 patches × 3 values"), ("Candidate widths", "1 vs 2 numbers")),
-            note="Both bottleneck widths are fitted on the same training set and scored on the same two held-out test rows.",
-        )
-        out = mini_table(
-            "Held-out reconstruction error vs code storage across bottleneck widths",
-            ("Bottleneck width", "Test code bytes (2 samples, float64)", "Held-out MSE", "Trade-off"),
+        inp = svg_swatches(
+            "Same held-out test set passed through 1-number vs 2-number bottlenecks",
             (
-                ("1 number per patch", "16 bytes", "0.00141", "Half the code size, 2.9× higher reconstruction error"),
-                ("2 numbers per patch", "32 bytes", "0.00049", "Retains finer detail at double the code size"),
+                ("Width = 1", "16 bytes (2 test rows)", "#f7e7ba", "#8a5a19"),
+                ("Width = 2", "32 bytes (2 test rows)", "#d5e5dc", "#205841"),
             ),
-            highlight_row=1,
+        )
+        out = svg_hbars(
+            "Held-out reconstruction error (MSE, lower retains more detail)",
+            (
+                ("1 number (16 B)", 0.00141, "0.00141 MSE", "#8a5a19"),
+                ("2 numbers (32 B)", 0.00049, "0.00049 MSE (2.9× lower)", "#205841"),
+            ),
+            max_val=0.0015,
         )
         return inp, out
 
     if filename == "score_variational_reconstruction.py":
-        inp = stat_cards(
-            (("Image error term (BCE)", "0.387"), ("Raw code KL penalty", "0.083"), ("Applied weight (β)", "0.5")),
-            note="Separates pixel reconstruction fidelity from the KL penalty on the latent code distribution.",
-        )
-        out = mini_table(
-            "Variational objective receipt: Total = Reconstruction + β × KL",
-            ("Component", "Formula / role", "Value"),
+        inp = svg_swatches(
+            "Two-part VAE objective: image fidelity + code distribution penalty",
             (
-                ("Image reconstruction error", "Binary cross-entropy on target vs decoded pixels", "0.387"),
-                ("Code distribution penalty (raw KL)", "Divergence of latent (μ, log σ²) from standard normal", "0.083"),
-                ("Weighted penalty (β × KL)", "0.5 × 0.083", "0.042"),
-                ("Total variational loss", "0.387 + 0.5 × 0.083", "0.429"),
+                ("Image error (BCE)", "0.387", "#e6c5d4", "#8a4b68"),
+                ("Raw KL penalty", "0.083", "#f7e7ba", "#8a5a19"),
+                ("Weight β = 0.5", "0.5 × 0.083 = 0.042", "#d5e5dc", "#205841"),
             ),
-            highlight_row=3,
+        )
+        out = svg_hbars(
+            "Receipt: 0.387 (image) + 0.5 × 0.083 (code KL) = 0.429 total",
+            (
+                ("Reconstruction", 0.387, "0.387", "#8a4b68"),
+                ("Weighted KL (β=0.5)", 0.042, "0.042 (raw 0.083)", "#8a5a19"),
+                ("Total VAE loss", 0.429, "0.429", "#205841"),
+            ),
+            max_val=0.45,
         )
         return inp, out
 
-    # --- Goal: features (Learn features from two views) ---
+    # --- Goal: features (Contrastive view learning) ---
     if filename == "learn_image_features.py":
-        inp = mini_table(
-            "Four samples represented by two orthogonal vs two duplicated feature columns",
-            ("Arrangement", "Feature column 1", "Feature column 2", "Cross-column correlation"),
+        inp = svg_swatches(
+            "Orthogonal vs duplicated feature columns across 4 samples",
             (
-                ("Independent features", "[-1, -1, +1, +1]", "[-1, +1, -1, +1]", "0.00 (uncorrelated)"),
-                ("Duplicated feature", "[-1, -1, +1, +1]", "[-1, -1, +1, +1]", "1.00 (repeats column 1)"),
+                ("Independent cols", "Col 1 ⊥ Col 2 (r = 0)", "#d5e5dc", "#205841"),
+                ("Duplicated col", "Col 1 = Col 2 (r = 1)", "#f5d0c5", "#b3472a"),
             ),
-            highlight_row=1,
         )
-        out = mini_table(
-            "Barlow Twins loss breakdown (redundancy weight λ = 0.005)",
-            ("Feature arrangement", "Agreement loss (on-diagonal)", "Redundancy penalty (λ × off-diagonal²)", "Total loss"),
+        out = svg_hbars(
+            "Barlow Twins total loss (agreement + 0.005 × off-diagonal redundancy)",
             (
-                ("Independent features", "0.000", "0.000", "0.000"),
-                ("Duplicated feature", "0.000", "0.010 (0.005 × 2.0)", "0.010"),
+                ("Independent (r=0)", 0.0005, "0.000 total loss", "#205841"),
+                ("Duplicated (r=1)", 0.010, "0.010 (redundancy penalty)", "#b3472a"),
             ),
-            highlight_row=1,
-            note="Duplicating a column still matches perfectly across views (agreement loss 0.000), but the off-diagonal redundancy penalty raises total loss.",
+            max_val=0.011,
+            note="Both arrangements achieve 0.000 agreement loss across views, but duplicating a column triggers the off-diagonal redundancy penalty (+0.010).",
         )
         return inp, out
 
     if filename == "prepare_paired_views.py":
-        inp = mini_table(
-            "Source patch p1 (2 × 2 grayscale pixels, seed = 9)",
-            ("Patch ID", "Row 1", "Row 2", "Applied stochastic transforms"),
-            (("p1 (original)", "[0.10, 0.50]", "[0.70, 1.00]", "Horizontal flip + brightness gain in [0.85, 1.15]"),),
+        inp = svg_swatches(
+            "Source 2 × 2 patch p1 and two stochastic augmentations (seed = 9)",
+            (
+                ("p1 (original)", "[[0.10, 0.50], [0.70, 1.00]]", "#e6c5d4", "#8a4b68"),
+                ("View 1 (×0.94)", "[[0.09, 0.47], [0.66, 0.94]]", "#d5e5dc", "#205841"),
+                ("View 2 (flip, ×1.04)", "[[0.52, 0.10], [1.00, 0.72]]", "#f7e7ba", "#8a5a19"),
+            ),
         )
         out = mini_table(
-            "Two altered views retaining shared patch ID p1",
-            ("Output view", "Shared ID", "Row 1", "Row 2", "Transformation applied"),
+            "Paired views keep shared patch ID p1 for contrastive training",
+            ("View", "Shared ID", "Row 1", "Row 2", "Applied transform"),
             (
-                ("View 1", "p1", "[0.09, 0.47]", "[0.66, 0.94]", "Unflipped · brightness gain ×0.94"),
-                ("View 2", "p1", "[0.52, 0.10]", "[1.00, 0.72]", "Flipped horizontally · brightness gain ×1.04 (clipped at 1.0)"),
+                ("View 1", "p1", "[0.09, 0.47]", "[0.66, 0.94]", "Unflipped · brightness ×0.94"),
+                ("View 2", "p1", "[0.52, 0.10]", "[1.00, 0.72]", "Horizontal flip · brightness ×1.04"),
             ),
         )
         return inp, out
 
     if filename == "audit_feature_variation.py":
-        inp = mini_table(
-            "Sample-by-feature matrix (3 patches × 3 feature columns)",
-            ("Patch", "Column 0 (varies)", "Column 1 (constant)", "Column 2 (5 × Column 0)"),
+        inp = svg_swatches(
+            "3-column feature matrix with 1 constant column and 1 correlated pair",
             (
-                ("Sample 1", "1.0", "0.0", "5.0"),
-                ("Sample 2", "2.0", "0.0", "10.0"),
-                ("Sample 3", "3.0", "0.0", "15.0"),
+                ("Col 0 · Varies", "[1, 2, 3]", "#d5e5dc", "#205841"),
+                ("Col 1 · Constant", "[0, 0, 0] (std = 0)", "#f5d0c5", "#b3472a"),
+                ("Col 2 · Duplicate", "[5, 10, 15] (5 × Col 0)", "#f7e7ba", "#8a5a19"),
             ),
         )
         out = mini_table(
-            "Feature audit flags (distinguishing zero variation from redundant overlap)",
-            ("Check", "Flagged column(s)", "Measured statistic", "Why inspect before training"),
+            "Feature health checks before downstream training",
+            ("Flagged issue", "Column(s)", "Measured value", "Meaning"),
             (
-                ("Zero variation (collapse)", "Column 1", "Std dev = 0.0 (≤ 1e-8)", "Carries no signal across patches."),
-                ("Near-duplicate signal", "Columns (0, 2)", "|r| = 1.00 (≥ 0.99)", "Both columns vary, but Column 2 repeats Column 0."),
+                ("Collapsed feature", "Column 1", "Std dev = 0.0", "Zero variation across patches; carries no signal."),
+                ("Redundant pair", "Columns (0, 2)", "|r| = 1.00 (≥ 0.99)", "Column 2 is a linear multiple of Column 0."),
             ),
         )
         return inp, out
 
     if filename == "fit_shared_view_encoder.py":
         inp = (
-            '<svg viewBox="0 0 300 84" class="lab-diagram" role="img" aria-label="Two altered views passing through one shared 2x2 weight matrix to compute the Barlow Twins objective">'
-            '<rect x="12" y="12" width="74" height="26" rx="4" fill="#e2e8dc" stroke="#527c67"/>'
-            '<text x="20" y="29" font-size="11" fill="#244035">View 1 (4×2)</text>'
-            '<rect x="12" y="46" width="74" height="26" rx="4" fill="#e2e8dc" stroke="#527c67"/>'
-            '<text x="20" y="63" font-size="11" fill="#244035">View 2 (4×2)</text>'
+            '<svg viewBox="0 0 300 84" class="lab-diagram" role="img" aria-label="Two views entering shared weight matrix W">'
+            '<rect x="12" y="12" width="74" height="26" rx="4" fill="#d5e5dc" stroke="#205841"/>'
+            '<text x="20" y="29" font-size="10.5" fill="#1b3126">View 1 (4×2)</text>'
+            '<rect x="12" y="46" width="74" height="26" rx="4" fill="#f7e7ba" stroke="#8a5a19"/>'
+            '<text x="20" y="63" font-size="10.5" fill="#1b3126">View 2 (4×2)</text>'
             '<line x1="86" y1="25" x2="122" y2="38" stroke="#205841" stroke-width="1.5"/>'
             '<line x1="86" y1="59" x2="122" y2="46" stroke="#205841" stroke-width="1.5"/>'
-            '<rect x="122" y="24" width="88" height="36" rx="4" fill="#f9ecb2" stroke="#205841" stroke-width="2"/>'
-            '<text x="130" y="46" font-size="11" fill="#1b3126" font-weight="bold">Shared W (2×2)</text>'
+            '<rect x="122" y="24" width="88" height="36" rx="4" fill="#e6c5d4" stroke="#8a4b68" stroke-width="2"/>'
+            '<text x="130" y="46" font-size="10.5" fill="#1b3126" font-weight="bold">Shared W (2×2)</text>'
             '<line x1="210" y1="42" x2="232" y2="42" stroke="#205841" stroke-width="1.5"/>'
-            '<text x="236" y="46" font-size="11" fill="#205841" font-weight="bold">Loss ↓</text>'
+            '<text x="236" y="46" font-size="10.5" fill="#205841" font-weight="bold">40 steps</text>'
             "</svg>"
         )
-        out = mini_table(
-            "Shared encoder optimization over 40 update steps",
-            ("Stage", "Barlow Twins objective", "Shared weight matrix W"),
-            (
-                ("Step 0 (initial)", "0.1938", "[[1.000, 1.000], [0.150, -0.150]]"),
-                ("Step 40 (fitted)", "0.0003", "[[0.520, 0.520], [0.884, -0.884]]"),
-            ),
-            highlight_row=1,
+        out = (
+            '<svg viewBox="0 0 300 90" class="lab-diagram" role="img" aria-label="Barlow Twins objective curve dropping from 0.1938 to 0.0003 over 40 steps">'
+            '<rect width="300" height="90" rx="6" fill="#f7f4ea"/>'
+            '<text x="14" y="18" font-size="11" fill="#244035" font-weight="bold">Barlow Twins objective over 40 update steps</text>'
+            '<line x1="36" y1="26" x2="36" y2="72" stroke="#9ab0a2"/><line x1="36" y1="72" x2="276" y2="72" stroke="#9ab0a2"/>'
+            '<path d="M36,30 Q90,66 156,70 T272,71" fill="none" stroke="#205841" stroke-width="2.5"/>'
+            '<circle cx="36" cy="30" r="4" fill="#b3472a"/><text x="44" y="34" font-size="10" fill="#b3472a" font-weight="bold">Step 0: 0.1938</text>'
+            '<circle cx="272" cy="71" r="4" fill="#205841"/><text x="184" y="64" font-size="10" fill="#205841" font-weight="bold">Step 40: 0.0003</text>'
+            "</svg>"
         )
         return inp, out
 
-    # --- Goal: frozen-features (Extract features with existing models) ---
+    # --- Goal: frozen-features (Pretrained encoders) ---
     if filename == "batch_frozen_features.py":
-        inp = mini_table(
+        inp = svg_swatches(
             "Three identified patches processed in batches of 2 (weights frozen)",
-            ("Batch", "Patch ID", "Input pixels"),
-            (("Batch 1", "p1", "[[0.1, 0.4]]"), ("Batch 1", "p2", "[[0.7, 0.9]]"), ("Batch 2", "p3", "[[0.4, 0.2]]")),
+            (
+                ("Batch 1 · p1", "[[0.1, 0.4]]", "#d5e5dc", "#205841"),
+                ("Batch 1 · p2", "[[0.7, 0.9]]", "#d5e5dc", "#205841"),
+                ("Batch 2 · p3", "[[0.4, 0.2]]", "#f7e7ba", "#8a5a19"),
+            ),
         )
         out = mini_table(
-            "Extracted feature vectors in original patch ID order",
-            ("Patch ID", "Feature 1 (mean)", "Feature 2 (std)", "Fixed during extraction"),
-            (
-                ("p1", "0.250", "0.150", "Encoder weights & input ID order"),
-                ("p2", "0.800", "0.100", "Encoder weights & input ID order"),
-                ("p3", "0.300", "0.100", "Encoder weights & input ID order"),
-            ),
+            "Output vectors preserve exact input ID order across batches",
+            ("Patch ID", "Feature 1 (mean)", "Feature 2 (std)", "Batch"),
+            (("p1", "0.250", "0.150", "Batch 1"), ("p2", "0.800", "0.100", "Batch 1"), ("p3", "0.300", "0.100", "Batch 2")),
         )
         return inp, out
 
     if filename == "compare_encoder_dimensions.py":
-        inp = stat_cards(
-            (("Fixed sample count", "30 patches"), ("Number format", "float32 (4 bytes / value)")),
-            note="Compares in-memory array sizes (not compressed disk files) for two feature widths on the same 30 patches.",
-        )
-        out = mini_table(
-            "Feature array dimensions and raw byte footprint (30 examples, float32)",
-            ("Encoder", "Examples", "Feature width", "Number format", "Array size (bytes)"),
+        inp = svg_swatches(
+            "30 patches encoded at two vector widths (float32 = 4 B/value)",
             (
-                ("small", "30", "16 dimensions", "float32 (4 B)", "1,920 B"),
-                ("wide", "30", "64 dimensions", "float32 (4 B)", "7,680 B (4× larger)"),
+                ("small encoder", "30 × 16 float32", "#d5e5dc", "#205841"),
+                ("wide encoder", "30 × 64 float32", "#f7e7ba", "#8a5a19"),
             ),
+        )
+        out = svg_hbars(
+            "In-memory array size for 30 patches (bytes)",
+            (("small (16-D)", 1920, "1,920 B", "#205841"), ("wide (64-D)", 7680, "7,680 B (4×)", "#8a5a19")),
+            max_val=8000,
+            note="Calculated array footprint (examples × dimensions × 4 bytes), distinct from compressed disk file size.",
         )
         return inp, out
 
     if filename == "standardise_encoder_inputs.py":
         inp = (
-            '<svg viewBox="0 0 260 86" class="lab-diagram" role="img" aria-label="16 by 20 RGB patch resized to 8 by 8 and normalised across 3 channels">'
-            '<rect x="16" y="12" width="48" height="60" rx="3" fill="#95bbaf" stroke="#244035"/>'
-            '<text x="12" y="82" font-size="10" fill="#244035">Input 16 × 20 RGB</text>'
-            '<text x="78" y="45" font-size="12" fill="#205841" font-weight="bold">→ resize &amp; norm →</text>'
-            '<rect x="184" y="22" width="36" height="36" rx="3" fill="#95bbaf" stroke="#205841" stroke-width="2"/>'
-            '<text x="172" y="72" font-size="10" fill="#244035">Output (3, 8, 8) float32</text>'
+            '<svg viewBox="0 0 280 84" class="lab-diagram" role="img" aria-label="16 by 20 RGB patch resized to 8 by 8 and normalised">'
+            '<rect x="16" y="12" width="44" height="56" rx="3" fill="#95bbaf" stroke="#244035"/>'
+            '<text x="12" y="79" font-size="9.5" fill="#244035">16 × 20 RGB (#95bbaf)</text>'
+            '<text x="76" y="44" font-size="11" fill="#205841" font-weight="bold">→ resize 8×8 &amp; norm →</text>'
+            '<rect x="202" y="20" width="38" height="38" rx="3" fill="#95bbaf" stroke="#205841" stroke-width="2"/>'
+            '<text x="184" y="74" font-size="9.5" fill="#244035">Tensor (3, 8, 8) float32</text>'
             "</svg>"
         )
-        out = mini_table(
-            "Standardised encoder tensor (channels-first RGB, mean = 0.5, std = 0.25)",
-            ("Channel", "Source 8-bit value", "Scaled [0, 1]", "Normalised (x − 0.5) / 0.25", "Output tensor shape"),
+        out = svg_hbars(
+            "Normalised channel values (mean = 0.5, std = 0.25)",
             (
-                ("R (channel 0)", "149", "0.584", "+0.337", "(3, 8, 8)"),
-                ("G (channel 1)", "187", "0.733", "+0.933", "(3, 8, 8)"),
-                ("B (channel 2)", "175", "0.686", "+0.745", "(3, 8, 8)"),
+                ("R (149 → 0.584)", 0.337, "+0.337", "#b3472a"),
+                ("G (187 → 0.733)", 0.933, "+0.933", "#205841"),
+                ("B (175 → 0.686)", 0.745, "+0.745", "#3b6e8c"),
             ),
-            note="The preview swatch shows the unnormalised RGB colour (#95bbaf); the model receives the signed float32 array.",
+            max_val=1.0,
         )
         return inp, out
 
-    # --- Goal: feature-benchmarks (Test which features are useful) ---
+    # --- Goal: feature-benchmarks (Benchmark feature quality) ---
     if filename == "benchmark_frozen_features.py":
-        inp = mini_table(
-            "Fixed train/test split across both candidate representations",
-            ("Split role", "Sample indices", "Expected labels", "First encoder values", "Second encoder values"),
+        inp = svg_swatches(
+            "Shared train centroids [0, 1] and held-out test split [2, 3]",
             (
-                ("Train centroids", "Indices 0, 1", "['a', 'b']", "[0.0], [4.0]", "[0.0], [4.0]"),
-                ("Held-out test", "Indices 2, 3", "['a', 'b']", "[0.3], [3.7]", "[3.5], [3.7]"),
+                ("Train [0, 1]", "Labels ['a', 'b'] at 0.0, 4.0", "#e2e8dc", "#527c67"),
+                ("Test · first", "[0.3, 3.7] → ['a', 'b']", "#d5e5dc", "#205841"),
+                ("Test · second", "[3.5, 3.7] → ['b', 'b']", "#f5d0c5", "#b3472a"),
             ),
-            highlight_row=1,
         )
-        out = mini_table(
-            "Held-out nearest-centroid accuracy on the shared 2-sample test split",
-            ("Representation", "Predictions on test [2, 3]", "Correct / Total", "Held-out accuracy"),
-            (
-                ("first", "['a', 'b'] vs ['a', 'b']", "2 / 2", "1.00 (100%)"),
-                ("second", "['b', 'b'] vs ['a', 'b']", "1 / 2", "0.50 (50%)"),
-            ),
-            highlight_row=0,
-            note="Holding the train/test indices and classifier fixed isolates the difference between the two feature representations.",
+        out = svg_hbars(
+            "Held-out nearest-centroid accuracy on shared test cases [2, 3]",
+            (("first encoder", 1.0, "2/2 (100%)", "#205841"), ("second encoder", 0.5, "1/2 (50%)", "#b3472a")),
+            max_val=1.0,
         )
         return inp, out
 
     if filename == "measure_feature_separation.py":
         inp = (
             '<svg viewBox="0 0 290 74" class="lab-diagram" role="img" aria-label="Four 1D points in two groups showing within-group distance 0.5 vs nearest other-group distance 3.25">'
+            '<rect width="290" height="74" rx="6" fill="#f7f4ea"/>'
             '<line x1="24" y1="38" x2="266" y2="38" stroke="#9ab0a2" stroke-width="2"/>'
-            '<circle cx="40" cy="38" r="6" fill="#205841"/><text x="32" y="24" font-size="10" fill="#205841" font-weight="bold">s0 (0.0)</text>'
-            '<circle cx="70" cy="38" r="6" fill="#205841"/><text x="62" y="24" font-size="10" fill="#205841" font-weight="bold">s1 (0.5)</text>'
-            '<circle cx="220" cy="38" r="6" fill="#8a5a19"/><text x="208" y="24" font-size="10" fill="#8a5a19" font-weight="bold">s2 (3.5)</text>'
-            '<circle cx="250" cy="38" r="6" fill="#8a5a19"/><text x="242" y="24" font-size="10" fill="#8a5a19" font-weight="bold">s3 (4.0)</text>'
-            '<text x="36" y="60" font-size="10" fill="#205841">Group g1 (within = 0.5)</text>'
-            '<text x="186" y="60" font-size="10" fill="#8a5a19">Group g2 (other mean = 3.25–3.75)</text>'
+            '<circle cx="40" cy="38" r="6" fill="#205841"/><text x="28" y="24" font-size="10" fill="#205841" font-weight="bold">s0 (0.0)</text>'
+            '<circle cx="70" cy="38" r="6" fill="#205841"/><text x="60" y="24" font-size="10" fill="#205841" font-weight="bold">s1 (0.5)</text>'
+            '<circle cx="220" cy="38" r="6" fill="#8a5a19"/><text x="204" y="24" font-size="10" fill="#8a5a19" font-weight="bold">s2 (3.5)</text>'
+            '<circle cx="250" cy="38" r="6" fill="#8a5a19"/><text x="240" y="24" font-size="10" fill="#8a5a19" font-weight="bold">s3 (4.0)</text>'
+            '<text x="32" y="60" font-size="10" fill="#205841">Group g1 (within = 0.5)</text>'
+            '<text x="176" y="60" font-size="10" fill="#8a5a19">Group g2 (across = 3.25–3.75)</text>'
             "</svg>"
         )
-        out = mini_table(
-            "Per-sample silhouette scores (one representation split into groups g1 and g2)",
-            ("Sample", "Group", "Feature value", "Within-group distance", "Nearest other-group mean", "Silhouette score"),
+        out = svg_hbars(
+            "Per-sample silhouette score (1 representation split into g1 and g2)",
             (
-                ("Sample 0", "g1", "0.0", "0.50", "3.75", "0.87"),
-                ("Sample 1", "g1", "0.5", "0.50", "3.25", "0.85"),
-                ("Sample 2", "g2", "3.5", "0.50", "3.25", "0.85"),
-                ("Sample 3", "g2", "4.0", "0.50", "3.75", "0.87"),
+                ("s0 (g1, x=0.0)", 0.87, "0.87", "#205841"),
+                ("s1 (g1, x=0.5)", 0.85, "0.85", "#205841"),
+                ("s2 (g2, x=3.5)", 0.85, "0.85", "#8a5a19"),
+                ("s3 (g2, x=4.0)", 0.87, "0.87", "#8a5a19"),
             ),
-            note="All four scores come from one feature representation divided into two groups (g1 and g2).",
+            max_val=1.0,
         )
         return inp, out
 
     if filename == "project_feature_space.py":
-        inp = mini_table(
-            "Three 3D feature vectors before PCA projection",
-            ("Sample ID", "Feature 1", "Feature 2", "Feature 3"),
-            (("Sample 1", "0.10", "0.30", "0.20"), ("Sample 2", "0.20", "0.45", "0.17"), ("Sample 3", "0.75", "0.60", "0.90")),
+        inp = svg_swatches(
+            "Three 3D feature vectors projected onto 2 principal axes",
+            (
+                ("Sample 1", "[0.10, 0.30, 0.20]", "#d5e5dc", "#205841"),
+                ("Sample 2", "[0.20, 0.45, 0.17]", "#d5e5dc", "#205841"),
+                ("Sample 3", "[0.75, 0.60, 0.90]", "#f7e7ba", "#8a5a19"),
+            ),
         )
         out = (
             '<svg viewBox="0 0 280 112" class="lab-diagram" role="img" aria-label="2D PCA scatter plot of three samples with variance explained on each axis">'
             '<rect x="36" y="10" width="224" height="78" rx="4" fill="#f7f4ea" stroke="#9ab0a2"/>'
             '<line x1="36" y1="49" x2="260" y2="49" stroke="#d0d8cd" stroke-dasharray="3 3"/>'
-            '<circle cx="74" cy="34" r="5" fill="#205841"/><text x="83" y="37" font-size="10" fill="#205841" font-weight="bold">S1 (-0.359, +0.080)</text>'
-            '<circle cx="88" cy="66" r="5" fill="#205841"/><text x="97" y="69" font-size="10" fill="#205841" font-weight="bold">S2 (-0.282, -0.086)</text>'
-            '<circle cx="222" cy="48" r="5" fill="#8a5a19"/><text x="150" y="44" font-size="10" fill="#8a5a19" font-weight="bold">S3 (+0.640, +0.007)</text>'
-            '<text x="100" y="104" font-size="10" fill="#244035">Axis 1 (97.8% variance) · Axis 2 (2.2% variance)</text>'
+            '<circle cx="74" cy="34" r="5.5" fill="#205841"/><text x="83" y="37" font-size="10" fill="#205841" font-weight="bold">S1 (-0.359, +0.080)</text>'
+            '<circle cx="88" cy="66" r="5.5" fill="#205841"/><text x="97" y="69" font-size="10" fill="#205841" font-weight="bold">S2 (-0.282, -0.086)</text>'
+            '<circle cx="222" cy="48" r="5.5" fill="#8a5a19"/><text x="148" y="44" font-size="10" fill="#8a5a19" font-weight="bold">S3 (+0.640, +0.007)</text>'
+            '<text x="86" y="104" font-size="10" fill="#244035" font-weight="bold">PC1: 97.8% variance · PC2: 2.2% variance</text>'
             "</svg>"
-            '<p class="lab-card-note">Visible separation here reflects the synthetic 3-point input; pair with numerical silhouette scores on held-out data.</p>'
         )
         return inp, out
 
     if filename == "check_bag_classifier_on_known_signal.py":
         inp = (
             '<svg viewBox="0 0 300 84" class="lab-diagram" role="img" aria-label="Positive bag with 1 planted +5 signal among 12 patches vs negative bag of background noise">'
-            '<text x="12" y="22" font-size="11" fill="#244035" font-weight="bold">Positive bag (1 of 12 patches carries +5 signal):</text>'
+            '<rect width="300" height="84" rx="6" fill="#f7f4ea"/>'
+            '<text x="12" y="20" font-size="10.5" fill="#244035" font-weight="bold">Positive bag (1 of 12 patches carries +5 signal):</text>'
             + "".join(
-                f'<rect x="{12 + i * 22}" y="28" width="18" height="16" rx="2" fill="{"#b3472a" if i == 4 else "#d7ddd2"}"/>'
+                f'<rect x="{12 + i * 22}" y="26" width="18" height="16" rx="2" fill="{"#b3472a" if i == 4 else "#d0d8cd"}"/>'
                 for i in range(12)
             )
-            + '<text x="12" y="60" font-size="11" fill="#244035" font-weight="bold">Negative bag (all 12 patches N(0, 1) noise):</text>'
+            + '<text x="12" y="58" font-size="10.5" fill="#244035" font-weight="bold">Negative bag (all 12 patches N(0, 1) noise):</text>'
             + "".join(
-                f'<rect x="{12 + i * 22}" y="66" width="18" height="14" rx="2" fill="#d7ddd2"/>'
+                f'<rect x="{12 + i * 22}" y="64" width="18" height="14" rx="2" fill="#d0d8cd"/>'
                 for i in range(12)
             )
             + "</svg>"
         )
-        out = mini_table(
-            "Bag-level ROC AUC on 64 synthetic bags (32 positive, 32 negative, 12 patches/bag)",
-            ("Pooling rule", "How it combines the 12 patch scores", "Area under ROC (AUC)"),
+        out = svg_hbars(
+            "Bag-level ROC AUC across 64 bags (32 positive, 32 negative)",
             (
-                ("Mean pooling", "Averages all 12 patches (dilutes 1 planted signal with 11 noise patches)", "0.830"),
-                ("Maximum pooling", "Takes the strongest single patch in the bag", "0.999"),
+                ("Mean pooling", 0.830, "0.830 AUC (diluted)", "#8a5a19"),
+                ("Max pooling", 0.999, "0.999 AUC ★", "#205841"),
             ),
-            highlight_row=1,
+            max_val=1.0,
+            note="Averaging all 12 patches dilutes a single positive instance with 11 background patches; max pooling isolates the strongest instance.",
         )
         return inp, out
 
-    # --- Goal: feature-export (Link feature vectors to the source image) ---
+    # --- Goal: feature-export (Keep vector coordinates) ---
     if filename == "export_feature_vectors.py":
         inp = (
-            '<svg viewBox="0 0 260 76" class="lab-diagram" role="img" aria-label="Two adjacent 4x4 patches on an 8x4 grid with their IDs and bounds">'
-            '<rect x="16" y="14" width="48" height="48" fill="#e2e8dc" stroke="#205841" stroke-width="2"/>'
-            '<text x="20" y="36" font-size="10" fill="#1b3126" font-weight="bold">patch-x0-y0</text>'
-            '<text x="20" y="50" font-size="9" fill="#536052">(0, 0, 4, 4)</text>'
-            '<rect x="64" y="14" width="48" height="48" fill="#f5f0e2" stroke="#205841" stroke-width="2"/>'
-            '<text x="68" y="36" font-size="10" fill="#1b3126" font-weight="bold">patch-x4-y0</text>'
-            '<text x="68" y="50" font-size="9" fill="#536052">(4, 0, 8, 4)</text>'
-            '<text x="126" y="36" font-size="11" fill="#244035" font-weight="bold">Width = 2 features</text>'
-            '<text x="126" y="52" font-size="10" fill="#536052">Coordinates travel with each row</text>'
+            '<svg viewBox="0 0 270 76" class="lab-diagram" role="img" aria-label="Two adjacent 4x4 patches on an 8x4 grid with their IDs and bounds">'
+            '<rect x="14" y="12" width="52" height="52" fill="#d5e5dc" stroke="#205841" stroke-width="2"/>'
+            '<text x="18" y="34" font-size="9.5" fill="#1b3126" font-weight="bold">patch-x0-y0</text>'
+            '<text x="18" y="48" font-size="9" fill="#536052">(0, 0, 4, 4)</text>'
+            '<rect x="66" y="12" width="52" height="52" fill="#f7e7ba" stroke="#8a5a19" stroke-width="2"/>'
+            '<text x="70" y="34" font-size="9.5" fill="#1b3126" font-weight="bold">patch-x4-y0</text>'
+            '<text x="70" y="48" font-size="9" fill="#536052">(4, 0, 8, 4)</text>'
+            '<text x="130" y="34" font-size="10.5" fill="#244035" font-weight="bold">+ 2 features per row</text>'
+            '<text x="130" y="50" font-size="9.5" fill="#536052">Coordinates travel with vector</text>'
             "</svg>"
         )
         out = mini_table(
-            "Exported feature table (2 regions × 2 features, coordinates preserved)",
-            ("region_id", "left", "top", "right", "bottom", "feature_1", "feature_2"),
-            (
-                ("patch-x0-y0", "0", "0", "4", "4", "0.12", "0.68"),
-                ("patch-x4-y0", "4", "0", "8", "4", "0.43", "0.19"),
-            ),
+            "Exported CSV rows keeping bounds and features together",
+            ("region_id", "Bounds (l, t, r, b)", "feature_1", "feature_2"),
+            (("patch-x0-y0", "(0, 0, 4, 4)", "0.12", "0.68"), ("patch-x4-y0", "(4, 0, 8, 4)", "0.43", "0.19")),
         )
         return inp, out
 
     if filename == "align_features_to_regions.py":
-        inp = mini_table(
-            "Region coordinates and feature vectors arriving in different orders",
-            ("Input table", "Row 1", "Row 2"),
-            (
-                ("Regions (ordered A, B)", "A → (12, 6)", "B → (80, 5)"),
-                ("Vectors (ordered B, A)", "B → (0.1, 0.2)", "A → (0.3, 0.4)"),
-            ),
-            highlight_row=1,
+        inp = (
+            '<svg viewBox="0 0 290 78" class="lab-diagram" role="img" aria-label="Region table ordered A, B joined by ID to feature table ordered B, A">'
+            '<rect x="12" y="12" width="96" height="24" rx="3" fill="#d5e5dc" stroke="#205841"/><text x="18" y="28" font-size="10" fill="#1b3126">Regions: A (12, 6)</text>'
+            '<rect x="12" y="42" width="96" height="24" rx="3" fill="#f7e7ba" stroke="#8a5a19"/><text x="18" y="58" font-size="10" fill="#1b3126">Regions: B (80, 5)</text>'
+            '<rect x="176" y="12" width="102" height="24" rx="3" fill="#f7e7ba" stroke="#8a5a19"/><text x="182" y="28" font-size="10" fill="#1b3126">Vectors: B (0.1, 0.2)</text>'
+            '<rect x="176" y="42" width="102" height="24" rx="3" fill="#d5e5dc" stroke="#205841"/><text x="182" y="58" font-size="10" fill="#1b3126">Vectors: A (0.3, 0.4)</text>'
+            '<line x1="108" y1="24" x2="176" y2="54" stroke="#205841" stroke-width="2"/>'
+            '<line x1="108" y1="54" x2="176" y2="24" stroke="#8a5a19" stroke-width="2"/>'
+            "</svg>"
         )
         out = mini_table(
-            "Joined records aligned by region ID (plus missing-ID safeguard)",
-            ("Region ID", "Joined coordinates (x, y)", "Joined vector", "Verification status"),
-            (
-                ("A (reordered match)", "(12, 6)", "(0.3, 0.4)", "Matched by ID across reordered inputs"),
-                ("B", "(80, 5)", "(0.1, 0.2)", "Matched by ID"),
-                ("If an ID is absent", "—", "—", "Raises ValueError listing missing vs unknown IDs"),
-            ),
-            highlight_row=0,
+            "Records aligned by ID regardless of input file order",
+            ("Region ID", "Coordinates (x, y)", "Feature vector", "Join check"),
+            (("A", "(12, 6)", "(0.3, 0.4)", "✓ Matched across reordered rows"), ("B", "(80, 5)", "(0.1, 0.2)", "✓ Matched by ID")),
         )
         return inp, out
 
     if filename == "check_feature_cache.py":
-        inp = mini_table(
-            "Expected metadata vs cached feature array metadata",
-            ("Metadata field", "Expected by experiment", "Stored in cache", "Status"),
+        inp = svg_swatches(
+            "Cached feature array checked against experiment requirements",
             (
-                ("Region ID order", "['A', 'B']", "['B', 'A']", "Mismatch (reordered)"),
-                ("Encoder name", "encoder-v2", "encoder-v1", "Mismatch (outdated encoder)"),
-                ("Array shape (n, width)", "(2, 8)", "(2, 8)", "Passed (2 rows × 8 features)"),
+                ("ID order · ✕", "['B', 'A'] vs ['A', 'B']", "#f5d0c5", "#b3472a"),
+                ("Encoder · ✕", "v1 vs expected v2", "#f5d0c5", "#b3472a"),
+                ("Shape · ✓", "(2, 8) matches width 8", "#d5e5dc", "#205841"),
             ),
         )
         out = mini_table(
-            "Cache validation report and follow-up action",
-            ("Check", "Result", "Required action"),
+            "Cache verification report before training",
+            ("Check", "Status", "Action required"),
             (
-                ("region IDs or ordering changed", "Flagged", "Re-align rows by ID or regenerate cache in canonical order."),
-                ("encoder changed", "Flagged", "Re-extract features with encoder-v2 before training."),
-                ("vector shape (2, 8)", "Passed", "Width 8 matches expected dimension."),
+                ("region IDs or ordering", "Flagged", "Re-index cache to ['A', 'B'] order."),
+                ("encoder name", "Flagged", "Re-extract features with encoder-v2."),
+                ("vector shape (2, 8)", "Passed", "Dimensions match expected 2 × 8 matrix."),
             ),
         )
         return inp, out
 
-    # --- Goal: grading-splits (Prepare reference grades and splits) ---
+    # --- Goal: grading-splits (Reference grades & splits) ---
     if filename == "prepare_reference_grades.py":
-        inp = mini_table(
-            "Individual assessor ratings supplied for two samples",
-            ("Sample ID", "Assessor r1", "Assessor r2", "Ratings available"),
-            (("a", "1", "2", "2 assessors"), ("b", "— (not rated)", "3", "1 assessor only")),
+        inp = svg_swatches(
+            "Assessor stain ratings (0–3 scale) supplied for Samples a and b",
+            (
+                ("Sample a", "r1 = 1, r2 = 2 (n=2)", "#d5e5dc", "#205841"),
+                ("Sample b", "r2 = 3 only (n=1)", "#f7e7ba", "#8a5a19"),
+            ),
         )
         out = mini_table(
-            "Combined reference grade with rating count and spread preserved",
-            ("Sample ID", "Reference (mean)", "Rating count (n)", "Spread (max − min)", "How to read spread = 0"),
+            "Reference grade paired with assessor count (n) and spread",
+            ("Sample", "Mean grade", "Assessors (n)", "Spread", "Why count (n) matters alongside spread"),
             (
-                ("a", "1.5", "2", "1", "Two assessors differed by 1 grade level (1 vs 2)."),
-                ("b", "3.0", "1", "0", "Zero spread from n=1 means uncorroborated, not two agreeing assessors."),
+                ("a", "1.5", "n = 2", "1.0", "Two assessors differed by 1 grade point (1 vs 2)."),
+                ("b", "3.0", "n = 1", "0.0", "Spread = 0 from n = 1 means uncorroborated, not two agreeing raters."),
             ),
             highlight_row=1,
         )
         return inp, out
 
     if filename == "assign_validation_folds.py":
-        inp = mini_table(
-            "Four samples in three groups before fold assignment",
-            ("Group ID", "Member samples", "Group size"),
-            (("g1 (paired samples)", "a, b", "2 samples"), ("g2", "c", "1 sample"), ("g3", "d", "1 sample")),
-            highlight_row=0,
+        inp = (
+            '<svg viewBox="0 0 300 84" class="lab-diagram" role="img" aria-label="Samples a and b in group g1 kept together in Fold 0 while c and d go to Fold 1">'
+            '<rect x="12" y="12" width="110" height="26" rx="4" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="18" y="29" font-size="10.5" fill="#1b3126" font-weight="bold">Group g1: a, b</text>'
+            '<rect x="12" y="46" width="110" height="26" rx="4" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="18" y="63" font-size="10.5" fill="#1b3126" font-weight="bold">Groups g2, g3: c, d</text>'
+            '<text x="136" y="29" font-size="12" fill="#205841" font-weight="bold">→</text>'
+            '<text x="136" y="63" font-size="12" fill="#8a5a19" font-weight="bold">→</text>'
+            '<rect x="158" y="12" width="128" height="26" rx="4" fill="#d5e5dc" stroke="#205841" stroke-width="2"/>'
+            '<text x="166" y="29" font-size="10.5" fill="#1b3126" font-weight="bold">Fold 0: a, b (paired)</text>'
+            '<rect x="158" y="46" width="128" height="26" rx="4" fill="#f7e7ba" stroke="#8a5a19" stroke-width="2"/>'
+            '<text x="166" y="63" font-size="10.5" fill="#1b3126" font-weight="bold">Fold 1: c, d</text>'
+            "</svg>"
         )
         out = mini_table(
-            "Balanced 2-fold split keeping group g1 together",
-            ("Sample", "Group ID", "Held-out fold", "Role in Fold 0 eval", "Role in Fold 1 eval"),
-            (
-                ("a", "g1", "Fold 0", "Held-out test", "Training"),
-                ("b", "g1", "Fold 0", "Held-out test (kept with a)", "Training (kept with a)"),
-                ("c", "g2", "Fold 1", "Training", "Held-out test"),
-                ("d", "g3", "Fold 1", "Training", "Held-out test"),
-            ),
-            highlight_row=1,
-            note="Related samples a and b share group g1 and never sit on opposite sides of the train/test split.",
+            "Group-aware fold split (preventing group g1 from leaking across train/test)",
+            ("Sample", "Group", "Held-out fold", "Kept together with"),
+            (("a, b", "g1", "Fold 0", "Both in Fold 0 (never split across train and test)"), ("c, d", "g2, g3", "Fold 1", "Balanced 2 samples per fold")),
         )
         return inp, out
 
-    # --- Goal: grading-models (Train and compare graders at three scales) ---
+    # --- Goal: grading-models (Compare scale graders) ---
     if filename == "train_scale_graders.py":
-        inp = mini_table(
-            "Shared training/test split across scale-specific feature sets",
-            ("Sample", "Split role", "Reference grade", "Patch feature", "Cell feature"),
+        inp = svg_swatches(
+            "Shared split (Train: a=1, b=2 · Test: c=3) at Patch vs Cell scale",
             (
-                ("a", "Train", "1.0", "[0.1]", "[0.3]"),
-                ("b", "Train", "2.0", "[0.5]", "[0.6]"),
-                ("c", "Held-out test", "3.0", "[0.9]", "[0.7]"),
+                ("Patch features", "a:0.1, b:0.5 → test c:0.9", "#d5e5dc", "#205841"),
+                ("Cell features", "a:0.3, b:0.6 → test c:0.7", "#f7e7ba", "#8a5a19"),
             ),
-            highlight_row=2,
         )
-        out = mini_table(
-            "Held-out predictions for sample c (2-scale demo of the 3-scale thesis workflow)",
-            ("Scale model", "Trained on", "Held-out sample", "Reference grade", "Predicted grade", "Absolute error"),
+        out = svg_hbars(
+            "Held-out prediction error on Sample c (reference grade = 3.000)",
             (
-                ("Patch grader", "a, b", "c", "3.000", "2.167", "0.833"),
-                ("Cell grader", "a, b", "c", "3.000", "1.759", "1.241"),
+                ("Patch grader (pred 2.17)", 0.833, "0.833 error", "#205841"),
+                ("Cell grader (pred 1.76)", 1.241, "1.241 error", "#8a5a19"),
             ),
+            max_val=1.5,
+            note="Two-scale demo of the three-scale thesis comparison (where patch features achieved the lowest error).",
         )
         return inp, out
 
     if filename == "save_held_out_grades.py":
-        inp = mini_table(
-            "Two-fold cross-validation schedule (4 samples, patch scale)",
-            ("Evaluation fold", "Training samples (fit model)", "Held-out samples (predict)"),
-            (("Fold 0", "b, c", "a, d"), ("Fold 1", "a, d", "b, c")),
+        inp = svg_swatches(
+            "2-fold cross-validation rotates which samples are held out",
+            (
+                ("Fold 0 eval", "Train {b, c} → Predict {a, d}", "#d5e5dc", "#205841"),
+                ("Fold 1 eval", "Train {a, d} → Predict {b, c}", "#f7e7ba", "#8a5a19"),
+            ),
         )
         out = mini_table(
-            "Saved out-of-fold predictions (every case predicted by a model that did not train on it)",
-            ("sample", "scale", "fold", "reference", "prediction", "abs_error"),
+            "Out-of-fold predictions CSV (every sample predicted by a model that did not train on it)",
+            ("sample", "scale", "fold", "reference", "prediction", "|error|"),
             (
                 ("a", "patch", "0", "0.0", "1.039", "1.039"),
                 ("d", "patch", "0", "3.0", "1.907", "1.093"),
@@ -985,493 +1134,486 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "summarise_errors_by_grade.py":
-        inp = mini_table(
-            "Five held-out predictions grouped by ordinal reference grade",
-            ("Reference grade", "Predicted grades in example", "Sample count (n)"),
-            (("Grade 0", "0.7, 0.2", "n = 2"), ("Grade 1", "1.2", "n = 1"), ("Grade 3", "2.1, 2.8", "n = 2")),
-            highlight_row=2,
-        )
-        out = mini_table(
-            "Signed and absolute error by reference grade (signed = prediction − reference)",
-            ("Reference grade", "Count (n)", "Signed error (direction)", "Absolute error (magnitude)"),
+        inp = svg_swatches(
+            "5 held-out predictions grouped by ordinal reference grade",
             (
-                ("Grade 0", "2", "+0.45 (runs high)", "0.45"),
-                ("Grade 1", "1", "+0.20 (runs slightly high)", "0.20"),
-                ("Grade 3", "2", "−0.55 (under-predicts high grade)", "0.55"),
+                ("Grade 0 (n=2)", "Preds: 0.7, 0.2", "#d5e5dc", "#205841"),
+                ("Grade 1 (n=1)", "Pred: 1.2", "#e2e8dc", "#527c67"),
+                ("Grade 3 (n=2)", "Preds: 2.1, 2.8", "#f5d0c5", "#b3472a"),
             ),
-            highlight_row=2,
-            note="Positive signed error means predictions exceed the reference; negative (−0.55 at Grade 3 across 2 cases) shows under-prediction at the top of the scale.",
+        )
+        out = (
+            svg_diverging_bars(
+                "Signed error by reference grade (prediction − reference)",
+                (
+                    ("Grade 0 (n=2)", 0.45, "+0.45 (high)"),
+                    ("Grade 1 (n=1)", 0.20, "+0.20 (high)"),
+                    ("Grade 3 (n=2)", -0.55, "−0.55 (low)"),
+                ),
+                scale=0.6,
+                note="Grade 0 runs +0.45 high on average, while Grade 3 under-predicts by −0.55 across its 2 cases.",
+            )
         )
         return inp, out
 
-    # --- Goal: compare (Test changes against matched baseline runs) ---
+    # --- Goal: compare (Matched ablation runs) ---
     if filename == "compare_experiments.py":
         inp = mini_table(
-            "Matched baseline and compact runs across 2 folds (seed = 7)",
-            ("Configuration", "Fold", "Seed", "Error", "Time / epoch (s)", "Peak memory (MiB)"),
+            "Baseline and compact variant paired on Folds 0 & 1 (seed = 7)",
+            ("Config", "Fold 0 (err, time, RAM)", "Fold 1 (err, time, RAM)"),
             (
-                ("baseline", "0", "7", "0.31", "52 s", "92 MiB"),
-                ("compact", "0", "7", "0.32", "29 s", "60 MiB"),
-                ("baseline", "1", "7", "0.33", "55 s", "91 MiB"),
-                ("compact", "1", "7", "0.34", "31 s", "59 MiB"),
+                ("baseline", "0.31 · 52 s · 92 MiB", "0.33 · 55 s · 91 MiB"),
+                ("compact", "0.32 · 29 s · 60 MiB", "0.34 · 31 s · 59 MiB"),
             ),
         )
-        out = mini_table(
-            "Paired percentage change vs baseline (averaged across Folds 0 and 1, seed 7)",
-            ("Variant", "Matched pairs", "Error change", "Time / epoch change", "Peak memory change"),
-            (("compact vs baseline", "2 folds × 1 seed", "+3.1% (slightly worse)", "−43.9% (faster)", "−35.0% (smaller)"),),
-            highlight_row=0,
-            note="Time and memory fell substantially while error rose by 3.1% across the two matched folds.",
+        out = svg_diverging_bars(
+            "Paired % change (compact vs baseline across 2 folds, seed 7)",
+            (
+                ("Error (+worse)", 3.1, "+3.1%"),
+                ("Time / epoch", -43.9, "−43.9% faster"),
+                ("Peak memory", -35.0, "−35.0% smaller"),
+            ),
+            scale=50.0,
+            note="Compact cuts runtime (−43.9%) and memory (−35.0%) while raising error by +3.1%.",
         )
         return inp, out
 
     if filename == "plan_matched_runs.py":
-        inp = mini_table(
-            "Single-setting changes expanded across shared folds (0, 1) and seeds (7, 11)",
-            ("Configuration", "pool setting", "batch_size setting", "What changed vs baseline"),
+        inp = svg_swatches(
+            "Baseline + 2 single-parameter changes × 2 folds × 2 seeds = 12 runs",
             (
-                ("baseline", "mean", "16", "Reference configuration"),
-                ("max_pool", "max", "16", "Only pooling rule changed (mean → max)"),
-                ("large_batch", "mean", "32", "Only batch size changed (16 → 32)"),
+                ("baseline", "pool=mean, bs=16", "#e2e8dc", "#527c67"),
+                ("max_pool", "pool=max, bs=16", "#d5e5dc", "#205841"),
+                ("large_batch", "pool=mean, bs=32", "#f7e7ba", "#8a5a19"),
             ),
         )
         out = mini_table(
-            "Planned 3 × 2 × 2 = 12 run schedule (highlighting shared fold 0, seed 7 pair)",
+            "12-run schedule grid (each cell pairs Fold and Seed across variants)",
             ("Configuration", "Fold 0 · Seed 7", "Fold 0 · Seed 11", "Fold 1 · Seed 7", "Fold 1 · Seed 11"),
             (
-                ("baseline", "mean, bs=16 (pair #1)", "mean, bs=16", "mean, bs=16", "mean, bs=16"),
-                ("max_pool", "max, bs=16 (pair #1)", "max, bs=16", "max, bs=16", "max, bs=16"),
-                ("large_batch", "mean, bs=32 (pair #1)", "mean, bs=32", "mean, bs=32", "mean, bs=32"),
+                ("baseline", "mean, bs=16", "mean, bs=16", "mean, bs=16", "mean, bs=16"),
+                ("max_pool (1 change)", "max, bs=16", "max, bs=16", "max, bs=16", "max, bs=16"),
+                ("large_batch (1 change)", "mean, bs=32", "mean, bs=32", "mean, bs=32", "mean, bs=32"),
             ),
-            highlight_row=1,
         )
         return inp, out
 
     if filename == "verify_run_configuration.py":
-        inp = mini_table(
-            "Planned settings vs startup record for seed = 7",
-            ("Setting", "Planned value", "Recorded at startup"),
+        inp = svg_swatches(
+            "Planned run settings vs recorded startup log (seed = 7)",
             (
-                ("seed", "7", "7 (matches)"),
-                ("depth", "2", "1 (wrong value)"),
-                ("position_encoding", "True", "Absent from startup log"),
+                ("seed = 7 · ✓", "Recorded 7", "#d5e5dc", "#205841"),
+                ("depth = 2 · ⚠", "Recorded 1 (wrong!)", "#f7e7ba", "#8a5a19"),
+                ("positions · ✕", "Missing from log", "#f5d0c5", "#b3472a"),
             ),
         )
         out = mini_table(
-            "Configuration verification flags before including run in an ablation table",
-            ("Setting", "Planned", "Effective", "Recorded?", "Why it undermines a comparison"),
+            "Two configuration faults caught before including the run",
+            ("Setting", "Planned", "Effective", "Recorded?", "Impact on comparison"),
             (
-                ("depth", "2", "1", "True", "Ran a shallower model than the experiment plan specified."),
-                ("position_encoding", "True", "None", "False", "Startup log never confirmed whether positions were active."),
+                ("depth", "2", "1", "True", "Ran a 1-layer model instead of planned 2-layer model."),
+                ("position_encoding", "True", "None", "False", "Unconfirmed whether positional encoding was active."),
             ),
         )
         return inp, out
 
     if filename == "summarise_matched_training_traces.py":
-        inp = mini_table(
-            "Per-epoch validation traces across 2 matched (fold, seed) pairs (window = epochs 2–3)",
-            ("Run pair", "Epoch 1 (excluded warmup)", "Epoch 2 (in window)", "Epoch 3 (in window)"),
+        inp = svg_swatches(
+            "Validation window fixed to final Epochs 2–3 across 2 paired runs",
             (
-                ("baseline · (0, 11) & (1, 11)", "acc 0.745, 22 s", "acc 0.755, 44 s", "acc 0.765, 66 s"),
-                ("variant · (0, 11) & (1, 11)", "acc 0.755, 17 s", "acc 0.765, 34 s", "acc 0.775, 51 s"),
+                ("Epoch 1", "Warmup (excluded)", "#e2e8dc", "#7b8c80"),
+                ("Epoch 2", "Included in window", "#d5e5dc", "#205841"),
+                ("Epoch 3", "Included in window", "#d5e5dc", "#205841"),
             ),
         )
-        out = mini_table(
-            "Window summary over final epochs 2–3 (2 folds, seed 11)",
-            ("Configuration", "Included epochs", "Mean balanced accuracy", "Mean elapsed time at epoch 3"),
-            (
-                ("baseline", "Epochs 2, 3 (n=2 runs)", "0.760", "66.0 s"),
-                ("variant", "Epochs 2, 3 (n=2 runs)", "0.770 (+0.010)", "51.0 s (−15.0 s)"),
-            ),
-            highlight_row=1,
+        out = (
+            svg_hbars(
+                "Final-window mean balanced accuracy & elapsed time (Epochs 2–3)",
+                (
+                    ("baseline (0.760 acc)", 66.0, "66.0 s · 0.760 acc", "#8a5a19"),
+                    ("variant (0.770 acc)", 51.0, "51.0 s · 0.770 acc", "#205841"),
+                ),
+                max_val=70.0,
+            )
         )
         return inp, out
 
-    # --- Goal: sampling (Choose which training examples to revisit) ---
+    # --- Goal: sampling (Sample rare & hard cases) ---
     if filename == "weight_grading_examples.py":
         inp = mini_table(
-            "Four training samples with class frequency and per-epoch losses",
-            ("Sample", "Grade label (frequency)", "Epoch 1 loss", "Epoch 2 loss"),
+            "Four samples combining class frequency and training loss",
+            ("Sample", "Grade class", "Epoch 1 loss", "Epoch 2 loss"),
             (
-                ("Sample 1", "Grade 0 (3 in class)", "0.10", "0.20"),
-                ("Sample 2", "Grade 0 (3 in class · high loss)", "0.90", "0.60"),
-                ("Sample 3", "Grade 0 (3 in class)", "0.10", "0.20"),
-                ("Sample 4", "Grade 1 (1 in class · rare grade)", "0.40", "0.30"),
+                ("s1, s3", "Grade 0 (common, n=3)", "0.10 (low)", "0.20"),
+                ("s2", "Grade 0 (common, n=3)", "0.90 (high loss!)", "0.60"),
+                ("s4", "Grade 1 (rare, n=1)", "0.40", "0.30"),
             ),
         )
-        out = mini_table(
-            "Hybrid sampling probabilities (higher weight = revisited more often during training)",
-            ("Sample", "Why weighted", "Initial weight", "Next-epoch weight"),
+        out = svg_hbars(
+            "Updated sampling probabilities (boosting rare s4 & high-loss s2)",
             (
-                ("Sample 1 (Grade 0, low loss)", "Common class, small error", "0.136", "0.157"),
-                ("Sample 2 (Grade 0, high loss)", "Boosted by large training loss", "0.322", "0.293"),
-                ("Sample 3 (Grade 0, low loss)", "Common class, small error", "0.136", "0.157"),
-                ("Sample 4 (Grade 1, rare class)", "Boosted by rare class balance", "0.406", "0.392"),
+                ("s1 (common, low loss)", 0.157, "0.136 → 0.157", "#7b8c80"),
+                ("s2 (high loss boosted)", 0.293, "0.322 → 0.293", "#8a5a19"),
+                ("s3 (common, low loss)", 0.157, "0.136 → 0.157", "#7b8c80"),
+                ("s4 (rare grade boosted)", 0.392, "0.406 → 0.392", "#205841"),
             ),
-            highlight_row=3,
+            max_val=0.45,
         )
         return inp, out
 
     if filename == "probe_grading_model_with_noise.py":
-        inp = mini_table(
-            "Generated signal bags vs independent Gaussian noise probe (12 bags each)",
-            ("Input batch", "Bag count", "Distribution (20 instances × 2 features)", "Example bag mean"),
+        inp = svg_swatches(
+            "12 signal bags vs 12 Gaussian noise bags fed to null-aware scorer",
             (
-                ("Generated signal", "12 bags", "N(mean = 1.5, std = 0.4)", "+1.50"),
-                ("Gaussian noise probe", "12 bags", "N(mean = 0.0, std = 1.0)", "≈ 0.00"),
+                ("Signal bags (n=12)", "N(mean=1.5, std=0.4)", "#d5e5dc", "#205841"),
+                ("Noise probe (n=12)", "N(mean=0.0, std=1.0)", "#f5d0c5", "#b3472a"),
             ),
         )
-        out = mini_table(
-            "Outside-input (null class 2) response on generated probe",
-            ("Probe batch", "Median null-class probability", "Predicted as outside-input (null calls)", "Interpretation in demo"),
+        out = svg_hbars(
+            "Median probability assigned to the outside-input (null) class",
             (
-                ("Signal bags", "0.009", "0 / 12 bags", "Assigned to regular grade classes (0 or 1)"),
-                ("Gaussian noise bags", "0.683", "12 / 12 bags", "Flagged by the dedicated outside-input class"),
+                ("Signal (0/12 null)", 0.009, "0.009 (0/12 calls)", "#205841"),
+                ("Noise (12/12 null)", 0.683, "0.683 (12/12 calls)", "#b3472a"),
             ),
-            highlight_row=1,
-            note="Synthetic probe illustrating Appendix A.4's null-class structure.",
+            max_val=0.75,
+            note="Synthetic probe illustrating Appendix A.4's dedicated outside-input class.",
         )
         return inp, out
 
-    # --- Goal: agreement (Compare model error with assessor disagreement) ---
+    # --- Goal: agreement (Model vs expert gap) ---
     if filename == "compare_assessor_errors.py":
         inp = mini_table(
-            "Two matched samples with two assessor grades and one model prediction",
-            ("Sample", "Assessor A", "Assessor B", "Assessor mean (reference)", "Model prediction"),
-            (
-                ("a", "1.0", "2.0", "1.50", "1.40"),
-                ("b", "2.0", "2.0", "2.00", "1.80"),
-            ),
+            "Two matched samples scored by Assessor A, Assessor B and the model",
+            ("Sample", "Assessor A", "Assessor B", "Consensus mean", "Model prediction"),
+            (("a", "1.0", "2.0", "1.50", "1.40"), ("b", "2.0", "2.0", "2.00", "1.80")),
         )
-        out = mini_table(
-            "Two distinct error definitions on the same 2 matched samples",
-            ("Metric", "What it compares", "Sample a", "Sample b", "Mean (MAE)"),
+        out = svg_hbars(
+            "Person-to-person disagreement vs model-to-consensus error (grade pts)",
             (
-                ("Assessor-to-assessor gap", "|Assessor A − Assessor B| (between people)", "1.00", "0.00", "0.50 grade pts"),
-                ("Model-to-consensus MAE", "|Prediction − Mean(A, B)| (against average)", "0.10", "0.20", "0.15 grade pts"),
+                ("Demo: Rater gap |A−B|", 0.50, "0.50 grade pts", "#8a5a19"),
+                ("Demo: Model vs Mean", 0.15, "0.15 grade pts", "#205841"),
+                ("Thesis: Rater gap", 0.382, "0.382 grade pts", "#8a5a19"),
+                ("Thesis: Patch model", 0.238, "0.238 grade pts", "#205841"),
             ),
-            note="The two numbers have different targets: 0.50 compares one person with another, while 0.15 compares the model with their average.",
+            max_val=0.55,
+            note="The two numbers have distinct targets: rater gap compares two people, while model MAE compares predictions against their average.",
         )
         return inp, out
 
     if filename == "score_ordinal_agreement.py":
-        inp = mini_table(
-            "Four aligned ordinal grade pairs across levels [0, 1, 2, 3]",
-            ("Pair", "First rating", "Second rating", "Ordinal distance |a − b|", "Quadratic penalty (a − b)²"),
+        inp = svg_swatches(
+            "Four paired ratings on the 0–3 ordinal staining scale",
             (
-                ("Case 1", "0", "0", "0 (exact match)", "0"),
-                ("Case 2", "1", "2", "1 (one-level miss)", "1"),
-                ("Case 3", "2", "2", "0 (exact match)", "0"),
-                ("Case 4", "3", "3", "0 (exact match)", "0"),
+                ("3 exact matches", "(0,0), (2,2), (3,3) · Δ²=0", "#d5e5dc", "#205841"),
+                ("1 one-grade miss", "(1,2) · Δ²=1", "#f7e7ba", "#8a5a19"),
             ),
-            highlight_row=1,
         )
-        out = stat_cards(
-            (("Quadratic weighted κ", "0.90"), ("Exact matches", "3 of 4 pairs"), ("One-grade miss", "1 of 4 pairs (1 vs 2)")),
-            note="Quadratic weighting penalises a 2- or 3-grade jump by 4× or 9× a 1-grade miss, adjusted for chance agreement.",
+        out = svg_hbars(
+            "Chance-adjusted ordinal agreement (quadratic-weighted κ)",
+            (
+                ("Observed exact rate", 0.75, "3 / 4 pairs", "#527c67"),
+                ("Quadratic weighted κ", 0.90, "κ = 0.90", "#205841"),
+            ),
+            max_val=1.0,
+            note="Quadratic weighting penalises multi-grade disagreements by (a − b)² and adjusts for chance.",
         )
         return inp, out
 
-    # --- Goal: subtype-cohort (Prepare the subtype dataset) ---
+    # --- Goal: subtype-cohort (Curate subtype cohort) ---
     if filename == "join_subtype_labels.py":
-        inp = mini_table(
-            "Three image records matched against the supplied reference table",
-            ("Image ID", "Reference ID", "Value in reference table"),
-            (("a", "R1", "'ABC'"), ("b", "R2", "'unclassified'"), ("c", "R3", "None (absent)")),
+        inp = svg_swatches(
+            "Three image IDs matched against supplied reference subtype table",
+            (
+                ("a → R1", "'ABC' (valid)", "#d5e5dc", "#205841"),
+                ("b → R2", "'unclassified'", "#f7e7ba", "#8a5a19"),
+                ("c → R3", "None (missing)", "#f5d0c5", "#b3472a"),
+            ),
         )
         out = mini_table(
-            "Label join outcome (distinguishing unrecognised values from missing rows)",
-            ("Image ID", "Reference ID", "Supplied status", "Outcome"),
+            "Join outcome (separating unrecognised strings from missing records)",
+            ("Image ID", "Reference ID", "Status", "Action"),
             (
-                ("a", "R1", "ABC (allowed)", "Kept for eligibility check →"),
-                ("b", "R2", "unrecognised ('unclassified')", "Held for review (not in {'ABC', 'GCB'})"),
-                ("c", "R3", "missing (no entry for R3)", "Held for review (never inferred)"),
+                ("a", "R1", "✓ Accepted ('ABC')", "Advances to cohort eligibility filter"),
+                ("b", "R2", "⚠ Unrecognised ('unclassified')", "Held for review (not in {'ABC', 'GCB'})"),
+                ("c", "R3", "✕ Missing (no record)", "Held for review (never inferred)"),
             ),
             highlight_row=0,
         )
         return inp, out
 
     if filename == "audit_cohort_filters.py":
-        inp = mini_table(
-            "Eligibility criteria checked for each specimen (required stain = stain-a, min patches = 8)",
-            ("Specimen", "Target label in {ABC, GCB}?", "Has stain-a?", "Retained patches ≥ 8?"),
+        inp = svg_swatches(
+            "Three inclusion gates: valid label, required stain-a, and ≥ 8 patches",
             (
-                ("Specimen a", "✓ Pass (ABC)", "✓ Pass ({stain-a})", "✓ Pass (12 patches)"),
-                ("Specimen b", "✕ Fail (None)", "✕ Fail (empty set)", "✕ Fail (4 patches)"),
+                ("Specimen a · ✓ Keep", "ABC · stain-a · 12 patches", "#d5e5dc", "#205841"),
+                ("Specimen b · ✕ Drop", "Fails all 3 rules (4 patches)", "#f5d0c5", "#b3472a"),
             ),
-            highlight_row=1,
         )
         out = mini_table(
-            "Cohort filter audit result (1 of 2 specimens retained)",
-            ("Specimen", "Decision", "Recorded exclusion reasons"),
+            "Specimen-by-criterion eligibility matrix (1 of 2 retained)",
+            ("Specimen", "Target in {ABC, GCB}", "Has stain-a", "Patches ≥ 8", "Decision"),
             (
-                ("Specimen a", "Retained (1 remaining)", "All 3 eligibility criteria passed"),
-                ("Specimen b", "Excluded", "target unavailable · required stain unavailable · not enough retained patches"),
+                ("Specimen a", "✓ ABC", "✓ Yes", "✓ 12 patches", "Retained (1 remaining)"),
+                ("Specimen b", "✕ None", "✕ Missing", "✕ 4 patches", "Excluded (all 3 reasons logged)"),
             ),
             highlight_row=0,
         )
         return inp, out
 
-    # --- Goal: interpret (How do many patches give one case prediction?) ---
+    # --- Goal: interpret (Pool patches per case) ---
     if filename == "pool_patch_evidence.py":
-        inp = mini_table(
-            "Three patch feature vectors and attention logits for one specimen",
-            ("Patch", "Feature 1", "Feature 2", "Attention logit → softmax weight"),
+        inp = svg_hbars(
+            "Softmax attention weights across the 3 patches in the bag",
             (
-                ("Patch 1", "0.100", "0.900 (max F2)", "0 → weight 0.212"),
-                ("Patch 2", "0.300", "0.700", "0 → weight 0.212"),
-                ("Patch 3", "0.900 (max F1)", "0.200", "1 → weight 0.576"),
+                ("Patch 1 [0.1, 0.9]", 0.212, "w = 0.212 (logit 0)", "#527c67"),
+                ("Patch 2 [0.3, 0.7]", 0.212, "w = 0.212 (logit 0)", "#527c67"),
+                ("Patch 3 [0.9, 0.2]", 0.576, "w = 0.576 (logit 1)", "#205841"),
             ),
+            max_val=0.65,
         )
         out = mini_table(
-            "Comparison of three pooling rules on the same 3 patches",
-            ("Pooling method", "Pooled Feature 1", "Pooled Feature 2", "How Feature 1 was formed"),
+            "Pooled bag vector under Mean, Max and Attention pooling",
+            ("Pooling rule", "Feature 1", "Feature 2", "How Feature 1 was combined"),
             (
-                ("mean", "0.433", "0.600", "(0.1 + 0.3 + 0.9) / 3 = 0.433"),
-                ("maximum", "0.900", "0.900", "max(0.1, 0.3, 0.9) = 0.900 from Patch 3"),
-                ("attention", "0.603", "0.454", "0.212×0.1 + 0.212×0.3 + 0.576×0.9 = 0.603"),
+                ("mean", "0.433", "0.600", "(0.1 + 0.3 + 0.9) / 3"),
+                ("maximum", "0.900", "0.900", "max(0.1, 0.3, 0.9) from Patch 3"),
+                ("attention", "0.603", "0.454", "0.212×0.1 + 0.212×0.3 + 0.576×0.9"),
             ),
+            highlight_row=2,
         )
         return inp, out
 
     if filename == "batch_variable_patch_sets.py":
         inp = (
             '<svg viewBox="0 0 300 94" class="lab-diagram" role="img" aria-label="Four specimens sorted by patch count into two batches with padded slots marked">'
-            '<text x="12" y="18" font-size="11" fill="#244035" font-weight="bold">Batch 1 (max 5): b (3) + 2 pad, c (5)</text>'
-            '<rect x="12" y="24" width="54" height="12" rx="2" fill="#527c67"/>'
-            '<rect x="68" y="24" width="36" height="12" rx="2" fill="#e2e8dc" stroke="#b3472a" stroke-dasharray="2 2"/>'
-            '<rect x="12" y="40" width="92" height="12" rx="2" fill="#527c67"/>'
-            '<text x="12" y="68" font-size="11" fill="#244035" font-weight="bold">Batch 2 (max 15): a (12) + 3 pad, d (15)</text>'
-            '<rect x="12" y="74" width="160" height="12" rx="2" fill="#527c67"/>'
-            '<rect x="174" y="74" width="40" height="12" rx="2" fill="#e2e8dc" stroke="#b3472a" stroke-dasharray="2 2"/>'
+            '<rect width="300" height="94" rx="6" fill="#f7f4ea"/>'
+            '<text x="12" y="18" font-size="10.5" fill="#244035" font-weight="bold">Batch 1 (width 5): b (3) + 2 pad, c (5)</text>'
+            '<rect x="12" y="24" width="54" height="12" rx="2" fill="#205841"/>'
+            '<rect x="68" y="24" width="36" height="12" rx="2" fill="#f5d0c5" stroke="#b3472a" stroke-dasharray="2 2"/>'
+            '<rect x="12" y="40" width="92" height="12" rx="2" fill="#205841"/>'
+            '<text x="12" y="68" font-size="10.5" fill="#244035" font-weight="bold">Batch 2 (width 15): a (12) + 3 pad, d (15)</text>'
+            '<rect x="12" y="74" width="160" height="12" rx="2" fill="#205841"/>'
+            '<rect x="174" y="74" width="40" height="12" rx="2" fill="#f5d0c5" stroke="#b3472a" stroke-dasharray="2 2"/>'
             "</svg>"
         )
-        out = mini_table(
-            "Size-sorted batches (batch_size = 2) and masked padding counts",
-            ("Batch", "Grouped specimens (patch counts)", "Batch width", "Padded dummy slots", "Mask role"),
+        out = svg_hbars(
+            "Dummy padding slots required across the 4 specimens (batch_size = 2)",
             (
-                ("Batch 1", "b (3 patches), c (5 patches)", "5 slots", "2 padded slots", "Validity mask zeroes out the 2 dummy slots"),
-                ("Batch 2", "a (12 patches), d (15 patches)", "15 slots", "3 padded slots", "Validity mask zeroes out the 3 dummy slots"),
+                ("Unsorted (b=3 with d=15)", 21, "21 pad slots", "#b3472a"),
+                ("Sorted ([b,c], [a,d])", 5, "5 pad slots (−76%)", "#205841"),
             ),
-            note="Sorting by count before batching keeps total padding to 5 slots (vs 21 slots if b=3 and d=15 were paired).",
+            max_val=22,
+            note="Validity masks prevent the 5 padded slots from contributing to pooled bag predictions.",
         )
         return inp, out
 
     if filename == "predict_subtypes_from_bags.py":
-        inp = mini_table(
-            "Two labelled training bags and one held-out test bag",
-            ("Bag ID", "Split role", "Supplied label", "Patch values", "Bag mean centroid"),
-            (
-                ("a", "Training", "ABC", "[[0.1], [0.2]]", "0.15"),
-                ("b", "Training", "GCB", "[[0.9], [0.8]]", "0.85"),
-                ("c", "Held-out test", "To predict", "[[0.6], [0.7], [0.8]]", "0.70"),
-            ),
-            highlight_row=2,
+        inp = (
+            '<svg viewBox="0 0 290 74" class="lab-diagram" role="img" aria-label="1D feature line showing ABC centroid at 0.15, held-out bag c at 0.70, and GCB centroid at 0.85">'
+            '<rect width="290" height="74" rx="6" fill="#f7f4ea"/>'
+            '<line x1="28" y1="40" x2="262" y2="40" stroke="#9ab0a2" stroke-width="2"/>'
+            '<circle cx="52" cy="40" r="6" fill="#205841"/><text x="32" y="24" font-size="10" fill="#205841" font-weight="bold">Bag a · ABC (0.15)</text>'
+            '<circle cx="196" cy="40" r="6" fill="#b3472a"/><text x="150" y="62" font-size="10" fill="#b3472a" font-weight="bold">Test bag c (mean 0.70)</text>'
+            '<circle cx="238" cy="40" r="6" fill="#8a5a19"/><text x="186" y="24" font-size="10" fill="#8a5a19" font-weight="bold">Bag b · GCB (0.85)</text>'
+            "</svg>"
         )
         out = mini_table(
-            "Held-out score for bag c (score = distance_to_GCB − distance_to_ABC)",
-            ("Held-out bag", "Distance to ABC (0.15)", "Distance to GCB (0.85)", "Signed score", "Threshold = 0 call"),
-            (("c (mean 0.70)", "0.55", "0.15", "−0.400", "< 0 (closer to GCB centroid)"),),
+            "Held-out bag c classification (score = dist_GCB − dist_ABC)",
+            ("Held-out bag", "Dist to ABC (0.15)", "Dist to GCB (0.85)", "Signed score", "Call"),
+            (("Bag c (mean 0.70)", "0.55", "0.15", "−0.400", "Closer to GCB (score < 0)"),),
         )
         return inp, out
 
-    # --- Goal: subtype-ablations (Test spatial positions and model hierarchy) ---
+    # --- Goal: subtype-ablations (Test position & hierarchy) ---
     if filename == "compare_spatial_attention.py":
-        inp = mini_table(
-            "Single-change ablation: identical query, keys and values with 2D rotary positions off vs on",
-            ("Patch index", "Valid?", "Position (x, y)", "Key vector", "Value"),
+        inp = svg_swatches(
+            "2 valid patches + 1 masked pad slot with 2D rotary positions off vs on",
             (
-                ("Patch 0", "True (valid)", "(0, 0)", "[1, 0, 1, 0]", "0.200"),
-                ("Patch 1", "True (valid)", "(2, 1)", "[1, 0, 1, 0]", "0.800"),
-                ("Patch 2", "False (padded)", "(3, 1)", "[10, 10, 10, 10]", "100.0 (ignored by mask)"),
+                ("Patch 0 (0, 0)", "Value = 0.20 (valid)", "#d5e5dc", "#205841"),
+                ("Patch 1 (2, 1)", "Value = 0.80 (valid)", "#f7e7ba", "#8a5a19"),
+                ("Patch 2 (3, 1)", "Value = 100 (masked)", "#e2e8dc", "#7b8c80"),
             ),
         )
-        out = mini_table(
-            "Pooled attention output with 2D rotary position encoding off vs on",
-            ("Setting", "Attention weights on valid patches [0, 1]", "Pooled score", "Why it changed"),
+        out = svg_hbars(
+            "Pooled attention score on identical inputs (Positions False vs True)",
             (
-                ("Positions False", "[0.500, 0.500] (equal keys)", "0.500", "Identical unrotated keys weight 0.2 and 0.8 equally."),
-                ("Positions True", "[0.719, 0.281] (rotated by x, y)", "0.369", "Rotating Patch 1 at (2, 1) reduces its alignment with query."),
+                ("Positions False", 0.500, "0.500 (equal weights)", "#527c67"),
+                ("Positions True (RoPE)", 0.369, "0.369 (rotated keys)", "#205841"),
             ),
-            note="In the thesis comparison (Ch. 4, §4.6.3), adding 2D positions gave no clear subtype advantage at patch scale.",
+            max_val=0.6,
+            note="Thesis finding (Ch. 4, §4.6.3): adding 2D positions gave no clear subtype accuracy gain at patch scale.",
         )
         return inp, out
 
     if filename == "compare_flat_and_hierarchical_pooling.py":
         inp = (
-            '<svg viewBox="0 0 300 86" class="lab-diagram" role="img" aria-label="4 valid cells nested inside 2 valid patches and 1 empty patch">'
-            '<rect x="12" y="14" width="96" height="58" rx="4" fill="#e2e8dc" stroke="#205841"/>'
-            '<text x="18" y="29" font-size="10" fill="#1b3126" font-weight="bold">Patch 1 (3 cells)</text>'
-            '<text x="18" y="48" font-size="11" fill="#244035">[0], [0], [0]</text>'
-            '<text x="18" y="64" font-size="10" fill="#536052">Patch mean = 0.00</text>'
-            '<rect x="116" y="14" width="92" height="58" rx="4" fill="#e2e8dc" stroke="#205841"/>'
-            '<text x="122" y="29" font-size="10" fill="#1b3126" font-weight="bold">Patch 2 (1 cell)</text>'
-            '<text x="122" y="48" font-size="11" fill="#244035">[1], <tspan fill="#999">pad, pad</tspan></text>'
-            '<text x="122" y="64" font-size="10" fill="#536052">Patch mean = 1.00</text>'
-            '<rect x="216" y="14" width="74" height="58" rx="4" fill="#f0eee6" stroke="#9ab0a2" stroke-dasharray="3 3"/>'
-            '<text x="222" y="29" font-size="10" fill="#536052">Patch 3 (empty)</text>'
-            '<text x="222" y="52" font-size="10" fill="#b3472a">Excluded</text>'
+            '<svg viewBox="0 0 300 84" class="lab-diagram" role="img" aria-label="4 valid cells nested inside 2 valid patches and 1 empty patch">'
+            '<rect x="10" y="12" width="96" height="60" rx="4" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="16" y="27" font-size="10" fill="#1b3126" font-weight="bold">Patch 1 (3 cells)</text>'
+            '<text x="16" y="45" font-size="10.5" fill="#244035">[0], [0], [0]</text>'
+            '<text x="16" y="61" font-size="9.5" fill="#205841">Patch mean = 0.00</text>'
+            '<rect x="114" y="12" width="94" height="60" rx="4" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="120" y="27" font-size="10" fill="#1b3126" font-weight="bold">Patch 2 (1 cell)</text>'
+            '<text x="120" y="45" font-size="10.5" fill="#244035">[1], <tspan fill="#888">pad, pad</tspan></text>'
+            '<text x="120" y="61" font-size="9.5" fill="#8a5a19">Patch mean = 1.00</text>'
+            '<rect x="216" y="12" width="74" height="60" rx="4" fill="#f0eee6" stroke="#9ab0a2" stroke-dasharray="3 3"/>'
+            '<text x="222" y="27" font-size="10" fill="#536052">Patch 3 (0)</text>'
+            '<text x="222" y="50" font-size="9.5" fill="#b3472a">Excluded</text>'
             "</svg>"
         )
-        out = mini_table(
-            "Flat cell pooling vs hierarchical patch-then-core pooling",
-            ("Pooling order", "Calculation on the 4 valid cells", "Result", "What gets equal weight"),
+        out = svg_hbars(
+            "Flat cell average vs hierarchical patch-then-core average",
             (
-                ("Flat pooling", "(0 + 0 + 0 + 1) / 4 valid cells", "0.25", "Every cell gets 1/4 vote (Patch 1 has 3× the weight of Patch 2)."),
-                ("Hierarchical pooling", "(mean(0,0,0) + mean(1)) / 2 valid patches", "0.50", "Every valid patch gets 1/2 vote; padded slots (999) are masked out."),
+                ("Flat (4 cells equal)", 0.25, "0.25 ((0+0+0+1)/4)", "#8a5a19"),
+                ("Hierarchical (2 patches)", 0.50, "0.50 ((0.0+1.0)/2)", "#205841"),
             ),
+            max_val=0.6,
         )
         return inp, out
 
-    # --- Goal: validation (Check performance across folds) ---
+    # --- Goal: validation (Cross-fold ROC & recall) ---
     if filename == "summarise_validation.py":
-        inp = mini_table(
-            "Independent example predictions across 2 folds (2 cases per fold per task)",
-            ("Task", "Fold 0 cases (ref → pred)", "Fold 1 cases (ref → pred)"),
+        inp = svg_swatches(
+            "Two independent validation tasks across Fold 0 and Fold 1 (n=2/fold)",
             (
-                ("Grading (continuous score)", "n=2: (2 → 2.4), (1 → 0.9)", "n=2: (3 → 2.6), (1 → 1.2)"),
-                ("Subtyping (class label)", "n=2: (A → A), (B → B)", "n=2: (A → B), (B → B)"),
+                ("Grading (MAE ↓)", "Fold 0: 0.25 · Fold 1: 0.30", "#d5e5dc", "#205841"),
+                ("Subtype (Acc ↑)", "Fold 0: 100% · Fold 1: 50%", "#f7e7ba", "#8a5a19"),
             ),
         )
         out = (
-            mini_table(
-                "Grading validation summary (unit: grade-point mean absolute error, lower is better)",
-                ("Validation fold", "Cases (n)", "Individual errors", "Mean absolute error (MAE)"),
-                (("Fold 0", "2", "0.40, 0.10", "0.25 grade pts"), ("Fold 1", "2", "0.40, 0.20", "0.30 grade pts")),
-            )
-            + mini_table(
-                "Subtyping validation summary (unit: classification accuracy, higher is better)",
-                ("Validation fold", "Cases (n)", "Correct / Total", "Fold accuracy"),
-                (("Fold 0", "2", "2 / 2", "100%"), ("Fold 1", "2", "1 / 2", "50%")),
-                highlight_row=1,
-                note="Reporting each fold separately reveals the weaker 50% fold that a pooled 75% average would hide.",
+            svg_hbars(
+                "Fold-by-fold subtype accuracy (exposing the weaker 50% fold)",
+                (("Fold 0 (n=2)", 1.0, "100% (2/2)", "#205841"), ("Fold 1 (n=2)", 0.5, "50% (1/2) ⚠", "#b3472a")),
+                max_val=1.0,
+                note="Grading MAE was 0.25 (Fold 0) and 0.30 (Fold 1) grade points.",
             )
         )
         return inp, out
 
     if filename == "evaluate_subtype_roc.py":
         inp = mini_table(
-            "Four held-out subtype scores ranked highest-first (including tied score at 0.60)",
-            ("Rank", "Reference label", "Predicted ABC score", "Note"),
+            "Four ranked subtype predictions (including tied score at 0.60)",
+            ("Rank", "True label", "Predicted ABC score", "Note"),
             (
-                ("1", "ABC (positive)", "0.90", "Highest score"),
-                ("2–3 (tie)", "GCB (negative)", "0.60", "Tied with rank 2–3 positive"),
-                ("2–3 (tie)", "ABC (positive)", "0.60", "Evaluated together with tied negative"),
-                ("4", "GCB (negative)", "0.20", "Lowest score"),
+                ("1", "ABC (+)", "0.90", "Top score → TP=1, FP=0"),
+                ("2–3 (tie)", "GCB (−) & ABC (+)", "0.60 (tied)", "Both enter together → TP=2, FP=1"),
+                ("4", "GCB (−)", "0.20", "Lowest score → TP=2, FP=2"),
             ),
             highlight_row=1,
         )
-        out = mini_table(
-            "ROC curve operating points as threshold moves (AUC = 0.875)",
-            ("Score threshold", "True positive rate (ABC recall)", "False positive rate (GCB false alarms)", "What changed"),
-            (
-                ("> 0.90", "0.0 (0/2)", "0.0 (0/2)", "No cases called positive"),
-                ("≥ 0.90", "0.5 (1/2)", "0.0 (0/2)", "Top ABC case detected with 0 false alarms"),
-                ("≥ 0.60 (tie)", "1.0 (2/2)", "0.5 (1/2)", "Both tied 0.60 cases enter together (+1 TP, +1 FP)"),
-                ("≥ 0.20", "1.0 (2/2)", "1.0 (2/2)", "All 4 cases called positive"),
-            ),
-            highlight_row=2,
+        out = (
+            '<svg viewBox="0 0 280 120" class="lab-diagram" role="img" aria-label="ROC curve plotting FPR vs TPR with area 0.875 shaded">'
+            '<rect width="280" height="120" rx="6" fill="#f7f4ea"/>'
+            '<polygon points="44,96 44,54 114,16 184,16 184,96" fill="#d5e5dc" opacity="0.75"/>'
+            '<line x1="44" y1="96" x2="184" y2="16" stroke="#9ab0a2" stroke-dasharray="3 3"/>'
+            '<polyline points="44,96 44,56 114,16 184,16" fill="none" stroke="#205841" stroke-width="2.5"/>'
+            '<circle cx="44" cy="96" r="3.5" fill="#205841"/><circle cx="44" cy="56" r="3.5" fill="#205841"/>'
+            '<circle cx="114" cy="16" r="4" fill="#8a5a19"/><circle cx="184" cy="16" r="3.5" fill="#205841"/>'
+            '<text x="194" y="36" font-size="11" fill="#205841" font-weight="bold">AUC = 0.875</text>'
+            '<text x="194" y="54" font-size="9.5" fill="#8a5a19">Tie at 0.60 → (0.5, 1.0)</text>'
+            '<text x="64" y="112" font-size="9.5" fill="#244035">False Positive Rate (0 → 1) vs TPR</text>'
+            "</svg>"
         )
         return inp, out
 
     if filename == "compare_fold_class_recall.py":
-        inp = mini_table(
-            "Subtype predictions across 2 folds (1 ABC and 1 GCB example per fold)",
-            ("Fold", "ABC case (ref → pred)", "GCB case (ref → pred)"),
-            (("Fold 0", "ABC → ABC (correct)", "GCB → ABC (missed)"), ("Fold 1", "ABC → GCB (missed)", "GCB → GCB (correct)")),
+        inp = svg_swatches(
+            "Each fold contains 1 ABC case and 1 GCB case (n=1 per cell)",
+            (
+                ("Fold 0", "ABC: 1/1 · GCB: 0/1", "#d5e5dc", "#205841"),
+                ("Fold 1", "ABC: 0/1 · GCB: 1/1", "#f7e7ba", "#8a5a19"),
+            ),
         )
         out = mini_table(
-            "Class recall by fold with explicit numerator / denominator counts",
-            ("Validation fold", "Subtype class", "Correct / Total (n)", "Class recall"),
+            "Per-fold class recall with explicit correct/total denominators",
+            ("Fold", "Subtype class", "Correct / Total", "Recall"),
             (
                 ("Fold 0", "ABC", "1 / 1", "1.00 (100%)"),
                 ("Fold 0", "GCB", "0 / 1", "0.00 (0%)"),
                 ("Fold 1", "ABC", "0 / 1", "0.00 (0%)"),
                 ("Fold 1", "GCB", "1 / 1", "1.00 (100%)"),
             ),
-            note="Showing 1/1 and 0/1 beside each proportion makes clear that each cell in this toy example rests on a single case.",
+            note="Displaying 1/1 and 0/1 prevents single-case proportions from being misread as large-sample percentages.",
         )
         return inp, out
 
-    # --- Goal: cost (Compare accuracy, runtime and memory) ---
+    # --- Goal: cost (Accuracy vs compute cost) ---
     if filename == "estimate_representation_cost.py":
-        inp = stat_cards(
-            (("Regions", "500 patches"), ("Patch dimensions", "224 × 224 × 3 uint8"), ("Feature vector", "256 × float32 (4 B)")),
-            note="Raw uncompressed byte calculation: 224 × 224 × 3 = 150,528 B vs 256 × 4 = 1,024 B per region.",
-        )
-        out = mini_table(
-            "Estimated raw storage for 500 regions (uncompressed bytes, excluding container overhead)",
-            ("Representation", "Number format", "Bytes per region", "Total for 500 regions", "Relative footprint"),
+        inp = svg_swatches(
+            "500 regions represented as raw RGB pixels vs 256-D float32 vectors",
             (
-                ("RGB patches (224 × 224 × 3)", "uint8 (1 B / channel)", "150,528 B", "75,264,000 B (75.26 MB)", "100% (baseline)"),
-                ("Feature vectors (256 values)", "float32 (4 B / value)", "1,024 B", "512,000 B (0.51 MB)", "0.68% (147× smaller)"),
+                ("RGB patch", "224×224×3 = 150,528 B", "#f7e7ba", "#8a5a19"),
+                ("Feature vector", "256 × 4 B = 1,024 B", "#d5e5dc", "#205841"),
             ),
-            highlight_row=1,
+        )
+        out = svg_hbars(
+            "Raw storage for 500 regions (147× reduction with feature vectors)",
+            (
+                ("RGB patches", 75.26, "75.26 MB", "#8a5a19"),
+                ("Feature vectors", 0.51, "0.51 MB (147× smaller)", "#205841"),
+            ),
+            max_val=76.0,
         )
         return inp, out
 
     if filename == "rank_accuracy_compute_tradeoffs.py":
         inp = mini_table(
-            "Three candidate models measured on accuracy, runtime and peak memory",
-            ("Candidate", "Held-out accuracy (↑)", "Runtime per epoch (↓)", "Peak memory (↓)"),
-            (
-                ("wide", "0.93", "40 s", "900 MiB"),
-                ("small", "0.91", "21 s", "600 MiB"),
-                ("slow", "0.90", "53 s", "950 MiB"),
-            ),
+            "Three candidates compared on accuracy (↑), time (↓) and memory (↓)",
+            ("Candidate", "Accuracy (↑)", "Time / epoch (↓)", "Peak RAM (↓)"),
+            (("wide", "0.93", "40 s", "900 MiB"), ("small", "0.91", "21 s", "600 MiB"), ("slow", "0.90", "53 s", "950 MiB")),
             highlight_row=2,
         )
-        out = mini_table(
-            "Pareto frontier selection (surviving vs dominated candidates)",
-            ("Candidate", "Frontier status", "Reason"),
-            (
-                ("wide", "Keep (on frontier)", "Highest accuracy (0.93) among all candidates."),
-                ("small", "Keep (on frontier)", "Fastest (21 s) and lowest memory (600 MiB)."),
-                ("slow", "Drop (dominated)", "Beaten on all three criteria by both wide and small."),
-            ),
-            highlight_row=2,
+        out = (
+            '<svg viewBox="0 0 290 112" class="lab-diagram" role="img" aria-label="Pareto frontier plot showing small and wide undominated while slow is dominated">'
+            '<rect width="290" height="112" rx="6" fill="#f7f4ea"/>'
+            '<rect x="170" y="54" width="104" height="40" rx="3" fill="#f5d0c5" opacity="0.45"/>'
+            '<polyline points="68,48 144,24" fill="none" stroke="#205841" stroke-width="2" stroke-dasharray="4 2"/>'
+            '<circle cx="68" cy="48" r="7" fill="#205841"/><text x="78" y="52" font-size="10" fill="#205841" font-weight="bold">small (21 s, 0.91 ★)</text>'
+            '<circle cx="144" cy="24" r="9" fill="#205841"/><text x="156" y="28" font-size="10" fill="#205841" font-weight="bold">wide (40 s, 0.93 ★)</text>'
+            '<circle cx="204" cy="70" r="9.5" fill="#b3472a"/><text x="180" y="88" font-size="10" fill="#b3472a" font-weight="bold">slow (53 s, 0.90 ✕ dominated)</text>'
+            '<text x="14" y="106" font-size="9.5" fill="#536052">← Faster runtime (s) · Higher accuracy ↑ (bubble = RAM)</text>'
+            "</svg>"
         )
         return inp, out
 
     if filename == "audit_compute_measurements.py":
-        inp = mini_table(
-            "Expected (model, fold) run list vs recorded resource logs",
-            ("Expected run", "seconds_per_epoch", "peak_memory_mib"),
+        inp = svg_swatches(
+            "Expected run list checked for complete timing and memory logs",
             (
-                ("('baseline', 0)", "10.4 s", "Missing (None)"),
-                ("('compact', 0)", "No run record found", "No run record found"),
+                ("('baseline', 0) · ⚠", "10.4 s · RAM missing", "#f7e7ba", "#8a5a19"),
+                ("('compact', 0) · ✕", "No run record found", "#f5d0c5", "#b3472a"),
             ),
         )
         out = mini_table(
-            "Resource audit report distinguishing partial logs from absent runs",
-            ("Expected run", "Audit status", "Follow-up action"),
+            "Resource log audit distinguishing partial logs from missing runs",
+            ("Run key", "Flagged status", "Follow-up action"),
             (
-                ("('baseline', 0)", "missing or invalid peak_memory_mib", "Run exists (10.4 s recorded), but memory profiling was not logged."),
-                ("('compact', 0)", "run missing", "No record for compact fold 0; check job schedule or incomplete runs."),
+                ("('baseline', 0)", "missing or invalid peak_memory_mib", "Run finished (10.4 s), but memory profiling was not recorded."),
+                ("('compact', 0)", "run missing", "No record for compact fold 0; launch or collect the missing job."),
             ),
         )
         return inp, out
 
-    # --- Goal: heatmaps (Map scores back onto the image) ---
+    # --- Goal: heatmaps (Spatial score heatmaps) ---
     if filename == "map_patch_scores.py":
         inp = (
-            '<svg viewBox="0 0 260 92" class="lab-diagram" role="img" aria-label="4 by 3 grid with two overlapping scored rectangles">'
-            '<rect x="16" y="12" width="120" height="72" fill="#f0eee6" stroke="#9ab0a2"/>'
-            '<rect x="16" y="12" width="90" height="48" fill="#527c67" fill-opacity="0.28" stroke="#205841" stroke-width="2"/>'
-            '<rect x="76" y="36" width="60" height="48" fill="#b3472a" fill-opacity="0.28" stroke="#b3472a" stroke-width="2"/>'
-            '<text x="20" y="28" font-size="10" fill="#1b3126" font-weight="bold">Patch 1: (0,0)–(3,2) = 0.4</text>'
-            '<text x="52" y="78" font-size="10" fill="#b3472a" font-weight="bold">Patch 2: (2,1)–(4,3) = 0.8</text>'
-            '<text x="148" y="38" font-size="10" fill="#244035">Overlap at (x=2, y=1):</text>'
-            '<text x="148" y="54" font-size="10" fill="#205841" font-weight="bold">(0.4 + 0.8) / 2 = 0.6</text>'
+            '<svg viewBox="0 0 260 88" class="lab-diagram" role="img" aria-label="4 by 3 grid with two overlapping scored rectangles">'
+            '<rect x="16" y="10" width="120" height="68" fill="#f0eee6" stroke="#9ab0a2"/>'
+            '<rect x="16" y="10" width="90" height="45" fill="#527c67" fill-opacity="0.3" stroke="#205841" stroke-width="2"/>'
+            '<rect x="76" y="33" width="60" height="45" fill="#b3472a" fill-opacity="0.3" stroke="#b3472a" stroke-width="2"/>'
+            '<text x="20" y="26" font-size="9.5" fill="#1b3126" font-weight="bold">Patch 1 = 0.40</text>'
+            '<text x="78" y="72" font-size="9.5" fill="#b3472a" font-weight="bold">Patch 2 = 0.80</text>'
+            '<text x="148" y="36" font-size="10" fill="#244035">Overlap (2, 1):</text>'
+            '<text x="148" y="52" font-size="10.5" fill="#205841" font-weight="bold">Mean = 0.60</text>'
             "</svg>"
         )
         out = mini_table(
-            "4 × 3 score grid (overlapping cell averaged to 0.6; uncovered cells marked unscored)",
-            ("Grid row", "x = 0", "x = 1", "x = 2", "x = 3"),
+            "4 × 3 spatial score grid (overlap = 0.60; uncovered cells = NaN)",
+            ("Row", "x = 0", "x = 1", "x = 2", "x = 3"),
             (
-                ("y = 0", "0.40", "0.40", "0.40", "Unscored (NaN)"),
+                ("y = 0", "0.40", "0.40", "0.40", "NaN (unscored)"),
                 ("y = 1", "0.40", "0.40", "0.60 (overlap)", "0.80"),
-                ("y = 2", "Unscored (NaN)", "Unscored (NaN)", "0.80", "0.80"),
+                ("y = 2", "NaN (unscored)", "NaN (unscored)", "0.80", "0.80"),
             ),
             highlight_row=1,
         )
@@ -1489,235 +1631,233 @@ def leaf_visuals(filename, examples, demo, captured):
                 "Heatmap of the same overlapping patches, with unscored pixels hatched",
                 "Output (64 × 48 px): Overlap averages 0.30 and 0.80 to 0.55. Hatched pixels have no score.",
             )
-            + mini_table(
-                "Shared colour scale legend",
-                ("Region state", "Score value", "Display treatment"),
+            + svg_swatches(
+                "Shared heatmap colour legend",
                 (
-                    ("Lower-score patch", "0.30", "Warm yellow-orange tint"),
-                    ("Overlapping region", "0.55 (mean)", "Intermediate orange-red tint"),
-                    ("Higher-score patch", "0.80", "Deeper red tint"),
-                    ("Outside scored patches", "No score (NaN)", "Transparent / hatched (never shown as zero)"),
+                    ("0.30 · Lower", "Patch 1", "#f9d56e", "#8a5a19"),
+                    ("0.55 · Overlap", "Mean of 0.3 & 0.8", "#ef8a47", "#b3472a"),
+                    ("0.80 · Higher", "Patch 2", "#d94f3d", "#8a2be2"),
                 ),
             )
         )
         return inp, out
 
     if filename == "summarise_overlay_coverage.py":
-        inp = mini_table(
-            "2 × 2 score grid with 3 reference points in the region of interest",
-            ("Grid position", "In reference region?", "Available score"),
-            (
-                ("(row 0, col 0)", "Yes (Point 1)", "0.40"),
-                ("(row 0, col 1)", "Yes (Point 2)", "Unscored (NaN)"),
-                ("(row 1, col 0)", "Yes (Point 3)", "0.80"),
-                ("(row 1, col 1)", "No (outside ROI)", "0.50 (ignored)"),
-            ),
-            highlight_row=1,
+        inp = (
+            '<svg viewBox="0 0 260 80" class="lab-diagram" role="img" aria-label="2 by 2 grid with 3 ROI points: 0.40, unscored NaN, and 0.80">'
+            '<rect x="14" y="10" width="54" height="28" rx="3" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="20" y="28" font-size="10" fill="#1b3126" font-weight="bold">ROI: 0.40</text>'
+            '<rect x="72" y="10" width="54" height="28" rx="3" fill="#f5d0c5" stroke="#b3472a" stroke-width="1.5"/>'
+            '<text x="78" y="28" font-size="10" fill="#b3472a" font-weight="bold">ROI: NaN</text>'
+            '<rect x="14" y="42" width="54" height="28" rx="3" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="20" y="60" font-size="10" fill="#1b3126" font-weight="bold">ROI: 0.80</text>'
+            '<rect x="72" y="42" width="54" height="28" rx="3" fill="#e2e8dc" stroke="#9ab0a2" stroke-dasharray="2 2"/>'
+            '<text x="76" y="60" font-size="9.5" fill="#536052">Outside: 0.50</text>'
+            '<text x="140" y="34" font-size="10.5" fill="#205841" font-weight="bold">2 of 3 ROI points scored</text>'
+            '<text x="140" y="52" font-size="10" fill="#536052">Median = 0.60 · Range 0.4–0.8</text>'
+            "</svg>"
         )
         out = stat_cards(
-            (("ROI coverage", "2 of 3 points (66.7%)"), ("Median of scored", "0.60"), ("Scored range", "0.40 to 0.80"), ("Unscored in ROI", "1 point (NaN)")),
-            note="Summary statistics use the 2 scored points while explicitly reporting that 1 of the 3 ROI points had no score.",
+            (("ROI coverage", "66.7% (2/3)"), ("Median score", "0.60"), ("Score range", "0.40–0.80"), ("Unscored in ROI", "1 point (NaN)")),
         )
         return inp, out
 
-    # --- Goal: explain (Test what happens when regions are dimmed) ---
+    # --- Goal: explain (Dimming & perturbation) ---
     if filename == "explain_prediction.py":
-        inp = mini_table(
-            "Four input regions scored by a fixed two-class linear model",
-            ("Input / Weight", "Region 1", "Region 2", "Region 3", "Region 4"),
-            (
-                ("Region value", "0.80", "0.60", "0.90", "0.40"),
-                ("Class A weights", "+1.0", "−1.0", "+0.4", "−0.8"),
-                ("Class B weights", "−0.4", "+1.0", "−0.7", "+0.9"),
-            ),
+        inp = (
+            '<svg viewBox="0 0 290 88" class="lab-diagram" role="img" aria-label="4 input regions and opposing Class A and Class B brightness masks">'
+            '<text x="12" y="18" font-size="10.5" fill="#244035" font-weight="bold">Class A mask (1.00 = bright kept, 0.00 = dimmed):</text>'
+            '<rect x="12" y="24" width="56" height="20" rx="3" fill="#f9ecb2" stroke="#205841" stroke-width="1.5"/><text x="26" y="38" font-size="9.5" fill="#1b3126">R1: 1.0</text>'
+            '<rect x="74" y="24" width="56" height="20" rx="3" fill="#26382e"/><text x="88" y="38" font-size="9.5" fill="#fffae7">R2: 0.0</text>'
+            '<rect x="136" y="24" width="56" height="20" rx="3" fill="#f9ecb2" stroke="#205841" stroke-width="1.5"/><text x="150" y="38" font-size="9.5" fill="#1b3126">R3: 1.0</text>'
+            '<rect x="198" y="24" width="56" height="20" rx="3" fill="#26382e"/><text x="212" y="38" font-size="9.5" fill="#fffae7">R4: 0.0</text>'
+            '<text x="12" y="58" font-size="10.5" fill="#244035" font-weight="bold">Class B mask (keeps the opposite regions):</text>'
+            '<rect x="12" y="64" width="56" height="20" rx="3" fill="#26382e"/><text x="26" y="78" font-size="9.5" fill="#fffae7">R1: 0.0</text>'
+            '<rect x="74" y="64" width="56" height="20" rx="3" fill="#f9ecb2" stroke="#8a5a19" stroke-width="1.5"/><text x="88" y="78" font-size="9.5" fill="#1b3126">R2: 1.0</text>'
+            '<rect x="136" y="64" width="56" height="20" rx="3" fill="#26382e"/><text x="150" y="78" font-size="9.5" fill="#fffae7">R3: 0.0</text>'
+            '<rect x="198" y="64" width="56" height="20" rx="3" fill="#f9ecb2" stroke="#8a5a19" stroke-width="1.5"/><text x="212" y="78" font-size="9.5" fill="#1b3126">R4: 1.0</text>'
+            "</svg>"
         )
-        out = mini_table(
-            "Fitted class-specific brightness masks (1.00 = kept, 0.00 = dimmed)",
-            ("Target class", "Baseline score", "Masked score", "Region 1", "Region 2", "Region 3", "Region 4"),
+        out = svg_hbars(
+            "Class score before and after applying fitted dimming mask",
             (
-                ("Class A mask", "0.24", "1.16 (+0.92)", "1.00 (kept)", "0.00 (dimmed)", "1.00 (kept)", "0.00 (dimmed)"),
-                ("Class B mask", "0.01", "0.96 (+0.95)", "0.00 (dimmed)", "1.00 (kept)", "0.00 (dimmed)", "1.00 (kept)"),
+                ("Class A baseline", 0.24, "0.24", "#7b8c80"),
+                ("Class A masked", 1.16, "1.16 (+0.92)", "#205841"),
+                ("Class B baseline", 0.01, "0.01", "#7b8c80"),
+                ("Class B masked", 0.96, "0.96 (+0.95)", "#8a5a19"),
             ),
-            note="The two masks keep opposite regions to raise their respective class scores; compare against a uniform dimming control in test_mask_score_changes.py.",
+            max_val=1.2,
         )
         return inp, out
 
     if filename == "model_explanations.md":
-        inp = (
-            '<div class="lab-route-card"><p class="lab-card-note"><strong>Question to ask of any highlighted region:</strong> '
-            "Does dimming this region change the model score more than dimming the whole image by the same average amount—and does that sensitivity reflect biology, staining, or a cohort artefact?</p></div>"
+        inp = svg_swatches(
+            "Two-stage check for any highlighted tissue region",
+            (
+                ("1. Model check", "Targeted vs uniform control", "#d5e5dc", "#205841"),
+                ("2. Biology check", "Expert & assay validation", "#f7e7ba", "#8a5a19"),
+            ),
         )
         out = mini_table(
-            "What model masks establish vs what requires separate validation",
-            ("Question", "What the mask / perturbation shows", "What additional evidence is required"),
+            "What dimming masks establish vs what requires independent validation",
+            ("Question", "What the mask shows", "What separate evidence is required"),
             (
-                ("Model sensitivity", "Which regions raise or lower a specific class score when dimmed or removed.", "Compare against a uniform-dimming control at the same mean brightness."),
-                ("Biological meaning", "Highlights image regions the fitted network relied on in this cohort.", "Expert review, repeatable signal across cohorts, and orthogonal biological assays."),
+                ("Model sensitivity", "Which pixels raise/lower the network's score when dimmed.", "Compare against a uniform mask of equal mean brightness."),
+                ("Biological meaning", "Regions correlated with the label in this cohort.", "Pathologist review, multi-centre replication and wet-lab assays."),
             ),
         )
         return inp, out
 
     if filename == "test_mask_score_changes.py":
-        inp = mini_table(
-            "Targeted explanation mask vs uniform control (both have mean brightness = 0.80)",
-            ("Mask type", "Top-left (w=0.8)", "Top-right (w=0.1)", "Bottom-left (w=0.1)", "Bottom-right (w=0.0)", "Mean brightness"),
+        inp = svg_swatches(
+            "Targeted mask vs uniform control at identical 0.80 mean brightness",
             (
-                ("Input image", "0.90", "0.50", "0.50", "0.20", "—"),
-                ("Targeted spatial mask", "0.20 (dimmed)", "1.00", "1.00", "1.00", "0.80"),
-                ("Uniform control mask", "0.80", "0.80", "0.80", "0.80", "0.80"),
+                ("Baseline (1.00)", "Score = 0.820", "#e2e8dc", "#527c67"),
+                ("Uniform (0.80)", "All tiles × 0.80", "#f7e7ba", "#8a5a19"),
+                ("Targeted (0.80)", "Top-left dimmed to 0.20", "#f5d0c5", "#b3472a"),
             ),
-            highlight_row=1,
         )
-        out = mini_table(
-            "Score change against baseline (0.820) in one generated test",
-            ("Condition", "Mean mask brightness", "Model score", "Change from baseline (Δ)"),
+        out = svg_diverging_bars(
+            "Score drop from baseline (0.820) at equal 0.80 mean brightness",
             (
-                ("Unmasked baseline", "1.00", "0.820", "0.000"),
-                ("Uniform dimming control", "0.80", "0.656", "−0.164"),
-                ("Targeted spatial mask", "0.80", "0.244", "−0.576 (3.5× larger drop)"),
+                ("Uniform control", -0.164, "−0.164 (to 0.656)"),
+                ("Targeted mask", -0.576, "−0.576 (to 0.244 · 3.5× drop)"),
             ),
-            highlight_row=2,
+            scale=0.6,
         )
         return inp, out
 
     if filename == "compare_patch_perturbations.py":
-        inp = mini_table(
-            "Three-patch bag scored by mean pooling (baseline scores: Class 0 = 0.367, Class 1 = 0.533)",
-            ("Patch ID", "Class 0 feature", "Class 1 feature", "Dominant signal"),
+        inp = svg_swatches(
+            "3-patch bag where Patch 0 favours Class 1 and Patch 2 favours Class 0",
             (
-                ("Patch 0", "0.100", "0.900", "Strong Class 1"),
-                ("Patch 1", "0.200", "0.600", "Moderate Class 1"),
-                ("Patch 2", "0.800", "0.100", "Strong Class 0"),
+                ("Patch 0", "[0.1, 0.9] · Class 1", "#d5e5dc", "#205841"),
+                ("Patch 1", "[0.2, 0.6] · Class 1", "#e2e8dc", "#527c67"),
+                ("Patch 2", "[0.8, 0.1] · Class 0", "#f7e7ba", "#8a5a19"),
             ),
         )
         out = mini_table(
-            "Score changes (Δ vs baseline) when removing one patch vs repeating only that patch",
-            ("Patch ID", "Remove patch Δ (Class 0, Class 1)", "Repeat-only patch Δ (Class 0, Class 1)", "Interpretation"),
+            "Class score shifts (Δ vs baseline) under patch removal vs repetition",
+            ("Patch ID", "Remove patch Δ (Class 0, Class 1)", "Repeat-only Δ (Class 0, Class 1)", "Effect"),
             (
-                ("Patch 0", "[+0.133, −0.183]", "[−0.267, +0.367]", "Removing Patch 0 drops Class 1; repeating it boosts Class 1."),
-                ("Patch 1", "[+0.083, −0.033]", "[−0.167, +0.067]", "Small effect in the same Class 1 direction."),
-                ("Patch 2", "[−0.217, +0.217]", "[+0.433, −0.433]", "Removing Patch 2 drops Class 0; repeating it boosts Class 0."),
+                ("Patch 0", "[+0.133, −0.183]", "[−0.267, +0.367]", "Drives Class 1 score"),
+                ("Patch 1", "[+0.083, −0.033]", "[−0.167, +0.067]", "Moderate Class 1 contribution"),
+                ("Patch 2", "[−0.217, +0.217]", "[+0.433, −0.433]", "Drives Class 0 score"),
             ),
-            note="Positive Δ means the class score rose; negative Δ means the class score fell relative to the unperturbed 3-patch bag.",
         )
         return inp, out
 
-    # --- Goal: cluster-runs (Plan and resume experiment jobs) ---
+    # --- Goal: cluster-runs (Schedule & resume jobs) ---
     if filename == "build_cluster_run_manifest.py":
-        inp = stat_cards(
-            (("Configurations", "2 (baseline, max_pool)"), ("Validation folds", "2 (Fold 0, Fold 1)"), ("Random seeds", "2 (Seed 7, Seed 11)")),
-            note="2 configurations × 2 folds × 2 seeds = 8 deterministic jobs.",
+        inp = svg_swatches(
+            "Run grid expansion: 2 configs × 2 folds × 2 seeds = 8 jobs",
+            (
+                ("2 configs", "baseline, max_pool", "#d5e5dc", "#205841"),
+                ("2 folds", "Fold 0, Fold 1", "#e2e8dc", "#527c67"),
+                ("2 seeds", "Seed 7, Seed 11", "#f7e7ba", "#8a5a19"),
+            ),
         )
         out = mini_table(
-            "Expanded 8-job manifest with deterministic SHA-256 run IDs",
-            ("Job #", "run_id (16-hex SHA-256)", "configuration", "fold", "seed", "pool", "batch_size"),
+            "Deterministic 16-hex SHA-256 run IDs from canonical JSON specs",
+            ("Job #", "run_id", "configuration", "fold", "seed", "pool"),
             (
-                ("1", "55b2ba45f220d664", "baseline", "0", "7", "mean", "16"),
-                ("2", "9616e1407eb20cf1", "baseline", "0", "11", "mean", "16"),
-                ("3–4", "23ef391e… / 055a5ebb…", "baseline", "1", "7, 11", "mean", "16"),
-                ("5", "04a29607846ac864", "max_pool", "0", "7", "max", "16"),
-                ("6–8", "f2c8f509… / 59549bad… / 71b73014…", "max_pool", "0, 1", "11, 7, 11", "max", "16"),
+                ("1", "55b2ba45f220d664", "baseline", "0", "7", "mean"),
+                ("2", "9616e1407eb20cf1", "baseline", "0", "11", "mean"),
+                ("5", "04a29607846ac864", "max_pool", "0", "7", "max"),
+                ("6–8", "f2c8f509… / 59549bad… / 71b73014…", "max_pool", "0, 1", "11, 7, 11", "max"),
             ),
-            highlight_row=0,
         )
         return inp, out
 
     if filename == "resume_chunked_experiment.py":
         inp = (
-            '<svg viewBox="0 0 300 76" class="lab-diagram" role="img" aria-label="Three-step strip showing Chunk 1 committed, Chunk 2 interrupted, and resumption from Chunk 2">'
-            '<rect x="10" y="14" width="84" height="46" rx="4" fill="#e2e8dc" stroke="#205841" stroke-width="1.5"/>'
-            '<text x="16" y="32" font-size="10" fill="#1b3126" font-weight="bold">1. Chunk 2 → 4</text>'
-            '<text x="16" y="48" font-size="9" fill="#205841">Committed to disk</text>'
-            '<rect x="106" y="14" width="84" height="46" rx="4" fill="#f9ecb2" stroke="#b3472a" stroke-width="1.5"/>'
-            '<text x="112" y="32" font-size="10" fill="#b3472a" font-weight="bold">2. Chunk 3 fails</text>'
-            '<text x="112" y="48" font-size="9" fill="#536052">Uncommitted work dropped</text>'
-            '<rect x="202" y="14" width="88" height="46" rx="4" fill="#e2e8dc" stroke="#205841" stroke-width="1.5"/>'
-            '<text x="208" y="32" font-size="10" fill="#1b3126" font-weight="bold">3. Resume</text>'
-            '<text x="208" y="48" font-size="9" fill="#205841">Reuses [4], runs 3, 4</text>'
+            '<svg viewBox="0 0 300 76" class="lab-diagram" role="img" aria-label="Three-step strip showing Chunk 1 committed, Chunk 2 interrupted, and resumption">'
+            '<rect x="10" y="12" width="84" height="48" rx="4" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="16" y="30" font-size="10" fill="#1b3126" font-weight="bold">1. Chunk 2 → 4</text>'
+            '<text x="16" y="46" font-size="9" fill="#205841">✓ Committed</text>'
+            '<rect x="106" y="12" width="84" height="48" rx="4" fill="#f5d0c5" stroke="#b3472a" stroke-width="1.5"/>'
+            '<text x="112" y="30" font-size="10" fill="#b3472a" font-weight="bold">2. Chunk 3 fails</text>'
+            '<text x="112" y="46" font-size="9" fill="#536052">✕ Interrupted</text>'
+            '<rect x="202" y="12" width="88" height="48" rx="4" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="208" y="30" font-size="10" fill="#1b3126" font-weight="bold">3. Resume</text>'
+            '<text x="208" y="46" font-size="9" fill="#8a5a19">Reuses [4], runs 3, 4</text>'
             "</svg>"
         )
         out = mini_table(
-            "Chunk execution state across interruption and retry (plan = [2, 3, 4])",
-            ("Chunk input", "First attempt", "Saved in checkpoint.json", "Retry action", "Final result"),
+            "Checkpoint state across interruption and retry (chunks = [2, 3, 4])",
+            ("Chunk", "Run 1", "In checkpoint.json", "Run 2 (resumed)", "Final output"),
             (
-                ("Chunk 1 (x = 2)", "Computed 4", "Committed ([4])", "Reused from disk (skipped)", "4"),
-                ("Chunk 2 (x = 3)", "InterruptedError", "Not committed", "Recomputed on resume", "9"),
-                ("Chunk 3 (x = 4)", "Not reached", "Not committed", "Computed on resume", "16"),
+                ("x = 2", "Computed 4", "✓ Saved [4]", "Skipped (reused [4])", "4"),
+                ("x = 3", "InterruptedError", "Not committed", "Recomputed 3² = 9", "9"),
+                ("x = 4", "Not reached", "Not committed", "Computed 4² = 16", "16"),
             ),
-            highlight_row=0,
         )
         return inp, out
 
-    # --- Goal: run-results (Collect and check completed runs) ---
+    # --- Goal: run-results (Audit completed runs) ---
     if filename == "collect_fold_results.py":
-        inp = mini_table(
-            "Input result stream keyed by (configuration, fold, seed)",
-            ("Source CSV", "configuration", "fold", "seed", "metric"),
-            (("Stream 1", "baseline", "0", "11", "0.28"),),
+        inp = svg_swatches(
+            "Result CSV streams keyed by (configuration, fold, seed)",
+            (
+                ("('baseline', 0, 11)", "metric = 0.28 · ✓ Unique", "#d5e5dc", "#205841"),
+                ("Duplicate key", "Rejected before merge", "#f5d0c5", "#b3472a"),
+            ),
         )
         out = mini_table(
-            "Collected metrics table (with duplicate-key safeguard)",
-            ("Key (configuration, fold, seed)", "Collected metric", "Duplicate-key rule"),
+            "Collected run metrics with duplicate-key guard",
+            ("Key (configuration, fold, seed)", "Metric", "Validation rule"),
             (
-                ("('baseline', 0, 11)", "0.28", "Accepted (unique key)"),
-                ("Repeated ('baseline', 0, 11)", "Rejected", "Raises ValueError('Duplicate result') before aggregation"),
+                ("('baseline', 0, 11)", "0.28", "✓ Accepted into summary table"),
+                ("Repeated ('baseline', 0, 11)", "—", "✕ Raises ValueError('Duplicate result')"),
             ),
         )
         return inp, out
 
     if filename == "find_incomplete_runs.py":
-        inp = mini_table(
-            "Planned 3-run schedule vs observed completion states",
-            ("Planned job (config, fold, seed)", "Observed status in storage"),
+        inp = svg_swatches(
+            "Planned 3-job schedule audited against observed job states",
             (
-                ("('baseline', 0, 7)", "completed"),
-                ("('compact', 0, 7)", "missing metrics (started, no final score)"),
-                ("('compact', 1, 7)", "Not in status table"),
+                ("baseline (0, 7)", "✓ completed", "#d5e5dc", "#205841"),
+                ("compact (0, 7)", "⚠ missing metrics", "#f7e7ba", "#8a5a19"),
+                ("compact (1, 7)", "✕ missing run", "#f5d0c5", "#b3472a"),
             ),
         )
         out = mini_table(
-            "Incomplete runs flagged before building comparison tables",
-            ("Run key", "Flagged state", "Follow-up action"),
+            "Incomplete runs flagged before aggregation",
+            ("Run key", "State", "Action"),
             (
-                ("('compact', 0, 7)", "missing metrics", "Inspect job log/checkpoint; run started but failed before saving metrics."),
-                ("('compact', 1, 7)", "missing (no run record)", "Submit job from build_cluster_run_manifest.py schedule."),
+                ("('compact', 0, 7)", "⚠ missing metrics", "Job started but failed before writing final score; inspect log."),
+                ("('compact', 1, 7)", "✕ missing", "No run record found; submit job from manifest."),
             ),
         )
         return inp, out
 
-    # --- Goal: figures (Rebuild tables and figures from saved results) ---
+    # --- Goal: figures (Reproduce thesis figures) ---
     if filename == "build_grading_table.py":
-        inp = mini_table(
-            "Matched held-out predictions for sample a across two scales (fold 0)",
-            ("sample", "scale", "fold", "reference (grade pts)", "prediction (grade pts)", "|prediction − reference|"),
+        inp = svg_swatches(
+            "Matched sample a scored at Core (1.6) and Patch (2.2) vs Ref (2.0)",
             (
-                ("a", "core", "0", "2.0", "1.6", "0.400"),
-                ("a", "patch", "0", "2.0", "2.2", "0.200"),
+                ("Core prediction", "|1.6 − 2.0| = 0.400", "#f7e7ba", "#8a5a19"),
+                ("Patch prediction", "|2.2 − 2.0| = 0.200", "#d5e5dc", "#205841"),
             ),
         )
-        out = mini_table(
-            "Scale comparison summary (1 matched sample, unit: grade points)",
-            ("Image scale", "Matched samples (n)", "Mean absolute error (grade points)"),
-            (
-                ("core", "1", "0.400"),
-                ("patch", "1", "0.200"),
-            ),
-            highlight_row=1,
-            note="Single-sample illustration; see run_grading_example.py for the 12-case × 3-scale synthetic rerun.",
+        out = svg_hbars(
+            "Aggregated mean absolute error (grade points, n = 1 matched sample)",
+            (("Core scale", 0.400, "0.400 MAE", "#8a5a19"), ("Patch scale", 0.200, "0.200 MAE", "#205841")),
+            max_val=0.45,
         )
         return inp, out
 
     if filename == "render_grading_figure.py":
-        inp = mini_table(
-            "Built-in 3-scale summary passed to the SVG figure renderer",
-            ("Scale", "Sample count (n)", "Mean absolute error (grade points)"),
+        inp = svg_hbars(
+            "Input scale summaries passed to the SVG figure renderer (n = 6/scale)",
             (
-                ("Core", "n = 6", "0.350"),
-                ("Patch", "n = 6", "0.240 (lowest error)"),
-                ("Cell", "n = 6", "0.320"),
+                ("Core (n=6)", 0.350, "0.350 grade pts", "#8a5a19"),
+                ("Patch (n=6)", 0.240, "0.240 grade pts ★", "#205841"),
+                ("Cell (n=6)", 0.320, "0.320 grade pts", "#527c67"),
             ),
-            highlight_row=1,
-            note="A grade point is one step on the 0–3 ordinal staining scale; a shorter bar means predictions stayed closer to the reference grade. This summary chart shows point estimates without intervals.",
+            max_val=0.40,
+            note="Shorter bar = predictions stayed closer to the reference grade on the 0–3 scale.",
         )
         return inp, ""
 
@@ -1741,15 +1881,21 @@ def leaf_visuals(filename, examples, demo, captured):
             for scale in scales for ref, pred in [predictions[scale]]
         )
         inp = (
-            stat_cards((("Case", case["Case"]), ("Held-out fold", case["Validation fold"]),
-                        ("Assessor A", case["Assessor A"]), ("Assessor B", case["Assessor B"]),
-                        ("Mean reference", "2.500")),
-                       note="Trace line: Ratings (2, 3) → Reference 2.500 → Held-out Fold 1 prediction → Scale MAE bar in grading_figure.svg.")
+            svg_swatches(
+                "End-to-end trace for Case S02 (Fold 1 held-out evaluation)",
+                (
+                    ("Assessor A & B", "Grades 2 & 3", "#f7e7ba", "#8a5a19"),
+                    ("Reference mean", "2.500 grade pts", "#e2e8dc", "#527c67"),
+                    ("Held-out Fold 1", "3 scale predictions", "#d5e5dc", "#205841"),
+                ),
+            )
+            + stat_cards((("Case", case["Case"]), ("Held-out fold", case["Validation fold"]),
+                          ("Assessor A", case["Assessor A"]), ("Assessor B", case["Assessor B"])))
         )
         out = (
             f'<label class="lab-scale-picker">Image scale <select data-image-scale>{selector}</select></label>'
             f'<div aria-live="polite">{panels}</div>'
-            '<p class="lab-card-note">Case S02 is one of 12 synthetic cases (36 predictions across 3 scales) that feed the aggregate chart below.</p>'
+            '<p class="lab-card-note">Case S02 is 1 of 12 synthetic cases (36 predictions across 3 scales) feeding the chart below.</p>'
         )
         return inp, out
 
@@ -1761,112 +1907,106 @@ def leaf_visuals(filename, examples, demo, captured):
         examples_by_bin = ("0, 20, 42", "79", "115, 128", "209")
         for idx, row in enumerate(rows):
             low, high, count = row["lower_inclusive"], row["upper_exclusive"], int(row["cores"])
-            label = f"{low}+ patches" if high == "None" else f"{low} to {int(high) - 1} patches"
+            label = f"{low}+ patches" if high == "None" else f"{low}–{int(high) - 1} patches"
             rule = f"≥ {low}" if high == "None" else f"{low} ≤ count < {high}"
-            items.append((label, count, f"{count} cores"))
+            items.append((label, count, f"{count} cores", "#205841" if count >= 2 else "#8a5a19"))
             table_rows.append((label, rule, examples_by_bin[idx], str(count)))
         inp = mini_table(
-            "Seven per-core patch counts and half-open bin rules [lower, upper)",
-            ("Range label", "Boundary rule", "Source counts in bin", "Core count"),
+            "7 core patch counts grouped into half-open bins [lower, upper)",
+            ("Bin label", "Rule", "Counts in bin", "Cores"),
             table_rows,
-            note="Boundaries are lower-inclusive and upper-exclusive: a core with exactly 50 patches belongs in 50–99, not 0–49.",
+            note="Lower-inclusive, upper-exclusive: a core with 50 patches enters 50–99, not 0–49.",
         )
-        out = metric_bars("Number of cores in each patch-count range", items, max_value=highest)
+        out = svg_hbars("Cores in each patch-count range", items, max_val=highest)
         return inp, out
 
     if filename == "grading_figure.svg":
-        inp = mini_table(
-            "Scale summaries feeding grading_figure.svg (from 36 synthetic held-out predictions)",
-            ("Image scale", "Held-out cases (n)", "Mean absolute error (grade points)"),
+        inp = svg_hbars(
+            "3-scale MAE summaries feeding grading_figure.svg (12 cases/scale)",
             (
-                ("Core", "12", "0.464"),
-                ("Patch", "12", "0.216 (lowest error in synthetic rerun)"),
-                ("Cell", "12", "0.371"),
+                ("Core (n=12)", 0.464, "0.464 MAE", "#8a5a19"),
+                ("Patch (n=12)", 0.216, "0.216 MAE ★", "#205841"),
+                ("Cell (n=12)", 0.371, "0.371 MAE", "#527c67"),
             ),
-            highlight_row=1,
-            note="Generated by run_grading_example.py and rendered by render_grading_figure.py.",
+            max_val=0.50,
         )
         return inp, ""
 
     if filename == "verify_report_assets.py":
-        inp = mini_table(
-            "Expected report assets checked against the generated report directory",
-            ("Asset filename", "Role in report", "Present on disk?"),
+        inp = svg_swatches(
+            "Expected report assets checked on disk and fingerprinted",
             (
-                ("scores.csv", "Model score summary table (27 bytes)", "✓ Found"),
-                ("figure.pdf", "Rendered publication figure", "✕ Missing"),
+                ("scores.csv · ✓", "27 B · SHA-256 verified", "#d5e5dc", "#205841"),
+                ("figure.pdf · ✕", "Missing from report folder", "#f5d0c5", "#b3472a"),
             ),
-            highlight_row=1,
         )
         out = mini_table(
-            "Asset verification and SHA-256 fingerprint table",
-            ("Asset", "Status", "Size", "SHA-256 prefix (verifies exact file identity)"),
+            "Report asset audit and SHA-256 checksum verification",
+            ("Asset", "Status", "Bytes", "SHA-256 prefix"),
             (
-                ("scores.csv", "Verified", "27 B", "cf1e81825e6bf460… (full 64-char hash in raw output)"),
-                ("figure.pdf", "Missing", "—", "Flagged before publication so stale or absent files are caught"),
+                ("scores.csv", "✓ Verified", "27 B", "cf1e81825e6bf460…"),
+                ("figure.pdf", "✕ Missing", "—", "Flagged before publication"),
             ),
-            note="Any change to a single byte in scores.csv changes its SHA-256 fingerprint, letting a reviewer confirm the published table matches the run output.",
         )
         return inp, out
 
-    # --- Goal: limits (Record what needs another test) ---
+    # --- Goal: limits (Study limits & next tests) ---
     if filename == "research_limits.md":
-        inp = (
-            '<div class="lab-route-card"><p class="lab-card-note"><strong>1. What internal validation measured:</strong> '
-            "Agreement with supplied assessor grades and ABC/GCB subtype labels across validation folds drawn from the same main clinical cohort.</p>"
-            '<p class="lab-card-note"><strong>2. What an independent cohort would test:</strong> '
-            "Whether fixed models and preprocessing transfer across different laboratories, staining batches, scanners and patient populations.</p></div>"
+        inp = svg_swatches(
+            "Internal single-cohort evidence vs external multi-centre validation",
+            (
+                ("Internal (done)", "3-fold CV within 1 cohort", "#d5e5dc", "#205841"),
+                ("External (next)", "Independent labs & scanners", "#f7e7ba", "#8a5a19"),
+            ),
         )
         out = mini_table(
-            "How the study design qualifies each headline thesis result",
-            ("Result area", "Internal finding", "Scope limit & next test"),
+            "How the study design scopes each headline thesis finding",
+            ("Finding", "Internal result", "Next test required"),
             (
-                ("IHC grading", "Patch features reached 0.238 MAE vs averaged assessor grades (#agreement).", "Requires multi-centre cohorts and multiple annotators per slide (#grading-splits)."),
-                ("Subtype prediction", "UNI patch features reached 0.970 accuracy / 0.992 AUC (#validation).", "Pooled across 3 folds within one cohort; requires external scanner & lab validation."),
-                ("Spatial & explanation checks", "Positions gave no clear patch-scale gain (#subtype-ablations); masks show model sensitivity (#explain).", "Biological interpretation requires orthogonal experimental validation."),
+                ("IHC grading", "0.238 patch MAE vs rater mean (#agreement)", "Multi-centre slides scored by independent pathologists."),
+                ("Subtype prediction", "0.970 acc / 0.992 AUC with UNI (#validation)", "External cohorts across different staining labs & scanners."),
+                ("Spatial & masks", "No 2D RoPE gain (#subtype-ablations); masks show sensitivity (#explain)", "Whole-slide architecture tests and orthogonal wet-lab assays."),
             ),
         )
         return inp, out
 
-    # --- Goal: pcam-bags & pcam-benchmarks (Appendix: separate benchmark work) ---
+    # --- Goal: pcam-bags & pcam-benchmarks (Appendix: PCam benchmark) ---
     if filename == "build_benchmark_bags.py":
-        inp = mini_table(
-            "Split parameters for repeatable positive and negative benchmark bags",
-            ("Split", "Random seed", "Source patches (0 = neg, 1 = pos)", "Bags built", "Composition rule"),
+        inp = svg_swatches(
+            "Disjoint seeded bag manifests (4 bags/split, 4 patches/bag)",
             (
-                ("train", "seed = 11", "train-00..05 (neg), train-06..09 (pos)", "4 bags (2 pos, 2 neg)", "4 patches/bag; pos bag has 1 pos patch"),
-                ("test", "seed = 23", "test-00..05 (neg), test-06..09 (pos)", "4 bags (2 pos, 2 neg)", "4 patches/bag; pos bag has 1 pos patch"),
+                ("Train (seed 11)", "2 pos bags (1 pos patch), 2 neg", "#d5e5dc", "#205841"),
+                ("Test (seed 23)", "2 pos bags (1 pos patch), 2 neg", "#f7e7ba", "#8a5a19"),
             ),
         )
         out = mini_table(
-            "Generated bag manifests (positive instances highlighted in bold text)",
-            ("Split (seed)", "Bag #", "Bag label", "Positive count", "Patch IDs in bag"),
+            "Generated PCam-style bag manifests with preserved patch IDs",
+            ("Split (seed)", "Bag label", "Positive patches", "Example patch IDs in bag"),
             (
-                ("train (11)", "1", "1 (positive)", "1", "train-04, train-00, train-05, train-06 (pos)"),
-                ("train (11)", "2", "1 (positive)", "1", "train-04, train-06 (pos), train-00, train-03"),
-                ("train (11)", "3–4", "0 (negative)", "0", "All patches from negative pool train-00..05"),
-                ("test (23)", "1, 3", "1 (positive)", "1", "Contains test-09 (pos) or test-06 (pos)"),
-                ("test (23)", "2, 4", "0 (negative)", "0", "All patches from negative pool test-00..05"),
+                ("train (11)", "1 (positive)", "1 of 4", "train-04, train-00, train-05, train-06 (pos)"),
+                ("train (11)", "0 (negative)", "0 of 4", "train-01, train-05, train-04, train-00"),
+                ("test (23)", "1 (positive)", "1 of 4", "test-03, test-05, test-09 (pos), test-00"),
+                ("test (23)", "0 (negative)", "0 of 4", "test-04, test-01, test-05, test-02"),
             ),
         )
         return inp, out
 
     if filename == "compare_benchmark_encoders.py":
-        inp = stat_cards(
-            (("Fixed training split", "8 bags (4 pos, 4 neg · seed 11)"),
-             ("Fixed test split", "8 bags (4 pos, 4 neg · seed 23)"),
-             ("Pooling & classifier", "Max pooling + nearest centroid")),
-            note="Both encoders receive the exact same train and test bag manifests from build_benchmark_bags.py.",
-        )
-        out = mini_table(
-            "Encoder comparison on fixed benchmark bags (8 train bags, 8 test bags)",
-            ("Stand-in encoder", "Feature definition", "Test bags (n)", "Balanced accuracy (mean of class recalls)"),
+        inp = svg_swatches(
+            "Identical 8 train bags & 8 test bags fed to both encoders",
             (
-                ("signal encoder", "Patch label + N(0, 0.1) noise", "8 (4 pos, 4 neg)", "1.000 (100%)"),
-                ("noise encoder", "Pure N(0, 1) random noise", "8 (4 pos, 4 neg)", "0.625 (62.5%)"),
+                ("signal encoder", "Label + N(0, 0.1) noise", "#d5e5dc", "#205841"),
+                ("noise encoder", "Pure N(0, 1) noise", "#f5d0c5", "#b3472a"),
             ),
-            highlight_row=0,
-            note="Holding the bag manifests and pooling rule fixed verifies that the evaluation pipeline separates a known signal representation from random noise.",
+        )
+        out = svg_hbars(
+            "Held-out balanced accuracy on fixed benchmark bags (max pooling)",
+            (
+                ("signal encoder", 1.000, "1.000 (100%)", "#205841"),
+                ("noise encoder", 0.625, "0.625 (62.5%)", "#b3472a"),
+            ),
+            max_val=1.0,
+            note="Holding the bag manifests and max-pooling rule fixed cleanly separates the informative representation from random noise.",
         )
         return inp, out
 
