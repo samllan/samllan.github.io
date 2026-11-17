@@ -1,0 +1,55 @@
+<main class="lab draft" id="main">
+  <div class="lab-toolbar">
+    <a class="lab-back" href="../">← PhD logbook</a>
+    <h1>Research logbook</h1>
+    <button type="button" id="draft-preview" aria-pressed="false">Preview</button>
+  </div>
+  <div class="lab-layout">
+    <aside class="lab-goals" aria-label="Research goals">
+      <label for="draft-title">Project name</label>
+      <input id="draft-title" placeholder="Name your project" maxlength="160">
+      <div class="draft-goal-heading"><h2>Goals</h2><button type="button" id="draft-add-goal">Add goal</button></div>
+      <nav id="draft-goals" aria-label="Goals and entries"></nav>
+    </aside>
+    <div class="lab-content">
+      <div class="lab-experiment draft-entry">
+        <section id="draft-editor" aria-labelledby="draft-entry-heading">
+          <div class="draft-intro">
+            <h2 id="draft-entry-heading">Research entry</h2>
+            <p>Start with a question. Come back to add what you did and what happened.</p>
+          </div>
+          <form id="draft-form">
+            <label for="draft-goal">Goal</label>
+            <input id="draft-goal" name="goal" placeholder="What bigger question does this contribute to?">
+            <label for="draft-entry-title">Entry title</label>
+            <input id="draft-entry-title" name="title" placeholder="Give this step a short name">
+            <label for="draft-question">Question</label>
+            <textarea id="draft-question" name="question" rows="2" placeholder="What am I trying to find out?"></textarea>
+            <label for="draft-method">What I did</label>
+            <textarea id="draft-method" name="method" rows="3" placeholder="What did I start with, and what did I try?"></textarea>
+            <label for="draft-result">Result and next step</label>
+            <textarea id="draft-result" name="result" rows="3" placeholder="What happened? What will I try or decide next?"></textarea>
+            <label for="draft-evidence">Evidence <span>(optional)</span></label>
+            <input id="draft-evidence" name="evidence" placeholder="Link, file name or reference">
+            <div id="draft-move-row" hidden>
+              <label for="draft-move">Move to another goal</label>
+              <select id="draft-move"></select>
+            </div>
+            <button type="button" id="draft-delete">Delete entry</button>
+          </form>
+        </section>
+        <section id="draft-reading" aria-label="Entry preview" hidden></section>
+        <div class="draft-files">
+          <p id="draft-status" role="status"></p>
+          <div class="draft-actions">
+            <button type="button" id="draft-new">New logbook</button>
+            <button type="button" id="draft-open">Open draft</button>
+            <button type="button" id="draft-save">Save draft</button>
+            <button type="button" id="draft-export">Download readable copy</button>
+            <input hidden id="draft-file" type="file" accept=".json,application/json">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

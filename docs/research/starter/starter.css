@@ -1,0 +1,35 @@
+.draft #draft-preview { margin-left: auto; }
+.draft .lab-layout { min-height: calc(100dvh - 58px); }
+.draft label { display: block; margin-bottom: 4px; color: #294337; font-weight: 650; }
+.draft label span { color: #536052; font-weight: 400; }
+.draft input, .draft textarea, .draft select {
+  display: block; box-sizing: border-box; width: 100%; padding: 8px 10px;
+  border: 1px solid #b8c7bb; border-radius: 5px; background: var(--lab-surface);
+  color: #23372c; font: inherit; line-height: 1.45;
+}
+.draft textarea { resize: vertical; }
+.draft input:focus-visible, .draft textarea:focus-visible, .draft select:focus-visible { outline: 2px solid #52856d; outline-offset: 2px; }
+.draft .draft-goal-heading { display: flex; gap: 10px; align-items: center; justify-content: space-between; margin: 17px 0 9px; }
+.draft .draft-goal-heading h2 { margin: 0; color: #294337; font-size: 16px; }
+.draft .draft-group { padding: 9px 0; border-top: 1px solid var(--lab-rule); }
+.draft .draft-group summary { cursor: pointer; color: #315744; font-weight: 650; overflow-wrap: anywhere;  }
+.draft .draft-group ul { margin: 6px 0; }
+.draft .draft-entry-link { display: block; width: 100%; margin: 2px 0; text-align: left; overflow-wrap: anywhere; }
+.draft .draft-entry-link[aria-current] { background: #dce8dc; border-color: #a9c1ac; }
+.draft .draft-group > button { margin-left: 0; }
+.draft .draft-entry { max-width: 710px; }
+.draft .draft-intro { margin-bottom: 18px; }
+.draft .draft-intro h2, .draft #draft-reading h2 { margin: 0; font-size: clamp(24px, 4vw, 37px); line-height: 1.24; }
+.draft .draft-intro p { margin: 6px 0 0; color: #536052; }
+.draft #draft-form input, .draft #draft-form textarea, .draft #draft-form select { margin-bottom: 13px; }
+.draft .draft-files { border-top: 1px solid var(--lab-rule); margin-top: 18px; padding-top: 10px; }
+.draft .draft-files p { font-size: 13px; color: #536052; margin: 0 0 8px; }
+.draft .draft-actions { display: flex; flex-wrap: wrap; gap: 6px 8px; }
+.draft #draft-reading section { margin-top: 14px; }
+.draft #draft-reading h3 { margin: 0; font-size: 16px; color: #274034; }
+.draft #draft-reading p { margin: 4px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (max-width: 700px) {
+  .draft .lab-toolbar { padding-block: 9px; }
+  .draft .lab-goals { padding: 11px 16px; }
+  .draft #draft-goals { max-height: 210px; overflow: auto; }
+}

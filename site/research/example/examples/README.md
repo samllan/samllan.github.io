@@ -1,5 +1,9 @@
 # Reuse this logbook
 
+[Start a blank logbook](../../starter/) in your browser. Record your question, what you did, and the result and next step. The editor saves a draft in your browser. Save a draft file to bring it back later, or download a readable copy to share.
+
+## Build a site from files
+
 Copy the example project folder to a new name inside site/research. Set the title, description, back link and source link in project.json. Leave the shared page, CSS and JavaScript in place.
 
 - Add a question or goal to goals.json. Give it a stable ID and a single sentence about the question.

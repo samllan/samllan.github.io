@@ -72,8 +72,7 @@ def export(research):
     leaf_details = load_leaf_details(research)
     titles = {goal["id"]: goal["title"] for group in groups for goal in group["goals"]}
     parts = ["# Text Review Map", f"[The PhD logbook]({BASE}) · Snapshot of the published logbook", "## The PhD logbook"]
-    template = (research / "logbook.html").read_text(encoding="utf-8")
-    parts.append(unescape(re.search(r'<p class="lab-date-note">([^<]+)', template)[1]))
+    parts.append("Dates refer to saved research versions or the thesis. The scripts are runnable adaptations using generated data.")
     appendix = []
     names = {f"{goal['id']}/{file[0]}": leaf_details.get(file[0], {}).get("title", file[0])
              for group in groups for goal in group["goals"] for file in goal["files"]}

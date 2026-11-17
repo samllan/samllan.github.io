@@ -1,0 +1,17 @@
+{
+  "file": "README.md",
+  "questions_file": "research_questions.md",
+  "title": "Run the grading example",
+  "description": "The example runs on generated data and saves the splits, predictions and chart. Run these commands from the examples folder with Python 3.9 or later.",
+  "command": "python -m pip install numpy pillow\npython run_grading_example.py --output grading-demo",
+  "links": [
+    [
+      "Full setup notes",
+      "examples/README.md"
+    ],
+    [
+      "See the worked example",
+      "#figures/run_grading_example.py"
+    ]
+  ]
+}

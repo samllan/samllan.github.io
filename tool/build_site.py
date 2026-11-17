@@ -232,6 +232,20 @@ for name in ('logbook.css', 'logbook.js'):
     f'<link rel="stylesheet" href="logbook.css?v={versions["logbook.css"]}">',
     site_chrome=False,
 ), encoding='utf-8')
+starter = research / 'starter'
+public_starter = public_research / 'starter'
+public_starter.mkdir(parents=True, exist_ok=True)
+for name in ('starter.css', 'starter.js'):
+    shutil.copyfile(starter / name, public_starter / name)
+(public_starter / 'index.html').write_text(document(
+    'Research logbook',
+    'Start a blank research logbook, record results and download a shareable copy.',
+    (starter / 'starter.html').read_text(encoding='utf-8'), '../../',
+    '<script src="starter.js" defer></script>',
+    f'<link rel="stylesheet" href="../logbook.css?v={versions["logbook.css"]}">'
+    '<link rel="stylesheet" href="starter.css">',
+    site_chrome=False,
+), encoding='utf-8')
 for settings_path in sorted(research.glob('*/project.json')):
     project = settings_path.parent
     settings = json.loads(settings_path.read_text(encoding='utf-8'))
