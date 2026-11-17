@@ -341,7 +341,9 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, conte
     context_open = " open" if key == "question" else ""
     story = (f'<details class="lab-detail"{context_open}><summary>Research goal and evidence</summary>{context}</details>'
              if context else "")
-    source_action = "View source" if filename.endswith(".py") else "Open original file"
+    source_action = "View script" if filename.endswith(".py") else "Open file"
+    source_tag = "Script" if filename.endswith(".py") else "File"
+    role = details.get("role", date_label(date))
     experiment = escape(target, quote=True)
     kicker = breadcrumb_markup([*ancestors, (key, goal["title"])])
     markup = f"""<article class="lab-experiment" id="{experiment}" data-experiment="{escape(filename, quote=True)}">
@@ -360,6 +362,12 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, conte
     </form>
     <small class="lab-framing-status" role="status"></small>
   </section>
+  <a class="lab-script-banner" data-preview href="{path}">
+    <span class="lab-script-tag">{source_tag}</span>
+    <code>{escape(filename)}</code>
+    <span class="lab-script-meta">{escape(role)} · {escape(date_label(date))}</span>
+    <span class="lab-script-cta">{source_action} ↗</span>
+  </a>
   <div class="lab-io">
     <section class="lab-io-card lab-input"><h3>Input</h3>
       {input_text}{input_visual}{upstream}
@@ -371,9 +379,6 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, conte
   <section class="lab-experiment-notes">
     <h3>What this step did</h3>
     {method_html}<p>{escape(outcome)}</p>
-    <div class="lab-next">
-      <a data-preview href="{path}">{source_action} ↗</a>
-    </div>
     {extra}{story}
   </section>
 </article>"""

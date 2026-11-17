@@ -137,7 +137,26 @@
 .lab-inline-files small { color: #536052; }
 .lab-step-sub { color: #536052; font-weight: 500; font-size: 12px; }
 .lab-framing, .lab-experiment-notes { max-width: 76ch; }
-.lab-framing { border-block: 1px solid var(--lab-rule); padding: 12px 0; margin-bottom: 23px; }
+.lab-framing { border-block: 1px solid var(--lab-rule); padding: 12px 0; margin-bottom: 14px; }
+.lab-script-banner {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px;
+  margin: 0 0 14px; padding: 10px 16px;
+  border: 1px solid #b8c9bc; border-left: 4px solid var(--lab-green); border-radius: 7px;
+  background: #e6efe6; color: #1f3a2c; text-decoration: none;
+  transition: background .12s ease, border-color .12s ease;
+}
+.lab-script-banner:hover { background: #dbe8dc; border-color: #8fa996; border-left-color: #204633; }
+.lab-script-tag {
+  padding: 2px 8px; border-radius: 4px; background: var(--lab-green); color: #fffdf7;
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+}
+.lab-script-banner code { font: 600 13.5px 'Cascadia Code', Consolas, monospace; color: #193325; }
+.lab-script-meta { font-size: 13px; color: #485b4e; }
+.lab-script-cta {
+  margin-left: auto; padding: 4px 10px; border-radius: 4px;
+  background: var(--lab-surface); border: 1px solid #b3c4b7;
+  font-size: 12.5px; font-weight: 650; color: var(--lab-green);
+}
 .lab-framing-head, .lab-io-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .lab-framing h3, .lab-io h3, .lab-experiment-notes h3 {
   margin: 0; font-weight: 650; font-size: 16px; color: #274034;
