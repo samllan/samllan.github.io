@@ -6,18 +6,54 @@ const cropDemo = document.querySelector('.lab-demo');
 let currentGoal;
 let cropReady = false;
 
+function setBranch(button, open) {
+  button.setAttribute('aria-expanded', String(open));
+  document.getElementById(button.getAttribute('aria-controls')).hidden = !open;
+}
+
+function revealNavigation(link) {
+  if (!link) return;
+  for (let item = link.parentElement; item; item = item.parentElement) {
+    if (item.matches('details.lab-group')) item.open = true;
+    if (item.matches('ul.lab-branch')) {
+      setBranch(item.parentElement.querySelector(':scope > .lab-branch-toggle'), true);
+    }
+  }
+  const button = link.parentElement.querySelector(':scope > .lab-branch-toggle');
+  if (button) setBranch(button, true);
+}
+
 function selectGoal() {
-  const active = document.getElementById(location.hash.slice(1));
+  const [id, encodedFile] = location.hash.slice(1).split('/');
+  const active = document.getElementById(id);
   const goal = goals.includes(active) ? active : goals[0];
-  if (goal === currentGoal) return;
-  currentGoal = goal;
-  goals.forEach(section => { section.hidden = section !== goal; });
-  goalLinks.forEach(link => {
-    if (link.hash === '#' + goal.id) link.setAttribute('aria-current', 'location');
-    else link.removeAttribute('aria-current');
-  });
-  if (!goal.querySelector('[data-selected]')) selectRow(goal.querySelector('.lab-row-file'));
-  content.scrollTop = 0;
+  const changed = goal !== currentGoal;
+  const wasOpen = Boolean(currentGoal);
+  if (changed) {
+    currentGoal = goal;
+    goals.forEach(section => { section.hidden = section !== goal; });
+    goalLinks.forEach(link => {
+      if (link.hash === '#' + goal.id) {
+        link.setAttribute('aria-current', 'location');
+        revealNavigation(link);
+      } else link.removeAttribute('aria-current');
+    });
+    content.scrollTop = 0;
+    if (wasOpen && matchMedia('(max-width: 700px)').matches) {
+      goal.scrollIntoView({ block: 'start', behavior: 'instant' });
+    }
+  }
+  let filename = '';
+  try { filename = decodeURIComponent(encodedFile || ''); } catch { /* Ignore a malformed bookmark. */ }
+  const links = [...goal.querySelectorAll('.lab-row-file')];
+  const selected = links.find(link => link.textContent === filename);
+  const files = goal.querySelector('.lab-files-panel');
+  if (selected) {
+    files.open = true;
+    selectRow(selected, !changed);
+  } else if (!goal.querySelector('[data-selected]') && links.length) {
+    selectRow(links.find(link => link.textContent === files.dataset.defaultFile) || links[0]);
+  }
 }
 
 function selectRow(link, reveal = false) {
@@ -42,9 +78,10 @@ function selectRow(link, reveal = false) {
       : filename.endsWith('.md') ? 'Research notes' : 'Synthetic example';
     panel.querySelector('.lab-output-title').textContent = filename;
     panel.querySelector('[data-preview]').href = link.href;
+    panel.querySelector('.lab-share-link').href = '#' + goal.id + '/' + encodeURIComponent(filename);
     panel.hidden = false;
   }
-  if (goal.id === 'crop') {
+  if (cropDemo && goal.id === 'crop') {
     cropDemo.hidden = !cropReady || filename !== 'prepare_image_regions.py';
   }
   if (reveal) panel.querySelector('.lab-output-head').scrollIntoView({ block: 'nearest' });
@@ -68,6 +105,11 @@ function setupSort(goal) {
 
 logbook.classList.add('enhanced');
 goals.forEach(setupSort);
+logbook.querySelectorAll('.lab-branch-toggle').forEach(button => {
+  button.hidden = false;
+  setBranch(button, false);
+  button.addEventListener('click', () => setBranch(button, button.getAttribute('aria-expanded') !== 'true'));
+});
 window.addEventListener('hashchange', selectGoal);
 
 const dialog = document.querySelector('#file-preview');
@@ -144,7 +186,8 @@ logbook.addEventListener('click', event => {
   } else if (link?.classList.contains('lab-script')) {
     event.preventDefault();
     const goal = document.getElementById(link.dataset.openGoal);
-    if (location.hash !== '#' + goal.id) location.hash = goal.id;
+    const target = '#' + goal.id + '/' + encodeURIComponent(link.textContent);
+    if (location.hash !== target) location.hash = target;
     selectGoal();
     const rowLink = [...goal.querySelectorAll('.lab-row-file')].find(item => item.href === link.href);
     if (rowLink) selectRow(rowLink, true);
@@ -159,99 +202,102 @@ logbook.addEventListener('click', event => {
 
 dialog.addEventListener('close', () => previewRequest?.abort());
 
-const scene = document.querySelector('#crop-image');
-const preview = document.querySelector('#crop-preview');
-const undo = document.querySelector('#crop-undo');
-const download = document.querySelector('#crop-download');
-const status = document.querySelector('#crop-status');
-const sceneContext = scene.getContext('2d');
-const previewContext = preview.getContext('2d');
-const marks = [];
-const size = preview.width;
-const cursor = { x: 106, y: 96 };
-const source = new Image();
+function setupCropDemo() {
+  const scene = document.querySelector('#crop-image');
+  const preview = document.querySelector('#crop-preview');
+  const undo = document.querySelector('#crop-undo');
+  const download = document.querySelector('#crop-download');
+  const status = document.querySelector('#crop-status');
+  const sceneContext = scene.getContext('2d');
+  const previewContext = preview.getContext('2d');
+  const marks = [];
+  const size = preview.width;
+  const cursor = { x: 106, y: 96 };
+  const source = new Image();
 
-function cropPosition({ x, y }) {
-  return [Math.min(Math.max(x - size / 2, 0), scene.width - size),
-    Math.min(Math.max(y - size / 2, 0), scene.height - size)];
-}
+  function cropPosition({ x, y }) {
+    return [Math.min(Math.max(x - size / 2, 0), scene.width - size),
+      Math.min(Math.max(y - size / 2, 0), scene.height - size)];
+  }
 
-function drawScene() {
-  sceneContext.drawImage(source, 0, 0);
-  sceneContext.lineWidth = 2;
-  sceneContext.font = 'bold 13px system-ui';
-  marks.forEach((mark, index) => {
-    const [left, top] = cropPosition(mark);
-    sceneContext.strokeStyle = '#f9ecb2';
-    sceneContext.strokeRect(left, top, size, size);
-    sceneContext.fillStyle = '#1b3126';
-    sceneContext.fillRect(left, top, 29, 21);
-    sceneContext.fillStyle = '#fffae7';
-    sceneContext.fillText(String(index + 1).padStart(2, '0'), left + 6, top + 15);
-  });
-  sceneContext.strokeStyle = '#fff9d4';
-  sceneContext.beginPath();
-  sceneContext.moveTo(cursor.x - 7, cursor.y);
-  sceneContext.lineTo(cursor.x + 7, cursor.y);
-  sceneContext.moveTo(cursor.x, cursor.y - 7);
-  sceneContext.lineTo(cursor.x, cursor.y + 7);
-  sceneContext.stroke();
-}
+  function drawScene() {
+    sceneContext.drawImage(source, 0, 0);
+    sceneContext.lineWidth = 2;
+    sceneContext.font = 'bold 13px system-ui';
+    marks.forEach((mark, index) => {
+      const [left, top] = cropPosition(mark);
+      sceneContext.strokeStyle = '#f9ecb2';
+      sceneContext.strokeRect(left, top, size, size);
+      sceneContext.fillStyle = '#1b3126';
+      sceneContext.fillRect(left, top, 29, 21);
+      sceneContext.fillStyle = '#fffae7';
+      sceneContext.fillText(String(index + 1).padStart(2, '0'), left + 6, top + 15);
+    });
+    sceneContext.strokeStyle = '#fff9d4';
+    sceneContext.beginPath();
+    sceneContext.moveTo(cursor.x - 7, cursor.y);
+    sceneContext.lineTo(cursor.x + 7, cursor.y);
+    sceneContext.moveTo(cursor.x, cursor.y - 7);
+    sceneContext.lineTo(cursor.x, cursor.y + 7);
+    sceneContext.stroke();
+  }
 
-function updateCrop() {
-  drawScene();
-  previewContext.clearRect(0, 0, size, size);
-  const count = marks.length;
-  if (count) previewContext.drawImage(source, ...cropPosition(marks[count - 1]), size, size, 0, 0, size, size);
-  status.textContent = count ? `${count} crop${count === 1 ? '' : 's'} marked` : 'No crops marked';
-  undo.disabled = download.disabled = count === 0;
-}
-
-function keepInImage(x, y) {
-  cursor.x = Math.max(0, Math.min(scene.width - 1, x));
-  cursor.y = Math.max(0, Math.min(scene.height - 1, y));
-}
-
-scene.addEventListener('click', event => {
-  const box = scene.getBoundingClientRect();
-  keepInImage(Math.floor((event.clientX - box.left) * scene.width / box.width),
-    Math.floor((event.clientY - box.top) * scene.height / box.height));
-  marks.push({ ...cursor });
-  updateCrop();
-});
-
-scene.addEventListener('keydown', event => {
-  const step = event.shiftKey ? 1 : 12;
-  const moves = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
-  if (moves[event.key]) {
-    event.preventDefault();
-    const [dx, dy] = moves[event.key];
-    keepInImage(cursor.x + dx, cursor.y + dy);
+  function updateCrop() {
     drawScene();
-  } else if (event.key === 'Enter' || event.key === ' ') {
-    event.preventDefault();
+    previewContext.clearRect(0, 0, size, size);
+    const count = marks.length;
+    if (count) previewContext.drawImage(source, ...cropPosition(marks[count - 1]), size, size, 0, 0, size, size);
+    status.textContent = count ? `${count} crop${count === 1 ? '' : 's'} marked` : 'No crops marked';
+    undo.disabled = download.disabled = count === 0;
+  }
+
+  function keepInImage(x, y) {
+    cursor.x = Math.max(0, Math.min(scene.width - 1, x));
+    cursor.y = Math.max(0, Math.min(scene.height - 1, y));
+  }
+
+  scene.addEventListener('click', event => {
+    const box = scene.getBoundingClientRect();
+    keepInImage(Math.floor((event.clientX - box.left) * scene.width / box.width),
+      Math.floor((event.clientY - box.top) * scene.height / box.height));
     marks.push({ ...cursor });
     updateCrop();
-  }
-});
+  });
 
-undo.addEventListener('click', () => { marks.pop(); updateCrop(); });
-download.addEventListener('click', () => {
-  const rows = marks.map(({ x, y }, index) => `${String(index + 1).padStart(2, '0')},${x},${y}`);
-  const url = URL.createObjectURL(new Blob([['label,x,y', ...rows].join('\n') + '\n'], { type: 'text/csv' }));
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'clicks.csv';
-  link.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-});
+  scene.addEventListener('keydown', event => {
+    const step = event.shiftKey ? 1 : 12;
+    const moves = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+    if (moves[event.key]) {
+      event.preventDefault();
+      const [dx, dy] = moves[event.key];
+      keepInImage(cursor.x + dx, cursor.y + dy);
+      drawScene();
+    } else if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      marks.push({ ...cursor });
+      updateCrop();
+    }
+  });
 
-source.addEventListener('load', () => {
-  cropReady = true;
-  const selected = cropDemo.closest('[data-goal]').querySelector('[data-selected] code');
-  cropDemo.hidden = selected?.textContent !== 'prepare_image_regions.py';
-  updateCrop();
-});
-source.src = 'examples/example_grid.png';
+  undo.addEventListener('click', () => { marks.pop(); updateCrop(); });
+  download.addEventListener('click', () => {
+    const rows = marks.map(({ x, y }, index) => `${String(index + 1).padStart(2, '0')},${x},${y}`);
+    const url = URL.createObjectURL(new Blob([['label,x,y', ...rows].join('\n') + '\n'], { type: 'text/csv' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'clicks.csv';
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
 
+  source.addEventListener('load', () => {
+    cropReady = true;
+    const selected = cropDemo.closest('[data-goal]').querySelector('[data-selected] code');
+    cropDemo.hidden = selected?.textContent !== 'prepare_image_regions.py';
+    updateCrop();
+  });
+  source.src = 'examples/example_grid.png';
+}
+
+if (cropDemo) setupCropDemo();
 selectGoal();

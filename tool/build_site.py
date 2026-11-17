@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 from html import escape
+import json
 from pathlib import Path
 import shutil
 
@@ -230,4 +231,17 @@ for name in ('logbook.css', 'logbook.js'):
     f'<link rel="stylesheet" href="logbook.css?v={versions["logbook.css"]}">',
     site_chrome=False,
 ), encoding='utf-8')
+for settings_path in sorted(research.glob('*/project.json')):
+    project = settings_path.parent
+    settings = json.loads(settings_path.read_text(encoding='utf-8'))
+    public_project = public_research / project.name
+    shutil.copytree(project / 'examples', public_project / 'examples', dirs_exist_ok=True,
+                    ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
+    (public_project / 'index.html').write_text(document(
+        settings['project title'], settings['description'],
+        render_logbook(research, project=project), '../../',
+        f'<script src="../logbook.js?v={versions["logbook.js"]}" defer></script>',
+        f'<link rel="stylesheet" href="../logbook.css?v={versions["logbook.css"]}">',
+        site_chrome=False,
+    ), encoding='utf-8')
 print(f'Built {len(PROJECTS)} project pages, the research logbook and a homepage in {OUT}')

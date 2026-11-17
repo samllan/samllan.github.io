@@ -1,0 +1,7 @@
+{
+  "trial_waits.csv": {"quantity": "8 observations · 4 per method"},
+  "summarise_waits.py": {
+    "quantity": "Median wait 8 and 4 minutes",
+    "stdout": "Paper list: 8 min (n=4)\nPrepared list: 4 min (n=4)"
+  }
+}

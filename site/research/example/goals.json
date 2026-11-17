@@ -1,0 +1,55 @@
+[
+  {
+    "title": "",
+    "goals": [
+      {
+        "id": "question",
+        "title": "Can an arrival list shorten the reading room queue?",
+        "description": "This fictional pilot shows how the same logbook can track a different project. A small library wants to help booked visitors get seated sooner.",
+        "path": [
+          ["Compare the two sign-in methods", "trial/trial_waits.csv", "Record the wait from arrival to seating under both methods."],
+          ["Decide what to test next", "decision", "Keep the outcome, the reason for the decision, and the next measurement together."]
+        ],
+        "files": [
+          ["README.md", "Template", "Shows how to reuse the logbook structure for another project."]
+        ]
+      }
+    ]
+  },
+  {
+    "title": "The pilot",
+    "goals": [
+      {
+        "id": "trial",
+        "title": "Measure the wait",
+        "description": "How long did visitors wait under each sign-in method?",
+        "story": {
+          "tried": "Record four waits for a paper list and four for a prepared arrival list.",
+          "found": "The fictional medians were 8 and 4 minutes, respectively.",
+          "next": "Review whether the methods were tested under comparable conditions.",
+          "source": "Fictional observations supplied with this example."
+        },
+        "default_file": "trial_waits.csv",
+        "links": [["Read the decision", "decision"]],
+        "files": [
+          ["trial_waits.csv", "Fictional pilot", "Lists the individual waits used in the comparison."],
+          ["summarise_waits.py", "Fictional pilot", "Recomputes the two medians from the CSV."]
+        ]
+      },
+      {
+        "id": "decision",
+        "title": "Review the decision",
+        "parent": "trial",
+        "description": "The shorter wait is promising enough to justify a better comparison.",
+        "story": {
+          "tried": "Compare the medians with the session notes and check what the trial controlled.",
+          "found": "The arrival list ran in the afternoon and the paper list ran in the morning. Time of day may explain the difference.",
+          "next": "Alternate sign-in methods in matching time slots and record both visitor and staff time."
+        },
+        "files": [
+          ["decision.md", "Fictional review", "Records the follow-up and why the draft rollout decision changed."]
+        ]
+      }
+    ]
+  }
+]

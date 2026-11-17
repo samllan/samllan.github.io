@@ -5,8 +5,11 @@
       {
         "id": "question",
         "title": "What did the PhD investigate?",
-        "description": "I built a way to work with large scans of lymphoma tissue at three scales: cores, patches and cells. The thesis asks how well these images can reproduce assessors’ grading scores and predict the supplied subtype labels. The code examples use generated inputs.",
+        "description": "Could large tissue scans be made practical to work with, then used to estimate expert staining grades and predict the supplied lymphoma subtype labels? The path below follows the work from preparing the images to interpreting the results.",
         "related": ["crop","grading-splits","subtype-cohort"],
+        "path": [["Prepare the tissue images","crop/crop_benchmark.csv","Mark tissue cores, then build patch and cell views. Point-and-click halved the time per sample compared with drawing boxes in the thesis comparison."],["Make the data practical to process","storage","Compress the patches and compare smaller representations while preserving a route back to the original images."],["Test what the images can predict","grading-splits","Keep related samples together when evaluating staining grades. Compare supplied subtype labels as a separate task."],["Check what the results support","subtype-ablations","Test model changes, preserve the findings that did not give a clear advantage, and identify what a separate cohort would need to establish."]],
+        "links": [["Reproduce a result","figures/run_grading_example.py"],["Read the research limits","limits"]],
+        "more": [["Try the same logbook on a different project","example/"]],
         "files": [
           ["research_questions.md","Nov 2026","Sets out the grading and subtype questions, and the engineering problem of making the image data practical to work with."],
           ["README.md","Nov 2026","Shows how to run a single example or reproduce the grading figure and its intermediate files."]
@@ -20,8 +23,11 @@
       {
         "id": "crop",
         "title": "Mark and label tissue regions",
-        "description": "I compared drawing rectangles with marking a centre and letting the software position a fixed-size crop. The click tool halved the reported extraction time per sample in this comparison.",
+        "description": "How could I make labelling tissue cores faster while keeping extraction reliable?",
         "related": ["prepare","cells"],
+        "story": {"tried":"I compared automatic extraction, manual boxes and a tool that turns a person's click into a consistently sized crop.","found":"Manual boxes took 6 seconds per sample and point-and-click took 3. Both recorded precision and recall of 1.00 in this comparison.","next":"Use point-and-click to build the crop set. A repeat study across annotators and scan types would test how well the result transfers.","source":"Submitted thesis, Table 2.5, p. 70. The values are from the extraction comparison."},
+        "default_file": "crop_benchmark.csv",
+        "links": [["Try marking a crop","crop/prepare_image_regions.py"],["See how crops were extracted","prepare"]],
         "files": [
           ["prepare_image_regions.py","Aug 2020–Nov 2023","Turns clicks or a grid into labelled image bounds. It shifts edge crops inward so they stay the same size."],
           ["crop_benchmark.csv","2026 thesis","Records the thesis comparison of six seconds per sample for rectangles and three seconds for clicks, alongside extraction precision and recall."],
@@ -33,6 +39,7 @@
         "title": "Extract crops and preserve their coordinates",
         "parent": "crop",
         "description": "The crop is a smaller image with a record of the scan, label and source bounds it came from. That record lets a reader go back to the right place in a scan.",
+        "story": {"tried":"Store bounds and labels alongside each image so the crop can be traced back to the scan.","found":"The demo produces two cropped images and a manifest with their source coordinates.","next":"Build the patch and cell views from the extracted cores."},
         "files": [
           ["extract_labelled_crops.py","2020–2023","Extracts one image per labelled region and writes a CSV linking crop names to the original pixel bounds."],
           ["map_crop_to_scan.py","2020–2023","Converts a box drawn inside a crop back into coordinates on the original scan, including the downsampling factor."]
@@ -65,7 +72,9 @@
       {
         "id": "storage",
         "title": "Check, bundle and compress datasets",
-        "description": "I compared storage and access trade-offs so the same image collections could be used in repeated experiments. The thesis reports that WebP reduced patch storage from 26.94 GB to 3.63 GB.",
+        "description": "How could I store the same collections compactly enough to use in repeated experiments?",
+        "story": {"tried":"Compare image encodings and inspect example patches while retaining the input needed for subsequent analysis.","found":"The thesis reports 26.94 GB for PNG patches and 3.63 GB for WebP patches in the collection.","next":"When reusing the workflow, compare the effect of compression on the downstream analysis with the same images and settings.","source":"Submitted thesis, Chapter 2 results, p. 72 and Fig. 2.12."},
+        "links": [["See alternatives to storing pixels","autoencoder"],["Trace exported features back to the image","feature-export"]],
         "files": [
           ["compare_image_encodings.py","Apr 2024","Measures file size and decoded pixel differences for PNG and WebP on the same generated patch."],
           ["audit_dataset_structure.py","2024–2025","Flags files that are missing, unexpected or the wrong shape before training begins."],
@@ -92,6 +101,8 @@
         "id": "features",
         "title": "Learn features from two views",
         "description": "I compared two transformed versions of a patch and trained a shared encoder to keep useful signals while reducing repeated information in the feature vector.",
+        "story": {"tried":"Train a shared encoder on two transformed views and compare its learned features with other representations.","found":"The runnable examples show how duplicate information raises the loss and how a small encoder learns with this objective.","next":"Compare representations on held-out tasks and check how they group examples."},
+        "default_file": "fit_shared_view_encoder.py",
         "files": [
           ["learn_image_features.py","Oct 2025","Reports agreement and redundancy terms for paired feature vectors in an illustrative Barlow Twins calculation."],
           ["prepare_paired_views.py","2023–2025","Generates two independently augmented views of each synthetic patch and retains the source ID for pairing."],
@@ -140,6 +151,9 @@
         "title": "Prepare reference grades and splits",
         "description": "The grading target combines available assessor ratings. In Chapter 3, samples from the same tissue core stayed in the same fold. The example shows how to keep groups together and inspect the assignments before training.",
         "related": ["grading-models","sampling"],
+        "story": {"tried":"Combine available grades into a reference and keep related samples in the same validation fold.","found":"The saved split and reference rows make the rules visible before fitting a model.","next":"Fit the models on the same split and compare their held-out predictions."},
+        "default_file": "assign_validation_folds.py",
+        "links": [["Follow the split into training","grading-models/save_held_out_grades.py"]],
         "files": [
           ["prepare_reference_grades.py","2026 thesis","Averages available assessor grades per example and keeps the number and spread of ratings alongside the reference."],
           ["assign_validation_folds.py","2024–2025","Assigns each known group to one held-out fold and writes split memberships that can be inspected before training."]
@@ -150,6 +164,9 @@
         "title": "Train and compare graders at three scales",
         "parent": "grading-splits",
         "description": "The research compared core, patch and cell representations for the same grading task. The small examples fit separate baseline models and keep a prediction for each held-out sample.",
+        "story": {"tried":"Fit graders for cores, patches and cells. Keep held-out predictions linked to sample IDs and their reference grades.","found":"Keeping the predictions makes it possible to inspect errors by grade and compare models on matched examples.","next":"Compare the errors with disagreement between assessors and rebuild the results figure."},
+        "default_file": "save_held_out_grades.py",
+        "links": [["See the assessor comparison","agreement"],["Run the full grading example","figures/run_grading_example.py"]],
         "files": [
           ["train_scale_graders.py","2022–2026","Fits a small independent grader on each scale using the same training IDs, and returns predictions by scale."],
           ["save_held_out_grades.py","2025–2026","Writes one out-of-fold prediction per sample and image scale, with its fold and reference grade."],
@@ -161,6 +178,8 @@
         "title": "Test changes against matched baseline runs",
         "description": "Changing one setting at a time makes results easier to interpret. I compared runs on matching folds and seeds, and the thesis describes cases where the settings or controls needed closer checks.",
         "related": ["agreement","cluster-runs"],
+        "story": {"tried":"Vary one training setting at a time and compare matched folds, seeds and epoch windows.","found":"The saved window and elapsed time let readers compare the result and the computing cost under the same protocol.","next":"Check which settings were actually applied before using the summary to make a decision.","source":"Submitted thesis, Chapter 3, Fig. 3.4 and Appendix A.2."},
+        "default_file": "summarise_matched_training_traces.py",
         "files": [
           ["compare_experiments.py","Sep 2026","Compares error, runtime and memory against baseline runs matched by fold and seed."],
           ["plan_matched_runs.py","2025–2026","Produces a schedule of baseline and single-change runs with shared folds and seeds."],
@@ -197,6 +216,7 @@
         "title": "Prepare the subtype dataset",
         "description": "The subtype experiment depends on matching supplied labels to usable images and recording which examples pass the data checks. The thesis describes the limits of the available reference metadata.",
         "related": ["interpret"],
+        "story": {"tried":"Join supplied labels to usable images and record why samples were excluded.","found":"A documented cohort makes it clear which images and labels the comparison covers.","next":"Keep the cohort rules fixed while comparing approaches to combining evidence from patches."},
         "files": [
           ["join_subtype_labels.py","2026","Matches supplied labels to image IDs and lists missing or unrecognised labels for review."],
           ["audit_cohort_filters.py","2026 thesis","Records which synthetic specimens pass each eligibility rule and why the other specimens are excluded."]
@@ -217,8 +237,11 @@
         "id": "subtype-ablations",
         "title": "Test spatial positions and model hierarchy",
         "parent": "interpret",
-        "description": "The Chapter 4 ablations examined whether position, hierarchy or masking changed the model. These examples expose the individual operations on small generated inputs.",
+        "description": "Does a model need to know where each patch sits, or is the information in the patches enough?",
         "related": ["cost","explain"],
+        "story": {"tried":"Compare the patch model with and without 2D rotary position information. Examine model structure and hierarchy in related experiments.","found":"Adding the 2D rotary positions gave no distinct advantage at patch scale in this study.","next":"Test whether the finding holds with data that preserve more of the tissue's spatial context and with independent validation.","source":"Submitted thesis, Chapter 4, §4.6.3 and Chapter 5, p. 186. The code output below demonstrates the operation on generated inputs."},
+        "default_file": "compare_spatial_attention.py",
+        "links": [["Read the study limits","limits"]],
         "files": [
           ["compare_spatial_attention.py","2026 thesis","Holds the query, keys and values fixed while comparing attention with and without 2D rotary positions and padding."],
           ["compare_flat_and_hierarchical_pooling.py","2026 thesis","Compares pooling all cells together with pooling within patches first, and checks that empty or padded patches do not contribute."]
@@ -292,7 +315,9 @@
       {
         "id": "figures",
         "title": "Rebuild tables and figures from saved results",
-        "description": "The thesis figures can be traced back to prediction tables and run comparisons. The synthetic replay below takes small generated inputs through the grading workflow and regenerates a figure.",
+        "description": "Can a reader regenerate a figure and inspect the steps that produced it?",
+        "story": {"tried":"Run one small grading example from group assignment through held-out predictions, assessor comparison and figure generation.","found":"The runnable example saves the split, prediction and agreement tables plus an SVG figure. It generates 36 predictions across three image scales.","next":"To rerun it, open the script and run it with --output grading-demo. Keep the saved predictions when comparing alternative summaries."},
+        "default_file": "run_grading_example.py",
         "files": [
           ["build_grading_table.py","2025–2026","Builds a comparison table from saved out-of-fold predictions with one error summary per image scale."],
           ["render_grading_figure.py","2026","Renders the comparison table as a labelled SVG figure that can be regenerated from the prediction file."],
@@ -306,6 +331,7 @@
         "id": "limits",
         "title": "Record what needs another test",
         "description": "The thesis sets out what the internal comparisons support and what better-controlled and independent testing would need to establish.",
+        "story": {"tried":"Compare approaches with the available tissue microarrays and supplied labels.","found":"The thesis identifies non-independent internal validation and the use of a single major clinical cohort as limits on generalisation.","next":"Fix the analysis protocol in advance and test across independent laboratories, scanners and populations.","source":"Submitted thesis, Chapter 5, §§5.5–5.6, pp. 189–190."},
         "files": [
           ["research_limits.md","Nov 2026","Records the limits of the internal comparisons and what independent validation would need."]
         ]
