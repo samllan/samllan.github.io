@@ -8,7 +8,7 @@ from pathlib import Path
 import re
 from urllib.parse import quote
 
-from leaf_visuals import leaf_visuals
+from leaf_visuals import goal_tentpole, leaf_visuals, section_tentpole
 
 
 CROP_COLUMNS = (
@@ -223,6 +223,7 @@ def render_group_overview(group_id, group, titles):
             f'<td>{finding_html}<ul class="lab-inline-files">{file_pills}</ul></td>'
             f"</tr>"
         )
+    tentpole = section_tentpole(group_id)
     markup = f"""<section id="{escape(group_id, quote=True)}" class="lab-goal" data-group-section>
 <article class="lab-experiment lab-goal-overview" data-group-overview>
   <div class="lab-experiment-head">
@@ -230,6 +231,7 @@ def render_group_overview(group_id, group, titles):
     <h2 tabindex="-1">{escape(label)}</h2>
     <p class="lab-lede">{escape(summary)}</p>
   </div>
+  {tentpole}
   <div class="lab-walkthrough-section" role="region" aria-label="Goals in this section">
     <table class="lab-result-table lab-arc-table">
       <caption>Narrative arc across {len(group["goals"])} goals ({total_files} experiments)</caption>
@@ -242,9 +244,10 @@ def render_group_overview(group_id, group, titles):
     return "\n".join(line.rstrip() for line in markup.splitlines())
 
 
-def render_goal_overview(ancestors, goal, titles, descriptions, children, details, snapshots, context):
+def render_goal_overview(ancestors, goal, titles, descriptions, children, details, snapshots, context, examples=None):
     key = goal["id"]
     kicker = breadcrumb_markup(ancestors)
+    tentpole = goal_tentpole(key, examples)
     rows = []
     for index, (filename, date, outcome) in enumerate(goal["files"], start=1):
         target = f"{key}/{filename}"
@@ -280,6 +283,7 @@ def render_goal_overview(ancestors, goal, titles, descriptions, children, detail
     <h2 tabindex="-1">{escape(goal["title"])}</h2>
     <p class="lab-lede">{escape(goal["description"])}</p>
   </div>
+  {tentpole}
   {context_block}
   <div class="lab-walkthrough-section" role="region" aria-label="Narrative walkthrough of experiments">
     <table class="lab-result-table lab-arc-table">
@@ -452,7 +456,7 @@ def render_logbook(research, *, project=None):
                 context += f'<nav class="lab-next" aria-label="Related goals">{links}</nav>'
             ancestors = goal_ancestors(key)
             overview = render_goal_overview(
-                ancestors, goal, titles, descriptions, children, details, snapshots, context
+                ancestors, goal, titles, descriptions, children, details, snapshots, context, examples
             )
             script_links, leaves = [], []
             for file in goal["files"]:

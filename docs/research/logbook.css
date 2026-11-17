@@ -194,6 +194,8 @@
 .lab-step-meta code { font: 500 12px 'Cascadia Code', Consolas, monospace; color: #2b4a3a; }
 .lab-step-badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11.5px; font-weight: 600; color: #244035; background: #e4ebe0; }
 .lab-diagram { display: block; width: 100%; max-width: 520px; height: auto; margin: 8px 0; border-radius: 6px; }
+.lab-tentpole { margin: 14px 0 18px; max-width: 92ch; }
+.lab-tentpole-svg { max-width: 100%; margin: 0; }
 .lab-row-highlight td { background: #dce7d8; font-weight: 600; }
 .lab-route-cards { display: grid; gap: 9px; margin-top: 6px; }
 .lab-route-card { border: 1px solid #cbd6c8; border-radius: 6px; padding: 10px 13px; background: #f8f7ef; }

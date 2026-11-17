@@ -2011,3 +2011,748 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     return "", ""
+
+
+def section_tentpole(group_id):
+    """Return a thesis-inspired tent-pole SVG banner for a section overview."""
+    if group_id == "section-1-prepare-tissue-scales":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 128" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Multi-scale data reduction funnel from 925.93 GB whole-slide scans to cores, patches and single cells">'
+            '<rect width="680" height="128" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="22" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Data Funnel (Fig. 1.2, 2.1 &amp; Table 2.4) · Turning 925.9 GB of raw scans into traceable biological scales</text>'
+            # Stage 1: Raw TMA Scans
+            '<rect x="16" y="34" width="144" height="78" rx="6" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.8"/>'
+            '<text x="26" y="53" font-size="11" fill="#1b3126" font-weight="bold">1. Whole TMA Scans</text>'
+            '<text x="26" y="70" font-size="10" fill="#244035">63 slides · 0.25 µm/px</text>'
+            '<text x="26" y="86" font-size="10.5" fill="#8a4b68" font-weight="bold">925.93 GB raw</text>'
+            '<text x="26" y="102" font-size="9.5" fill="#536052">Too large for GPU RAM</text>'
+            '<text x="166" y="76" font-size="14" fill="#205841" font-weight="bold">→</text>'
+            # Stage 2: Cores
+            '<rect x="182" y="34" width="148" height="78" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
+            '<text x="192" y="53" font-size="11" fill="#1b3126" font-weight="bold">2. Tissue Cores (#crop)</text>'
+            '<text x="192" y="70" font-size="10" fill="#244035">1,109 cores · 5,000² px</text>'
+            '<text x="192" y="86" font-size="10.5" fill="#205841" font-weight="bold">5.24 GB WebP (3 s/core)</text>'
+            '<text x="192" y="102" font-size="9.5" fill="#536052">1.00 prec &amp; recall</text>'
+            '<text x="336" y="76" font-size="14" fill="#205841" font-weight="bold">→</text>'
+            # Stage 3: Patches
+            '<rect x="352" y="34" width="150" height="78" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
+            '<text x="362" y="53" font-size="11" fill="#1b3126" font-weight="bold">3. Patches (#patches)</text>'
+            '<text x="362" y="70" font-size="10" fill="#244035">229,683 tiles · 256² px</text>'
+            '<text x="362" y="86" font-size="10.5" fill="#205841" font-weight="bold">3.63 GB WebP (−86.5%)</text>'
+            '<text x="362" y="102" font-size="9.5" fill="#536052">Otsu tissue mask ≥ 50%</text>'
+            '<text x="508" y="76" font-size="14" fill="#205841" font-weight="bold">→</text>'
+            # Stage 4: Single Cells
+            '<rect x="524" y="34" width="140" height="78" rx="6" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.8"/>'
+            '<text x="534" y="53" font-size="11" fill="#1b3126" font-weight="bold">4. Single Cells (#cells)</text>'
+            '<text x="534" y="70" font-size="10" fill="#244035">9,126,415 instances</text>'
+            '<text x="534" y="86" font-size="10.5" fill="#8a5a19" font-weight="bold">12.51 GB HDF5/NPZ</text>'
+            '<text x="534" y="102" font-size="9.5" fill="#536052">Exact (x, y) scan coords</text>'
+            "</svg></figure>"
+        )
+
+    if group_id == "section-2-compress-into-features":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 132" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Three representation families compared on latent geometry and downstream cluster separation">'
+            '<rect width="680" height="132" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="22" font-size="11.5" fill="#1b3126" font-weight="bold">Three Representation Families (Ch. 2, Fig. 2.7–2.9 &amp; 2.16–2.18) · From pixel reconstruction to invariant clusters</text>'
+            # Card 1: Autoencoder / VAE
+            '<rect x="16" y="34" width="204" height="84" rx="6" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.6"/>'
+            '<text x="26" y="52" font-size="11" fill="#1b3126" font-weight="bold">1. Reconstruction (AE / VAE)</text>'
+            '<text x="26" y="68" font-size="9.8" fill="#244035">Patch → z (32–256-D) → Rebuild</text>'
+            '<circle cx="52" cy="94" r="14" fill="#8a4b68" opacity="0.35"/><circle cx="58" cy="92" r="12" fill="#8a4b68" opacity="0.45"/>'
+            '<text x="82" y="90" font-size="9.8" fill="#8a4b68" font-weight="bold">Dense unseparated cloud</text>'
+            '<text x="82" y="105" font-size="9.2" fill="#536052">Silhouette: 0.015 · DB: 2.81</text>'
+            # Card 2: Barlow Twins Contrastive
+            '<rect x="238" y="34" width="204" height="84" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
+            '<text x="248" y="52" font-size="11" fill="#1b3126" font-weight="bold">2. Contrastive (Barlow Twins)</text>'
+            '<text x="248" y="68" font-size="9.8" fill="#244035">2 views → 8×8 C_ij → Identity I</text>'
+            '<circle cx="264" cy="88" r="7" fill="#205841"/><circle cx="282" cy="100" r="7" fill="#8a5a19"/><circle cx="298" cy="86" r="7" fill="#b3472a"/>'
+            '<text x="314" y="90" font-size="9.8" fill="#205841" font-weight="bold">Separated clusters ★</text>'
+            '<text x="314" y="105" font-size="9.2" fill="#244035">Silhouette: 0.408 (27× higher)</text>'
+            # Card 3: Pretrained Frozen Backbones
+            '<rect x="460" y="34" width="204" height="84" rx="6" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.6"/>'
+            '<text x="470" y="52" font-size="11" fill="#1b3126" font-weight="bold">3. Frozen Backbones (ResNet/UNI)</text>'
+            '<text x="470" y="68" font-size="9.8" fill="#244035">224² RGB → 1024-D / 2048-D</text>'
+            '<text x="470" y="88" font-size="9.8" fill="#8a5a19" font-weight="bold">147× smaller than raw RGB</text>'
+            '<text x="470" y="105" font-size="9.2" fill="#536052">Every vector keeps (l, t, r, b) coords</text>'
+            "</svg></figure>"
+        )
+
+    if group_id == "section-3-task-1-staining-grades":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 132" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Attention-MIL grading pipeline and multi-scale MAE comparison against inter-observer disagreement">'
+            '<rect width="680" height="132" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="22" font-size="11.5" fill="#1b3126" font-weight="bold">Task 1 · Expert IHC Staining Grades (Ch. 3, Fig. 3.3, 3.8 &amp; 3.10) · Patch Attention-MIL vs Human Disagreement</text>'
+            # Left: Attention-MIL 5-step flow
+            '<rect x="16" y="34" width="330" height="84" rx="6" fill="#eef2eb" stroke="#9ab0a2"/>'
+            '<text x="26" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">5-Step Attention-MIL Grader (Fig. 3.3):</text>'
+            '<text x="26" y="68" font-size="9.8" fill="#244035">1. N patch vectors → 2. Shared attention → 3. Softmax α_i</text>'
+            '<text x="26" y="84" font-size="9.8" fill="#244035">4. Weighted sum → 5. 8 logits (Null + 0.0..3.0 half-steps)</text>'
+            '<text x="26" y="104" font-size="9.5" fill="#205841" font-weight="bold">✓ Grouped folds + hybrid loss/rarity sampler (81-run ablation)</text>'
+            # Right: Scale MAE bars vs Expert gap
+            '<text x="364" y="48" font-size="10.5" fill="#1b3126" font-weight="bold">Held-out MAE (0–3 scale, lower is closer):</text>'
+            '<text x="364" y="67" font-size="10" fill="#205841" font-weight="bold">Patch-ResNet</text>'
+            '<rect x="456" y="56" width="95" height="13" rx="3" fill="#205841"/><text x="557" y="67" font-size="10" fill="#205841" font-weight="bold">0.238 MAE ★</text>'
+            '<text x="364" y="85" font-size="10" fill="#244035">Cell-Image</text>'
+            '<rect x="456" y="74" width="111" height="13" rx="3" fill="#527c67"/><text x="573" y="85" font-size="10" fill="#244035">0.278 MAE</text>'
+            '<text x="364" y="103" font-size="10" fill="#244035">Core-ResNet</text>'
+            '<rect x="456" y="92" width="138" height="13" rx="3" fill="#8a5a19"/><text x="600" y="103" font-size="10" fill="#8a5a19">0.346 MAE</text>'
+            '<text x="364" y="120" font-size="10" fill="#b3472a" font-weight="bold">Rater gap |A−B|</text>'
+            '<rect x="456" y="109" width="152" height="13" rx="3" fill="#b3472a"/><text x="614" y="120" font-size="10" fill="#b3472a" font-weight="bold">0.382 gap</text>'
+            "</svg></figure>"
+        )
+
+    if group_id == "section-4-task-2-subtype-labels":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 132" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Cohort curation funnel, parallel transformer architecture and scale jump in subtype ROC AUC">'
+            '<rect width="680" height="132" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="22" font-size="11.5" fill="#1b3126" font-weight="bold">Task 2 · ABC vs GCB Subtype Prediction (Ch. 4, Fig. 4.2–4.6 &amp; Table 4.4) · Scale Jump &amp; Spatial Ablation</text>'
+            # Left: Cohort funnel & Transformer
+            '<rect x="16" y="34" width="324" height="84" rx="6" fill="#eef2eb" stroke="#9ab0a2"/>'
+            '<text x="26" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">Audited Cohort Funnel (Fig. 4.2): 1,109 → 962 cores</text>'
+            '<text x="26" y="67" font-size="9.6" fill="#244035">Filters: cell ≤ 220 px · patches ≥ 87 · cells ≥ 1,000 · gap ≤ 1</text>'
+            '<text x="26" y="85" font-size="10.5" fill="#1b3126" font-weight="bold">4-Block Parallel Transformer (Fig. 4.3):</text>'
+            '<text x="26" y="101" font-size="9.6" fill="#8a5a19" font-weight="bold">Negative result (§4.6.3): 2D RoPE positions gave no patch gain</text>'
+            # Right: Scale jump in AUC
+            '<text x="356" y="48" font-size="10.5" fill="#1b3126" font-weight="bold">3-Fold Macro ROC AUC by Scale (Fig. 4.5):</text>'
+            '<text x="356" y="67" font-size="10" fill="#205841" font-weight="bold">Patch · UNI</text>'
+            '<rect x="454" y="56" width="148" height="13" rx="3" fill="#205841"/><text x="608" y="67" font-size="10" fill="#205841" font-weight="bold">0.992 ★</text>'
+            '<text x="356" y="85" font-size="10" fill="#205841">Patch · ResNet</text>'
+            '<rect x="454" y="74" width="142" height="13" rx="3" fill="#2f6f55"/><text x="602" y="85" font-size="10" fill="#244035">0.958</text>'
+            '<text x="356" y="103" font-size="10" fill="#527c67">Cell · ResNet</text>'
+            '<rect x="454" y="92" width="140" height="13" rx="3" fill="#527c67"/><text x="600" y="103" font-size="10" fill="#244035">0.952</text>'
+            '<text x="356" y="120" font-size="10" fill="#b3472a">Core · ResNet</text>'
+            '<rect x="454" y="109" width="100" height="13" rx="3" fill="#b3472a"/><text x="560" y="120" font-size="10" fill="#b3472a">0.675 (coarse)</text>'
+            "</svg></figure>"
+        )
+
+    if group_id == "section-5-explain-verify":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 132" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Four spatial interpretability methods and SHA-256 cluster run verification pipeline">'
+            '<rect width="680" height="132" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="22" font-size="11.5" fill="#1b3126" font-weight="bold">Spatial Interpretability &amp; Reproducibility (Fig. 3.5, 4.11–4.15) · Tracing scores back onto tissue</text>'
+            '<rect x="16" y="34" width="154" height="84" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.6"/>'
+            '<text x="24" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Score Heatmaps</text>'
+            '<text x="24" y="68" font-size="9.5" fill="#244035">Shared RGBA scale</text>'
+            '<text x="24" y="84" font-size="9.5" fill="#205841" font-weight="bold">Hatched NaN regions</text>'
+            '<text x="24" y="100" font-size="9.2" fill="#536052">Never conflates 0 &amp; NaN</text>'
+            '<rect x="182" y="34" width="166" height="84" rx="6" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.6"/>'
+            '<text x="190" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. Dream Dimming (XAI)</text>'
+            '<text x="190" y="68" font-size="9.5" fill="#244035">Class masks + occlusion</text>'
+            '<text x="190" y="84" font-size="9.5" fill="#8a4b68" font-weight="bold">3.5× score drop vs uniform</text>'
+            '<text x="190" y="100" font-size="9.2" fill="#536052">Crisp patch/cell masks</text>'
+            '<rect x="360" y="34" width="150" height="84" rx="6" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.6"/>'
+            '<text x="368" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">3. Cluster Checkpoints</text>'
+            '<text x="368" y="68" font-size="9.5" fill="#244035">16-hex SHA-256 run IDs</text>'
+            '<text x="368" y="84" font-size="9.5" fill="#8a5a19" font-weight="bold">Atomic chunk resume</text>'
+            '<text x="368" y="100" font-size="9.2" fill="#536052">Catches crashed jobs</text>'
+            '<rect x="522" y="34" width="142" height="84" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.6"/>'
+            '<text x="530" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">4. Figure Provenance</text>'
+            '<text x="530" y="68" font-size="9.5" fill="#244035">Case S02 → SVG chart</text>'
+            '<text x="530" y="84" font-size="9.5" fill="#205841" font-weight="bold">SHA-256 asset audit</text>'
+            '<text x="530" y="100" font-size="9.2" fill="#536052">+ Multi-centre limits</text>'
+            "</svg></figure>"
+        )
+
+    if group_id == "section-6-appendix-pcam-benchmark":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 116" class="lab-diagram lab-tentpole-svg" role="img" aria-label="PCam synthetic multiple-instance bag benchmark comparing signal and noise encoders">'
+            '<rect width="680" height="116" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="22" font-size="11.5" fill="#1b3126" font-weight="bold">External Bag Benchmark (Appendix) · Disjoint Seeded Bag Manifests &amp; Max-Pooling Separation</text>'
+            '<rect x="16" y="34" width="310" height="68" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.6"/>'
+            '<text x="26" y="54" font-size="10.5" fill="#1b3126" font-weight="bold">1. Seeded Bag Manifests (#pcam-bags)</text>'
+            '<text x="26" y="72" font-size="9.8" fill="#244035">Train (seed 11) &amp; Test (seed 23) · Pos bag = 1 pos patch in 4</text>'
+            '<text x="26" y="89" font-size="9.5" fill="#205841">Preserves exact patch IDs so every encoder faces identical bags</text>'
+            '<text x="336" y="72" font-size="14" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="354" y="34" width="310" height="68" rx="6" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.6"/>'
+            '<text x="364" y="54" font-size="10.5" fill="#1b3126" font-weight="bold">2. Encoder Comparison (#pcam-benchmarks)</text>'
+            '<text x="364" y="72" font-size="9.8" fill="#205841" font-weight="bold">Signal encoder: 1.000 bal acc ★ vs Noise: 0.625</text>'
+            '<text x="364" y="89" font-size="9.5" fill="#536052">Max pooling isolates the single positive instance per bag</text>'
+            "</svg></figure>"
+        )
+
+    return ""
+
+
+def goal_tentpole(goal_id, examples=None):
+    """Return a thesis-inspired tent-pole SVG diagram for a goal overview."""
+    if examples is not None and (examples / "trial_waits.csv").is_file():
+        return ""
+    if goal_id == "question":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 124" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Thesis multi-scale hypothesis spine from 63 whole-slide scans to Task 1 staining grades and Task 2 molecular subtypes">'
+            '<rect width="680" height="124" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Hypothesis Spine (Ch. 1–5) · Three Biological Scales × Two Clinical Tasks + Spatial Traceability</text>'
+            '<rect x="16" y="34" width="146" height="76" rx="5" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.5"/>'
+            '<text x="24" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Three Scales (Ch. 2)</text>'
+            '<text x="24" y="68" font-size="9.4" fill="#244035">• 1,109 Cores (5,000² px)</text>'
+            '<text x="24" y="83" font-size="9.4" fill="#205841" font-weight="bold">• 229,683 Patches (256² px)</text>'
+            '<text x="24" y="98" font-size="9.4" fill="#244035">• 9.13M Single Cells</text>'
+            '<text x="167" y="74" font-size="12" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="180" y="34" width="146" height="76" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="188" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. Vectors (Ch. 2)</text>'
+            '<text x="188" y="68" font-size="9.4" fill="#244035">• AE / VAE (32–256-D)</text>'
+            '<text x="188" y="83" font-size="9.4" fill="#205841" font-weight="bold">• Barlow Twins (0.408 sil.)</text>'
+            '<text x="188" y="98" font-size="9.4" fill="#244035">• Frozen ResNet50 &amp; UNI</text>'
+            '<text x="331" y="74" font-size="12" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="344" y="34" width="154" height="76" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="352" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">3. Two Tasks (Ch. 3–4)</text>'
+            '<text x="352" y="68" font-size="9.4" fill="#205841" font-weight="bold">• IHC Grade: 0.238 MAE ★</text>'
+            '<text x="352" y="83" font-size="9.4" fill="#536052">  (vs 0.382 rater gap)</text>'
+            '<text x="352" y="98" font-size="9.4" fill="#205841" font-weight="bold">• Subtype: 0.992 AUC ★</text>'
+            '<text x="503" y="74" font-size="12" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="516" y="34" width="148" height="76" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="524" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">4. Traceable (Ch. 3–5)</text>'
+            '<text x="524" y="68" font-size="9.4" fill="#244035">• Hatched NaN heatmaps</text>'
+            '<text x="524" y="83" font-size="9.4" fill="#8a4b68" font-weight="bold">• Dream Dimming (3.5×)</text>'
+            '<text x="524" y="98" font-size="9.4" fill="#244035">• SHA-256 run provenance</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "storage":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 116" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Thesis Figure 2.12 WebP compression reducing 229,683 patches from 26.94 GB to 3.63 GB">'
+            '<rect width="680" height="116" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 2.12 &amp; Table 2.4 · 86.5% Storage Reduction + Pre-Flight Array Audits</text>'
+            '<text x="16" y="46" font-size="10" fill="#8a5a19" font-weight="bold">PNG (229,683 patches)</text>'
+            '<rect x="162" y="35" width="230" height="14" rx="3" fill="#8a5a19"/><text x="398" y="46" font-size="10" fill="#8a5a19" font-weight="bold">26.94 GB</text>'
+            '<text x="16" y="68" font-size="10" fill="#205841" font-weight="bold">WebP Q=75 (adopted)</text>'
+            '<rect x="162" y="57" width="31" height="14" rx="3" fill="#205841"/><text x="200" y="68" font-size="10" fill="#205841" font-weight="bold">3.63 GB (−86.5% · saves 23.31 GB)</text>'
+            '<text x="16" y="96" font-size="9.5" fill="#536052">• Pre-flight audit checks manifest keys vs disk shapes before GPU jobs start · Contiguous bundle avoids 20× file-open overhead.</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "frozen-features":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 116" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Frozen ResNet-50 and UNI feature extraction pipeline">'
+            '<rect width="680" height="116" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Pretrained Feature Extraction (Ch. 2 &amp; 4) · Standardised RGB → Frozen Backbone → Compact Vector Cache</text>'
+            '<rect x="16" y="34" width="196" height="68" rx="5" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.5"/>'
+            '<text x="26" y="53" font-size="10.5" fill="#1b3126" font-weight="bold">1. Input Standardisation</text>'
+            '<text x="26" y="70" font-size="9.5" fill="#244035">Resize to 224 × 224 RGB</text>'
+            '<text x="26" y="86" font-size="9.5" fill="#8a4b68">Channel norm: (I − μ) / σ</text>'
+            '<text x="220" y="72" font-size="13" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="238" y="34" width="204" height="68" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="248" y="53" font-size="10.5" fill="#1b3126" font-weight="bold">2. Frozen Backbone Pass</text>'
+            '<text x="248" y="70" font-size="9.5" fill="#205841" font-weight="bold">UNI (1024-D) / ResNet50 (2048-D)</text>'
+            '<text x="248" y="86" font-size="9.5" fill="#536052">ID-ordered batch extraction</text>'
+            '<text x="450" y="72" font-size="13" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="468" y="34" width="196" height="68" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="478" y="53" font-size="10.5" fill="#1b3126" font-weight="bold">3. Cached Float32 Arrays</text>'
+            '<text x="478" y="70" font-size="9.5" fill="#8a5a19" font-weight="bold">4 bytes × width per patch</text>'
+            '<text x="478" y="86" font-size="9.5" fill="#244035">147× smaller than raw RGB pixels</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "feature-benchmarks":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 120" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Latent cluster separation and planted-signal MIL bag benchmark">'
+            '<rect width="680" height="120" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Tables 2.7–2.9 &amp; MIL Signal Probe · Cluster Geometry &amp; Rare-Instance Detection</text>'
+            '<rect x="16" y="34" width="318" height="72" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="26" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Geometry &amp; Generalisation (Ch. 2)</text>'
+            '<text x="26" y="69" font-size="9.5" fill="#205841" font-weight="bold">• Contrastive Silhouette: 0.408 vs 0.015 (AE)</text>'
+            '<text x="26" y="85" font-size="9.5" fill="#244035">• PC1 + PC2 explain 97.8% + 2.2% variance in demo</text>'
+            '<rect x="348" y="34" width="316" height="72" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="358" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. Planted-Signal Bag Probe (1 of 12 patches +5)</text>'
+            '<text x="358" y="69" font-size="9.5" fill="#8a5a19">• Mean pooling: 0.830 AUC (11 noise patches dilute signal)</text>'
+            '<text x="358" y="85" font-size="9.5" fill="#205841" font-weight="bold">• Max pooling: 0.999 AUC ★ (isolates the 1 positive patch)</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "feature-export":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 112" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Coordinate-linked feature export and pre-training cache verification">'
+            '<rect width="680" height="112" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Coordinate-Linked Feature Cache · Vectors Never Lose Their Tissue Bounding Box</text>'
+            '<rect x="16" y="32" width="208" height="66" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="26" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">1. Export With Bounds</text>'
+            '<text x="26" y="68" font-size="9.5" fill="#244035">region_id + (l, t, r, b) + vector</text>'
+            '<text x="26" y="84" font-size="9.2" fill="#205841">Coordinates travel in same row</text>'
+            '<rect x="236" y="32" width="208" height="66" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="246" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">2. Order-Safe ID Join</text>'
+            '<text x="246" y="68" font-size="9.5" fill="#244035">Matches [''A'', ''B''] to [''B'', ''A'']</text>'
+            '<text x="246" y="84" font-size="9.2" fill="#8a5a19">Never assumes row i == row i</text>'
+            '<rect x="456" y="32" width="208" height="66" rx="5" fill="#f5d0c5" stroke="#b3472a" stroke-width="1.5"/>'
+            '<text x="466" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">3. Pre-Flight Cache Check</text>'
+            '<text x="466" y="68" font-size="9.5" fill="#b3472a" font-weight="bold">Flags wrong encoder (v1 vs v2)</text>'
+            '<text x="466" y="84" font-size="9.2" fill="#244035">&amp; verifies matrix shape (N, D)</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "grading-splits":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 116" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Reference grade consensus with assessor count and group-aware cross-validation splits">'
+            '<rect width="680" height="116" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Ch. 3 (§3.2) · Consensus Grades (Keeping Rater Count n) + Group-Aware Validation Folds</text>'
+            '<rect x="16" y="34" width="318" height="68" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="26" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Why Spread Needs Assessor Count (n)</text>'
+            '<text x="26" y="69" font-size="9.5" fill="#244035">• Sample a (r1=1, r2=2): mean=1.5, n=2, spread=1.0</text>'
+            '<text x="26" y="85" font-size="9.5" fill="#b3472a" font-weight="bold">• Sample b (r2=3 only): spread=0.0 is n=1, not agreement!</text>'
+            '<rect x="348" y="34" width="316" height="68" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="358" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. Group-Aware Fold Assignment</text>'
+            '<text x="358" y="69" font-size="9.5" fill="#205841" font-weight="bold">• Group g1 (Samples a, b) locked together in Fold 0</text>'
+            '<text x="358" y="85" font-size="9.5" fill="#244035">• Prevents patient/slide leakage across train &amp; test splits</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "grading-models":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 120" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Thesis Figure 3.8 and 3.9 multi-scale grading MAE comparison and per-grade signed bias">'
+            '<rect width="680" height="120" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 3.8 &amp; 3.9 · Multi-Scale Out-of-Fold Grading Error &amp; Signed Boundary Bias</text>'
+            '<text x="16" y="45" font-size="10" fill="#205841" font-weight="bold">Patch-ResNet (Attention-MIL)</text>'
+            '<rect x="196" y="34" width="95" height="13" rx="3" fill="#205841"/><text x="298" y="45" font-size="10" fill="#205841" font-weight="bold">0.238 MAE ★</text>'
+            '<text x="16" y="64" font-size="10" fill="#244035">Cell-Image (Attention-MIL)</text>'
+            '<rect x="196" y="53" width="111" height="13" rx="3" fill="#527c67"/><text x="314" y="64" font-size="10" fill="#244035">0.278 MAE</text>'
+            '<text x="16" y="83" font-size="10" fill="#8a5a19">Core-ResNet (Whole core)</text>'
+            '<rect x="196" y="72" width="138" height="13" rx="3" fill="#8a5a19"/><text x="340" y="83" font-size="10" fill="#8a5a19">0.346 MAE</text>'
+            '<rect x="418" y="32" width="246" height="74" rx="5" fill="#eef2eb" stroke="#9ab0a2"/>'
+            '<text x="428" y="50" font-size="10" fill="#1b3126" font-weight="bold">Signed Bias by Ordinal Grade:</text>'
+            '<text x="428" y="67" font-size="9.5" fill="#205841">• Grade 0: +0.45 (pulls upward)</text>'
+            '<text x="428" y="83" font-size="9.5" fill="#b3472a">• Grade 3: −0.55 (pulls downward)</text>'
+            '<text x="428" y="98" font-size="9" fill="#536052">Every case scored out-of-fold</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "sampling":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 116" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Dynamic loss-and-rarity sampler and 8th null-class Gaussian noise probe">'
+            '<rect width="680" height="116" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Appendix A (Alg. 3 &amp; §A.4) · Hybrid Rare/Hard Sampler &amp; Dedicated Null Class Probe</text>'
+            '<rect x="16" y="34" width="318" height="68" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="26" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Hybrid Sampler (Rarity + Loss + EMA)</text>'
+            '<text x="26" y="69" font-size="9.5" fill="#205841" font-weight="bold">• Rare Grade 1 (s4) boosted to 0.392 probability</text>'
+            '<text x="26" y="85" font-size="9.5" fill="#8a5a19">• High-loss Grade 0 (s2) boosted to 0.293 vs 0.157 easy</text>'
+            '<rect x="348" y="34" width="316" height="68" rx="5" fill="#f5d0c5" stroke="#b3472a" stroke-width="1.5"/>'
+            '<text x="358" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. 8th Class Outside-Input (Null) Probe</text>'
+            '<text x="358" y="69" font-size="9.5" fill="#205841">• Tissue signal bags (n=12): 0.009 null prob (0/12 calls)</text>'
+            '<text x="358" y="85" font-size="9.5" fill="#b3472a" font-weight="bold">• Gaussian noise bags (n=12): 0.683 null prob (12/12 calls)</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "interpret":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 120" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Bag pooling rules and size-sorted variable bag batching">'
+            '<rect width="680" height="120" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Multiple-Instance Bag Pooling &amp; Size-Sorted Batching (Ch. 4, Fig. 4.3)</text>'
+            '<rect x="16" y="34" width="318" height="72" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="26" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Mean vs Max vs Softmax Attention</text>'
+            '<text x="26" y="69" font-size="9.5" fill="#244035">• Attention weights [0.212, 0.212, 0.576] emphasise Patch 3</text>'
+            '<text x="26" y="85" font-size="9.5" fill="#205841" font-weight="bold">• Shifts pooled Feature 1 from 0.433 (mean) to 0.603</text>'
+            '<rect x="348" y="34" width="316" height="72" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="358" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. Size-Sorted Bag Batching + Validity Masks</text>'
+            '<text x="358" y="69" font-size="9.5" fill="#b3472a">• Unsorted bags [3, 15] &amp; [12, 5] waste 21 pad slots</text>'
+            '<text x="358" y="85" font-size="9.5" fill="#205841" font-weight="bold">• Sorted [3, 5] &amp; [12, 15] cuts padding by 76% (to 5 slots)</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "subtype-ablations":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 120" class="lab-diagram lab-tentpole-svg" role="img" aria-label="2D rotary positional encoding ablation and flat vs hierarchical cell-to-patch pooling">'
+            '<rect width="680" height="120" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Ch. 4 (§4.6.3 &amp; Fig. 4.3) · Testing 2D Spatial Positions (RoPE) &amp; Cell-to-Patch Hierarchy</text>'
+            '<rect x="16" y="34" width="318" height="72" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="26" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Negative Finding: 2D RoPE Positions (§4.6.3)</text>'
+            '<text x="26" y="69" font-size="9.5" fill="#244035">• Rotates Q, K by (x, y) coordinates (0.500 off → 0.369 on)</text>'
+            '<text x="26" y="85" font-size="9.5" fill="#8a5a19" font-weight="bold">• Added compute cost without patch-level subtype gain</text>'
+            '<rect x="348" y="34" width="316" height="72" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="358" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. Flat vs Hierarchical Cell Pooling</text>'
+            '<text x="358" y="69" font-size="9.5" fill="#244035">• Flat cell mean (0.25) lets dense patches dominate</text>'
+            '<text x="358" y="85" font-size="9.5" fill="#205841" font-weight="bold">• Patch-then-core mean (0.50) weights regions equally</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "validation":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 120" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Thesis Table 4.4 and Figure 4.5 subtype validation ROC AUC across representations">'
+            '<rect width="680" height="120" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Table 4.4 &amp; Fig. 4.5 · Cross-Fold Subtype Accuracy, Macro AUC &amp; Explicit Fold Denominators</text>'
+            '<text x="16" y="45" font-size="10" fill="#205841" font-weight="bold">Patch · UNI (1024-D)</text>'
+            '<rect x="166" y="34" width="160" height="13" rx="3" fill="#205841"/><text x="332" y="45" font-size="10" fill="#205841" font-weight="bold">0.970 Acc · 0.992 AUC ★</text>'
+            '<text x="16" y="64" font-size="10" fill="#244035">Patch · ResNet50</text>'
+            '<rect x="166" y="53" width="152" height="13" rx="3" fill="#2f6f55"/><text x="324" y="64" font-size="10" fill="#244035">0.916 Acc · 0.958 AUC</text>'
+            '<text x="16" y="83" font-size="10" fill="#527c67">Cell · ResNet50</text>'
+            '<rect x="166" y="72" width="150" height="13" rx="3" fill="#527c67"/><text x="322" y="83" font-size="10" fill="#244035">0.892 Acc · 0.952 AUC</text>'
+            '<text x="16" y="102" font-size="10" fill="#b3472a">Core · ResNet50</text>'
+            '<rect x="166" y="91" width="108" height="13" rx="3" fill="#b3472a"/><text x="280" y="102" font-size="10" fill="#b3472a">0.630 Acc · 0.675 AUC</text>'
+            '<rect x="466" y="32" width="198" height="74" rx="5" fill="#eef2eb" stroke="#9ab0a2"/>'
+            '<text x="476" y="50" font-size="10" fill="#1b3126" font-weight="bold">Audit Rules:</text>'
+            '<text x="476" y="66" font-size="9.3" fill="#244035">• Show every fold (100% vs 50%)</text>'
+            '<text x="476" y="81" font-size="9.3" fill="#244035">• Tie-aware ROC step at 0.60</text>'
+            '<text x="476" y="96" font-size="9.3" fill="#205841" font-weight="bold">• Show k/n beside recall</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "cost":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 120" class="lab-diagram lab-tentpole-svg" role="img" aria-label="147x feature compression ratio and Pareto frontier filtering">'
+            '<rect width="680" height="120" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Representation Footprint (147× Smaller) &amp; Multi-Objective Pareto Frontier</text>'
+            '<rect x="16" y="34" width="318" height="72" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="26" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Raw RGB vs Cached Vectors (500 regions)</text>'
+            '<text x="26" y="69" font-size="9.5" fill="#8a5a19">• 224×224×3 uint8 RGB: 75.26 MB (150,528 B/patch)</text>'
+            '<text x="26" y="85" font-size="9.5" fill="#205841" font-weight="bold">• 256-D float32 vector: 0.51 MB (1,024 B · 147× smaller)</text>'
+            '<rect x="348" y="34" width="316" height="72" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="358" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. Pareto Efficiency (Acc ↑, Time ↓, RAM ↓)</text>'
+            '<text x="358" y="69" font-size="9.5" fill="#205841" font-weight="bold">• Keeps undominated frontier: small (21 s) &amp; wide (0.93)</text>'
+            '<text x="358" y="85" font-size="9.5" fill="#b3472a">• Drops slow (0.90 acc, 53 s, 950 MiB — beaten on all 3)</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "heatmaps":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 116" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Spatial heatmap projection with overlap averaging and hatched unscored NaN regions">'
+            '<rect width="680" height="116" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Spatial Score Projection · Averaging Overlaps &amp; Explicitly Hatching Unscored (NaN) Regions</text>'
+            '<rect x="16" y="34" width="208" height="68" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="26" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Coordinate Grid Map</text>'
+            '<text x="26" y="69" font-size="9.5" fill="#244035">Patch 1 (0.40) ∩ Patch 2 (0.80)</text>'
+            '<text x="26" y="85" font-size="9.5" fill="#205841" font-weight="bold">Overlap cell (2,1) = 0.60 mean</text>'
+            '<rect x="236" y="34" width="212" height="68" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="246" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. Hatched Unscored Pixels</text>'
+            '<text x="246" y="69" font-size="9.5" fill="#b3472a" font-weight="bold">Uncovered cells stay NaN (hatched)</text>'
+            '<text x="246" y="85" font-size="9.5" fill="#244035">Never confused with a 0.0 score</text>'
+            '<rect x="460" y="34" width="204" height="68" rx="5" fill="#e2e8dc" stroke="#527c67" stroke-width="1.5"/>'
+            '<text x="470" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">3. ROI Coverage Receipt</text>'
+            '<text x="470" y="69" font-size="9.5" fill="#205841" font-weight="bold">66.7% (2 of 3 ROI points scored)</text>'
+            '<text x="470" y="85" font-size="9.5" fill="#244035">Median = 0.60 · Range 0.40–0.80</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "cluster-runs":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 112" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Deterministic SHA-256 cluster run IDs and atomic chunk checkpoint resumption">'
+            '<rect width="680" height="112" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Cluster Job Provenance · Canonical SHA-256 Run IDs &amp; Atomic Checkpoint Resumption</text>'
+            '<rect x="16" y="32" width="318" height="66" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="26" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">1. Deterministic Manifest (2×2×2 = 8 jobs)</text>'
+            '<text x="26" y="67" font-size="9.5" fill="#205841" font-weight="bold">Canonical JSON → 16-hex SHA-256 (55b2ba45f220d664)</text>'
+            '<text x="26" y="83" font-size="9.2" fill="#536052">Prevents duplicate runs &amp; names output folders uniquely</text>'
+            '<rect x="348" y="32" width="316" height="66" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="358" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">2. Atomic Chunk Checkpoints</text>'
+            '<text x="358" y="67" font-size="9.5" fill="#8a5a19" font-weight="bold">Chunk 2 saved [4] → Chunk 3 interrupted → Resume</text>'
+            '<text x="358" y="83" font-size="9.2" fill="#244035">Reuses committed [4] and computes only unfinished [9, 16]</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "run-results":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 112" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Duplicate run guard and incomplete job state audit">'
+            '<rect width="680" height="112" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Pre-Aggregation Audit · Rejecting Duplicate Keys &amp; Separating Crashed vs Unlaunched Jobs</text>'
+            '<rect x="16" y="32" width="318" height="66" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="26" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">1. Duplicate-Key Guard</text>'
+            '<text x="26" y="67" font-size="9.5" fill="#244035">Keyed by (configuration, fold, seed)</text>'
+            '<text x="26" y="83" font-size="9.5" fill="#b3472a" font-weight="bold">Raises ValueError before silent double-counting</text>'
+            '<rect x="348" y="32" width="316" height="66" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="358" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">2. Incomplete Run Triage</text>'
+            '<text x="358" y="67" font-size="9.5" fill="#8a5a19" font-weight="bold">• missing metrics: job started but crashed (inspect log)</text>'
+            '<text x="358" y="83" font-size="9.5" fill="#b3472a" font-weight="bold">• missing run: never launched (submit from manifest)</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "figures":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 116" class="lab-diagram lab-tentpole-svg" role="img" aria-label="End-to-end figure provenance from Case S02 ratings to SVG bar chart and SHA-256 verification">'
+            '<rect width="680" height="116" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">End-to-End Figure Provenance · Trace Any Error Bar Back to Case S02, Fold 1 &amp; Raw Ratings</text>'
+            '<rect x="16" y="34" width="152" height="68" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="24" y="52" font-size="10" fill="#1b3126" font-weight="bold">1. Raw Ratings</text>'
+            '<text x="24" y="68" font-size="9.3" fill="#244035">Case S02: A=2, B=3</text>'
+            '<text x="24" y="84" font-size="9.3" fill="#8a5a19" font-weight="bold">Ref mean = 2.500</text>'
+            '<text x="173" y="72" font-size="12" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="186" y="34" width="154" height="68" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="194" y="52" font-size="10" fill="#1b3126" font-weight="bold">2. Out-of-Fold Preds</text>'
+            '<text x="194" y="68" font-size="9.3" fill="#244035">12 cases × 3 scales</text>'
+            '<text x="194" y="84" font-size="9.3" fill="#205841" font-weight="bold">36 held-out rows</text>'
+            '<text x="345" y="72" font-size="12" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="358" y="34" width="152" height="68" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="366" y="52" font-size="10" fill="#1b3126" font-weight="bold">3. SVG Bar Chart</text>'
+            '<text x="366" y="68" font-size="9.3" fill="#205841" font-weight="bold">Patch: 0.216 MAE ★</text>'
+            '<text x="366" y="84" font-size="9.3" fill="#536052">vs 0.371 cell, 0.464 core</text>'
+            '<text x="515" y="72" font-size="12" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="528" y="34" width="136" height="68" rx="5" fill="#e2e8dc" stroke="#527c67" stroke-width="1.5"/>'
+            '<text x="536" y="52" font-size="10" fill="#1b3126" font-weight="bold">4. Asset Audit</text>'
+            '<text x="536" y="68" font-size="9.3" fill="#244035">SHA-256 checksums</text>'
+            '<text x="536" y="84" font-size="9.3" fill="#b3472a" font-weight="bold">Flags missing PDFs</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "limits":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 112" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Scope boundary between internal single-cohort cross-validation and external multi-centre validation">'
+            '<rect width="680" height="112" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Ch. 5 (§§5.5–5.6) · Internal Cohort Evidence vs External Multi-Centre Validation</text>'
+            '<rect x="16" y="32" width="318" height="66" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="26" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">Established Within Main TMA Cohort (3-Fold CV)</text>'
+            '<text x="26" y="67" font-size="9.5" fill="#205841" font-weight="bold">• Patch IHC grading: 0.238 MAE · Subtype UNI: 0.992 AUC</text>'
+            '<text x="26" y="83" font-size="9.2" fill="#244035">• Controlled comparisons on identical splits &amp; seeds</text>'
+            '<rect x="348" y="32" width="316" height="66" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="358" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">Required Before Clinical Deployment</text>'
+            '<text x="358" y="67" font-size="9.5" fill="#8a5a19" font-weight="bold">• Independent hospitals, staining protocols &amp; scanners</text>'
+            '<text x="358" y="83" font-size="9.2" fill="#244035">• Whole-slide architecture tests &amp; wet-lab assay checks</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id in ("pcam-bags", "pcam-benchmarks"):
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 112" class="lab-diagram lab-tentpole-svg" role="img" aria-label="PCam seeded bag construction and max-pooling encoder benchmark">'
+            '<rect width="680" height="112" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">PCam Multiple-Instance Benchmark · Disjoint Seeded Splits (Seeds 11 &amp; 23) + Max-Pooling Probe</text>'
+            '<rect x="16" y="32" width="318" height="66" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="26" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">Positive Bag = 1 Positive Patch + 3 Negative</text>'
+            '<text x="26" y="67" font-size="9.5" fill="#244035">Negative Bag = 4 Negative Patches (0 positive)</text>'
+            '<text x="26" y="83" font-size="9.2" fill="#205841">Exact patch IDs locked in manifest across encoders</text>'
+            '<rect x="348" y="32" width="316" height="66" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="358" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">Held-Out Balanced Accuracy (8 test bags)</text>'
+            '<text x="358" y="67" font-size="9.5" fill="#205841" font-weight="bold">• Signal encoder: 1.000 (100%) ★</text>'
+            '<text x="358" y="83" font-size="9.5" fill="#b3472a">• Random noise encoder: 0.625 (62.5%)</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "crop":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 134" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Four core extraction methods from Thesis Figure 2.3 and Table 2.5">'
+            '<rect width="680" height="134" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 2.3 &amp; Table 2.5 · Comparing 4 ways to locate tissue microarray cores</text>'
+            # Panel 1: Hough
+            '<rect x="16" y="32" width="152" height="88" rx="5" fill="#f5d0c5" stroke="#b3472a" stroke-width="1.5"/>'
+            '<text x="24" y="49" font-size="10.5" fill="#b3472a" font-weight="bold">1. Hough circles (0.06 s)</text>'
+            '<circle cx="52" cy="74" r="13" fill="#c98ca7" stroke="#205841" stroke-width="1.5"/>'
+            '<circle cx="92" cy="74" r="13" fill="#c98ca7" opacity="0.4" stroke="#b3472a" stroke-dasharray="3 2"/>'
+            '<circle cx="130" cy="70" r="9" fill="none" stroke="#b3472a" stroke-width="1.5"/>'
+            '<text x="24" y="108" font-size="9.5" fill="#1b3126">0.89 recall · misses 11%</text>'
+            # Panel 2: Tilted Grid
+            '<rect x="180" y="32" width="152" height="88" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="188" y="49" font-size="10.5" fill="#8a5a19" font-weight="bold">2. Tilted grid (0.5 s)</text>'
+            '<line x1="202" y1="62" x2="310" y2="78" stroke="#8a5a19" stroke-dasharray="3 2"/>'
+            '<circle cx="216" cy="64" r="11" fill="#c98ca7"/><rect x="204" y="52" width="24" height="24" fill="none" stroke="#205841"/>'
+            '<circle cx="292" cy="66" r="11" fill="#c98ca7"/><rect x="274" y="64" width="24" height="24" fill="none" stroke="#b3472a" stroke-width="1.8"/>'
+            '<text x="188" y="108" font-size="9.5" fill="#1b3126">0.98 prec · clips drifted core</text>'
+            # Panel 3: Manual Rectangles
+            '<rect x="344" y="32" width="152" height="88" rx="5" fill="#e2e8dc" stroke="#527c67" stroke-width="1.5"/>'
+            '<text x="352" y="49" font-size="10.5" fill="#244035" font-weight="bold">3. Drawn boxes (6.0 s)</text>'
+            '<circle cx="384" cy="74" r="12" fill="#c98ca7"/><rect x="368" y="56" width="30" height="36" fill="none" stroke="#527c67" stroke-dasharray="3 2"/>'
+            '<circle cx="446" cy="74" r="12" fill="#c98ca7"/><rect x="426" y="60" width="38" height="28" fill="none" stroke="#527c67" stroke-dasharray="3 2"/>'
+            '<text x="352" y="108" font-size="9.5" fill="#1b3126">1.00 prec/rec · uneven sizes</text>'
+            # Panel 4: 1-Click Fixed Square
+            '<rect x="508" y="32" width="156" height="88" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="2"/>'
+            '<text x="516" y="49" font-size="10.5" fill="#205841" font-weight="bold">4. 1-click box (3.0 s ★)</text>'
+            '<circle cx="552" cy="74" r="12" fill="#c98ca7"/><rect x="536" y="58" width="32" height="32" fill="none" stroke="#205841" stroke-width="2"/>'
+            '<circle cx="552" cy="74" r="2.5" fill="#1b3126"/>'
+            '<circle cx="616" cy="74" r="12" fill="#c98ca7"/><rect x="600" y="58" width="32" height="32" fill="none" stroke="#205841" stroke-width="2"/>'
+            '<circle cx="616" cy="74" r="2.5" fill="#1b3126"/>'
+            '<text x="516" y="108" font-size="9.5" fill="#205841" font-weight="bold">1.00 prec/rec · uniform 5000²</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "prepare":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 112" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Reversible coordinate mapping between downsampled preview crops and full-resolution whole-slide scans">'
+            '<rect width="680" height="112" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Reversible Coordinate Chain · Every crop records its source scan origin and scale factor</text>'
+            '<rect x="16" y="32" width="190" height="66" rx="5" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.5"/>'
+            '<text x="26" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">1. Preview Mark (1.25×)</text>'
+            '<text x="26" y="68" font-size="9.5" fill="#244035">Local box: (10, 8) → (30, 28)</text>'
+            '<text x="26" y="84" font-size="9.5" fill="#8a4b68">Saved in crops.csv manifest</text>'
+            '<text x="218" y="68" font-size="13" fill="#205841" font-weight="bold">→ ×Scale + Origin →</text>'
+            '<rect x="348" y="32" width="316" height="66" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
+            '<text x="360" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">2. Full-Resolution Scan Coordinates (50×)</text>'
+            '<text x="360" y="68" font-size="9.8" fill="#205841" font-weight="bold">Scan = (1200, 800) + 4 × Local = (1240, 832, 1320, 912)</text>'
+            '<text x="360" y="84" font-size="9.5" fill="#536052">Allows any patch or cell score to be projected back onto the slide</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "patches":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 124" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Full bounding grid tiling over circular tissue core with Otsu foreground threshold">'
+            '<rect width="680" height="124" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 2.4 &amp; 2.5 · Full-Core Grid Tiling + Otsu Tissue Mask (mean 207 ± 61 patches/core)</text>'
+            # Circular core with grid
+            '<circle cx="74" cy="74" r="38" fill="#c98ca7" opacity="0.85"/>'
+            '<g fill="none" stroke="#205841" stroke-width="1.2">'
+            '<rect x="34" y="34" width="26" height="26"/><rect x="60" y="34" width="26" height="26"/><rect x="86" y="34" width="26" height="26"/>'
+            '<rect x="34" y="60" width="26" height="26"/><rect x="60" y="60" width="26" height="26"/><rect x="86" y="60" width="26" height="26"/>'
+            '<rect x="34" y="86" width="26" height="26"/><rect x="60" y="86" width="26" height="26"/><rect x="86" y="86" width="26" height="26"/>'
+            "</g>"
+            '<text x="132" y="48" font-size="10.5" fill="#1b3126" font-weight="bold">Why tile the full bounding box?</text>'
+            '<text x="132" y="65" font-size="9.6" fill="#244035">• An inscribed inner square discards peripheral rim tissue.</text>'
+            '<text x="132" y="81" font-size="9.6" fill="#205841" font-weight="bold">• Otsu red mask + ≥ 50% coverage keeps rim tissue &amp; drops glass.</text>'
+            '<text x="132" y="97" font-size="9.6" fill="#b3472a">• Explicit 0-patch core counter catches empty/damaged cores early.</text>'
+            '<rect x="488" y="36" width="176" height="74" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="498" y="55" font-size="10.5" fill="#1b3126" font-weight="bold">Cohort Yield (Table 2.4)</text>'
+            '<text x="498" y="73" font-size="10" fill="#205841" font-weight="bold">229,683 patches kept</text>'
+            '<text x="498" y="89" font-size="9.5" fill="#244035">256 × 256 px · 3.63 GB WebP</text>'
+            '<text x="498" y="103" font-size="9.2" fill="#536052">207 ± 61 patches per core</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "cells":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 124" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Cellpose gradient flow segmentation and 2D anomaly filter across 9.13M cells">'
+            '<rect width="680" height="124" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 2.6 &amp; 2.14 · Cellpose Instance Flows → 9,126,415 Cells + Core Concentration Audit</text>'
+            '<rect x="16" y="34" width="206" height="76" rx="5" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.5"/>'
+            '<text x="26" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Cellpose Flows (Fig. 2.6)</text>'
+            '<text x="26" y="69" font-size="9.5" fill="#244035">Horizontal/vertical gradients → masks</text>'
+            '<text x="26" y="85" font-size="9.5" fill="#8a4b68" font-weight="bold">Size gate rejects specks &amp; vacuoles</text>'
+            '<text x="26" y="100" font-size="9.2" fill="#536052">Max cell diameter ≤ 220 px</text>'
+            '<rect x="236" y="34" width="210" height="76" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="246" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. Global Scan Indexing</text>'
+            '<text x="246" y="69" font-size="9.5" fill="#244035">Scan (x, y) = Core Origin + Offset</text>'
+            '<text x="246" y="85" font-size="9.5" fill="#205841" font-weight="bold">Packed into aligned NPZ / HDF5</text>'
+            '<text x="246" y="100" font-size="9.2" fill="#536052">IDs + coords + vectors in lockstep</text>'
+            '<rect x="460" y="34" width="204" height="76" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="470" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">3. Per-Core Audit (Fig. 2.14)</text>'
+            '<text x="470" y="69" font-size="9.5" fill="#244035">8,229 ± 3,664 cells/core (mean)</text>'
+            '<text x="470" y="85" font-size="9.5" fill="#b3472a" font-weight="bold">Flags 0-cell &amp; dominant cores</text>'
+            '<text x="470" y="100" font-size="9.2" fill="#536052">Gate: ≥ 1,000 cells/core required</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "autoencoder":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 120" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Comparison of deterministic autoencoder, variational autoencoder and bottleneck width trade-off">'
+            '<rect width="680" height="120" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 2.7 &amp; 2.8 · Deterministic AE vs Variational (μ, log σ²) &amp; Bottleneck Byte Trade-Off</text>'
+            '<rect x="16" y="32" width="212" height="74" rx="5" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.5"/>'
+            '<text x="26" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">Standard Autoencoder</text>'
+            '<text x="26" y="67" font-size="9.5" fill="#244035">Patch → Bottleneck z → Decoded</text>'
+            '<text x="26" y="83" font-size="9.5" fill="#8a4b68" font-weight="bold">2 numbers cut MSE 2.9× vs 1 number</text>'
+            '<text x="26" y="98" font-size="9.2" fill="#536052">Worst-first MSE queue flags outliers</text>'
+            '<rect x="240" y="32" width="212" height="74" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="250" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">Variational (VAE / NVAE)</text>'
+            '<text x="250" y="67" font-size="9.5" fill="#244035">Splits code into mean μ &amp; log σ²</text>'
+            '<text x="250" y="83" font-size="9.5" fill="#8a5a19" font-weight="bold">Loss = BCE (0.387) + β·KL (0.042)</text>'
+            '<text x="250" y="98" font-size="9.2" fill="#536052">Prevents unregularised code spikes</text>'
+            '<rect x="464" y="32" width="200" height="74" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="474" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">Thesis Finding (Fig. 2.16)</text>'
+            '<text x="474" y="67" font-size="9.5" fill="#244035">Reconstructing every pixel forces</text>'
+            '<text x="474" y="82" font-size="9.5" fill="#244035">codes to store stain/background</text>'
+            '<text x="474" y="98" font-size="9.5" fill="#b3472a" font-weight="bold">→ Motivated Barlow Twins (#features)</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "features":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 124" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Barlow Twins dual-view cross-correlation matrix pushed toward the identity matrix">'
+            '<rect width="680" height="124" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 2.9 &amp; 2.18 · Barlow Twins Cross-Correlation Matrix (C_ii → 1, C_ij → 0)</text>'
+            '<rect x="16" y="34" width="186" height="76" rx="5" fill="#e2e8dc" stroke="#527c67" stroke-width="1.5"/>'
+            '<text x="26" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Paired Views (seed=9)</text>'
+            '<text x="26" y="69" font-size="9.5" fill="#244035">View A (×0.94) &amp; View B (flip, ×1.04)</text>'
+            '<text x="26" y="85" font-size="9.5" fill="#205841" font-weight="bold">Shared patch ID + shared encoder W</text>'
+            '<text x="26" y="100" font-size="9.2" fill="#536052">ResNet-50 → 2048 → 128 → 64 → 8-D</text>'
+            # Cross-correlation matrix graphic
+            '<rect x="216" y="34" width="224" height="76" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
+            '<text x="226" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">2. Cross-Correlation C → Identity</text>'
+            '<rect x="228" y="58" width="14" height="14" fill="#205841"/><rect x="244" y="58" width="14" height="14" fill="#f7f4ea"/><rect x="260" y="58" width="14" height="14" fill="#f7f4ea"/>'
+            '<rect x="228" y="74" width="14" height="14" fill="#f7f4ea"/><rect x="244" y="74" width="14" height="14" fill="#205841"/><rect x="260" y="74" width="14" height="14" fill="#f7f4ea"/>'
+            '<rect x="228" y="90" width="14" height="14" fill="#f7f4ea"/><rect x="244" y="90" width="14" height="14" fill="#f7f4ea"/><rect x="260" y="90" width="14" height="14" fill="#205841"/>'
+            '<text x="284" y="70" font-size="9.5" fill="#205841" font-weight="bold">Diag = 1 (invariance)</text>'
+            '<text x="284" y="86" font-size="9.5" fill="#b3472a" font-weight="bold">Off-diag = 0 (no dupes)</text>'
+            '<text x="284" y="101" font-size="9.2" fill="#244035">Loss: 0.1938 → 0.0003</text>'
+            '<rect x="454" y="34" width="210" height="76" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="464" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">3. Cluster Quality (Table 2.7)</text>'
+            '<text x="464" y="69" font-size="9.5" fill="#205841" font-weight="bold">Silhouette: 0.408 vs 0.015 (AE)</text>'
+            '<text x="464" y="85" font-size="9.5" fill="#244035">Davies-Bouldin: 0.82 vs 2.81 (AE)</text>'
+            '<text x="464" y="100" font-size="9.2" fill="#536052">Zero train/val overfitting gap (Ch. 2)</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "compare":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 124" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Thesis Figure 3.4 and 3.7 81-run stratified ablation comparison">'
+            '<rect width="680" height="124" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 3.4 &amp; 3.7 · 81-Run Single-Change Ablation Grid (Paired by Fold &amp; Seed)</text>'
+            '<text x="16" y="44" font-size="10" fill="#244035">Why balanced accuracy matters: A7 (Uniform sampling) looked best on ordinary accuracy (52.2%) by favouring majority classes,</text>'
+            '<text x="16" y="58" font-size="10" fill="#244035">but dropped balanced accuracy from 45.8% to 40.8%.</text>'
+            '<text x="16" y="80" font-size="10" fill="#205841" font-weight="bold">A0 Baseline (Cosine LR + Weighted)</text>'
+            '<rect x="230" y="69" width="160" height="13" rx="3" fill="#205841"/><text x="398" y="80" font-size="10" fill="#205841" font-weight="bold">45.8% bal acc ★ (49.7% acc)</text>'
+            '<text x="16" y="98" font-size="10" fill="#8a5a19">A7 Uniform Sampling (majority bias)</text>'
+            '<rect x="230" y="87" width="142" height="13" rx="3" fill="#8a5a19"/><text x="380" y="98" font-size="10" fill="#8a5a19">40.8% bal acc (52.2% raw acc ⚠)</text>'
+            '<text x="16" y="115" font-size="10" fill="#b3472a">A8 Fixed Learning Rate (no decay)</text>'
+            '<rect x="230" y="104" width="126" height="13" rx="3" fill="#b3472a"/><text x="364" y="115" font-size="10" fill="#b3472a">36.6% bal acc (−9.2 pts)</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "agreement":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 128" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Sorted inter-observer disagreement curve vs model-to-consensus error from Thesis Figure 3.10">'
+            '<rect width="680" height="128" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 3.10 · Sorted Human Disagreement (0.382) vs Patch Model Error (0.238) Across 1,008 Cores</text>'
+            # Mini step/curve plot
+            '<rect x="16" y="32" width="356" height="82" rx="4" fill="#ffffff" stroke="#b5c2b7"/>'
+            '<line x1="40" y1="100" x2="356" y2="100" stroke="#9ab0a2"/>'
+            # Blue step curve: human disagreement (0 on ~62% of cores, then 1.0 step)
+            '<polyline points="40,100 236,100 236,52 346,52 346,38 356,38" fill="none" stroke="#3b6e8c" stroke-width="2.5"/>'
+            # Orange smooth curve: model error vs mean
+            '<path d="M40,94 Q180,88 260,76 T356,56" fill="none" stroke="#d95f02" stroke-width="2.2"/>'
+            '<text x="48" y="48" font-size="9.5" fill="#3b6e8c" font-weight="bold">— Human |Assessor A − B| step curve (mean 0.382)</text>'
+            '<text x="48" y="64" font-size="9.5" fill="#d95f02" font-weight="bold">— Patch model |Pred − Consensus| (mean 0.238 ★)</text>'
+            '<text x="48" y="111" font-size="9" fill="#536052">1,008 TMA cores sorted by human rater disagreement →</text>'
+            # Right explanation box
+            '<rect x="386" y="32" width="278" height="82" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="396" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">Why both metrics are reported together</text>'
+            '<text x="396" y="68" font-size="9.5" fill="#244035">• Rater gap (0.382) compares two people directly.</text>'
+            '<text x="396" y="84" font-size="9.5" fill="#205841" font-weight="bold">• Model MAE (0.238) compares against their mean.</text>'
+            '<text x="396" y="100" font-size="9.5" fill="#244035">• Quadratic κ penalises multi-grade jumps by Δ².</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "subtype-cohort":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 116" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Thesis Figure 4.2 cohort curation funnel from 1,109 extracted cores to 962 curated cores">'
+            '<rect width="680" height="116" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 4.2 · 6-Gate Cohort Filtering Funnel (Every Excluded Core Logged by Rule)</text>'
+            '<rect x="16" y="34" width="96" height="66" rx="4" fill="#e2e8dc" stroke="#527c67"/>'
+            '<text x="24" y="54" font-size="10.5" fill="#1b3126" font-weight="bold">1,109 cores</text><text x="24" y="70" font-size="9" fill="#536052">Extracted</text><text x="24" y="86" font-size="9" fill="#205841">100%</text>'
+            '<text x="116" y="68" font-size="11" fill="#205841">→</text>'
+            '<rect x="128" y="34" width="96" height="66" rx="4" fill="#e2e8dc" stroke="#527c67"/>'
+            '<text x="136" y="54" font-size="10.5" fill="#1b3126" font-weight="bold">1,103 cores</text><text x="136" y="70" font-size="9" fill="#536052">Cell ≤ 220 px</text><text x="136" y="86" font-size="9" fill="#b3472a">−6 vacuoles</text>'
+            '<text x="228" y="68" font-size="11" fill="#205841">→</text>'
+            '<rect x="240" y="34" width="96" height="66" rx="4" fill="#e2e8dc" stroke="#527c67"/>'
+            '<text x="248" y="54" font-size="10.5" fill="#1b3126" font-weight="bold">1,021 cores</text><text x="248" y="70" font-size="9" fill="#536052">Patches ≥ 87</text><text x="248" y="86" font-size="9" fill="#b3472a">−82 sparse</text>'
+            '<text x="340" y="68" font-size="11" fill="#205841">→</text>'
+            '<rect x="352" y="34" width="96" height="66" rx="4" fill="#e2e8dc" stroke="#527c67"/>'
+            '<text x="360" y="54" font-size="10.5" fill="#1b3126" font-weight="bold">1,003 cores</text><text x="360" y="70" font-size="9" fill="#536052">Cells ≥ 1,000</text><text x="360" y="86" font-size="9" fill="#b3472a">−18 low cell</text>'
+            '<text x="452" y="68" font-size="11" fill="#205841">→</text>'
+            '<rect x="464" y="34" width="92" height="66" rx="4" fill="#e2e8dc" stroke="#527c67"/>'
+            '<text x="472" y="54" font-size="10.5" fill="#1b3126" font-weight="bold">978 cores</text><text x="472" y="70" font-size="9" fill="#536052">Rater Δ ≤ 1</text><text x="472" y="86" font-size="9" fill="#b3472a">−25 discordant</text>'
+            '<text x="560" y="68" font-size="11" fill="#205841">→</text>'
+            '<rect x="572" y="34" width="92" height="66" rx="4" fill="#d5e5dc" stroke="#205841" stroke-width="2"/>'
+            '<text x="580" y="54" font-size="10.5" fill="#205841" font-weight="bold">962 curated</text><text x="580" y="70" font-size="9" fill="#244035">−Slide 393936</text><text x="580" y="86" font-size="9" fill="#205841" font-weight="bold">86.7% retained</text>'
+            "</svg></figure>"
+        )
+
+    if goal_id == "explain":
+        return (
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 128" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Four XAI interpretability methods from Thesis Figure 3.5 and 4.11">'
+            '<rect width="680" height="128" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
+            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 3.5 &amp; 4.11–4.15 · Four Complementary XAI Probes vs Blurry Whole-Core Grad-CAM</text>'
+            '<rect x="16" y="34" width="152" height="80" rx="5" fill="#e2e8dc" stroke="#527c67" stroke-width="1.5"/>'
+            '<text x="24" y="51" font-size="10" fill="#1b3126" font-weight="bold">(A) Attention Weights</text>'
+            '<text x="24" y="67" font-size="9.2" fill="#244035">Softmax α_i pooling share</text>'
+            '<text x="24" y="83" font-size="9.2" fill="#527c67" font-weight="bold">Shows pooled routing,</text>'
+            '<text x="24" y="97" font-size="9.2" fill="#536052">not class sign (+/−)</text>'
+            '<rect x="180" y="34" width="152" height="80" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="188" y="51" font-size="10" fill="#1b3126" font-weight="bold">(B) Singleton Repeat</text>'
+            '<text x="188" y="67" font-size="9.2" fill="#244035">Bag = K copies of patch i</text>'
+            '<text x="188" y="83" font-size="9.2" fill="#205841" font-weight="bold">Isolates each patch’s</text>'
+            '<text x="188" y="97" font-size="9.2" fill="#536052">standalone class preference</text>'
+            '<rect x="344" y="34" width="152" height="80" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<text x="352" y="51" font-size="10" fill="#1b3126" font-weight="bold">(C) Leave-One-Out</text>'
+            '<text x="352" y="67" font-size="9.2" fill="#244035">Remove patch i from bag</text>'
+            '<text x="352" y="83" font-size="9.2" fill="#8a5a19" font-weight="bold">Measures marginal Δ</text>'
+            '<text x="352" y="97" font-size="9.2" fill="#536052">in context of whole bag</text>'
+            '<rect x="508" y="34" width="156" height="80" rx="5" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.8"/>'
+            '<text x="516" y="51" font-size="10" fill="#1b3126" font-weight="bold">(D) Dream Dimming ★</text>'
+            '<text x="516" y="67" font-size="9.2" fill="#244035">Optimise mask vs fixed net</text>'
+            '<text x="516" y="83" font-size="9.2" fill="#8a4b68" font-weight="bold">3.5× drop vs uniform</text>'
+            '<text x="516" y="97" font-size="9.2" fill="#536052">Tested at equal brightness</text>'
+            "</svg></figure>"
+        )
+
+    return ""
+
