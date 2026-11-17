@@ -196,8 +196,9 @@ def breadcrumb_markup(ancestors):
     return f'<nav class="lab-kicker" aria-label="Breadcrumb">{links}</nav>'
 
 
-def render_group_overview(group_id, group, titles):
+def render_group_overview(root_crumb, group_id, group, titles):
     label = group["title"]
+    kicker = breadcrumb_markup([root_crumb])
     total_files = sum(len(goal["files"]) for goal in group["goals"])
     summary = group.get(
         "summary",
@@ -227,7 +228,7 @@ def render_group_overview(group_id, group, titles):
     markup = f"""<section id="{escape(group_id, quote=True)}" class="lab-goal" data-group-section>
 <article class="lab-experiment lab-goal-overview" data-group-overview>
   <div class="lab-experiment-head">
-    <p class="lab-kicker">Section overview</p>
+    {kicker}
     <h2 tabindex="-1">{escape(label)}</h2>
     <p class="lab-lede">{escape(summary)}</p>
   </div>
@@ -384,10 +385,13 @@ def render_logbook(research, *, project=None):
     settings_path = project / "project.json"
     settings = json.loads(settings_path.read_text(encoding="utf-8")) if settings_path.is_file() else {
         "project title": "The PhD logbook",
+        "root label": "PhD logbook",
         "back label": "PhD project",
         "back url": "../projects/phd.html",
         "source url": "https://github.com/samllan/samllan.github.io/tree/main/site/research/examples",
     }
+    root_label = settings.setdefault("root label", re.sub(r"^The\s+", "", settings["project title"]))
+    root_crumb = ("question", root_label)
     groups = json.loads((project / "goals.json").read_text(encoding="utf-8"))
     snapshots = json.loads((project / "row_examples.json").read_text(encoding="utf-8"))
     details = load_leaf_details(project)
@@ -418,7 +422,7 @@ def render_logbook(research, *, project=None):
             if group["title"] else ""
         )
         if group_id:
-            panels.append(render_group_overview(group_id, group, titles))
+            panels.append(render_group_overview(root_crumb, group_id, group, titles))
         children, sidebar, parents = defaultdict(list), {}, {}
         for goal in group["goals"]:
             key, title = goal["id"], escape(goal["title"])
@@ -441,6 +445,8 @@ def render_logbook(research, *, project=None):
             chain.reverse()
             if group_id:
                 chain.insert(0, (group_id, group["title"]))
+            if key != "question":
+                chain.insert(0, root_crumb)
             return chain
 
         for goal in group["goals"]:

@@ -62,7 +62,7 @@ function selectExperiment() {
   tree.querySelector('[aria-current]')?.removeAttribute('aria-current');
   const link = selectedLeaf
     ? [...tree.querySelectorAll('.lab-script')].find(item => decodeURIComponent(item.hash.slice(1)) === selectedLeaf.id)
-    : tree.querySelector(`a[href="#${goal.id}"]`);
+    : tree.querySelector(`.lab-node-link[href="#${goal.id}"]`) || tree.querySelector(`a[href="#${goal.id}"]`);
   link?.setAttribute('aria-current', 'page');
   revealNavigation(link);
   if (selected !== activeExperiment || focusOnNavigation) {

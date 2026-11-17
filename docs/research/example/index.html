@@ -1,18 +1,18 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reading room logbook — Samuel Llanwarne</title><meta name="description" content="A fictional pilot showing how to reuse the research logbook pattern.">
-<link rel="stylesheet" href="../../style.css?v=2c230f6c43"><link rel="stylesheet" href="../logbook.css?v=91e369efaf"></head><body><a class="skip" href="#main">Skip to content</a>
+<link rel="stylesheet" href="../../style.css?v=2c230f6c43"><link rel="stylesheet" href="../logbook.css?v=b8c87521ad"></head><body><a class="skip" href="#main">Skip to content</a>
 <main id="main" class="lab">
   <div class="lab-toolbar">
     <a class="lab-back" href="../">← PhD logbook</a>
-    <h1>Reading room logbook</h1>
+    <h1><a class="lab-title-link" href="#question">Reading room logbook</a></h1>
     <a class="lab-source" href="https://github.com/samllan/samllan.github.io/tree/main/site/research/example/examples">GitHub ↗</a>
     <button type="button" class="lab-nav-toggle" aria-controls="lab-goals" aria-expanded="false">Browse goals</button>
   </div>
 
   <div class="lab-layout">
     <nav id="lab-goals" class="lab-goals" aria-label="Research goals">
-      <h2>Goals and scripts</h2>
+      <h2><a class="lab-home-link" href="#question">Reading room logbook</a></h2>
       <ul class="lab-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Can an arrival list shorten the reading room queue?" aria-expanded="true" aria-controls="branch-question" hidden></button><a class="lab-node-link" href="#question">Can an arrival list shorten the reading room queue?</a></div><div id="branch-question" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" href="#question/README.md"><code>README.md</code> <small>(Template)</small></a></li></ul></div></li></ul>
 <ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Goals under The pilot" aria-expanded="true" aria-controls="branch-section-the-pilot" hidden></button><a class="lab-node-link lab-group-link" href="#section-the-pilot">The pilot</a></div><div id="branch-section-the-pilot" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Measure the wait" aria-expanded="true" aria-controls="branch-trial" hidden></button><a class="lab-node-link" href="#trial">Measure the wait</a></div><div id="branch-trial" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" href="#trial/trial_waits.csv"><code>trial_waits.csv</code> <small>(Fictional pilot)</small></a></li><li><a class="lab-file lab-script" data-open-goal="trial" href="#trial/summarise_waits.py"><code>summarise_waits.py</code> <small>(Fictional pilot)</small></a></li></ul><ul class="lab-branch"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Review the decision" aria-expanded="true" aria-controls="branch-decision" hidden></button><a class="lab-node-link" href="#decision">Review the decision</a></div><div id="branch-decision" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" href="#decision/decision.md"><code>decision.md</code> <small>(Fictional review)</small></a></li></ul></div></li></ul></div></li></ul></div></li></ul>
       <p class="lab-date-note">Dates refer to saved research versions or the thesis. The scripts are runnable adaptations using generated data.</p>
@@ -74,7 +74,7 @@
 <section id="section-the-pilot" class="lab-goal" data-group-section>
 <article class="lab-experiment lab-goal-overview" data-group-overview>
   <div class="lab-experiment-head">
-    <p class="lab-kicker">Section overview</p>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">Reading room logbook</a></nav>
     <h2 tabindex="-1">The pilot</h2>
     <p class="lab-lede">This section groups 2 research goals and 3 experiment records.</p>
   </div>
@@ -91,7 +91,7 @@
 <section id="trial" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-the-pilot">The pilot</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">Reading room logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-the-pilot">The pilot</a></nav>
     <h2 tabindex="-1">Measure the wait</h2>
     <p class="lab-lede">How long did visitors wait under each sign-in method?</p>
   </div>
@@ -110,7 +110,7 @@
 </article>
 <div data-default-file="trial_waits.csv"><article class="lab-experiment" id="trial/trial_waits.csv" data-experiment="trial_waits.csv">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-the-pilot">The pilot</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#trial">Measure the wait</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">Reading room logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-the-pilot">The pilot</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#trial">Measure the wait</a></nav>
     <h2 tabindex="-1">Record the two groups of waits</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -144,7 +144,7 @@
   </section>
 </article><article class="lab-experiment" id="trial/summarise_waits.py" data-experiment="summarise_waits.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-the-pilot">The pilot</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#trial">Measure the wait</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">Reading room logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-the-pilot">The pilot</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#trial">Measure the wait</a></nav>
     <h2 tabindex="-1">Compare the median waits</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -180,7 +180,7 @@ Prepared list: 4 min (n=4)</pre></div></details>
 <section id="decision" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-the-pilot">The pilot</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#trial">Measure the wait</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">Reading room logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-the-pilot">The pilot</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#trial">Measure the wait</a></nav>
     <h2 tabindex="-1">Review the decision</h2>
     <p class="lab-lede">The shorter wait is promising enough to justify a better comparison.</p>
   </div>
@@ -198,7 +198,7 @@ Prepared list: 4 min (n=4)</pre></div></details>
 </article>
 <div data-default-file="decision.md"><article class="lab-experiment" id="decision/decision.md" data-experiment="decision.md">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-the-pilot">The pilot</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#trial">Measure the wait</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#decision">Review the decision</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">Reading room logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-the-pilot">The pilot</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#trial">Measure the wait</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#decision">Review the decision</a></nav>
     <h2 tabindex="-1">Choose a fairer follow-up test</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -239,4 +239,4 @@ Prepared list: 4 min (n=4)</pre></div></details>
     <div class="preview-links"><a id="preview-open" target="_blank" rel="noopener">Open file ↗</a><a id="preview-download" download>Download</a></div>
   </dialog>
 </main>
-<script src="../logbook.js?v=dd8662c6cf" defer></script></body></html>
+<script src="../logbook.js?v=e71e4fa8e9" defer></script></body></html>

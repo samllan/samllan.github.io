@@ -1,18 +1,18 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The PhD logbook — Samuel Llanwarne</title><meta name="description" content="A browsable record of the research questions, code and experiments behind the doctoral thesis.">
-<link rel="stylesheet" href="../style.css?v=2c230f6c43"><link rel="stylesheet" href="logbook.css?v=91e369efaf"></head><body><a class="skip" href="#main">Skip to content</a>
+<link rel="stylesheet" href="../style.css?v=2c230f6c43"><link rel="stylesheet" href="logbook.css?v=b8c87521ad"></head><body><a class="skip" href="#main">Skip to content</a>
 <main id="main" class="lab">
   <div class="lab-toolbar">
     <a class="lab-back" href="../projects/phd.html">← PhD project</a>
-    <h1>The PhD logbook</h1>
+    <h1><a class="lab-title-link" href="#question">The PhD logbook</a></h1>
     <a class="lab-source" href="https://github.com/samllan/samllan.github.io/tree/main/site/research/examples">GitHub ↗</a>
     <button type="button" class="lab-nav-toggle" aria-controls="lab-goals" aria-expanded="false">Browse goals</button>
   </div>
 
   <div class="lab-layout">
     <nav id="lab-goals" class="lab-goals" aria-label="Research goals">
-      <h2>Goals and scripts</h2>
+      <h2><a class="lab-home-link" href="#question">PhD logbook</a></h2>
       <ul class="lab-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Overview &amp; hypothesis" aria-expanded="true" aria-controls="branch-question" hidden></button><a class="lab-node-link" href="#question">Overview &amp; hypothesis</a></div><div id="branch-question" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" href="#question/research_questions.md"><code>research_questions.md</code> <small>(11/2026)</small></a></li><li><a class="lab-file lab-script" href="#question/README.md"><code>README.md</code> <small>(11/2026)</small></a></li></ul></div></li></ul>
 <ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Goals under 1. Prepare tissue scales" aria-expanded="true" aria-controls="branch-section-1-prepare-tissue-scales" hidden></button><a class="lab-node-link lab-group-link" href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a></div><div id="branch-section-1-prepare-tissue-scales" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Locate tissue cores" aria-expanded="true" aria-controls="branch-crop" hidden></button><a class="lab-node-link" href="#crop">Locate tissue cores</a></div><div id="branch-crop" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="crop" href="#crop/select_core_rectangles.py"><code>select_core_rectangles.py</code> <small>(08/2020)</small></a></li><li><a class="lab-file lab-script" data-open-goal="crop" href="#crop/interpolate_core_grid.py"><code>interpolate_core_grid.py</code> <small>(08/2020)</small></a></li><li><a class="lab-file lab-script" data-open-goal="crop" href="#crop/prepare_image_regions.py"><code>prepare_image_regions.py</code> <small>(08/2020 – 11/2023)</small></a></li><li><a class="lab-file lab-script" href="#crop/crop_benchmark.csv"><code>crop_benchmark.csv</code> <small>(2026 thesis)</small></a></li><li><a class="lab-file lab-script" data-open-goal="crop" href="#crop/record_crop_marks.py"><code>record_crop_marks.py</code> <small>(2020 – 2023)</small></a></li></ul><ul class="lab-branch"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Extract traceable crops" aria-expanded="true" aria-controls="branch-prepare" hidden></button><a class="lab-node-link" href="#prepare">Extract traceable crops</a></div><div id="branch-prepare" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="prepare" href="#prepare/extract_labelled_crops.py"><code>extract_labelled_crops.py</code> <small>(2020 – 2023)</small></a></li><li><a class="lab-file lab-script" data-open-goal="prepare" href="#prepare/map_crop_to_scan.py"><code>map_crop_to_scan.py</code> <small>(2020 – 2023)</small></a></li></ul><ul class="lab-branch"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Tile into patches" aria-expanded="true" aria-controls="branch-patches" hidden></button><a class="lab-node-link" href="#patches">Tile into patches</a></div><div id="branch-patches" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="patches" href="#patches/filter_tissue_patches.py"><code>filter_tissue_patches.py</code> <small>(2023 – 2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="patches" href="#patches/summarise_patch_counts.py"><code>summarise_patch_counts.py</code> <small>(2023 – 2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="patches" href="#patches/extract_patch_images.py"><code>extract_patch_images.py</code> <small>(2023 – 2025)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Segment single cells" aria-expanded="true" aria-controls="branch-cells" hidden></button><a class="lab-node-link" href="#cells">Segment single cells</a></div><div id="branch-cells" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="cells" href="#cells/extract_cell_crops.py"><code>extract_cell_crops.py</code> <small>(2023 – 2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="cells" href="#cells/index_segmented_cells.py"><code>index_segmented_cells.py</code> <small>(2021 – 2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="cells" href="#cells/package_cell_arrays.py"><code>package_cell_arrays.py</code> <small>(2021 – 2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="cells" href="#cells/summarise_cells_by_core.py"><code>summarise_cells_by_core.py</code> <small>(2026 thesis)</small></a></li></ul></div></li></ul></div></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Compress &amp; audit storage" aria-expanded="true" aria-controls="branch-storage" hidden></button><a class="lab-node-link" href="#storage">Compress &amp; audit storage</a></div><div id="branch-storage" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="storage" href="#storage/compare_image_encodings.py"><code>compare_image_encodings.py</code> <small>(04/2024)</small></a></li><li><a class="lab-file lab-script" data-open-goal="storage" href="#storage/audit_dataset_structure.py"><code>audit_dataset_structure.py</code> <small>(2024 – 2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="storage" href="#storage/measure_storage_reads.py"><code>measure_storage_reads.py</code> <small>(2024 – 2025)</small></a></li></ul></div></li></ul></div></li></ul>
 <ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Goals under 2. Compress into features" aria-expanded="true" aria-controls="branch-section-2-compress-into-features" hidden></button><a class="lab-node-link lab-group-link" href="#section-2-compress-into-features">2. Compress into features</a></div><div id="branch-section-2-compress-into-features" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Autoencoder reconstruction" aria-expanded="true" aria-controls="branch-autoencoder" hidden></button><a class="lab-node-link" href="#autoencoder">Autoencoder reconstruction</a></div><div id="branch-autoencoder" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="autoencoder" href="#autoencoder/fit_linear_autoencoder.py"><code>fit_linear_autoencoder.py</code> <small>(2021 – 2024)</small></a></li><li><a class="lab-file lab-script" data-open-goal="autoencoder" href="#autoencoder/score_reconstructions.py"><code>score_reconstructions.py</code> <small>(2021 – 2024)</small></a></li><li><a class="lab-file lab-script" data-open-goal="autoencoder" href="#autoencoder/compare_bottleneck_sizes.py"><code>compare_bottleneck_sizes.py</code> <small>(2021 – 2024)</small></a></li><li><a class="lab-file lab-script" data-open-goal="autoencoder" href="#autoencoder/score_variational_reconstruction.py"><code>score_variational_reconstruction.py</code> <small>(2026 thesis)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Contrastive view learning" aria-expanded="true" aria-controls="branch-features" hidden></button><a class="lab-node-link" href="#features">Contrastive view learning</a></div><div id="branch-features" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="features" href="#features/learn_image_features.py"><code>learn_image_features.py</code> <small>(10/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="features" href="#features/prepare_paired_views.py"><code>prepare_paired_views.py</code> <small>(2023 – 2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="features" href="#features/audit_feature_variation.py"><code>audit_feature_variation.py</code> <small>(2023 – 2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="features" href="#features/fit_shared_view_encoder.py"><code>fit_shared_view_encoder.py</code> <small>(2026 thesis)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Pretrained encoders" aria-expanded="true" aria-controls="branch-frozen-features" hidden></button><a class="lab-node-link" href="#frozen-features">Pretrained encoders</a></div><div id="branch-frozen-features" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="frozen-features" href="#frozen-features/batch_frozen_features.py"><code>batch_frozen_features.py</code> <small>(2024 – 2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="frozen-features" href="#frozen-features/compare_encoder_dimensions.py"><code>compare_encoder_dimensions.py</code> <small>(2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="frozen-features" href="#frozen-features/standardise_encoder_inputs.py"><code>standardise_encoder_inputs.py</code> <small>(2024 – 2025)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Benchmark feature quality" aria-expanded="true" aria-controls="branch-feature-benchmarks" hidden></button><a class="lab-node-link" href="#feature-benchmarks">Benchmark feature quality</a></div><div id="branch-feature-benchmarks" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="#feature-benchmarks/benchmark_frozen_features.py"><code>benchmark_frozen_features.py</code> <small>(2025 – 2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="#feature-benchmarks/measure_feature_separation.py"><code>measure_feature_separation.py</code> <small>(2021 – 2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="#feature-benchmarks/project_feature_space.py"><code>project_feature_space.py</code> <small>(2021 – 2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="#feature-benchmarks/check_bag_classifier_on_known_signal.py"><code>check_bag_classifier_on_known_signal.py</code> <small>(2026 thesis)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Keep vector coordinates" aria-expanded="true" aria-controls="branch-feature-export" hidden></button><a class="lab-node-link" href="#feature-export">Keep vector coordinates</a></div><div id="branch-feature-export" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="feature-export" href="#feature-export/export_feature_vectors.py"><code>export_feature_vectors.py</code> <small>(Sep – 10/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="feature-export" href="#feature-export/align_features_to_regions.py"><code>align_features_to_regions.py</code> <small>(2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="feature-export" href="#feature-export/check_feature_cache.py"><code>check_feature_cache.py</code> <small>(2025)</small></a></li></ul></div></li></ul></div></li></ul>
@@ -139,7 +139,7 @@ context of the thesis and includes a browser demo of the crop workflow.</p></div
 <section id="section-1-prepare-tissue-scales" class="lab-goal" data-group-section>
 <article class="lab-experiment lab-goal-overview" data-group-overview>
   <div class="lab-experiment-head">
-    <p class="lab-kicker">Section overview</p>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a></nav>
     <h2 tabindex="-1">1. Prepare tissue scales</h2>
     <p class="lab-lede">Before testing any model hypothesis, multi-gigabyte whole-slide scans had to be turned into uniform cores, background-filtered patches and segmented single cells that fit on disk and kept their exact scan coordinates.</p>
   </div>
@@ -156,7 +156,7 @@ context of the thesis and includes a browser demo of the crop workflow.</p></div
 <section id="crop" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a></nav>
     <h2 tabindex="-1">Locate tissue cores</h2>
     <p class="lab-lede">Can we locate every tissue core on a whole-slide scan in half the manual time without losing accuracy or crop uniformity?</p>
   </div>
@@ -175,7 +175,7 @@ context of the thesis and includes a browser demo of the crop workflow.</p></div
 </article>
 <div data-default-file="crop_benchmark.csv"><article class="lab-experiment" id="crop/select_core_rectangles.py" data-experiment="select_core_rectangles.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a></nav>
     <h2 tabindex="-1">Draw manual core boxes</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -208,7 +208,7 @@ context of the thesis and includes a browser demo of the crop workflow.</p></div
   </section>
 </article><article class="lab-experiment" id="crop/interpolate_core_grid.py" data-experiment="interpolate_core_grid.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a></nav>
     <h2 tabindex="-1">Project a tilted microarray grid</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -243,7 +243,7 @@ context of the thesis and includes a browser demo of the crop workflow.</p></div
   </section>
 </article><article class="lab-experiment" id="crop/prepare_image_regions.py" data-experiment="prepare_image_regions.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a></nav>
     <h2 tabindex="-1">Mark core centres with 1 click</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -287,7 +287,7 @@ crop-02 (8, 4, 12, 8)
   </section>
 </article><article class="lab-experiment" id="crop/crop_benchmark.csv" data-experiment="crop_benchmark.csv">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a></nav>
     <h2 tabindex="-1">Benchmark 4 core-finding methods</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -321,7 +321,7 @@ crop-02 (8, 4, 12, 8)
   </section>
 </article><article class="lab-experiment" id="crop/record_crop_marks.py" data-experiment="record_crop_marks.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a></nav>
     <h2 tabindex="-1">Save scan crop coordinates</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -358,7 +358,7 @@ demo-scan,B,rectangle,64,44,88,68</pre></div></details>
 <section id="prepare" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a></nav>
     <h2 tabindex="-1">Extract traceable crops</h2>
     <p class="lab-lede">How do we cut out each marked core so downstream patch and cell predictions can always be placed back on the full scan?</p>
   </div>
@@ -375,7 +375,7 @@ demo-scan,B,rectangle,64,44,88,68</pre></div></details>
 </article>
 <div data-default-file="extract_labelled_crops.py"><article class="lab-experiment" id="prepare/extract_labelled_crops.py" data-experiment="extract_labelled_crops.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a></nav>
     <h2 tabindex="-1">Cut out cores with a manifest</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -409,7 +409,7 @@ demo-scan,crop-01,crop-002.png,21,8,29,16</pre></div></details><details class="l
   </section>
 </article><article class="lab-experiment" id="prepare/map_crop_to_scan.py" data-experiment="map_crop_to_scan.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a></nav>
     <h2 tabindex="-1">Map crop boxes back to full scan</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -444,7 +444,7 @@ demo-scan,crop-01,crop-002.png,21,8,29,16</pre></div></details><details class="l
 <section id="patches" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a></nav>
     <h2 tabindex="-1">Tile into patches</h2>
     <p class="lab-lede">How do we tile each core into regular squares while discarding empty glass background and catching cores with zero usable patches?</p>
   </div>
@@ -461,7 +461,7 @@ demo-scan,crop-01,crop-002.png,21,8,29,16</pre></div></details><details class="l
 </article>
 <div data-default-file="filter_tissue_patches.py"><article class="lab-experiment" id="patches/filter_tissue_patches.py" data-experiment="filter_tissue_patches.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#patches">Tile into patches</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#patches">Tile into patches</a></nav>
     <h2 tabindex="-1">Filter empty background tiles</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -500,7 +500,7 @@ patch-x12-y4 0% skip</pre></div></details><details class="lab-detail"><summary>R
   </section>
 </article><article class="lab-experiment" id="patches/summarise_patch_counts.py" data-experiment="summarise_patch_counts.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#patches">Tile into patches</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#patches">Tile into patches</a></nav>
     <h2 tabindex="-1">Flag cores with zero usable patches</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -534,7 +534,7 @@ C 1</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="patches/extract_patch_images.py" data-experiment="extract_patch_images.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#patches">Tile into patches</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#patches">Tile into patches</a></nav>
     <h2 tabindex="-1">Save patch tiles with bounds</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -571,7 +571,7 @@ core-1,patch-x8-y0.png,8,0,16,8,0.5</pre></div></details>
 <section id="cells" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a></nav>
     <h2 tabindex="-1">Segment single cells</h2>
     <p class="lab-lede">Can we extract millions of individual cells with their scan coordinates and check whether a few cores dominate the cell count?</p>
   </div>
@@ -588,7 +588,7 @@ core-1,patch-x8-y0.png,8,0,16,8,0.5</pre></div></details>
 </article>
 <div data-default-file="extract_cell_crops.py"><article class="lab-experiment" id="cells/extract_cell_crops.py" data-experiment="extract_cell_crops.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cells">Segment single cells</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cells">Segment single cells</a></nav>
     <h2 tabindex="-1">Extract size-filtered cell crops</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -621,7 +621,7 @@ Cell 2: scan centre (262.0, 534.0), crop (8, 8)</pre></div></details><details cl
   </section>
 </article><article class="lab-experiment" id="cells/index_segmented_cells.py" data-experiment="index_segmented_cells.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cells">Segment single cells</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cells">Segment single cells</a></nav>
     <h2 tabindex="-1">Index cells to global scan coords</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -654,7 +654,7 @@ Cell 2: scan centre (262.0, 534.0), crop (8, 8)</pre></div></details><details cl
   </section>
 </article><article class="lab-experiment" id="cells/package_cell_arrays.py" data-experiment="package_cell_arrays.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cells">Segment single cells</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cells">Segment single cells</a></nav>
     <h2 tabindex="-1">Pack aligned cell arrays</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -686,7 +686,7 @@ Cell 2: scan centre (262.0, 534.0), crop (8, 8)</pre></div></details><details cl
   </section>
 </article><article class="lab-experiment" id="cells/summarise_cells_by_core.py" data-experiment="summarise_cells_by_core.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cells">Segment single cells</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#crop">Locate tissue cores</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#prepare">Extract traceable crops</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cells">Segment single cells</a></nav>
     <h2 tabindex="-1">Audit cell counts across cores</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -721,7 +721,7 @@ Cell 2: scan centre (262.0, 534.0), crop (8, 8)</pre></div></details><details cl
 <section id="storage" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a></nav>
     <h2 tabindex="-1">Compress &amp; audit storage</h2>
     <p class="lab-lede">How can we shrink 229,683 patches enough for repeated training runs and catch corrupted dataset shapes before jobs launch?</p>
   </div>
@@ -741,7 +741,7 @@ Cell 2: scan centre (262.0, 534.0), crop (8, 8)</pre></div></details><details cl
 </article>
 <div data-default-file="compare_image_encodings.py"><article class="lab-experiment" id="storage/compare_image_encodings.py" data-experiment="compare_image_encodings.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#storage">Compress &amp; audit storage</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#storage">Compress &amp; audit storage</a></nav>
     <h2 tabindex="-1">Compare PNG vs WebP compression</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -778,7 +778,7 @@ WebP         174                      1.95</pre></div></details><details class="
   </section>
 </article><article class="lab-experiment" id="storage/audit_dataset_structure.py" data-experiment="audit_dataset_structure.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#storage">Compress &amp; audit storage</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#storage">Compress &amp; audit storage</a></nav>
     <h2 tabindex="-1">Audit dataset shapes before training</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -810,7 +810,7 @@ WebP         174                      1.95</pre></div></details><details class="
   </section>
 </article><article class="lab-experiment" id="storage/measure_storage_reads.py" data-experiment="measure_storage_reads.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#storage">Compress &amp; audit storage</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#storage">Compress &amp; audit storage</a></nav>
     <h2 tabindex="-1">Time bundled vs separate file reads</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -846,7 +846,7 @@ bundle: 12288 bytes in 10.052 ms</pre></div></details>
 <section id="section-2-compress-into-features" class="lab-goal" data-group-section>
 <article class="lab-experiment lab-goal-overview" data-group-overview>
   <div class="lab-experiment-head">
-    <p class="lab-kicker">Section overview</p>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a></nav>
     <h2 tabindex="-1">2. Compress into features</h2>
     <p class="lab-lede">Training multi-scale models directly on raw pixels is expensive. This section tests three ways to turn image patches into compact feature vectors—autoencoder reconstruction, self-supervised Barlow Twins, and frozen pretrained backbones—while keeping every vector linked to its scan coordinates.</p>
   </div>
@@ -863,7 +863,7 @@ bundle: 12288 bytes in 10.052 ms</pre></div></details>
 <section id="autoencoder" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a></nav>
     <h2 tabindex="-1">Autoencoder reconstruction</h2>
     <p class="lab-lede">How much visual detail is retained when a patch is squeezed through a narrow numerical bottleneck and reconstructed?</p>
   </div>
@@ -880,7 +880,7 @@ bundle: 12288 bytes in 10.052 ms</pre></div></details>
 </article>
 <div data-default-file="fit_linear_autoencoder.py"><article class="lab-experiment" id="autoencoder/fit_linear_autoencoder.py" data-experiment="fit_linear_autoencoder.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#autoencoder">Autoencoder reconstruction</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#autoencoder">Autoencoder reconstruction</a></nav>
     <h2 tabindex="-1">Compress patches via reconstruction</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -914,7 +914,7 @@ bundle: 12288 bytes in 10.052 ms</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="autoencoder/score_reconstructions.py" data-experiment="score_reconstructions.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#autoencoder">Autoencoder reconstruction</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#autoencoder">Autoencoder reconstruction</a></nav>
     <h2 tabindex="-1">Rank worst reconstructions first</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -946,7 +946,7 @@ bundle: 12288 bytes in 10.052 ms</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="autoencoder/compare_bottleneck_sizes.py" data-experiment="compare_bottleneck_sizes.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#autoencoder">Autoencoder reconstruction</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#autoencoder">Autoencoder reconstruction</a></nav>
     <h2 tabindex="-1">Compare code width vs reconstruction error</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -978,7 +978,7 @@ bundle: 12288 bytes in 10.052 ms</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="autoencoder/score_variational_reconstruction.py" data-experiment="score_variational_reconstruction.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#autoencoder">Autoencoder reconstruction</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#autoencoder">Autoencoder reconstruction</a></nav>
     <h2 tabindex="-1">Split VAE pixel loss from KL penalty</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1013,7 +1013,7 @@ bundle: 12288 bytes in 10.052 ms</pre></div></details>
 <section id="features" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a></nav>
     <h2 tabindex="-1">Contrastive view learning</h2>
     <p class="lab-lede">Can a shared encoder learn features that stay invariant across two augmented views of a patch without collapsing into redundant columns?</p>
   </div>
@@ -1030,7 +1030,7 @@ bundle: 12288 bytes in 10.052 ms</pre></div></details>
 </article>
 <div data-default-file="fit_shared_view_encoder.py"><article class="lab-experiment" id="features/learn_image_features.py" data-experiment="learn_image_features.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#features">Contrastive view learning</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#features">Contrastive view learning</a></nav>
     <h2 tabindex="-1">Penalise redundant feature columns</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1063,7 +1063,7 @@ Duplicated feature | agreement loss 0.000 | total loss 0.010</pre></div></detail
   </section>
 </article><article class="lab-experiment" id="features/prepare_paired_views.py" data-experiment="prepare_paired_views.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#features">Contrastive view learning</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#features">Contrastive view learning</a></nav>
     <h2 tabindex="-1">Generate paired augmented views</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1095,7 +1095,7 @@ Duplicated feature | agreement loss 0.000 | total loss 0.010</pre></div></detail
   </section>
 </article><article class="lab-experiment" id="features/audit_feature_variation.py" data-experiment="audit_feature_variation.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#features">Contrastive view learning</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#features">Contrastive view learning</a></nav>
     <h2 tabindex="-1">Detect collapsed or duplicate features</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1127,7 +1127,7 @@ Duplicated feature | agreement loss 0.000 | total loss 0.010</pre></div></detail
   </section>
 </article><article class="lab-experiment" id="features/fit_shared_view_encoder.py" data-experiment="fit_shared_view_encoder.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#features">Contrastive view learning</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#features">Contrastive view learning</a></nav>
     <h2 tabindex="-1">Train a shared encoder on paired views</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1163,7 +1163,7 @@ Shared weights: [[0.52, 0.52], [0.884, -0.884]]</pre></div></details><details cl
 <section id="frozen-features" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a></nav>
     <h2 tabindex="-1">Pretrained encoders</h2>
     <p class="lab-lede">How do we standardise histology patches for frozen pretrained backbones and compare their vector footprints?</p>
   </div>
@@ -1180,7 +1180,7 @@ Shared weights: [[0.52, 0.52], [0.884, -0.884]]</pre></div></details><details cl
 </article>
 <div data-default-file="batch_frozen_features.py"><article class="lab-experiment" id="frozen-features/batch_frozen_features.py" data-experiment="batch_frozen_features.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#frozen-features">Pretrained encoders</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#frozen-features">Pretrained encoders</a></nav>
     <h2 tabindex="-1">Extract frozen features in batches</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1212,7 +1212,7 @@ Shared weights: [[0.52, 0.52], [0.884, -0.884]]</pre></div></details><details cl
   </section>
 </article><article class="lab-experiment" id="frozen-features/compare_encoder_dimensions.py" data-experiment="compare_encoder_dimensions.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#frozen-features">Pretrained encoders</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#frozen-features">Pretrained encoders</a></nav>
     <h2 tabindex="-1">Compare 16-D vs 64-D vector footprints</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1246,7 +1246,7 @@ wide,30,64,float32,7680</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="frozen-features/standardise_encoder_inputs.py" data-experiment="standardise_encoder_inputs.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#frozen-features">Pretrained encoders</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#frozen-features">Pretrained encoders</a></nav>
     <h2 tabindex="-1">Standardise RGB inputs for backbones</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1281,7 +1281,7 @@ wide,30,64,float32,7680</pre></div></details>
 <section id="feature-benchmarks" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a></nav>
     <h2 tabindex="-1">Benchmark feature quality</h2>
     <p class="lab-lede">Which feature representations group related examples cleanly and detect rare positive instances inside a multi-patch bag?</p>
   </div>
@@ -1298,7 +1298,7 @@ wide,30,64,float32,7680</pre></div></details>
 </article>
 <div data-default-file="benchmark_frozen_features.py"><article class="lab-experiment" id="feature-benchmarks/benchmark_frozen_features.py" data-experiment="benchmark_frozen_features.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-benchmarks">Benchmark feature quality</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-benchmarks">Benchmark feature quality</a></nav>
     <h2 tabindex="-1">Benchmark encoders on shared splits</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1330,7 +1330,7 @@ wide,30,64,float32,7680</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="feature-benchmarks/measure_feature_separation.py" data-experiment="measure_feature_separation.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-benchmarks">Benchmark feature quality</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-benchmarks">Benchmark feature quality</a></nav>
     <h2 tabindex="-1">Score cluster separation (Silhouette)</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1362,7 +1362,7 @@ wide,30,64,float32,7680</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="feature-benchmarks/project_feature_space.py" data-experiment="project_feature_space.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-benchmarks">Benchmark feature quality</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-benchmarks">Benchmark feature quality</a></nav>
     <h2 tabindex="-1">Project features onto 2D PCA axes</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1395,7 +1395,7 @@ variance explained [0.978, 0.022]</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="feature-benchmarks/check_bag_classifier_on_known_signal.py" data-experiment="check_bag_classifier_on_known_signal.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-benchmarks">Benchmark feature quality</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-benchmarks">Benchmark feature quality</a></nav>
     <h2 tabindex="-1">Detect 1 positive patch in a 12-patch bag</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1431,7 +1431,7 @@ maximum: area under ROC 0.999</pre></div></details>
 <section id="feature-export" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a></nav>
     <h2 tabindex="-1">Keep vector coordinates</h2>
     <p class="lab-lede">How do we guarantee that cached feature vectors stay aligned to their exact source patch coordinates even if files are reordered?</p>
   </div>
@@ -1448,7 +1448,7 @@ maximum: area under ROC 0.999</pre></div></details>
 </article>
 <div data-default-file="export_feature_vectors.py"><article class="lab-experiment" id="feature-export/export_feature_vectors.py" data-experiment="export_feature_vectors.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-export">Keep vector coordinates</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-export">Keep vector coordinates</a></nav>
     <h2 tabindex="-1">Export vectors with pixel bounds</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1482,7 +1482,7 @@ patch-x4-y0,4,0,8,4,0.43,0.19</pre></div></details><details class="lab-detail"><
   </section>
 </article><article class="lab-experiment" id="feature-export/align_features_to_regions.py" data-experiment="align_features_to_regions.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-export">Keep vector coordinates</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-export">Keep vector coordinates</a></nav>
     <h2 tabindex="-1">Join vectors to regions by ID</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1515,7 +1515,7 @@ B,80,5,0.1,0.2</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="feature-export/check_feature_cache.py" data-experiment="check_feature_cache.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-export">Keep vector coordinates</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-2-compress-into-features">2. Compress into features</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#feature-export">Keep vector coordinates</a></nav>
     <h2 tabindex="-1">Verify cached features before reuse</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1550,7 +1550,7 @@ B,80,5,0.1,0.2</pre></div></details>
 <section id="section-3-task-1-staining-grades" class="lab-goal" data-group-section>
 <article class="lab-experiment lab-goal-overview" data-group-overview>
   <div class="lab-experiment-head">
-    <p class="lab-kicker">Section overview</p>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a></nav>
     <h2 tabindex="-1">3. Task 1: Staining grades</h2>
     <p class="lab-lede">Hypothesis test 1: how closely can models trained on cores, patches or single cells reproduce expert immunohistochemical (IHC) staining grades (0–3), and how does model error compare with the disagreement between human assessors?</p>
   </div>
@@ -1567,7 +1567,7 @@ B,80,5,0.1,0.2</pre></div></details>
 <section id="grading-splits" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a></nav>
     <h2 tabindex="-1">Reference grades &amp; splits</h2>
     <p class="lab-lede">How do we combine multiple assessor ratings into a reference grade while keeping related samples together in the same validation fold?</p>
   </div>
@@ -1586,7 +1586,7 @@ B,80,5,0.1,0.2</pre></div></details>
 </article>
 <div data-default-file="assign_validation_folds.py"><article class="lab-experiment" id="grading-splits/prepare_reference_grades.py" data-experiment="prepare_reference_grades.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-splits">Reference grades &amp; splits</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-splits">Reference grades &amp; splits</a></nav>
     <h2 tabindex="-1">Average expert grades &amp; log rater count</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1619,7 +1619,7 @@ b,3,1,0</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="grading-splits/assign_validation_folds.py" data-experiment="assign_validation_folds.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-splits">Reference grades &amp; splits</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-splits">Reference grades &amp; splits</a></nav>
     <h2 tabindex="-1">Assign group-aware validation folds</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1660,7 +1660,7 @@ d,1</pre></div></details><details class="lab-detail"><summary>Research goal and 
 <section id="grading-models" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-splits">Reference grades &amp; splits</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-splits">Reference grades &amp; splits</a></nav>
     <h2 tabindex="-1">Compare scale graders</h2>
     <p class="lab-lede">Which biological scale—whole core, tissue patch or single cell—most accurately reproduces expert staining grades on held-out cases?</p>
   </div>
@@ -1679,7 +1679,7 @@ d,1</pre></div></details><details class="lab-detail"><summary>Research goal and 
 </article>
 <div data-default-file="save_held_out_grades.py"><article class="lab-experiment" id="grading-models/train_scale_graders.py" data-experiment="train_scale_graders.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-splits">Reference grades &amp; splits</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-models">Compare scale graders</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-splits">Reference grades &amp; splits</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-models">Compare scale graders</a></nav>
     <h2 tabindex="-1">Train core, patch &amp; cell graders</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1712,7 +1712,7 @@ cell {&#x27;c&#x27;: 1.7586206896551726}</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="grading-models/save_held_out_grades.py" data-experiment="save_held_out_grades.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-splits">Reference grades &amp; splits</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-models">Compare scale graders</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-splits">Reference grades &amp; splits</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-models">Compare scale graders</a></nav>
     <h2 tabindex="-1">Save out-of-fold grade predictions</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1750,7 +1750,7 @@ c,patch,1,2.0,2.071428571428571</pre></div></details><details class="lab-detail"
   </section>
 </article><article class="lab-experiment" id="grading-models/summarise_errors_by_grade.py" data-experiment="summarise_errors_by_grade.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-splits">Reference grades &amp; splits</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-models">Compare scale graders</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-splits">Reference grades &amp; splits</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#grading-models">Compare scale graders</a></nav>
     <h2 tabindex="-1">Break down signed bias by grade</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1788,7 +1788,7 @@ c,patch,1,2.0,2.071428571428571</pre></div></details><details class="lab-detail"
 <section id="compare" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a></nav>
     <h2 tabindex="-1">Matched ablation runs</h2>
     <p class="lab-lede">How do we test one training change at a time fairly—and catch runs where a startup setting silently differed from the plan?</p>
   </div>
@@ -1806,7 +1806,7 @@ c,patch,1,2.0,2.071428571428571</pre></div></details><details class="lab-detail"
 </article>
 <div data-default-file="summarise_matched_training_traces.py"><article class="lab-experiment" id="compare/compare_experiments.py" data-experiment="compare_experiments.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#compare">Matched ablation runs</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#compare">Matched ablation runs</a></nav>
     <h2 tabindex="-1">Compare paired runs across folds</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1838,7 +1838,7 @@ c,patch,1,2.0,2.071428571428571</pre></div></details><details class="lab-detail"
   </section>
 </article><article class="lab-experiment" id="compare/plan_matched_runs.py" data-experiment="plan_matched_runs.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#compare">Matched ablation runs</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#compare">Matched ablation runs</a></nav>
     <h2 tabindex="-1">Expand a single-change ablation grid</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1881,7 +1881,7 @@ c,patch,1,2.0,2.071428571428571</pre></div></details><details class="lab-detail"
   </section>
 </article><article class="lab-experiment" id="compare/verify_run_configuration.py" data-experiment="verify_run_configuration.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#compare">Matched ablation runs</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#compare">Matched ablation runs</a></nav>
     <h2 tabindex="-1">Audit startup logs against planned specs</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1914,7 +1914,7 @@ position_encoding {&#x27;planned&#x27;: True, &#x27;effective&#x27;: None, &#x27
   </section>
 </article><article class="lab-experiment" id="compare/summarise_matched_training_traces.py" data-experiment="summarise_matched_training_traces.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#compare">Matched ablation runs</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#compare">Matched ablation runs</a></nav>
     <h2 tabindex="-1">Compare fixed final-epoch windows</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -1951,7 +1951,7 @@ variant: mean balanced accuracy 0.770, mean time 51.0s</pre></div></details><det
 <section id="sampling" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a></nav>
     <h2 tabindex="-1">Sample rare &amp; hard cases</h2>
     <p class="lab-lede">Can dynamic sampling revisit rare grades and high-loss examples during training, and how does the model respond to out-of-distribution noise?</p>
   </div>
@@ -1969,7 +1969,7 @@ variant: mean balanced accuracy 0.770, mean time 51.0s</pre></div></details><det
 </article>
 <div data-default-file="weight_grading_examples.py"><article class="lab-experiment" id="sampling/weight_grading_examples.py" data-experiment="weight_grading_examples.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#sampling">Sample rare &amp; hard cases</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#sampling">Sample rare &amp; hard cases</a></nav>
     <h2 tabindex="-1">Boost rare grades &amp; high-loss cases</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2003,7 +2003,7 @@ Next epoch: [0.157, 0.293, 0.157, 0.392]</pre></div></details><details class="la
   </section>
 </article><article class="lab-experiment" id="sampling/probe_grading_model_with_noise.py" data-experiment="probe_grading_model_with_noise.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#sampling">Sample rare &amp; hard cases</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#sampling">Sample rare &amp; hard cases</a></nav>
     <h2 tabindex="-1">Probe null class with Gaussian noise</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2039,7 +2039,7 @@ noise: median null 0.683, 12/12 null calls</pre></div></details>
 <section id="agreement" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a></nav>
     <h2 tabindex="-1">Model vs expert gap</h2>
     <p class="lab-lede">How does the model&#x27;s grading error compare with the disagreement between two human experts scoring the same tissue?</p>
   </div>
@@ -2057,7 +2057,7 @@ noise: median null 0.683, 12/12 null calls</pre></div></details>
 </article>
 <div data-default-file="compare_assessor_errors.py"><article class="lab-experiment" id="agreement/compare_assessor_errors.py" data-experiment="compare_assessor_errors.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#agreement">Model vs expert gap</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#agreement">Model vs expert gap</a></nav>
     <h2 tabindex="-1">Compare model MAE with human rater gap</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2090,7 +2090,7 @@ noise: median null 0.683, 12/12 null calls</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="agreement/score_ordinal_agreement.py" data-experiment="score_ordinal_agreement.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#agreement">Model vs expert gap</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#agreement">Model vs expert gap</a></nav>
     <h2 tabindex="-1">Score quadratic-weighted kappa (κ)</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2125,7 +2125,7 @@ noise: median null 0.683, 12/12 null calls</pre></div></details>
 <section id="section-4-task-2-subtype-labels" class="lab-goal" data-group-section>
 <article class="lab-experiment lab-goal-overview" data-group-overview>
   <div class="lab-experiment-head">
-    <p class="lab-kicker">Section overview</p>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a></nav>
     <h2 tabindex="-1">4. Task 2: Subtype labels</h2>
     <p class="lab-lede">Hypothesis test 2: can multiple-instance learning over patch or cell representations predict the supplied ABC and GCB molecular subtype labels—and does adding 2D spatial patch positions or hierarchical pooling improve accuracy relative to compute cost?</p>
   </div>
@@ -2142,7 +2142,7 @@ noise: median null 0.683, 12/12 null calls</pre></div></details>
 <section id="subtype-cohort" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a></nav>
     <h2 tabindex="-1">Curate subtype cohort</h2>
     <p class="lab-lede">Which specimens had valid ABC or GCB subtype labels, required stains and sufficient tissue patches to enter the comparison?</p>
   </div>
@@ -2159,7 +2159,7 @@ noise: median null 0.683, 12/12 null calls</pre></div></details>
 </article>
 <div data-default-file="join_subtype_labels.py"><article class="lab-experiment" id="subtype-cohort/join_subtype_labels.py" data-experiment="join_subtype_labels.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#subtype-cohort">Curate subtype cohort</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#subtype-cohort">Curate subtype cohort</a></nav>
     <h2 tabindex="-1">Match specimens to ABC / GCB labels</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2191,7 +2191,7 @@ noise: median null 0.683, 12/12 null calls</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="subtype-cohort/audit_cohort_filters.py" data-experiment="audit_cohort_filters.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#subtype-cohort">Curate subtype cohort</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#subtype-cohort">Curate subtype cohort</a></nav>
     <h2 tabindex="-1">Log per-rule cohort exclusions</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2226,7 +2226,7 @@ noise: median null 0.683, 12/12 null calls</pre></div></details>
 <section id="interpret" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a></nav>
     <h2 tabindex="-1">Pool patches per case</h2>
     <p class="lab-lede">How should hundreds of patch vectors from one specimen be combined into a single case-level subtype prediction?</p>
   </div>
@@ -2243,7 +2243,7 @@ noise: median null 0.683, 12/12 null calls</pre></div></details>
 </article>
 <div data-default-file="pool_patch_evidence.py"><article class="lab-experiment" id="interpret/pool_patch_evidence.py" data-experiment="pool_patch_evidence.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#interpret">Pool patches per case</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#interpret">Pool patches per case</a></nav>
     <h2 tabindex="-1">Compare mean, max &amp; attention pooling</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2275,7 +2275,7 @@ noise: median null 0.683, 12/12 null calls</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="interpret/batch_variable_patch_sets.py" data-experiment="batch_variable_patch_sets.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#interpret">Pool patches per case</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#interpret">Pool patches per case</a></nav>
     <h2 tabindex="-1">Sort variable bags to cut padding 76%</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2307,7 +2307,7 @@ noise: median null 0.683, 12/12 null calls</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="interpret/predict_subtypes_from_bags.py" data-experiment="predict_subtypes_from_bags.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#interpret">Pool patches per case</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#interpret">Pool patches per case</a></nav>
     <h2 tabindex="-1">Classify held-out bags by subtype</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2342,7 +2342,7 @@ noise: median null 0.683, 12/12 null calls</pre></div></details>
 <section id="subtype-ablations" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#interpret">Pool patches per case</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#interpret">Pool patches per case</a></nav>
     <h2 tabindex="-1">Test position &amp; hierarchy</h2>
     <p class="lab-lede">Does giving the transformer 2D spatial patch coordinates or pooling cells within patches first improve subtype prediction?</p>
   </div>
@@ -2361,7 +2361,7 @@ noise: median null 0.683, 12/12 null calls</pre></div></details>
 </article>
 <div data-default-file="compare_spatial_attention.py"><article class="lab-experiment" id="subtype-ablations/compare_spatial_attention.py" data-experiment="compare_spatial_attention.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#interpret">Pool patches per case</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#subtype-ablations">Test position &amp; hierarchy</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#interpret">Pool patches per case</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#subtype-ablations">Test position &amp; hierarchy</a></nav>
     <h2 tabindex="-1">Ablate 2D rotary patch positions (RoPE)</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2396,7 +2396,7 @@ Positions True: pooled score 0.369</pre></div></details><details class="lab-deta
   </section>
 </article><article class="lab-experiment" id="subtype-ablations/compare_flat_and_hierarchical_pooling.py" data-experiment="compare_flat_and_hierarchical_pooling.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#interpret">Pool patches per case</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#subtype-ablations">Test position &amp; hierarchy</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#interpret">Pool patches per case</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#subtype-ablations">Test position &amp; hierarchy</a></nav>
     <h2 tabindex="-1">Compare flat cell vs patch-then-core pooling</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2432,7 +2432,7 @@ hierarchical: 0.50</pre></div></details>
 <section id="validation" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a></nav>
     <h2 tabindex="-1">Cross-fold ROC &amp; recall</h2>
     <p class="lab-lede">Which subtype representation performed best across validation folds, and how do class recalls behave across thresholds?</p>
   </div>
@@ -2451,7 +2451,7 @@ hierarchical: 0.50</pre></div></details>
 </article>
 <div data-default-file="summarise_validation.py"><article class="lab-experiment" id="validation/summarise_validation.py" data-experiment="summarise_validation.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#validation">Cross-fold ROC &amp; recall</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#validation">Cross-fold ROC &amp; recall</a></nav>
     <h2 tabindex="-1">Report grading &amp; subtype scores by fold</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2490,7 +2490,7 @@ Fold 1  | 50%</pre></div></details><details class="lab-detail"><summary>Research
   </section>
 </article><article class="lab-experiment" id="validation/evaluate_subtype_roc.py" data-experiment="evaluate_subtype_roc.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#validation">Cross-fold ROC &amp; recall</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#validation">Cross-fold ROC &amp; recall</a></nav>
     <h2 tabindex="-1">Trace tie-aware ROC curves &amp; AUC</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2522,7 +2522,7 @@ Fold 1  | 50%</pre></div></details><details class="lab-detail"><summary>Research
   </section>
 </article><article class="lab-experiment" id="validation/compare_fold_class_recall.py" data-experiment="compare_fold_class_recall.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#validation">Cross-fold ROC &amp; recall</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#validation">Cross-fold ROC &amp; recall</a></nav>
     <h2 tabindex="-1">Report per-fold ABC &amp; GCB recall (k/n)</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2560,7 +2560,7 @@ Fold 1  | 50%</pre></div></details><details class="lab-detail"><summary>Research
 <section id="cost" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a></nav>
     <h2 tabindex="-1">Accuracy vs compute cost</h2>
     <p class="lab-lede">Which models sit on the Pareto frontier when we weigh subtype accuracy against runtime, peak memory and storage?</p>
   </div>
@@ -2577,7 +2577,7 @@ Fold 1  | 50%</pre></div></details><details class="lab-detail"><summary>Research
 </article>
 <div data-default-file="estimate_representation_cost.py"><article class="lab-experiment" id="cost/estimate_representation_cost.py" data-experiment="estimate_representation_cost.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cost">Accuracy vs compute cost</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cost">Accuracy vs compute cost</a></nav>
     <h2 tabindex="-1">Compare raw RGB vs vector cache bytes</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2612,7 +2612,7 @@ Feature vectors                1,024         512,000</pre></div></details><detai
   </section>
 </article><article class="lab-experiment" id="cost/rank_accuracy_compute_tradeoffs.py" data-experiment="rank_accuracy_compute_tradeoffs.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cost">Accuracy vs compute cost</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cost">Accuracy vs compute cost</a></nav>
     <h2 tabindex="-1">Filter models on the Pareto frontier</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2644,7 +2644,7 @@ Feature vectors                1,024         512,000</pre></div></details><detai
   </section>
 </article><article class="lab-experiment" id="cost/audit_compute_measurements.py" data-experiment="audit_compute_measurements.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cost">Accuracy vs compute cost</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cost">Accuracy vs compute cost</a></nav>
     <h2 tabindex="-1">Audit timing &amp; peak RAM logs</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2679,7 +2679,7 @@ Feature vectors                1,024         512,000</pre></div></details><detai
 <section id="section-5-explain-verify" class="lab-goal" data-group-section>
 <article class="lab-experiment lab-goal-overview" data-group-overview>
   <div class="lab-experiment-head">
-    <p class="lab-kicker">Section overview</p>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a></nav>
     <h2 tabindex="-1">5. Explain &amp; verify</h2>
     <p class="lab-lede">A high validation score is not enough for scientific workflows: researchers need to see which tissue regions drove a prediction, test whether dimming those regions changes the score more than a uniform control, and trace every published figure back to verified run outputs.</p>
   </div>
@@ -2696,7 +2696,7 @@ Feature vectors                1,024         512,000</pre></div></details><detai
 <section id="heatmaps" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a></nav>
     <h2 tabindex="-1">Spatial score heatmaps</h2>
     <p class="lab-lede">How do we project model scores back onto the source tissue image while clearly marking regions that were never scored?</p>
   </div>
@@ -2713,7 +2713,7 @@ Feature vectors                1,024         512,000</pre></div></details><detai
 </article>
 <div data-default-file="render_score_overlay.py"><article class="lab-experiment" id="heatmaps/map_patch_scores.py" data-experiment="map_patch_scores.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#heatmaps">Spatial score heatmaps</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#heatmaps">Spatial score heatmaps</a></nav>
     <h2 tabindex="-1">Project patch scores onto a 2D grid</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2747,7 +2747,7 @@ Feature vectors                1,024         512,000</pre></div></details><detai
   </section>
 </article><article class="lab-experiment" id="heatmaps/render_score_overlay.py" data-experiment="render_score_overlay.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#heatmaps">Spatial score heatmaps</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#heatmaps">Spatial score heatmaps</a></nav>
     <h2 tabindex="-1">Render heatmaps with hatched NaN areas</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2779,7 +2779,7 @@ Feature vectors                1,024         512,000</pre></div></details><detai
   </section>
 </article><article class="lab-experiment" id="heatmaps/summarise_overlay_coverage.py" data-experiment="summarise_overlay_coverage.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#heatmaps">Spatial score heatmaps</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#heatmaps">Spatial score heatmaps</a></nav>
     <h2 tabindex="-1">Summarise scored ROI coverage</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2814,7 +2814,7 @@ Feature vectors                1,024         512,000</pre></div></details><detai
 <section id="explain" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a></nav>
     <h2 tabindex="-1">Dimming &amp; perturbation</h2>
     <p class="lab-lede">When an explanation highlights part of a tissue image, does dimming or removing that region change the score more than a uniform control?</p>
   </div>
@@ -2831,7 +2831,7 @@ Feature vectors                1,024         512,000</pre></div></details><detai
 </article>
 <div data-default-file="explain_prediction.py"><article class="lab-experiment" id="explain/explain_prediction.py" data-experiment="explain_prediction.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#explain">Dimming &amp; perturbation</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#explain">Dimming &amp; perturbation</a></nav>
     <h2 tabindex="-1">Fit class-specific dimming masks</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2864,7 +2864,7 @@ Class B: 0.01 -&gt; 0.96 | 0.00 1.00 0.00 1.00</pre></div></details><details cla
   </section>
 </article><article class="lab-experiment" id="explain/model_explanations.md" data-experiment="model_explanations.md">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#explain">Dimming &amp; perturbation</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#explain">Dimming &amp; perturbation</a></nav>
     <h2 tabindex="-1">Scope XAI masks vs biological proof</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2896,7 +2896,7 @@ Class B: 0.01 -&gt; 0.96 | 0.00 1.00 0.00 1.00</pre></div></details><details cla
   </section>
 </article><article class="lab-experiment" id="explain/test_mask_score_changes.py" data-experiment="test_mask_score_changes.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#explain">Dimming &amp; perturbation</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#explain">Dimming &amp; perturbation</a></nav>
     <h2 tabindex="-1">Test targeted vs uniform dimming control</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2928,7 +2928,7 @@ Class B: 0.01 -&gt; 0.96 | 0.00 1.00 0.00 1.00</pre></div></details><details cla
   </section>
 </article><article class="lab-experiment" id="explain/compare_patch_perturbations.py" data-experiment="compare_patch_perturbations.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#explain">Dimming &amp; perturbation</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#explain">Dimming &amp; perturbation</a></nav>
     <h2 tabindex="-1">Compare leave-one-out vs singleton repeat</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -2965,7 +2965,7 @@ Patch 2: remove [-0.217  0.217], repeat [ 0.433 -0.433]</pre></div></details>
 <section id="cluster-runs" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a></nav>
     <h2 tabindex="-1">Schedule &amp; resume jobs</h2>
     <p class="lab-lede">How do we give every cluster experiment a deterministic ID and resume interrupted jobs without repeating committed work?</p>
   </div>
@@ -2982,7 +2982,7 @@ Patch 2: remove [-0.217  0.217], repeat [ 0.433 -0.433]</pre></div></details>
 </article>
 <div data-default-file="build_cluster_run_manifest.py"><article class="lab-experiment" id="cluster-runs/build_cluster_run_manifest.py" data-experiment="build_cluster_run_manifest.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cluster-runs">Schedule &amp; resume jobs</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cluster-runs">Schedule &amp; resume jobs</a></nav>
     <h2 tabindex="-1">Generate SHA-256 cluster run IDs</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -3095,7 +3095,7 @@ Patch 2: remove [-0.217  0.217], repeat [ 0.433 -0.433]</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="cluster-runs/resume_chunked_experiment.py" data-experiment="resume_chunked_experiment.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cluster-runs">Schedule &amp; resume jobs</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#cluster-runs">Schedule &amp; resume jobs</a></nav>
     <h2 tabindex="-1">Resume interrupted jobs from checkpoints</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -3131,7 +3131,7 @@ Resumed results: [4, 9, 16]</pre></div></details>
 <section id="run-results" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a></nav>
     <h2 tabindex="-1">Audit completed runs</h2>
     <p class="lab-lede">How do we catch missing, crashed or duplicate runs before aggregating fold metrics into a result table?</p>
   </div>
@@ -3148,7 +3148,7 @@ Resumed results: [4, 9, 16]</pre></div></details>
 </article>
 <div data-default-file="collect_fold_results.py"><article class="lab-experiment" id="run-results/collect_fold_results.py" data-experiment="collect_fold_results.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#run-results">Audit completed runs</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#run-results">Audit completed runs</a></nav>
     <h2 tabindex="-1">Merge fold results &amp; block duplicates</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -3180,7 +3180,7 @@ Resumed results: [4, 9, 16]</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="run-results/find_incomplete_runs.py" data-experiment="find_incomplete_runs.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#run-results">Audit completed runs</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#run-results">Audit completed runs</a></nav>
     <h2 tabindex="-1">Flag crashed or unlaunched cluster jobs</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -3216,7 +3216,7 @@ compact,1,7,missing</pre></div></details>
 <section id="figures" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a></nav>
     <h2 tabindex="-1">Reproduce thesis figures</h2>
     <p class="lab-lede">Can a reviewer start from one error bar in a results figure and trace it all the way back to the individual case, fold and raw ratings?</p>
   </div>
@@ -3233,7 +3233,7 @@ compact,1,7,missing</pre></div></details>
 </article>
 <div data-default-file="run_grading_example.py"><article class="lab-experiment" id="figures/build_grading_table.py" data-experiment="build_grading_table.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#figures">Reproduce thesis figures</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#figures">Reproduce thesis figures</a></nav>
     <h2 tabindex="-1">Aggregate scale MAE on matched cases</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -3267,7 +3267,7 @@ patch,1,0.200</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="figures/render_grading_figure.py" data-experiment="render_grading_figure.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#figures">Reproduce thesis figures</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#figures">Reproduce thesis figures</a></nav>
     <h2 tabindex="-1">Render scale MAE summary to SVG</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -3299,7 +3299,7 @@ patch,1,0.200</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="figures/run_grading_example.py" data-experiment="run_grading_example.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#figures">Reproduce thesis figures</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#figures">Reproduce thesis figures</a></nav>
     <h2 tabindex="-1">Trace Case S02 from ratings to chart</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -3331,7 +3331,7 @@ patch,1,0.200</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="figures/bin_patch_distribution.py" data-experiment="bin_patch_distribution.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#figures">Reproduce thesis figures</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#figures">Reproduce thesis figures</a></nav>
     <h2 tabindex="-1">Bin per-core patch counts [lower, upper)</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -3367,7 +3367,7 @@ patch,1,0.200</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="figures/grading_figure.svg" data-experiment="grading_figure.svg">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#figures">Reproduce thesis figures</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#figures">Reproduce thesis figures</a></nav>
     <h2 tabindex="-1">Inspect the rendered 3-scale SVG chart</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -3399,7 +3399,7 @@ patch,1,0.200</pre></div></details>
   </section>
 </article><article class="lab-experiment" id="figures/verify_report_assets.py" data-experiment="verify_report_assets.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#figures">Reproduce thesis figures</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#figures">Reproduce thesis figures</a></nav>
     <h2 tabindex="-1">Verify report files with SHA-256 hashes</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -3435,7 +3435,7 @@ Missing: [&#x27;figure.pdf&#x27;]</pre></div></details>
 <section id="limits" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a></nav>
     <h2 tabindex="-1">Study limits &amp; next tests</h2>
     <p class="lab-lede">What do the internal single-cohort comparisons establish, and what would a multi-centre external study need to test next?</p>
   </div>
@@ -3453,7 +3453,7 @@ Missing: [&#x27;figure.pdf&#x27;]</pre></div></details>
 </article>
 <div data-default-file="research_limits.md"><article class="lab-experiment" id="limits/research_limits.md" data-experiment="research_limits.md">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#limits">Study limits &amp; next tests</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-5-explain-verify">5. Explain &amp; verify</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#limits">Study limits &amp; next tests</a></nav>
     <h2 tabindex="-1">Scope internal CV vs external validation</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -3489,7 +3489,7 @@ Missing: [&#x27;figure.pdf&#x27;]</pre></div></details>
 <section id="section-6-appendix-pcam-benchmark" class="lab-goal" data-group-section>
 <article class="lab-experiment lab-goal-overview" data-group-overview>
   <div class="lab-experiment-head">
-    <p class="lab-kicker">Section overview</p>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a></nav>
     <h2 tabindex="-1">6. Appendix: PCam benchmark</h2>
     <p class="lab-lede">To test the multiple-instance bag pipeline on an external public dataset, this appendix assembles repeatable positive and negative patch bags from PatchCamelyon (PCam) and compares frozen encoders on fixed bag splits.</p>
   </div>
@@ -3506,7 +3506,7 @@ Missing: [&#x27;figure.pdf&#x27;]</pre></div></details>
 <section id="pcam-bags" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-6-appendix-pcam-benchmark">6. Appendix: PCam benchmark</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-6-appendix-pcam-benchmark">6. Appendix: PCam benchmark</a></nav>
     <h2 tabindex="-1">Assemble benchmark bags</h2>
     <p class="lab-lede">How do we group patches into repeatable positive and negative bags with fixed seeds so different encoders face the exact same benchmark?</p>
   </div>
@@ -3523,7 +3523,7 @@ Missing: [&#x27;figure.pdf&#x27;]</pre></div></details>
 </article>
 <div data-default-file="build_benchmark_bags.py"><article class="lab-experiment" id="pcam-bags/build_benchmark_bags.py" data-experiment="build_benchmark_bags.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-6-appendix-pcam-benchmark">6. Appendix: PCam benchmark</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#pcam-bags">Assemble benchmark bags</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-6-appendix-pcam-benchmark">6. Appendix: PCam benchmark</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#pcam-bags">Assemble benchmark bags</a></nav>
     <h2 tabindex="-1">Build seeded PCam benchmark bags</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -3559,7 +3559,7 @@ test [{&#x27;patches&#x27;: [&#x27;test-03&#x27;, &#x27;test-05&#x27;, &#x27;tes
 <section id="pcam-benchmarks" class="lab-goal" data-goal>
 <article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-6-appendix-pcam-benchmark">6. Appendix: PCam benchmark</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#pcam-bags">Assemble benchmark bags</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-6-appendix-pcam-benchmark">6. Appendix: PCam benchmark</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#pcam-bags">Assemble benchmark bags</a></nav>
     <h2 tabindex="-1">Compare bag encoders</h2>
     <p class="lab-lede">When we hold the train/test bag manifests and max-pooling rule fixed, how clearly does the benchmark separate a signal encoder from noise?</p>
   </div>
@@ -3576,7 +3576,7 @@ test [{&#x27;patches&#x27;: [&#x27;test-03&#x27;, &#x27;test-05&#x27;, &#x27;tes
 </article>
 <div data-default-file="compare_benchmark_encoders.py"><article class="lab-experiment" id="pcam-benchmarks/compare_benchmark_encoders.py" data-experiment="compare_benchmark_encoders.py">
   <div class="lab-experiment-head">
-    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#section-6-appendix-pcam-benchmark">6. Appendix: PCam benchmark</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#pcam-bags">Assemble benchmark bags</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#pcam-benchmarks">Compare bag encoders</a></nav>
+    <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">PhD logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-6-appendix-pcam-benchmark">6. Appendix: PCam benchmark</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#pcam-bags">Assemble benchmark bags</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#pcam-benchmarks">Compare bag encoders</a></nav>
     <h2 tabindex="-1">Compare encoders on fixed PCam bags</h2>
   </div>
   <section class="lab-framing" aria-label="Research question and notes">
@@ -3617,4 +3617,4 @@ noise: balanced accuracy 0.625</pre></div></details><details class="lab-detail">
     <div class="preview-links"><a id="preview-open" target="_blank" rel="noopener">Open file ↗</a><a id="preview-download" download>Download</a></div>
   </dialog>
 </main>
-<script src="logbook.js?v=dd8662c6cf" defer></script></body></html>
+<script src="logbook.js?v=e71e4fa8e9" defer></script></body></html>
