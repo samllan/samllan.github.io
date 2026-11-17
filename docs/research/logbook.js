@@ -3,8 +3,16 @@ const content = logbook.querySelector('.lab-content');
 const goals = [...logbook.querySelectorAll('[data-goal]')];
 const goalLinks = [...logbook.querySelectorAll('.lab-goals a[href^="#"]')];
 const cropDemo = document.querySelector('.lab-demo');
+const browseGoals = document.querySelector('.lab-nav-toggle');
 let currentGoal;
 let cropReady = false;
+
+function showGoalMenu(open) {
+  logbook.toggleAttribute('data-nav-open', open);
+  browseGoals.setAttribute('aria-expanded', String(open));
+}
+
+browseGoals.addEventListener('click', () => showGoalMenu(!logbook.hasAttribute('data-nav-open')));
 
 function setBranch(button, open) {
   button.setAttribute('aria-expanded', String(open));
@@ -176,6 +184,7 @@ async function previewFile(link) {
 logbook.addEventListener('click', event => {
   if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
   const link = event.target.closest('a');
+  if (link?.closest('.lab-goals')) showGoalMenu(false);
   if (link?.hasAttribute('data-preview')) {
     if (dialog.showModal) {
       event.preventDefault();
@@ -248,7 +257,12 @@ function setupCropDemo() {
     const mark = marks.at(-1);
     if (mark) previewContext.drawImage(source, ...cropPosition(mark), size, size, 0, 0, size, size);
     status.textContent = count ? `${count} crop${count === 1 ? '' : 's'} marked` : 'No crops marked';
-    coordinates.textContent = mark ? `Centre (${mark.x}, ${mark.y}) px` : '';
+    if (mark) {
+      const [left, top] = cropPosition(mark);
+      coordinates.textContent = `Core ${count} · Centre (${mark.x}, ${mark.y}) px · Bounds (${left}, ${top}) to (${left + size}, ${top + size}) px`;
+    } else {
+      coordinates.textContent = '';
+    }
     undo.disabled = download.disabled = count === 0;
   }
 
@@ -282,11 +296,16 @@ function setupCropDemo() {
 
   undo.addEventListener('click', () => { marks.pop(); updateCrop(); });
   download.addEventListener('click', () => {
-    const rows = marks.map(({ x, y }, index) => `${String(index + 1).padStart(2, '0')},${x},${y}`);
-    const url = URL.createObjectURL(new Blob([['label,x,y', ...rows].join('\n') + '\n'], { type: 'text/csv' }));
+    const rows = marks.map((mark, index) => {
+      const [left, top] = cropPosition(mark);
+      return ['synthetic-slide', `core-${String(index + 1).padStart(2, '0')}`, mark.x, mark.y,
+        left, top, left + size, top + size].join(',');
+    });
+    const header = 'image_id,core_id,centre_x,centre_y,crop_left,crop_top,crop_right,crop_bottom';
+    const url = URL.createObjectURL(new Blob([[header, ...rows].join('\n') + '\n'], { type: 'text/csv' }));
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'marked-centres.csv';
+    link.download = 'crop-records.csv';
     link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   });

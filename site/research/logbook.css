@@ -11,6 +11,7 @@
 .lab-toolbar h1 { margin: 0; font-size: clamp(19px, 2.4vw, 25px); line-height: 1.25; font-weight: 650; }
 .lab-back, .lab-source { flex: none; color: var(--lab-green); font-size: 13px; font-weight: 700; }
 .lab-source { margin-left: auto; }
+.lab-toolbar .lab-nav-toggle { display: none; }
 .lab-layout { display: grid; grid-template-columns: clamp(250px, 28vw, 345px) minmax(0, 1fr); }
 .lab-goals { display: block; padding: 22px 17px 14px; border-right: 1px solid var(--lab-rule); background: #f0eee7; }
 .lab-goals h2 { margin: 0 10px 9px; font-size: 13px; font-weight: 700; color: #536052; }
@@ -51,6 +52,12 @@
 .lab-path li::before { content: ''; position: absolute; inset: 10px auto auto -21px; width: 7px; height: 7px; border-radius: 50%; background: #4e7560; }
 .lab-path a { color: #2d5541; font-weight: 650; }
 .lab-path p { max-width: 72ch; margin: 2px 0 0; color: #536052; line-height: 1.45; }
+.lab-start { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 0 0 19px; }
+.lab-start a { color: #2d5541; font-weight: 650; }
+.lab-evidence-table { max-width: 760px; margin: 14px 0; overflow-x: auto; }
+.lab-evidence-table > p { font-size: 13px; margin: 6px 0 0; color: #536052; }
+.lab-revision { max-width: 72ch; margin: 14px 0; padding-left: 12px; border-left: 2px solid var(--lab-rule); }
+.lab-revision p { margin: 4px 0; }
 .lab-figure { margin: 0 0 17px; max-width: 720px; }
 .lab-figure img { display: block; max-width: 100%; height: auto; border-radius: 5px; }
 .lab-figure figcaption { margin-top: 6px; color: #536052; font-size: 13px; }
@@ -132,6 +139,8 @@
 @media (max-width: 700px) {
   .lab-toolbar { flex-wrap: wrap; gap: 5px 12px; }
   .lab-toolbar h1 { order: -1; flex-basis: 100%; }
+  .lab.enhanced .lab-toolbar .lab-nav-toggle { display: inline-block; }
+  .lab.enhanced:not([data-nav-open]) .lab-goals { display: none; }
   .lab-layout { display: block; }
   .lab-goals { padding: 12px 16px; border-right: 0; border-bottom: 1px solid var(--lab-rule); }
   .lab.enhanced .lab-goals { max-height: min(39vh, 315px); overflow-y: auto; }

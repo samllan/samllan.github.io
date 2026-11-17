@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 from urllib.parse import quote, urljoin
 
-from render_logbook import CROP_COLUMNS, STORY_LABELS
+from render_logbook import CROP_COLUMNS, STORY_LABELS, evidence_data
 
 
 ROOT = Path(__file__).resolve().parents[1] / "site" / "research"
@@ -24,8 +24,16 @@ def asset(filename):
 
 
 def figure(visual):
-    filename, alt, caption = visual
+    filename, alt, caption, *_ = visual
     return f"![{alt}]({asset(filename)})\n\n{caption}"
+
+
+def evidence(table, examples):
+    headings, rows = evidence_data(table, examples)
+    lines = ["| " + " | ".join(headings) + " |", "| " + " | ".join("---" for _ in headings) + " |"]
+    lines.extend("| " + " | ".join(row) + " |" for row in rows)
+    note = "\n\n" + table["note"] if table.get("note") else ""
+    return f'**{table["title"]}**\n\n' + "\n".join(lines) + note
 
 
 def notes(examples, filename):
@@ -72,6 +80,8 @@ def export(research):
         for goal in group["goals"]:
             key = goal["id"]
             parts += ["### " + goal["title"], goal["description"]]
+            if goal.get("start"):
+                parts.append(" · ".join(f"[{label}]({route(target)})" for label, target in goal["start"]))
             if "figure" in goal:
                 parts.append(figure(goal["figure"]))
             if goal.get("path"):
@@ -79,9 +89,17 @@ def export(research):
                     for index, (label, target, detail) in enumerate(goal["path"], 1)))
             if "story" in goal:
                 story = goal["story"]
-                parts.extend(f"**{label}**  \n{story[field]}" for field, label in STORY_LABELS)
+                parts.extend(
+                    f"**{goal.get('next_label', label) if field == 'next' else label}**  \n{story[field]}"
+                    for field, label in STORY_LABELS
+                )
                 if "source" in story:
                     parts.append(story["source"])
+            if "table" in goal:
+                parts.append(evidence(goal["table"], examples))
+            if "revision" in goal:
+                date, previous, reason = goal["revision"]
+                parts += [f"**Decision revised** · {date}", f"**Previous decision** · {previous}", f"**Why it changed** · {reason}"]
             links = [f"[{label}]({route(target)})" for label, target in goal.get("links", ())]
             links.extend(f"[{label}]({urljoin(BASE, target)})" for label, target in goal.get("more", ()))
             if links:
@@ -106,6 +124,10 @@ def export(research):
                     parts.append(figure(snapshot["figure"]))
                 if "note" in snapshot:
                     parts.append(snapshot["note"])
+                if "table" in snapshot:
+                    parts.append(evidence(snapshot["table"], examples))
+                if "assets" in snapshot:
+                    parts.append(" · ".join(f"[{label}]({asset(file)})" for label, file in snapshot["assets"]))
                 if "stdout" in snapshot:
                     appendix.append(f"#### [{filename}]({link})")
                     if filename == "render_grading_figure.py":

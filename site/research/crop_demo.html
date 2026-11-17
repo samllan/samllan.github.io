@@ -1,9 +1,9 @@
         <section class="lab-demo" aria-labelledby="demo-title" hidden>
           <div class="lab-demo-head"><h3 id="demo-title">Mark a core with one click</h3><span>Synthetic image</span></div>
-          <p id="demo-help">Click the middle of a core. The tool draws the crop and records the marked point. With the image focused, use the arrow keys to move and Enter to mark.</p>
+          <p id="demo-help">Click the middle of a core. The tool records the marked centre and the crop’s four borders. Close to an edge, the crop shifts inward to keep its size. With the image focused, use the arrow keys to move and Enter to mark.</p>
           <div class="demo-grid">
             <canvas id="crop-image" width="640" height="240" tabindex="0" aria-label="Example image for marking crop centres" aria-describedby="demo-help"></canvas>
             <div class="demo-preview"><canvas id="crop-preview" width="96" height="96" aria-label="Newest marked crop"></canvas><p id="crop-status" aria-live="polite">No crops marked</p><p id="crop-coordinates"></p></div>
           </div>
-          <div class="demo-actions"><button id="crop-undo" type="button" disabled>Undo last</button><button id="crop-download" type="button" disabled>Download marked centres (CSV)</button></div>
+          <div class="demo-actions"><button id="crop-undo" type="button" disabled>Undo last</button><button id="crop-download" type="button" disabled>Download crop records (CSV)</button></div>
         </section>

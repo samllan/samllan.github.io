@@ -41,6 +41,8 @@
         "title": "Review the decision",
         "parent": "trial",
         "description": "The shorter wait is promising enough to justify a better comparison.",
+        "next_label": "Next test",
+        "revision": ["15 January 2026 (fictional)", "Adopt the prepared list after the first pilot.", "The groups arrived at different times of day. Alternate the methods in matching time slots before adopting either one."],
         "story": {
           "tried": "Compare the medians with the session notes and check what the trial controlled.",
           "found": "The arrival list ran in the afternoon and the paper list ran in the morning. Time of day may explain the difference.",

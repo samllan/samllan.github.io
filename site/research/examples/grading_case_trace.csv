@@ -1,0 +1,8 @@
+Field,Value
+Case,S02
+Validation fold,1
+Assessor A,2
+Assessor B,3
+Reference grade (mean),2.500
+Patch model prediction,2.226
+Absolute error (grade points),0.274

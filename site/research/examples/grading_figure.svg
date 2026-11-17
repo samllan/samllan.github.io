@@ -6,16 +6,16 @@
 <text x="24" y="55" font-size="13">Synthetic rerun · lower is better</text>
 <text x="24" y="90" font-size="15">Cell</text>
 <rect x="142" y="72" width="330" height="24" rx="3" fill="#e2e8dc"/>
-<rect x="142" y="72" width="260.0" height="24" rx="3" fill="#527c67"/>
-<text x="490" y="90" font-size="14">0.394 (n=12)</text>
+<rect x="142" y="72" width="244.8" height="24" rx="3" fill="#527c67"/>
+<text x="490" y="90" font-size="14">0.371 (n=12)</text>
 <text x="24" y="127" font-size="15">Core</text>
 <rect x="142" y="109" width="330" height="24" rx="3" fill="#e2e8dc"/>
-<rect x="142" y="109" width="322.5" height="24" rx="3" fill="#527c67"/>
-<text x="490" y="127" font-size="14">0.489 (n=12)</text>
+<rect x="142" y="109" width="306.0" height="24" rx="3" fill="#527c67"/>
+<text x="490" y="127" font-size="14">0.464 (n=12)</text>
 <text x="24" y="164" font-size="15">Patch</text>
 <rect x="142" y="146" width="330" height="24" rx="3" fill="#e2e8dc"/>
-<rect x="142" y="146" width="133.4" height="24" rx="3" fill="#527c67"/>
-<text x="490" y="164" font-size="14">0.202 (n=12)</text>
+<rect x="142" y="146" width="142.6" height="24" rx="3" fill="#527c67"/>
+<text x="490" y="164" font-size="14">0.216 (n=12)</text>
 <path d="M142 183h330" stroke="#718477"/>
 <path d="M142 183v5" stroke="#718477"/>
 <text x="142" y="206" text-anchor="middle" font-size="13">0</text>

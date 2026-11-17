@@ -1,16 +1,17 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reading room logbook — Samuel Llanwarne</title><meta name="description" content="A fictional pilot showing how to reuse the research logbook pattern.">
-<link rel="stylesheet" href="../../style.css?v=2c230f6c43"><link rel="stylesheet" href="../logbook.css?v=fd7caa4453"></head><body><a class="skip" href="#main">Skip to content</a>
+<link rel="stylesheet" href="../../style.css?v=2c230f6c43"><link rel="stylesheet" href="../logbook.css?v=b77661572f"></head><body><a class="skip" href="#main">Skip to content</a>
 <main id="main" class="lab">
   <div class="lab-toolbar">
     <a class="lab-back" href="../">← PhD logbook</a>
     <h1>Reading room logbook</h1>
     <a class="lab-source" href="https://github.com/samllan/samllan.github.io/tree/main/site/research/example/examples">GitHub ↗</a>
+    <button type="button" class="lab-nav-toggle" aria-controls="lab-goals" aria-expanded="false">Browse goals</button>
   </div>
 
   <div class="lab-layout">
-    <nav class="lab-goals" aria-label="Research goals">
+    <nav id="lab-goals" class="lab-goals" aria-label="Research goals">
       <h2>Goals and scripts</h2>
       <ul class="lab-tree"><li><a href="#question">Can an arrival list shorten the reading room queue?</a></li></ul>
 <details class="lab-group"><summary>The pilot</summary><ul class="lab-tree lab-group-tree"><li><a href="#trial">Measure the wait</a><button type="button" class="lab-branch-toggle" aria-label="Subgoals of Measure the wait" aria-expanded="true" aria-controls="branch-trial" hidden></button><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="trial" href="examples/summarise_waits.py"><code>summarise_waits.py</code></a></li></ul><ul class="lab-branch" id="branch-trial"><li><a href="#decision">Review the decision</a></li></ul></li></ul></details>
@@ -105,7 +106,8 @@ Prepared list: 4 min (n=4)</pre></template>
 <section id="decision" class="lab-goal" data-goal>
   <h2>Review the decision</h2>
   <p class="lab-lede">The shorter wait is promising enough to justify a better comparison.</p>
-<dl class="lab-story"><div><dt>What I tried</dt><dd>Compare the medians with the session notes and check what the trial controlled.</dd></div><div><dt>What I found</dt><dd>The arrival list ran in the afternoon and the paper list ran in the morning. Time of day may explain the difference.</dd></div><div><dt>Decision or next step</dt><dd>Alternate sign-in methods in matching time slots and record both visitor and staff time.</dd></div></dl>
+<dl class="lab-story"><div><dt>What I tried</dt><dd>Compare the medians with the session notes and check what the trial controlled.</dd></div><div><dt>What I found</dt><dd>The arrival list ran in the afternoon and the paper list ran in the morning. Time of day may explain the difference.</dd></div><div><dt>Next test</dt><dd>Alternate sign-in methods in matching time slots and record both visitor and staff time.</dd></div></dl>
+<div class="lab-revision"><p><strong>Decision revised</strong> · 15 January 2026 (fictional)</p><p><strong>Previous decision</strong> · Adopt the prepared list after the first pilot.</p><p><strong>Why it changed</strong> · The groups arrived at different times of day. Alternate the methods in matching time slots before adopting either one.</p></div>
   <details class="lab-files-panel" open>
   <summary>Files and outputs</summary>
   <div class="lab-order" hidden><label>Sort <select>
@@ -147,4 +149,4 @@ The next pilot records arrival and seating time as well as the staff time needed
     <div class="preview-links"><a id="preview-open" target="_blank" rel="noopener">Open file ↗</a><a id="preview-download" download>Download</a></div>
   </dialog>
 </main>
-<script src="../logbook.js?v=018045ae25" defer></script></body></html>
+<script src="../logbook.js?v=48927d3c92" defer></script></body></html>

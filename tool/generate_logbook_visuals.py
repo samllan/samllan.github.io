@@ -37,11 +37,12 @@ def image_scales():
               (0.72, 0.54, 0.21, 0.37), (0.72, 0.05, 0.21, 0.37))
     axes = [figure.add_axes(position) for position in layout]
     for axis, pixels, name in zip(axes, (scan, core, patch, cell),
-                                  ("Tissue scan", "Selected core", "Patch view", "Cell view")):
+                                  ("Tissue scan", "Core C01", "Patch from C01", "Cell from C01")):
         axis.imshow(pixels, interpolation="nearest")
         axis.set_title(name, loc="left", color="#244035", fontsize=13, pad=7)
         axis.set_axis_off()
     axes[0].add_patch(Rectangle((76.5, 73.5), 45, 45, fill=False, edgecolor="#205841", linewidth=2))
+    axes[0].text(77, 126, "C01", fontsize=9, color="#205841", fontweight="bold")
     axes[1].add_patch(Rectangle((11.5, 11.5), 17, 17, fill=False, edgecolor="#205841", linewidth=2))
     axes[1].add_patch(Rectangle((local_x - 3.5, local_y - 3.5), 7, 7, fill=False, edgecolor="#f8eaae", linewidth=2))
     figure.text(.315, .49, "→", fontsize=21, color="#426454")
@@ -65,12 +66,15 @@ def score_overlay():
     for left, top, right, bottom, _ in patches:
         axes[0].add_patch(Rectangle((left - .5, top - .5), right - left, bottom - top,
                                    fill=False, edgecolor="#f8eaae", linewidth=1.5))
+    axes[1].contourf(np.ma.masked_where(np.isfinite(scores), np.ones_like(scores)),
+                     levels=(0.5, 1.5), colors="none", hatches=("///",))
     colors = render_overlay(Image.new("RGB", (4, 1), "#634b68"),
                             np.array([[.3, .55, .8, np.nan]]))
     for i, label in enumerate(("0.30 · lower", "0.55 · overlap", "0.80 · higher", "No score")):
         x = .052 + .235 * i
         color = np.asarray(colors)[0, i, :3] / 255
-        figure.patches.append(Rectangle((x, .12), .025, .04, transform=figure.transFigure, color=color))
+        figure.patches.append(Rectangle((x, .12), .025, .04, transform=figure.transFigure,
+                                        facecolor=color, hatch="///" if i == 3 else None))
         figure.text(x + .034, .126, label, fontsize=10, color="#244035")
     figure.savefig(EXAMPLES / "score_overlay_example.png", dpi=145)
     plt.close(figure)

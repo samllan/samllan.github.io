@@ -16,10 +16,31 @@ STORY_LABELS = (("tried", "What I tried"), ("found", "What I found"), ("next", "
 
 
 def figure_markup(figure):
-    filename, alt, caption = figure
+    filename, alt, caption, *size = figure
+    dimensions = f' width="{int(size[0])}" height="{int(size[1])}"' if size else ""
     return (
         f'<figure class="lab-figure"><img src="examples/{quote(filename)}" alt="{escape(alt, quote=True)}" '
-        f'loading="lazy"><figcaption>{escape(caption)}</figcaption></figure>'
+        f'loading="lazy"{dimensions}><figcaption>{escape(caption)}</figcaption></figure>'
+    )
+
+
+def evidence_data(table, examples):
+    if "csv" in table:
+        with (examples / table["csv"]).open(encoding="utf-8", newline="") as stream:
+            headings, *rows = csv.reader(stream)
+        return headings, rows
+    return table["headings"], table["rows"]
+
+
+def evidence_table(table, examples):
+    headings, rows = evidence_data(table, examples)
+    columns = "".join(f'<th scope="col">{escape(heading)}</th>' for heading in headings)
+    cells = "".join("<tr>" + "".join(f"<td>{escape(item)}</td>" for item in row) + "</tr>" for row in rows)
+    note = f'<p>{escape(table["note"])}</p>' if table.get("note") else ""
+    return (
+        f'<div class="lab-evidence-table"><table class="lab-result-table">'
+        f'<caption>{escape(table["title"])}</caption><thead><tr>{columns}</tr></thead>'
+        f'<tbody>{cells}</tbody></table>{note}</div>'
     )
 
 
@@ -48,7 +69,12 @@ def example_markup(examples, filename, captured):
         encoded = quote(output, safe="")
         return f'<img src="data:image/svg+xml,{encoded}" alt="Example grading error bars by image scale">'
     if filename == "run_grading_example.py":
-        return ('<img src="examples/grading_figure.svg" alt="Grading workflow figure for its 36 synthetic predictions">'
+        worked_case = evidence_table(captured["table"], examples) if "table" in captured else ""
+        files = "".join(
+            f'<a href="examples/{quote(file)}">{escape(label)}</a>' for label, file in captured.get("assets", ())
+        )
+        return (worked_case + (f'<div class="lab-start">{files}</div>' if files else "") +
+                '<img src="examples/grading_figure.svg" alt="Grading workflow figure for its 36 synthetic predictions">'
                 f'<pre>{escape(output)}</pre>')
     note = captured.get("note")
     note_html = f'<p>{escape(note)}</p>' if note else ""
@@ -56,7 +82,7 @@ def example_markup(examples, filename, captured):
     return f'{visual}{note_html}<pre>{escape(output)}</pre>'
 
 
-def narrative(goal, targets):
+def narrative(goal, targets, examples):
     def route(target):
         key, marker, name = target.partition("/")
         if key not in targets or (marker and name not in targets[key]):
@@ -64,6 +90,9 @@ def narrative(goal, targets):
         return "#" + key + ("/" + quote(name, safe="") if marker else "")
 
     blocks = []
+    if goal.get("start"):
+        starters = "".join(f'<a href="{route(target)}">{escape(label)} →</a>' for label, target in goal["start"])
+        blocks.append(f'<div class="lab-start">{starters}</div>')
     if "figure" in goal:
         blocks.append(figure_markup(goal["figure"]))
     if goal.get("path"):
@@ -76,12 +105,23 @@ def narrative(goal, targets):
     story = goal.get("story")
     if story:
         items = "".join(
-            f'<div><dt>{label}</dt><dd>{escape(story[key])}</dd></div>'
+            f'<div><dt>{escape(goal.get("next_label", label) if key == "next" else label)}</dt>'
+            f'<dd>{escape(story[key])}</dd></div>'
             for key, label in STORY_LABELS
         )
         blocks.append(f'<dl class="lab-story">{items}</dl>')
         if story.get("source"):
             blocks.append(f'<p class="lab-evidence">{escape(story["source"])}</p>')
+    if "table" in goal:
+        blocks.append(evidence_table(goal["table"], examples))
+    if "revision" in goal:
+        date, previous, reason = goal["revision"]
+        blocks.append(
+            '<div class="lab-revision">'
+            f'<p><strong>Decision revised</strong> · {escape(date)}</p>'
+            f'<p><strong>Previous decision</strong> · {escape(previous)}</p>'
+            f'<p><strong>Why it changed</strong> · {escape(reason)}</p></div>'
+        )
     links = [
         f'<a href="{route(target)}">{escape(label)} →</a>' for label, target in goal.get("links", ())
     ]
@@ -172,7 +212,7 @@ def render_logbook(research, *, project=None):
                 raise ValueError(f"Unknown default output for {key}: {default_file}")
             default_attr = f' data-default-file="{escape(default_file, quote=True)}"' if default_file else ""
             summary_open = "" if goal.get("path") else " open"
-            story_html = narrative(goal, targets)
+            story_html = narrative(goal, targets, examples)
             tables.append(f'''<section id="{key}" class="lab-goal" data-goal>
   <h2>{title}</h2>
   <p class="lab-lede">{escape(goal["description"])}</p>

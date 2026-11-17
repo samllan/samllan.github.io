@@ -17,8 +17,9 @@ def run(output):
     ids = [f"S{i:02}" for i in range(12)]
     signal = {sample: (i % 4) + (i % 3 - 1) * 0.2 for i, sample in enumerate(ids)}
     first = {sample: round(value) for sample, value in signal.items()}
-    second = {sample: min(3, max(0, round(value + (i % 5 - 2) * 0.25)))
-              for i, (sample, value) in enumerate(signal.items())}
+    # Give one teaching case a controlled disagreement between the two ratings.
+    case = "S02"
+    second = {**first, case: 3}
     ratings = [(sample, assessor, table[sample]) for assessor, table in (("A", first), ("B", second)) for sample in ids]
     grades = {sample: result[0] for sample, result in reference_grades(ratings).items()}
     assignments = assign_folds([(sample, f"G{i // 2}") for i, sample in enumerate(ids)], 3)
@@ -40,6 +41,17 @@ def run(output):
             for row in csv.DictReader(stream) if row["scale"] == "patch"
         }
     agreement = compare_errors(first, second, predictions)
+    case_rows = [
+        ("Case", case), ("Validation fold", assignments[case]),
+        ("Assessor A", first[case]), ("Assessor B", second[case]),
+        ("Reference grade (mean)", f"{grades[case]:.3f}"),
+        ("Patch model prediction", f"{predictions[case]:.3f}"),
+        ("Absolute error (grade points)", f"{abs(predictions[case] - grades[case]):.3f}"),
+    ]
+    with (output / "case_trace.csv").open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.writer(stream)
+        writer.writerow(("Field", "Value"))
+        writer.writerows(case_rows)
     with (output / "agreement.csv").open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=list(agreement))
         writer.writeheader()

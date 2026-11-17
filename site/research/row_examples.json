@@ -103,7 +103,7 @@
   "compare_spatial_attention.py": {
     "quantity": "One generated input · pooled scores 0.500 and 0.369",
     "stdout": "Positions False: pooled score 0.500\nPositions True: pooled score 0.369",
-    "note": "The two values are pooled scores from the same generated input with positions off and on. They show a change in the calculation."
+    "note": "The pooled score changes from 0.500 with positions off to 0.369 with positions on. Both values are from the same generated input and describe that calculation."
   },
   "crop_benchmark.csv": {
     "quantity": "Thesis Table 2.5 · 6 s → 3 s per sample · precision and recall 1.00"
@@ -237,8 +237,8 @@
     "stdout": "Rendered (64, 48) RGBA",
     "figure": [
       "score_overlay_example.png",
-      "The same input with outlined patches on the left and patch scores overlaid on the right.",
-      "Synthetic patch scores. The overlap averages 0.30 and 0.80 to 0.55. Uncoloured areas have no score."
+      "The same input with outlined patches on the left and patch scores overlaid on the right. Hatched regions have no score.",
+      "Synthetic patch scores. The overlap averages 0.30 and 0.80 to 0.55. The hatching marks areas without a patch score."
     ]
   },
   "research_questions.md": {
@@ -250,7 +250,22 @@
   },
   "run_grading_example.py": {
     "quantity": "12 synthetic cases × 3 image scales · 36 held-out predictions",
-    "stdout": "[('cell', 12, 0.39392411533457666), ('core', 12, 0.48858962935568573), ('patch', 12, 0.20219014829686496)]"
+    "stdout": "[('cell', 12, 0.37097618627820533), ('core', 12, 0.4635760637281914), ('patch', 12, 0.21610161706773326)]",
+    "table": {
+      "title": "Follow case S02 from two grades to one error",
+      "csv": "grading_case_trace.csv",
+      "note": "The difference between the two ratings is deliberate. The synthetic inputs also use a different noise level for each scale, so the chart illustrates the workflow."
+    },
+    "assets": [
+      [
+        "Open the 36 prediction rows (CSV)",
+        "grading_predictions.csv"
+      ],
+      [
+        "Open the assessor comparison (CSV)",
+        "grading_agreement.csv"
+      ]
+    ]
   },
   "save_held_out_grades.py": {
     "quantity": "4 held-out predictions across 2 folds",
