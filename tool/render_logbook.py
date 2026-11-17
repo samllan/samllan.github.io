@@ -15,7 +15,7 @@ CROP_COLUMNS = (
     ("approach", "Approach"), ("seconds_per_sample", "Seconds per sample"),
     ("precision", "Precision"), ("recall", "Recall"), ("manual_intervention", "Manual intervention"),
 )
-STORY_LABELS = (("tried", "What I tried"), ("found", "What I found"), ("next", "Decision or next step"))
+STORY_LABELS = (("tried", "Tried"), ("found", "Found"), ("next", "Decision"))
 
 
 def figure_markup(figure):
@@ -253,12 +253,14 @@ def render_goal_overview(ancestors, goal, titles, descriptions, children, detail
         target = f"{key}/{filename}"
         detail = details.get(filename, {})
         leaf_title = detail.get("title", filename)
+        role = detail.get("role", date_label(date))
         quantity = snapshots.get(filename, {}).get("quantity", "")
         badge_html = f'<div class="lab-arc-badge"><span class="lab-step-badge">{escape(quantity)}</span></div>' if quantity else ""
         rows.append(
             f"<tr>"
             f'<td><a class="lab-step-link" href="{leaf_href(target)}">{index}. {escape(leaf_title)} →</a>'
             f'<div class="lab-step-meta"><code>{escape(filename)}</code> · {escape(date_label(date))}</div></td>'
+            f'<td class="lab-step-role">{escape(role)}</td>'
             f"<td>{escape(outcome)}{badge_html}</td>"
             f"</tr>"
         )
@@ -288,7 +290,7 @@ def render_goal_overview(ancestors, goal, titles, descriptions, children, detail
   <div class="lab-walkthrough-section" role="region" aria-label="Narrative walkthrough of experiments">
     <table class="lab-result-table lab-arc-table">
       <caption>Experiments in this step ({len(goal["files"])} {"entry" if len(goal["files"]) == 1 else "entries"})</caption>
-      <thead><tr><th scope="col">Step &amp; script</th><th scope="col">What it did &amp; found</th></tr></thead>
+      <thead><tr><th scope="col">Step</th><th scope="col">Role in the story</th><th scope="col">Result / output</th></tr></thead>
       <tbody>{"".join(rows)}</tbody>
     </table>
   </div>

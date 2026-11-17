@@ -1,85 +1,551 @@
 {
-  "research_questions.md": {"title": "From tissue images to two research questions", "input": "Lymphoma tissue images, expert staining grades and supplied subtype labels."},
-  "README.md": {"title": "Reproduce a worked example", "input": "The published adaptations, their generated inputs and the grading example."},
-  "select_core_rectangles.py": {"title": "Draw a box around each tissue core", "input": "Two hand-drawn preview boxes and the zoom factors linking the preview to the full scan.", "framing": "Drawing a rectangle around each tissue core kept a person in control of every selection, at the cost of 6 seconds per core and slightly different box dimensions.", "method": "Scale each hand-drawn preview rectangle (left, top, width, height) by the slide zoom multiplier and display magnification."},
-  "interpolate_core_grid.py": {"title": "Project a tilted grid from two corner cores", "input": "Two corner reference clicks on a tilted microarray and the observed centres of four cores.", "from": ["crop/select_core_rectangles.py"], "framing": "Could two corner clicks define the tilt and spacing of an entire tissue microarray grid in 0.5 seconds per core, and what happens when a real tissue core sits slightly off the grid line?", "method": "Estimate the slide tilt angle and average row spacing from two reference clicks, project square bounds across rows and columns, and measure centre drift."},
-  "prepare_image_regions.py": {"title": "Mark a core with one click", "input": "A generated tissue-core image and the point you mark.", "from": ["crop/select_core_rectangles.py", "crop/interpolate_core_grid.py"], "framing": "Drawing a rectangle around every core took 6 seconds and yielded differently sized boxes, while a projected slide grid clipped cores that drifted off the grid line. Could one click mark each centre and let the tool choose a consistent fixed-size crop?", "method": "Save the crop’s top, bottom, left and right pixel positions around each clicked centre (shifting inward at scan edges), and separately tile an already extracted core into regular grid patches."},
-  "crop_benchmark.csv": {"title": "Time four ways to collect image regions", "input": "Four extraction methods compared in the submitted thesis (Table 2.5, p. 70).", "from": ["crop/select_core_rectangles.py", "crop/interpolate_core_grid.py", "crop/prepare_image_regions.py"], "framing": "Would one-click marking save time compared with drawing rectangles while still finding the same cores, and how did both compare with faster Hough circle detection and grid projection?", "method": "Compare the measured time per sample, precision (avoiding wrong selections), recall (avoiding missed cores) and manual intervention for four ways of extracting cores."},
-  "record_crop_marks.py": {"title": "Save what was marked on a scan", "input": "Two named marks on one generated scan, each with a centre and rectangle.", "from": ["crop/prepare_image_regions.py", "crop/crop_benchmark.csv"], "framing": "Could I save the marks separately from the image so they could be reviewed, shared or used again?"},
-  "extract_labelled_crops.py": {"title": "Turn marked bounds into image files", "input": "An example image and two labelled sets of pixel bounds.", "from": ["crop/record_crop_marks.py"], "framing": "Once a scan has been marked, can I cut out every region automatically and still know exactly where it came from?"},
-  "map_crop_to_scan.py": {"title": "Find a smaller crop on the original scan", "input": "An example box on a reduced image, together with its offset and scale.", "from": ["prepare/extract_labelled_crops.py"]},
-  "filter_tissue_patches.py": {"title": "Keep patches that contain enough tissue", "input": "Eight squares from a generated mask and a minimum tissue fraction.", "framing": "A regular grid cuts through empty background as well as tissue. How much tissue should a square contain before I keep it?"},
-  "summarise_patch_counts.py": {"title": "Spot cores with no usable patches", "input": "A list of expected cores and the manifest of saved patches.", "from": ["patches/extract_patch_images.py"]},
-  "extract_patch_images.py": {"title": "Save patches with their coordinates", "input": "Generated image regions and their measured tissue coverage.", "from": ["patches/filter_tissue_patches.py", "prepare/extract_labelled_crops.py"]},
-  "extract_cell_crops.py": {"title": "Cut out separate cell regions", "input": "A generated image and labelled regions, with the allowed size range for retaining a cell."},
-  "index_segmented_cells.py": {"title": "Find individual cells on the scan", "input": "Two segmented cells and the coordinates of their containing core.", "from": ["cells/extract_cell_crops.py"]},
-  "package_cell_arrays.py": {"title": "Bundle cell records for later analysis", "input": "Two cell IDs, their x/y positions and one feature per cell.", "from": ["cells/index_segmented_cells.py"]},
-  "summarise_cells_by_core.py": {"title": "Count cells by their source core", "input": "A generated cell index spread across three cores.", "from": ["cells/index_segmented_cells.py"]},
-  "compare_image_encodings.py": {"title": "Compare image size and decoded pixels", "input": "The same generated patch saved using PNG and WebP.", "framing": "Can smaller files make it easier to keep the patch collection and still retain the image detail I need?"},
-  "audit_dataset_structure.py": {"title": "Catch dataset faults before training", "input": "An expected file inventory and a dataset with deliberate omissions and shape mismatches."},
-  "measure_storage_reads.py": {"title": "Time two ways to fetch the same bytes", "input": "Identical generated bytes stored in separate files and in one bundle."},
-  "fit_linear_autoencoder.py": {"title": "Learn a shorter description of each patch", "input": "Three generated patches and a two-feature target width."},
-  "score_reconstructions.py": {"title": "Find the hardest images to reconstruct", "input": "Two pairs of original and reconstructed example arrays.", "from": ["autoencoder/fit_linear_autoencoder.py"]},
-  "compare_bottleneck_sizes.py": {"title": "Compare smaller and larger compressed codes", "input": "The same example input and two candidate widths for its compressed representation.", "from": ["autoencoder/score_reconstructions.py"], "framing": "How much reconstruction quality do I give up when I keep fewer numbers to describe an image?"},
-  "score_variational_reconstruction.py": {"title": "Separate two parts of reconstruction loss", "input": "A generated reconstruction, its target and the statistics of its compressed code."},
-  "learn_image_features.py": {"title": "Measure agreement between two image views", "input": "Paired feature vectors for four generated samples."},
-  "prepare_paired_views.py": {"title": "Make two views of the same patch", "input": "One identified patch and two image transformations."},
-  "audit_feature_variation.py": {"title": "Find features with little new information", "input": "An example matrix with one column per feature across multiple patches.", "from": ["features/fit_shared_view_encoder.py"]},
-  "fit_shared_view_encoder.py": {"title": "Train one encoder on paired views", "input": "Two generated versions of the same examples and a shared encoder trained for 40 updates.", "from": ["features/prepare_paired_views.py", "features/learn_image_features.py"], "framing": "Can one encoder learn to recognise that two altered views came from the same patch?"},
-  "batch_frozen_features.py": {"title": "Extract features in batches", "input": "Three identified example patches and a fixed feature extractor.", "from": ["frozen-features/standardise_encoder_inputs.py"]},
-  "compare_encoder_dimensions.py": {"title": "Estimate how much feature vectors occupy", "input": "Two candidate vector widths and the same set of 30 examples."},
-  "standardise_encoder_inputs.py": {"title": "Prepare an image for a fixed encoder", "input": "An RGB image and an encoder’s target dimensions and colour-channel scaling."},
-  "benchmark_frozen_features.py": {"title": "Compare features on the same held-out cases", "input": "Two generated feature sets, training labels and a shared test split.", "from": ["frozen-features/batch_frozen_features.py"]},
-  "measure_feature_separation.py": {"title": "Measure how clearly feature groups separate", "input": "Four example vectors from one representation, divided into two groups.", "from": ["feature-benchmarks/project_feature_space.py"]},
-  "project_feature_space.py": {"title": "Plot feature vectors in two dimensions", "input": "Three labelled example vectors and a fitted two-axis projection.", "from": ["frozen-features/batch_frozen_features.py"], "framing": "If I gave each example just two coordinates, would I still be able to see how similar the features are?"},
-  "check_bag_classifier_on_known_signal.py": {"title": "Check which pooling rule detects a rare signal", "input": "Sixty-four generated sets of 12 patches with a known planted signal."},
-  "export_feature_vectors.py": {"title": "Write a traceable feature table", "input": "Two identified patches, their coordinates and two values per vector.", "from": ["feature-export/align_features_to_regions.py"]},
-  "align_features_to_regions.py": {"title": "Match saved vectors to image regions", "input": "Two sets of records with the same region IDs, in potentially different orders.", "from": ["frozen-features/batch_frozen_features.py", "patches/extract_patch_images.py"]},
-  "check_feature_cache.py": {"title": "Check that saved features still match the job", "input": "A cached array, expected encoder name, region order and vector length.", "from": ["feature-export/export_feature_vectors.py"]},
-  "prepare_reference_grades.py": {"title": "Combine the assessors’ grades", "input": "Three generated assessor ratings for two samples."},
-  "assign_validation_folds.py": {"title": "Keep related samples in one validation fold", "input": "Four example samples with known grouping IDs and two destination folds.", "framing": "Can I check the train and test lists in advance so related samples stay together in one fold?"},
-  "train_scale_graders.py": {"title": "Train a separate grader for each scale", "input": "Generated features at two image scales with shared training and test IDs.", "from": ["grading-splits/prepare_reference_grades.py", "grading-splits/assign_validation_folds.py"]},
-  "save_held_out_grades.py": {"title": "Save predictions on samples left out of training", "input": "Predictions, reference grades and fold assignments for the example cases.", "from": ["grading-models/train_scale_graders.py"]},
-  "summarise_errors_by_grade.py": {"title": "Find where grades run high or low", "input": "Five example predictions and their reference grades.", "from": ["grading-models/save_held_out_grades.py"]},
-  "compare_experiments.py": {"title": "Compare a change with matched baseline runs", "input": "Example runs with fold and seed IDs, error, time and memory measurements.", "from": ["compare/verify_run_configuration.py"]},
-  "plan_matched_runs.py": {"title": "Plan a fair baseline comparison", "input": "A baseline, two single-change configurations and shared folds and seeds."},
-  "verify_run_configuration.py": {"title": "Check that each run used the intended settings", "input": "One planned configuration and the settings that an example run recorded at startup.", "from": ["compare/plan_matched_runs.py"]},
-  "summarise_matched_training_traces.py": {"title": "Compare the same training window across runs", "input": "Four matched runs with per-epoch validation scores and elapsed time.", "from": ["compare/plan_matched_runs.py"]},
-  "weight_grading_examples.py": {"title": "Adjust which grading examples are sampled", "input": "Four reference grades, their losses and previous weights."},
-  "probe_grading_model_with_noise.py": {"title": "Check responses to generated noise", "input": "Twelve generated signal sets and twelve noise sets for the outside-input class."},
-  "compare_assessor_errors.py": {"title": "Put grading error alongside assessor disagreement", "input": "Two samples with matched assessor grades and model predictions.", "from": ["grading-splits/prepare_reference_grades.py", "grading-models/save_held_out_grades.py"], "framing": "How large is model error relative to the differences between two assessors on the same cases?"},
-  "score_ordinal_agreement.py": {"title": "Account for the size of grading disagreements", "input": "Four paired grades where differences of several levels count more than one."},
-  "join_subtype_labels.py": {"title": "Match subtype labels to images", "input": "Three example image IDs and a separate list of supplied subtype labels."},
-  "audit_cohort_filters.py": {"title": "Record why specimens were kept or excluded", "input": "Two generated specimens and a set of eligibility rules.", "from": ["subtype-cohort/join_subtype_labels.py"]},
-  "pool_patch_evidence.py": {"title": "Compare ways to combine patch evidence", "input": "Three generated patch features and three rules for combining them."},
-  "batch_variable_patch_sets.py": {"title": "Batch specimens with similar patch counts", "input": "Four specimens that contain different numbers of patches."},
-  "predict_subtypes_from_bags.py": {"title": "Train a subtype classifier on sets of patches", "input": "Two labelled training sets of patches and one generated test set.", "from": ["interpret/pool_patch_evidence.py", "subtype-cohort/audit_cohort_filters.py"]},
-  "compare_spatial_attention.py": {"title": "Test whether patch position changes the score", "input": "One set of example patch features with two positional arrangements.", "framing": "Does moving the same patches to different positions change the pooled result?"},
-  "compare_flat_and_hierarchical_pooling.py": {"title": "Compare pooling cells directly or by patch", "input": "Four generated cell values, their patch memberships and a mask for empty slots."},
-  "summarise_validation.py": {"title": "Summarise both tasks by validation fold", "input": "Example held-out predictions and references for both grading and subtyping."},
-  "evaluate_subtype_roc.py": {"title": "See what happens as the subtype threshold moves", "input": "Four example subtype scores and their known binary labels.", "from": ["interpret/predict_subtypes_from_bags.py"], "framing": "How does the balance of missed cases and false alarms change as I move the threshold?"},
-  "compare_fold_class_recall.py": {"title": "Check whether each subtype was recovered in each fold", "input": "Two example folds with subtype predictions and reference labels.", "from": ["interpret/predict_subtypes_from_bags.py"]},
-  "estimate_representation_cost.py": {"title": "Estimate the storage saved by keeping features", "input": "Five hundred example regions, with their raw image dimensions and feature vector size."},
-  "rank_accuracy_compute_tradeoffs.py": {"title": "Find the models worth comparing further", "input": "Three candidates described by accuracy, time and memory."},
-  "audit_compute_measurements.py": {"title": "Check that timing and memory were recorded", "input": "Two example runs with their expected time and memory fields."},
-  "map_patch_scores.py": {"title": "Place scores back on the image grid", "input": "Two example patch scores and their bounds on a four-by-three grid."},
-  "render_score_overlay.py": {"title": "Put model scores back on the image", "input": "A generated 64 × 48 pixel image with two overlapping scored patches.", "from": ["heatmaps/map_patch_scores.py"], "framing": "Can a reviewer see where a patch score belongs and tell which image regions were never scored?", "method": "Average scores where patch bounds overlap, then render the scores on a shared colour scale. Pixels outside both patches have no score."},
-  "summarise_overlay_coverage.py": {"title": "Measure where the overlay has evidence", "input": "Three reference points in a region and their available scores.", "from": ["heatmaps/map_patch_scores.py"]},
-  "explain_prediction.py": {"title": "Inspect which regions the model highlights", "input": "Four generated image regions and an illustrative two-class model."},
-  "model_explanations.md": {"title": "Interpret model highlights cautiously", "input": "Example masks, original scores and scores after dimming selected regions.", "from": ["explain/test_mask_score_changes.py"]},
-  "test_mask_score_changes.py": {"title": "Compare targeted dimming with a simple control", "input": "An example explanation mask and an evenly dimmed mask with the same average brightness.", "from": ["explain/explain_prediction.py"], "framing": "Does dimming selected regions change the score more than dimming the whole input by the same average amount?"},
-  "compare_patch_perturbations.py": {"title": "Check what changes when one patch is removed", "input": "Three generated patches and a fixed rule for scoring the set."},
-  "build_cluster_run_manifest.py": {"title": "Give every compute run a stable identity", "input": "Two configurations, two folds and two seeds to expand into a run plan."},
-  "resume_chunked_experiment.py": {"title": "Resume work from its last saved chunk", "input": "A three-chunk job with an example checkpoint already stored on disk."},
-  "collect_fold_results.py": {"title": "Collect results by configuration, fold and seed", "input": "Example result files with identifiers and metric records.", "from": ["cluster-runs/build_cluster_run_manifest.py"]},
-  "find_incomplete_runs.py": {"title": "Find runs that still need attention", "input": "A planned list of jobs, their start records and any saved final results.", "from": ["cluster-runs/build_cluster_run_manifest.py"]},
-  "build_grading_table.py": {"title": "Summarise grading errors by image scale", "input": "A matched example sample with predictions from two image scales.", "from": ["grading-models/save_held_out_grades.py"]},
-  "render_grading_figure.py": {"title": "Turn grading summaries into a reproducible chart", "input": "Three image-scale labels with example error estimates and intervals.", "from": ["figures/build_grading_table.py"]},
-  "run_grading_example.py": {"title": "Follow one grading case into the final figure", "input": "Two assessor grades for case S02, its fold assignment and feature vectors at three image scales.", "from": ["grading-splits/prepare_reference_grades.py", "grading-splits/assign_validation_folds.py"], "framing": "Can someone start from one grading error in a chart and trace it back to the original ratings, the held-out case and the prediction?", "method": "Average the two assessor grades. Fit each scale’s model on other folds, predict S02 in fold 1, then compare that prediction with the reference grade."},
-  "bin_patch_distribution.py": {"title": "Show how patches are distributed across cores", "input": "Saved patch counts for seven example cores.", "from": ["patches/summarise_patch_counts.py"], "framing": "How many cores yield few patches, and how many yield 200 or more?"},
-  "grading_figure.svg": {"title": "Compare grading errors across three scales", "input": "Thirty-six held-out example predictions, twelve for each image scale.", "from": ["figures/run_grading_example.py"]},
-  "verify_report_assets.py": {"title": "Check which figures and tables made it into the report", "input": "Two expected report assets and a generated report directory."},
-  "research_limits.md": {"title": "State what the study can establish", "input": "The thesis’s internal grading and subtype comparisons and their validation design."},
-  "build_benchmark_bags.py": {"title": "Assemble repeatable groups for an external benchmark", "input": "Example positive and negative patches, split sizes and separate seeds."},
-  "compare_benchmark_encoders.py": {"title": "Compare encoders on fixed benchmark splits", "input": "The same labelled training and test sets, with two encoder representations.", "from": ["pcam-bags/build_benchmark_bags.py"]}
+  "research_questions.md": {
+    "title": "Overview & multi-scale hypothesis",
+    "role": "3-scale thesis question & main results",
+    "input": "Lymphoma tissue images, expert staining grades and supplied subtype labels.",
+    "framing": "Whole-slide lymphoma scans are too large to train on directly. If we extract each specimen at three biological scales (cores, patches, cells) and compress them into feature vectors, which scale best predicts (1) expert staining grades and (2) molecular subtypes—and can we trace predictions back onto the tissue?"
+  },
+  "README.md": {
+    "title": "Replay the grading workflow",
+    "role": "1-command end-to-end reproduction",
+    "input": "The published adaptations, their generated inputs and the grading example.",
+    "framing": "Can a reviewer rerun the entire three-scale grading workflow from one command and inspect every intermediate CSV and SVG chart?"
+  },
+  "select_core_rectangles.py": {
+    "title": "Draw manual core boxes",
+    "role": "Manual rectangle baseline (Aug 2020)",
+    "input": "Two hand-drawn preview boxes and the zoom factors linking the preview to the full scan.",
+    "framing": "Drawing a rectangle around each tissue core kept a person in control of every selection, at the cost of 6 seconds per core and uneven box dimensions.",
+    "method": "Scale each hand-drawn preview rectangle (left, top, width, height) by the slide zoom multiplier and display magnification."
+  },
+  "interpolate_core_grid.py": {
+    "title": "Project a tilted microarray grid",
+    "role": "2-click grid automation (Aug 2020)",
+    "input": "Two corner reference clicks on a tilted microarray and the observed centres of four cores.",
+    "from": ["crop/select_core_rectangles.py"],
+    "framing": "Could two corner clicks define the tilt and spacing of an entire microarray grid in 0.5 seconds per core—and what breaks when a core drifts off the grid line?",
+    "method": "Estimate slide tilt angle and row spacing from two reference clicks, project square bounds across rows and columns, and measure centre drift."
+  },
+  "prepare_image_regions.py": {
+    "title": "Mark core centres with 1 click",
+    "role": "Interactive 1-click fixed-size cropper",
+    "input": "A generated tissue-core image and the point you mark.",
+    "from": ["crop/select_core_rectangles.py", "crop/interpolate_core_grid.py"],
+    "framing": "Manual boxes took 6 seconds with uneven sizes, while a projected grid clipped off-grid cores. Can one click mark each centre and cut a uniform 5,000 × 5,000 px square?",
+    "method": "Save top, bottom, left and right pixel bounds around each clicked centre (clamping inward at scan edges), and separately tile an extracted core into regular grid patches."
+  },
+  "crop_benchmark.csv": {
+    "title": "Benchmark 4 core-finding methods",
+    "role": "Thesis Table 2.5 speed vs accuracy",
+    "input": "Four extraction methods compared in the submitted thesis (Table 2.5, p. 70).",
+    "from": ["crop/select_core_rectangles.py", "crop/interpolate_core_grid.py", "crop/prepare_image_regions.py"],
+    "framing": "How do Hough circles, tilted grid projection, manual boxes and 1-click cropping compare on speed, precision, recall and crop uniformity?",
+    "method": "Compare measured time per sample, precision (no wrong selections), recall (no missed cores) and manual intervention across all four core-extraction methods."
+  },
+  "record_crop_marks.py": {
+    "title": "Save scan crop coordinates",
+    "role": "Export centres & bounds to CSV",
+    "input": "Two named marks on one generated scan, each with a centre and rectangle.",
+    "from": ["crop/prepare_image_regions.py", "crop/crop_benchmark.csv"],
+    "framing": "How do we record clicked centres and rectangle bounds in a lightweight CSV manifest before touching the multi-gigabyte pixel files?"
+  },
+  "extract_labelled_crops.py": {
+    "title": "Cut out cores with a manifest",
+    "role": "Write core images + crops.csv",
+    "input": "An example image and two labelled sets of pixel bounds.",
+    "from": ["crop/record_crop_marks.py"],
+    "framing": "Once core bounds are recorded, how do we extract each core image while keeping a permanent link to its parent scan coordinates?"
+  },
+  "map_crop_to_scan.py": {
+    "title": "Map crop boxes back to full scan",
+    "role": "Reverse 4× downsample & offset",
+    "input": "An example box on a reduced image, together with its offset and scale.",
+    "from": ["prepare/extract_labelled_crops.py"],
+    "framing": "If a model highlights a 20 × 20 px box inside a 4× downsampled crop, where does that box sit on the full-resolution whole-slide scan?"
+  },
+  "filter_tissue_patches.py": {
+    "title": "Filter empty background tiles",
+    "role": "Keep squares with ≥ 50% tissue",
+    "input": "Eight squares from a generated mask and a minimum tissue fraction.",
+    "framing": "A full bounding grid over a circular core cuts across empty glass as well as tissue. Which grid squares contain enough tissue (≥ 50%) to keep?"
+  },
+  "summarise_patch_counts.py": {
+    "title": "Flag cores with zero usable patches",
+    "role": "Audit retained patches per core",
+    "input": "A list of expected cores and the manifest of saved patches.",
+    "from": ["patches/extract_patch_images.py"],
+    "framing": "If a damaged or faintly stained core yields zero usable patches after background filtering, how do we catch it before training starts?"
+  },
+  "extract_patch_images.py": {
+    "title": "Save patch tiles with bounds",
+    "role": "Export patch PNGs + patches.csv",
+    "input": "Generated image regions and their measured tissue coverage.",
+    "from": ["patches/filter_tissue_patches.py", "prepare/extract_labelled_crops.py"],
+    "framing": "How do we export accepted patch tiles so every image file carries its source core ID, pixel bounds and tissue fraction?"
+  },
+  "extract_cell_crops.py": {
+    "title": "Extract size-filtered cell crops",
+    "role": "Keep valid cells & drop specks",
+    "input": "A generated image and labelled regions, with the allowed size range for retaining a cell.",
+    "framing": "Instance segmentation masks include tiny stain specks and giant vacuoles alongside real cells. How do we filter by diameter and cut uniform cell crops?"
+  },
+  "index_segmented_cells.py": {
+    "title": "Index cells to global scan coords",
+    "role": "Add core origin to cell offsets",
+    "input": "Two segmented cells and the coordinates of their containing core.",
+    "from": ["cells/extract_cell_crops.py"],
+    "framing": "How do we convert each segmented cell's local crop offset into exact global (x, y) coordinates on the whole-slide scan?"
+  },
+  "package_cell_arrays.py": {
+    "title": "Pack aligned cell arrays",
+    "role": "Bundle IDs, coords & features",
+    "input": "Two cell IDs, their x/y positions and one feature per cell.",
+    "from": ["cells/index_segmented_cells.py"],
+    "framing": "With 9.13 million segmented cells, how do we store cell IDs, coordinates and feature vectors in one compressed archive without row misalignment?"
+  },
+  "summarise_cells_by_core.py": {
+    "title": "Audit cell counts across cores",
+    "role": "Check core concentration & 0-cell cores",
+    "input": "A generated cell index spread across three cores.",
+    "from": ["cells/index_segmented_cells.py"],
+    "framing": "Does a total cell count hide the fact that one dense core supplies most of the cells while another core has zero?"
+  },
+  "compare_image_encodings.py": {
+    "title": "Compare PNG vs WebP compression",
+    "role": "Measure byte savings & pixel diff",
+    "input": "The same generated patch saved using PNG and WebP.",
+    "framing": "Can WebP shrink 229,683 histology patches from 26.94 GB to 3.63 GB (−86.5%) while keeping decoded RGB values within ~2/255 of lossless PNG?"
+  },
+  "audit_dataset_structure.py": {
+    "title": "Audit dataset shapes before training",
+    "role": "Catch missing, extra & wrong-shape arrays",
+    "input": "An expected file inventory and a dataset with deliberate omissions and shape mismatches.",
+    "framing": "How do we catch missing feature files, unexpected spillover files or truncated array dimensions before a multi-hour GPU job starts?"
+  },
+  "measure_storage_reads.py": {
+    "title": "Time bundled vs separate file reads",
+    "role": "Benchmark 1 bundle vs 20 small files",
+    "input": "Identical generated bytes stored in separate files and in one bundle.",
+    "framing": "Does seeking inside one contiguous binary file reduce filesystem overhead compared with opening dozens of small patch files?"
+  },
+  "fit_linear_autoencoder.py": {
+    "title": "Compress patches via reconstruction",
+    "role": "Fit 2-number bottleneck & decode",
+    "input": "Three generated patches and a two-feature target width.",
+    "framing": "An autoencoder squeezes each patch into a short numerical code and tries to rebuild the image. Which input details survive that narrow bottleneck?"
+  },
+  "score_reconstructions.py": {
+    "title": "Rank worst reconstructions first",
+    "role": "Sort held-out samples by MSE",
+    "input": "Two pairs of original and reconstructed example arrays.",
+    "from": ["autoencoder/fit_linear_autoencoder.py"],
+    "framing": "An average reconstruction error hides individual failures. How do we rank held-out patches worst-first so high-residual anomalies are inspected immediately?"
+  },
+  "compare_bottleneck_sizes.py": {
+    "title": "Compare code width vs reconstruction error",
+    "role": "Trade off 16 B vs 32 B latent codes",
+    "input": "The same example input and two candidate widths for its compressed representation.",
+    "from": ["autoencoder/score_reconstructions.py"],
+    "framing": "How much reconstruction fidelity do we gain on held-out patches when we double the latent bottleneck width?"
+  },
+  "score_variational_reconstruction.py": {
+    "title": "Split VAE pixel loss from KL penalty",
+    "role": "Log image error + β·KL receipt",
+    "input": "A generated reconstruction, its target and the statistics of its compressed code.",
+    "framing": "When a variational autoencoder's total loss changes, how do we tell whether image reconstruction improved or the latent KL penalty shifted?"
+  },
+  "learn_image_features.py": {
+    "title": "Penalise redundant feature columns",
+    "role": "Barlow Twins agreement + off-diagonal loss",
+    "input": "Paired feature vectors for four generated samples.",
+    "framing": "Two augmented views can agree perfectly even if the encoder copies the same number into every column. How does Barlow Twins penalise redundant columns?"
+  },
+  "prepare_paired_views.py": {
+    "title": "Generate paired augmented views",
+    "role": "Create linked views per patch ID",
+    "input": "One identified patch and two image transformations.",
+    "framing": "How do we apply stochastic flips and brightness shifts to create two distinct views of each patch while keeping their shared patch ID intact?"
+  },
+  "audit_feature_variation.py": {
+    "title": "Detect collapsed or duplicate features",
+    "role": "Flag zero-std & |r| ≥ 0.99 columns",
+    "input": "An example matrix with one column per feature across multiple patches.",
+    "from": ["features/fit_shared_view_encoder.py"],
+    "framing": "Before training downstream classifiers, how do we verify that no feature column collapsed to a constant or duplicated another column?"
+  },
+  "fit_shared_view_encoder.py": {
+    "title": "Train a shared encoder on paired views",
+    "role": "Optimise Barlow Twins over 40 steps",
+    "input": "Two generated versions of the same examples and a shared encoder trained for 40 updates.",
+    "from": ["features/prepare_paired_views.py", "features/learn_image_features.py"],
+    "framing": "Can one shared weight matrix learn features that stay invariant across paired views while driving off-diagonal redundancy toward zero?"
+  },
+  "batch_frozen_features.py": {
+    "title": "Extract frozen features in batches",
+    "role": "Preserve patch ID order across batches",
+    "input": "Three identified example patches and a fixed feature extractor.",
+    "from": ["frozen-features/standardise_encoder_inputs.py"],
+    "framing": "How do we run hundreds of thousands of patches through a frozen pretrained backbone in batches while guaranteeing exact input ID order?"
+  },
+  "compare_encoder_dimensions.py": {
+    "title": "Compare 16-D vs 64-D vector footprints",
+    "role": "Calculate float32 RAM & cache size",
+    "input": "Two candidate vector widths and the same set of 30 examples.",
+    "framing": "How much memory and cache footprint do we save when choosing a narrower feature vector width across a cohort?"
+  },
+  "standardise_encoder_inputs.py": {
+    "title": "Standardise RGB inputs for backbones",
+    "role": "Resize & normalise RGB channels",
+    "input": "An RGB image and an encoder’s target dimensions and colour-channel scaling.",
+    "framing": "Pretrained backbones expect fixed input dimensions and channel statistics. How do we standardise arbitrary histology crops into normalised float32 tensors?"
+  },
+  "benchmark_frozen_features.py": {
+    "title": "Benchmark encoders on shared splits",
+    "role": "Compare held-out centroid accuracy",
+    "input": "Two generated feature sets, training labels and a shared test split.",
+    "from": ["frozen-features/batch_frozen_features.py"],
+    "framing": "When comparing two candidate feature extractors, how do we lock the training centroids and held-out test split so the comparison is fair?"
+  },
+  "measure_feature_separation.py": {
+    "title": "Score cluster separation (Silhouette)",
+    "role": "Compare within- vs across-group distance",
+    "input": "Four example vectors from one representation, divided into two groups.",
+    "from": ["feature-benchmarks/project_feature_space.py"],
+    "framing": "How tightly do examples from the same biological group cluster together relative to the nearest rival group in feature space?"
+  },
+  "project_feature_space.py": {
+    "title": "Project features onto 2D PCA axes",
+    "role": "Plot 2D scatter + explained variance",
+    "input": "Three labelled example vectors and a fitted two-axis projection.",
+    "from": ["frozen-features/batch_frozen_features.py"],
+    "framing": "When we project high-dimensional feature vectors onto two 2D axes for visual inspection, how much of the original variance is preserved on each axis?"
+  },
+  "check_bag_classifier_on_known_signal.py": {
+    "title": "Detect 1 positive patch in a 12-patch bag",
+    "role": "Max (0.999 AUC) vs Mean (0.830 AUC)",
+    "input": "Sixty-four generated sets of 12 patches with a known planted signal.",
+    "framing": "If only 1 of 12 patches in a positive bag carries the diagnostic signal, does mean pooling dilute it—and can max pooling isolate it?"
+  },
+  "export_feature_vectors.py": {
+    "title": "Export vectors with pixel bounds",
+    "role": "Write region_id + bounds + features",
+    "input": "Two identified patches, their coordinates and two values per vector.",
+    "from": ["feature-export/align_features_to_regions.py"],
+    "framing": "How do we export extracted feature vectors so their source scan coordinates travel in the exact same table row?"
+  },
+  "align_features_to_regions.py": {
+    "title": "Join vectors to regions by ID",
+    "role": "Order-safe join across shuffled tables",
+    "input": "Two sets of records with the same region IDs, in potentially different orders.",
+    "from": ["frozen-features/batch_frozen_features.py", "patches/extract_patch_images.py"],
+    "framing": "If a cluster job writes feature vectors in a different row order from the region manifest, how do we realign them safely by ID?"
+  },
+  "check_feature_cache.py": {
+    "title": "Verify cached features before reuse",
+    "role": "Check ID order, encoder name & shape",
+    "input": "A cached array, expected encoder name, region order and vector length.",
+    "from": ["feature-export/export_feature_vectors.py"],
+    "framing": "Before reusing a cached feature matrix for a new model run, how do we verify that its encoder version, row order and dimensions match the spec?"
+  },
+  "prepare_reference_grades.py": {
+    "title": "Average expert grades & log rater count",
+    "role": "Compute consensus mean, n & spread",
+    "input": "Three generated assessor ratings for two samples.",
+    "framing": "A rating spread of 0.0 could mean two experts agreed perfectly or only one expert scored the core. Why must rater count (n) always sit beside the mean grade?"
+  },
+  "assign_validation_folds.py": {
+    "title": "Assign group-aware validation folds",
+    "role": "Keep paired samples in the same fold",
+    "input": "Four example samples with known grouping IDs and two destination folds.",
+    "framing": "How do we assign cross-validation folds so cores from the same patient or group never leak across the train/test boundary?"
+  },
+  "train_scale_graders.py": {
+    "title": "Train core, patch & cell graders",
+    "role": "Compare scales on shared held-out split",
+    "input": "Generated features at two image scales with shared training and test IDs.",
+    "from": ["grading-splits/prepare_reference_grades.py", "grading-splits/assign_validation_folds.py"],
+    "framing": "When trained on the exact same specimen split, which biological scale predicts held-out staining grades with the lowest error?"
+  },
+  "save_held_out_grades.py": {
+    "title": "Save out-of-fold grade predictions",
+    "role": "Record unseen predictions per fold",
+    "input": "Predictions, reference grades and fold assignments for the example cases.",
+    "from": ["grading-models/train_scale_graders.py"],
+    "framing": "How do we record cross-validation predictions so every single specimen is evaluated exclusively by a model that never saw it during training?"
+  },
+  "summarise_errors_by_grade.py": {
+    "title": "Break down signed bias by grade",
+    "role": "Check over/under-prediction at 0 vs 3",
+    "input": "Five example predictions and their reference grades.",
+    "from": ["grading-models/save_held_out_grades.py"],
+    "framing": "Overall MAE hides directional bias at the scale ends. Does the grader pull Grade 0 upward (+0.45) and Grade 3 downward (−0.55)?"
+  },
+  "compare_experiments.py": {
+    "title": "Compare paired runs across folds",
+    "role": "Report paired % Δ in error, time & RAM",
+    "input": "Example runs with fold and seed IDs, error, time and memory measurements.",
+    "from": ["compare/verify_run_configuration.py"],
+    "framing": "When a compact model change alters accuracy, runtime and memory simultaneously, how do we pair runs by fold and seed to measure the exact trade-off?"
+  },
+  "plan_matched_runs.py": {
+    "title": "Expand a single-change ablation grid",
+    "role": "Pair baseline & variants across seeds",
+    "input": "A baseline, two single-change configurations and shared folds and seeds.",
+    "framing": "How do we generate an ablation schedule where each variant changes only one parameter from the baseline across identical folds and seeds?"
+  },
+  "verify_run_configuration.py": {
+    "title": "Audit startup logs against planned specs",
+    "role": "Catch mismatched or unlogged settings",
+    "input": "One planned configuration and the settings that an example run recorded at startup.",
+    "from": ["compare/plan_matched_runs.py"],
+    "framing": "What if a script silently falls back to a default hyperparameter? How do we verify recorded startup logs against the planned run specification?"
+  },
+  "summarise_matched_training_traces.py": {
+    "title": "Compare fixed final-epoch windows",
+    "role": "Average balanced acc & time (Epochs 2–3)",
+    "input": "Four matched runs with per-epoch validation scores and elapsed time.",
+    "from": ["compare/plan_matched_runs.py"],
+    "framing": "Cherry-picking the single best validation epoch can flatter a noisy run. How do two configurations compare over a fixed final-epoch window?"
+  },
+  "weight_grading_examples.py": {
+    "title": "Boost rare grades & high-loss cases",
+    "role": "Hybrid rarity + loss + EMA sampler",
+    "input": "Four reference grades, their losses and previous weights.",
+    "framing": "Can a dynamic training sampler revisit both rare staining grades and high-loss examples without oscillating wildly between epochs?"
+  },
+  "probe_grading_model_with_noise.py": {
+    "title": "Probe null class with Gaussian noise",
+    "role": "Test 8th outside-input class (12/12 flagged)",
+    "input": "Twelve generated signal sets and twelve noise sets for the outside-input class.",
+    "framing": "If pure out-of-distribution Gaussian noise is fed into the grading model, does the dedicated 8th null class catch it instead of assigning a false stain grade?"
+  },
+  "compare_assessor_errors.py": {
+    "title": "Compare model MAE with human rater gap",
+    "role": "0.238 patch MAE vs 0.382 rater gap",
+    "input": "Two samples with matched assessor grades and model predictions.",
+    "from": ["grading-splits/prepare_reference_grades.py", "grading-models/save_held_out_grades.py"],
+    "framing": "How does the patch model's error against the consensus grade (0.238 MAE) compare with the disagreement between two human experts scoring the same cores (0.382)?"
+  },
+  "score_ordinal_agreement.py": {
+    "title": "Score quadratic-weighted kappa (κ)",
+    "role": "Penalise multi-grade jumps by Δ²",
+    "input": "Four paired grades where differences of several levels count more than one.",
+    "framing": "Mistaking Grade 0 for Grade 3 is far worse than mistaking Grade 1 for Grade 2. How does quadratic-weighted κ score ordinal agreement beyond chance?"
+  },
+  "join_subtype_labels.py": {
+    "title": "Match specimens to ABC / GCB labels",
+    "role": "Separate valid, unrecognised & missing",
+    "input": "Three example image IDs and a separate list of supplied subtype labels.",
+    "framing": "When joining image IDs to clinical subtype tables, how do we keep valid {'ABC', 'GCB'} calls while separating 'unclassified' strings from missing records?"
+  },
+  "audit_cohort_filters.py": {
+    "title": "Log per-rule cohort exclusions",
+    "role": "Audit label, stain & patch-count gates",
+    "input": "Two generated specimens and a set of eligibility rules.",
+    "from": ["subtype-cohort/join_subtype_labels.py"],
+    "framing": "Instead of silently dropping ineligible specimens, how do we log every pass/fail criterion per specimen so the cohort funnel (1,109 → 962) is fully auditable?"
+  },
+  "pool_patch_evidence.py": {
+    "title": "Compare mean, max & attention pooling",
+    "role": "Combine patch vectors into 1 bag vector",
+    "input": "Three generated patch features and three rules for combining them.",
+    "framing": "One core contains hundreds of patches but only one subtype label. How do mean, maximum and softmax-attention pooling weight the patches inside a bag?"
+  },
+  "batch_variable_patch_sets.py": {
+    "title": "Sort variable bags to cut padding 76%",
+    "role": "Group similar bag sizes + mask pad slots",
+    "input": "Four specimens that contain different numbers of patches.",
+    "framing": "Cores yield anywhere from 87 to 300+ patches. How much dummy padding do we eliminate by sorting bags by length before batching—and masking padded slots?"
+  },
+  "predict_subtypes_from_bags.py": {
+    "title": "Classify held-out bags by subtype",
+    "role": "Score bag distance to ABC vs GCB centroids",
+    "input": "Two labelled training sets of patches and one generated test set.",
+    "from": ["interpret/pool_patch_evidence.py", "subtype-cohort/audit_cohort_filters.py"],
+    "framing": "Once variable patch bags are pooled into specimen vectors, how do we fit a bag-level subtype classifier on training cases and score held-out bags?"
+  },
+  "compare_spatial_attention.py": {
+    "title": "Ablate 2D rotary patch positions (RoPE)",
+    "role": "Test positions off vs on (negative result)",
+    "input": "One set of example patch features with two positional arrangements.",
+    "framing": "Does rotating transformer attention keys by 2D (x, y) patch coordinates change the pooled score—and did it improve subtype accuracy in the thesis?"
+  },
+  "compare_flat_and_hierarchical_pooling.py": {
+    "title": "Compare flat cell vs patch-then-core pooling",
+    "role": "Flat (0.25) vs hierarchical (0.50) mean",
+    "input": "Four generated cell values, their patch memberships and a mask for empty slots.",
+    "framing": "Why does averaging all cells directly let one cell-dense patch dominate the core score compared with pooling cells within each patch first?"
+  },
+  "summarise_validation.py": {
+    "title": "Report grading & subtype scores by fold",
+    "role": "Expose fold-to-fold spread (100% vs 50%)",
+    "input": "Example held-out predictions and references for both grading and subtyping.",
+    "framing": "A single pooled average can hide a weak validation fold. How do both clinical tasks perform when broken down fold by fold?"
+  },
+  "evaluate_subtype_roc.py": {
+    "title": "Trace tie-aware ROC curves & AUC",
+    "role": "Compute FPR/TPR steps & 0.875 AUC",
+    "input": "Four example subtype scores and their known binary labels.",
+    "from": ["interpret/predict_subtypes_from_bags.py"],
+    "framing": "How do true-positive and false-positive rates trade off across classification thresholds—and how must tied prediction scores (0.60) be handled?"
+  },
+  "compare_fold_class_recall.py": {
+    "title": "Report per-fold ABC & GCB recall (k/n)",
+    "role": "Pair class recall with explicit counts",
+    "input": "Two example folds with subtype predictions and reference labels.",
+    "from": ["interpret/predict_subtypes_from_bags.py"],
+    "framing": "Did a model achieve 50% accuracy by getting every ABC case right and every GCB case wrong? Why must class recall always show explicit k/n counts?"
+  },
+  "estimate_representation_cost.py": {
+    "title": "Compare raw RGB vs vector cache bytes",
+    "role": "75.26 MB RGB → 0.51 MB vectors (147×)",
+    "input": "Five hundred example regions, with their raw image dimensions and feature vector size.",
+    "framing": "How much storage and memory bandwidth do we save across 500 regions by caching 256-D float32 feature vectors instead of 224 × 224 RGB patches?"
+  },
+  "rank_accuracy_compute_tradeoffs.py": {
+    "title": "Filter models on the Pareto frontier",
+    "role": "Keep undominated accuracy/time/RAM models",
+    "input": "Three candidates described by accuracy, time and memory.",
+    "framing": "When choosing among encoders and architectures, which candidates sit on the Pareto frontier of accuracy (↑), runtime (↓) and peak RAM (↓)?"
+  },
+  "audit_compute_measurements.py": {
+    "title": "Audit timing & peak RAM logs",
+    "role": "Separate missing RAM logs from missing runs",
+    "input": "Two example runs with their expected time and memory fields.",
+    "framing": "Before plotting compute trade-offs, how do we verify that every scheduled run recorded both wall-clock runtime and peak memory?"
+  },
+  "map_patch_scores.py": {
+    "title": "Project patch scores onto a 2D grid",
+    "role": "Average overlaps (0.60) & mark NaN",
+    "input": "Two example patch scores and their bounds on a four-by-three grid.",
+    "framing": "When overlapping patches are projected back onto a core's coordinate grid, how do we average overlaps while keeping unscored pixels explicitly marked as NaN?"
+  },
+  "render_score_overlay.py": {
+    "title": "Render heatmaps with hatched NaN areas",
+    "role": "Shared colour scale + hatched unscored regions",
+    "input": "A generated 64 × 48 pixel image with two overlapping scored patches.",
+    "from": ["heatmaps/map_patch_scores.py"],
+    "framing": "Can a pathologist see where high-risk patch scores sit on the tissue image without mistaking unscored background glass for a low-risk (0.0) score?",
+    "method": "Average scores where patch bounds overlap, render scored pixels on a shared RGBA colour scale, and hatch pixels that received no score (NaN)."
+  },
+  "summarise_overlay_coverage.py": {
+    "title": "Summarise scored ROI coverage",
+    "role": "Report % ROI covered, median & range",
+    "input": "Three reference points in a region and their available scores.",
+    "from": ["heatmaps/map_patch_scores.py"],
+    "framing": "Before interpreting a heatmap over a region of interest (ROI), what fraction of the ROI actually received a model score?"
+  },
+  "explain_prediction.py": {
+    "title": "Fit class-specific dimming masks",
+    "role": "Spectral Dream Dimming (Class A vs B)",
+    "input": "Four generated image regions and an illustrative two-class model.",
+    "framing": "Which tissue regions must stay bright to support Class A, and which regions flip the network toward Class B when dimmed?"
+  },
+  "model_explanations.md": {
+    "title": "Scope XAI masks vs biological proof",
+    "role": "Model sensitivity vs wet-lab validation",
+    "input": "Example masks, original scores and scores after dimming selected regions.",
+    "from": ["explain/test_mask_score_changes.py"],
+    "framing": "What does a perturbation or dimming mask prove about the trained network—and what independent evidence is required before making a biological claim?"
+  },
+  "test_mask_score_changes.py": {
+    "title": "Test targeted vs uniform dimming control",
+    "role": "3.5× larger score drop at equal 0.80 brightness",
+    "input": "An example explanation mask and an evenly dimmed mask with the same average brightness.",
+    "from": ["explain/explain_prediction.py"],
+    "framing": "Does dimming the highlighted region drop the model's score substantially more than dimming the entire image uniformly to the exact same 0.80 mean brightness?"
+  },
+  "compare_patch_perturbations.py": {
+    "title": "Compare leave-one-out vs singleton repeat",
+    "role": "Measure Δ score when removing vs repeating",
+    "input": "Three generated patches and a fixed rule for scoring the set.",
+    "framing": "How much does each patch move the bag prediction when we remove it (leave-one-out) versus when we fill the bag with copies of that single patch?"
+  },
+  "build_cluster_run_manifest.py": {
+    "title": "Generate SHA-256 cluster run IDs",
+    "role": "Hash canonical JSON into 16-hex run_id",
+    "input": "Two configurations, two folds and two seeds to expand into a run plan.",
+    "framing": "How do we give every cluster job a deterministic 16-character SHA-256 ID from its canonical parameters so runs never overwrite or duplicate each other?"
+  },
+  "resume_chunked_experiment.py": {
+    "title": "Resume interrupted jobs from checkpoints",
+    "role": "Reuse committed chunks & run unfinished",
+    "input": "A three-chunk job with an example checkpoint already stored on disk.",
+    "framing": "When a long cluster array job is pre-empted mid-run, how do atomic disk checkpoints let the retry skip committed chunks and finish only the remaining work?"
+  },
+  "collect_fold_results.py": {
+    "title": "Merge fold results & block duplicates",
+    "role": "Key by (config, fold, seed) with dupe guard",
+    "input": "Example result files with identifiers and metric records.",
+    "from": ["cluster-runs/build_cluster_run_manifest.py"],
+    "framing": "When collecting hundreds of result CSVs from a cluster, how do we prevent a re-submitted job from being counted twice in the fold average?"
+  },
+  "find_incomplete_runs.py": {
+    "title": "Flag crashed or unlaunched cluster jobs",
+    "role": "Separate missing metrics vs missing runs",
+    "input": "A planned list of jobs, their start records and any saved final results.",
+    "from": ["cluster-runs/build_cluster_run_manifest.py"],
+    "framing": "Before building a thesis table, how do we tell which scheduled runs never launched and which runs started but crashed before writing final metrics?"
+  },
+  "build_grading_table.py": {
+    "title": "Aggregate scale MAE on matched cases",
+    "role": "Verify sample alignment & compute MAE",
+    "input": "A matched example sample with predictions from two image scales.",
+    "from": ["grading-models/save_held_out_grades.py"],
+    "framing": "How do we verify that core, patch and cell predictions cover the exact same held-out specimens before computing the summary MAE table?"
+  },
+  "render_grading_figure.py": {
+    "title": "Render scale MAE summary to SVG",
+    "role": "Generate reproducible SVG bar chart",
+    "input": "Three image-scale labels with example error estimates and intervals.",
+    "from": ["figures/build_grading_table.py"],
+    "framing": "How do we turn the verified scale MAE table directly into a clean, publication-ready SVG chart without manual plotting steps?"
+  },
+  "run_grading_example.py": {
+    "title": "Trace Case S02 from ratings to chart",
+    "role": "End-to-end 12-case, 3-scale replay",
+    "input": "Two assessor grades for case S02, its fold assignment and feature vectors at three image scales.",
+    "from": ["grading-splits/prepare_reference_grades.py", "grading-splits/assign_validation_folds.py"],
+    "framing": "Can a reader pick one error bar in the final chart and trace Case S02 step by step from two assessor ratings (2 and 3) through Fold 1 to its 3-scale predictions?",
+    "method": "Average the two assessor grades (2.500), fit each scale's model on the other folds, predict S02 held out in Fold 1, and rebuild the 3-scale SVG chart."
+  },
+  "bin_patch_distribution.py": {
+    "title": "Bin per-core patch counts [lower, upper)",
+    "role": "Group counts into 0–49, 50–99, 100–199, 200+",
+    "input": "Saved patch counts for seven example cores.",
+    "from": ["patches/summarise_patch_counts.py"],
+    "framing": "How do we bin per-core patch counts into unambiguous half-open intervals [lower, upper) so boundary values (like 50) are never double-counted?"
+  },
+  "grading_figure.svg": {
+    "title": "Inspect the rendered 3-scale SVG chart",
+    "role": "Patch (0.216) vs Cell (0.371) vs Core (0.464)",
+    "input": "Thirty-six held-out example predictions, twelve for each image scale.",
+    "from": ["figures/run_grading_example.py"],
+    "framing": "What does the generated SVG figure look like when all 36 held-out predictions (12 synthetic cases × 3 scales) are aggregated?"
+  },
+  "verify_report_assets.py": {
+    "title": "Verify report files with SHA-256 hashes",
+    "role": "Check asset presence, bytes & checksums",
+    "input": "Two expected report assets and a generated report directory.",
+    "framing": "Before submitting a report or thesis, how do we verify that every referenced table and figure exists on disk and matches its expected SHA-256 fingerprint?"
+  },
+  "research_limits.md": {
+    "title": "Scope internal CV vs external validation",
+    "role": "Single-cohort evidence vs multi-centre tests",
+    "input": "The thesis’s internal grading and subtype comparisons and their validation design.",
+    "framing": "What do the internal 3-fold cross-validation results establish within this cohort, and what must be tested across independent hospitals and scanners next?"
+  },
+  "build_benchmark_bags.py": {
+    "title": "Build seeded PCam benchmark bags",
+    "role": "Disjoint train (seed 11) & test (seed 23) bags",
+    "input": "Example positive and negative patches, split sizes and separate seeds.",
+    "framing": "How do we assemble repeatable positive bags (1 positive patch) and negative bags (0 positive patches) with separate train/test seeds for an external benchmark?"
+  },
+  "compare_benchmark_encoders.py": {
+    "title": "Compare encoders on fixed PCam bags",
+    "role": "Signal (1.000) vs noise (0.625) max-pool acc",
+    "input": "The same labelled training and test sets, with two encoder representations.",
+    "from": ["pcam-bags/build_benchmark_bags.py"],
+    "framing": "When we hold the seeded bag manifests and max-pooling rule fixed, how cleanly does the benchmark separate an informative encoder (1.000) from noise (0.625)?"
+  }
 }

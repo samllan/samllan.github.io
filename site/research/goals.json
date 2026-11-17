@@ -35,9 +35,9 @@
         "description": "Can we locate every tissue core on a whole-slide scan in half the manual time without losing accuracy or crop uniformity?",
         "related": ["prepare","cells"],
         "story": {
-          "tried": "Compared automated Hough circles, 2-click tilted grid projection, hand-drawn rectangles and 1-click fixed-size cropping.",
-          "found": "1-click halved manual time vs rectangles (3 s vs 6 s/core) at 1.00 precision and recall; tilted grid (0.5 s) dropped to 0.98 precision on off-grid cores, and Hough (0.06 s) missed 11% of cores (0.89 recall).",
-          "next": "Adopted 1-click fixed-size (5,000 × 5,000 px) cropping for all 1,109 cores so every core had uniform dimensions.",
+          "tried": "4 core-finding methods (Hough, 2-click grid, drawn boxes, 1-click fixed box).",
+          "found": "1-click halved manual time (6 s → 3 s/core) at 1.00 prec/recall; grid clipped drifted cores (0.98 prec); Hough missed 11% (0.89 rec).",
+          "next": "Adopted 1-click fixed-size (5,000 × 5,000 px) cropping across all 1,109 cores.",
           "source": "Submitted thesis, Table 2.5, p. 70, and August 2020 annotation scripts."
         },
         "next_label": "Decision",
@@ -57,9 +57,9 @@
         "parent": "crop",
         "description": "How do we cut out each marked core so downstream patch and cell predictions can always be placed back on the full scan?",
         "story": {
-          "tried": "Saved each core image alongside a CSV manifest recording its source scan ID and four pixel bounds.",
-          "found": "Preserving origin offsets and downsample scale factors let any local box map back to exact full-resolution scan pixels.",
-          "next": "Fed the extracted cores into both patch tiling and single-cell segmentation while keeping the parent core ID."
+          "tried": "Saved each core crop alongside a CSV manifest of scan origins and 4× downsample factors.",
+          "found": "Scan = Origin + Scale × Local mapped any reduced crop box back to exact full-scan pixels.",
+          "next": "Fed traceable cores into patch tiling (#patches) and single-cell segmentation (#cells)."
         },
         "files": [
           ["extract_labelled_crops.py","2020–2023","Cuts out one image per marked region and writes crops.csv linking filenames to source scan coordinates."],
@@ -72,9 +72,9 @@
         "parent": "prepare",
         "description": "How do we tile each core into regular squares while discarding empty glass background and catching cores with zero usable patches?",
         "story": {
-          "tried": "Measured foreground tissue fraction per grid square against a coverage threshold (≥ 50%) and counted retained patches per core.",
-          "found": "Filtering removed empty background squares, and logging zero-patch cores exposed missing tissue before training.",
-          "next": "Saved the 229,683 accepted patches with their core IDs, pixel bounds and tissue coverage fractions."
+          "tried": "Tiled full core bounding boxes, applied ≥ 50% Otsu tissue filtering, and logged 0-patch cores.",
+          "found": "Retained 229,683 tissue patches (207 ± 61/core) while catching empty/damaged cores before training.",
+          "next": "Saved accepted patch images with core IDs, pixel bounds and tissue coverage fractions."
         },
         "files": [
           ["filter_tissue_patches.py","2023–2025","Computes tissue coverage per grid square and keeps only squares meeting the ≥ 50% tissue threshold."],
@@ -89,9 +89,9 @@
         "description": "Can we extract millions of individual cells with their scan coordinates and check whether a few cores dominate the cell count?",
         "related": ["autoencoder","features"],
         "story": {
-          "tried": "Filtered segmented cell masks by size, indexed each cell's scan coordinates, packed aligned arrays and audited per-core cell counts.",
-          "found": "Across 9,126,415 segmented cells, per-core counts varied sharply—making core-level concentration checks essential.",
-          "next": "Used the indexed cell arrays to test cell-scale grading and hierarchical cell-to-patch pooling."
+          "tried": "Size-filtered Cellpose instances, indexed global scan (x, y) coords, and audited per-core cell counts.",
+          "found": "Across 9,126,415 cells, per-core counts varied sharply (8,229 ± 3,664; 75% in 1 core in demo).",
+          "next": "Enforced ≥ 1,000 cells/core and ≤ 220 px diameter gates for cell-scale grading and subtyping."
         },
         "files": [
           ["extract_cell_crops.py","2023–2026","Extracts size-filtered 8 × 8 px cell crops from segmented instances while rejecting tiny specks or clumps."],
@@ -105,9 +105,9 @@
         "title": "Compress & audit storage",
         "description": "How can we shrink 229,683 patches enough for repeated training runs and catch corrupted dataset shapes before jobs launch?",
         "story": {
-          "tried": "Compared PNG vs WebP compression on decoded pixel fidelity and file size, audited array shapes against manifests, and timed bundled vs separate file reads.",
-          "found": "WebP shrank the 229,683-patch thesis collection by 86.5% (26.94 GB → 3.63 GB), whereas a single tiny synthetic gradient patch was smaller in PNG (129 B vs 174 B).",
-          "next": "Combined compressed storage with pre-flight dataset audits and feature caching for fast model training.",
+          "tried": "Compared PNG vs WebP (Q=75), audited array shapes against manifests, and timed bundled vs split reads.",
+          "found": "WebP shrank 229,683 patches by 86.5% (26.94 → 3.63 GB) with ~1.95/255 channel diff; pre-flight audit caught shape/file faults.",
+          "next": "Stored patch and core collections in WebP and ran pre-flight array audits before GPU jobs.",
           "source": "Submitted thesis, Chapter 2 results, p. 72 and Fig. 2.12."
         },
         "links": [["Next: Compress into features","autoencoder"],["Trace exported features to coordinates","feature-export"]],
@@ -137,9 +137,9 @@
         "title": "Autoencoder reconstruction",
         "description": "How much visual detail is retained when a patch is squeezed through a narrow numerical bottleneck and reconstructed?",
         "story": {
-          "tried": "Fitted reconstruction models across bottleneck widths, ranked held-out patches by reconstruction error, and separated pixel error from latent KL regularisation.",
-          "found": "Wider bottlenecks halved reconstruction MSE (0.00141 → 0.00049) at double the code bytes (16 B → 32 B), while ranking errors exposed the hardest patches first.",
-          "next": "Compared reconstruction codes against self-supervised contrastive and pretrained representations."
+          "tried": "Fitted AE/VAE bottlenecks across widths, ranked worst-MSE patches first, and split pixel BCE from β·KL loss.",
+          "found": "Doubling code width (16 B → 32 B) cut MSE 2.9× (0.00141 → 0.00049), but pixel reconstruction produced unseparated UMAP clouds (0.015 sil.).",
+          "next": "Tested self-supervised Barlow Twins (#features) and frozen pretrained backbones (#frozen-features)."
         },
         "files": [
           ["fit_linear_autoencoder.py","2021–2024","Compresses 3-value patches into a 2-number latent code and reconstructs the inputs."],
@@ -153,9 +153,9 @@
         "title": "Contrastive view learning",
         "description": "Can a shared encoder learn features that stay invariant across two augmented views of a patch without collapsing into redundant columns?",
         "story": {
-          "tried": "Generated paired augmented views of each patch and trained a shared encoder with the Barlow Twins agreement + redundancy objective.",
-          "found": "Duplicating a feature column kept view agreement perfect (0.000) but raised off-diagonal redundancy loss (+0.010); optimizing the shared encoder drove total loss from 0.1938 to 0.0003.",
-          "next": "Audited learned feature matrices for constant or correlated columns before downstream grading and subtyping."
+          "tried": "Trained a shared encoder on paired augmented views with Barlow Twins invariance + off-diagonal redundancy loss.",
+          "found": "Off-diagonal penalty (+0.010) blocked duplicate columns; 40 steps cut loss 0.1938 → 0.0003 (thesis Silhouette 0.408 vs 0.015 AE).",
+          "next": "Audited learned matrices for zero-std or correlated columns before downstream grading and subtyping."
         },
         "default_file": "fit_shared_view_encoder.py",
         "files": [
@@ -170,9 +170,9 @@
         "title": "Pretrained encoders",
         "description": "How do we standardise histology patches for frozen pretrained backbones and compare their vector footprints?",
         "story": {
-          "tried": "Standardised RGB patch sizes and channel normalisation, extracted frozen features in ID-ordered batches, and compared 16-D vs 64-D cache sizes.",
-          "found": "Batch extraction preserved exact patch ID ordering while reducing each patch to a compact float32 vector (1,920 B vs 7,680 B for 30 patches).",
-          "next": "Evaluated frozen representations alongside learned features on held-out classification and clustering benchmarks."
+          "tried": "Standardised RGB resize/normalisation, extracted frozen backbone vectors in ID-ordered batches, and compared 16-D vs 64-D footprints.",
+          "found": "Batch extraction preserved exact patch ID order while shrinking 30 patches to 1,920 B (16-D) or 7,680 B (64-D).",
+          "next": "Benchmarked frozen ResNet-50 and UNI vectors alongside learned features (#feature-benchmarks)."
         },
         "files": [
           ["batch_frozen_features.py","2024–2025","Extracts one feature vector per patch in batches while keeping patch IDs in their exact input order."],
@@ -185,9 +185,9 @@
         "title": "Benchmark feature quality",
         "description": "Which feature representations group related examples cleanly and detect rare positive instances inside a multi-patch bag?",
         "story": {
-          "tried": "Tested candidate representations on held-out nearest-centroid accuracy, silhouette cluster separation, 2D PCA projections and a 64-bag planted-signal benchmark.",
-          "found": "On bags where only 1 of 12 patches carried the positive signal, max pooling reached 0.999 AUC vs 0.830 for mean pooling (which diluted the rare signal).",
-          "next": "Carried instance-sensitive pooling forward into the lymphoma grading and subtype comparisons."
+          "tried": "Compared encoders on held-out centroid accuracy, Silhouette separation, 2D PCA variance and 64 planted-signal MIL bags.",
+          "found": "When 1 of 12 patches carried the positive signal, max pooling reached 0.999 AUC vs 0.830 for mean pooling (which diluted the signal).",
+          "next": "Carried instance-sensitive attention/max pooling into Task 1 grading and Task 2 subtyping."
         },
         "files": [
           ["benchmark_frozen_features.py","2025–2026","Compares candidate feature sets on the exact same held-out test split (100% vs 50% accuracy in demo)."],
@@ -201,9 +201,9 @@
         "title": "Keep vector coordinates",
         "description": "How do we guarantee that cached feature vectors stay aligned to their exact source patch coordinates even if files are reordered?",
         "story": {
-          "tried": "Exported feature vectors with region IDs and pixel bounds in the same row, joined tables by ID rather than row position, and verified cache metadata before reuse.",
-          "found": "Joining by ID recovered the exact coordinates across reordered tables, and cache checks caught encoder version or ID-order mismatches before training.",
-          "next": "Used coordinate-linked feature tables to train scale graders and project predictions back onto tissue heatmaps."
+          "tried": "Exported vectors with (l, t, r, b) bounds, joined tables by region_id across shuffled rows, and checked cache metadata.",
+          "found": "ID-keyed joins recovered exact coordinates regardless of file order, and pre-flight checks caught encoder/shape mismatches.",
+          "next": "Used coordinate-linked feature caches for scale grading (#grading-models) and spatial heatmaps (#heatmaps)."
         },
         "files": [
           ["export_feature_vectors.py","Sep–Oct 2025","Writes each feature vector beside its region_id and (left, top, right, bottom) pixel bounds."],
@@ -223,9 +223,9 @@
         "description": "How do we combine multiple assessor ratings into a reference grade while keeping related samples together in the same validation fold?",
         "related": ["grading-models","sampling"],
         "story": {
-          "tried": "Averaged assessor scores per sample while recording rating count and spread, and assigned sample groups to balanced validation folds.",
-          "found": "Recording rating count alongside spread distinguishes two agreeing raters (n=2, spread=0) from a single uncorroborated rating (n=1, spread=0), and group-aware splits keep paired samples together.",
-          "next": "Trained core, patch and cell graders on identical cross-validation folds.",
+          "tried": "Averaged assessor grades per core while logging rater count (n) and spread, and assigned grouped validation folds.",
+          "found": "Logging n alongside spread separated two agreeing raters (n=2, spread=0) from 1 uncorroborated rating (n=1, spread=0).",
+          "next": "Trained core, patch and cell graders on identical group-aware cross-validation folds.",
           "source": "Submitted thesis, Chapter 3, p. 117."
         },
         "default_file": "assign_validation_folds.py",
@@ -241,9 +241,9 @@
         "parent": "grading-splits",
         "description": "Which biological scale—whole core, tissue patch or single cell—most accurately reproduces expert staining grades on held-out cases?",
         "story": {
-          "tried": "Trained separate graders on core, patch and cell representations using the same fold splits and saved every out-of-fold prediction.",
-          "found": "Patch-level features achieved the lowest grading error in the thesis comparison (0.238 MAE), while grade-by-grade breakdowns showed whether errors ran high at Grade 0 or low at Grade 3.",
-          "next": "Compared the model's 0.238 MAE directly against inter-assessor disagreement (0.382) on the same cohort.",
+          "tried": "Trained core, patch and cell graders on shared splits, saved out-of-fold predictions, and broke down signed bias by grade.",
+          "found": "Patch features reached the lowest thesis grading error (0.238 MAE vs 0.278 cell and 0.346 core).",
+          "next": "Compared the 0.238 patch MAE directly against human inter-assessor disagreement (0.382) in #agreement.",
           "source": "Submitted thesis, Chapter 3, p. 126."
         },
         "default_file": "save_held_out_grades.py",
@@ -260,9 +260,9 @@
         "description": "How do we test one training change at a time fairly—and catch runs where a startup setting silently differed from the plan?",
         "related": ["agreement","cluster-runs"],
         "story": {
-          "tried": "Paired baseline and single-change runs by fold and seed, verified startup logs against planned settings, and compared final-epoch validation windows.",
-          "found": "Matched pairing isolated the trade-off (e.g. −43.9% time and −35.0% RAM for +3.1% error), while startup audits flagged unrecorded or mismatched settings before aggregation.",
-          "next": "Applied verified single-change schedules across all grading and subtype ablations.",
+          "tried": "Paired baseline and single-change runs by fold/seed, audited startup logs, and averaged fixed final-epoch windows.",
+          "found": "Matched pairing isolated exact trade-offs (−43.9% time, −35.0% RAM, +3.1% error) and startup checks caught silent config drift.",
+          "next": "Applied verified single-change schedules across the 81-run grading and subtype ablations.",
           "source": "Submitted thesis, Chapter 3, Fig. 3.4 and Appendix A.2."
         },
         "default_file": "summarise_matched_training_traces.py",
@@ -279,9 +279,9 @@
         "description": "Can dynamic sampling revisit rare grades and high-loss examples during training, and how does the model respond to out-of-distribution noise?",
         "related": ["compare"],
         "story": {
-          "tried": "Combined class rarity, current loss and prior weights to update per-epoch sampling probabilities, and probed a trained scorer with Gaussian noise bags.",
-          "found": "Hybrid weighting boosted both rare Grade 1 samples (0.406) and high-loss Grade 0 samples (0.322), while the dedicated null class flagged 12/12 synthetic noise bags vs 0/12 signal bags.",
-          "next": "Evaluated model error alongside human inter-assessor disagreement."
+          "tried": "Combined class rarity, training loss and EMA weights for dynamic sampling, and probed the 8th null class with Gaussian noise.",
+          "found": "Hybrid weighting boosted rare Grade 1 (0.392) and hard Grade 0 (0.293); the null class caught 12/12 noise bags vs 0/12 signal bags.",
+          "next": "Evaluated trained grading error alongside human inter-assessor disagreement (#agreement)."
         },
         "links": [["See hybrid sampling weights","sampling/weight_grading_examples.py"],["See Gaussian noise probe","sampling/probe_grading_model_with_noise.py"]],
         "files": [
@@ -294,9 +294,9 @@
         "title": "Model vs expert gap",
         "description": "How does the model's grading error compare with the disagreement between two human experts scoring the same tissue?",
         "story": {
-          "tried": "Measured mean absolute difference between two experts on matched samples alongside model error against their average, plus quadratic-weighted kappa.",
-          "found": "In the thesis comparison, experts differed from each other by 0.382 grade points on average, while the patch model differed from their average grade by 0.238.",
-          "next": "Kept the two targets distinct (person-vs-person gap vs model-vs-average error) when reporting agreement.",
+          "tried": "Measured person-vs-person |A − B| gap alongside model-vs-consensus MAE and quadratic-weighted κ.",
+          "found": "Human assessors differed by 0.382 grade points on average, while the patch model differed from their consensus mean by 0.238.",
+          "next": "Reported both metrics together with distinct targets (person-vs-person vs model-vs-mean).",
           "source": "Submitted thesis, Chapter 3, Fig. 3.10, p. 127."
         },
         "files": [
@@ -316,9 +316,9 @@
         "description": "Which specimens had valid ABC or GCB subtype labels, required stains and sufficient tissue patches to enter the comparison?",
         "related": ["interpret"],
         "story": {
-          "tried": "Matched image IDs to supplied ABC/GCB labels without inferring missing values, and logged every exclusion criterion per specimen.",
-          "found": "Separating unrecognised labels ('unclassified') from missing records and logging per-rule exclusions made the cohort denominator auditable.",
-          "next": "Held the curated cohort fixed across all pooling, positional and encoder comparisons."
+          "tried": "Joined image IDs to {'ABC', 'GCB'} calls without inferring missing labels, and logged every exclusion gate per core.",
+          "found": "6-gate filtering (cell ≤ 220 px, patches ≥ 87, cells ≥ 1,000, rater Δ ≤ 1, slide check) curated 1,109 cores down to 962 (86.7%).",
+          "next": "Held the 962-core curated cohort fixed across all pooling, positional and encoder comparisons."
         },
         "files": [
           ["join_subtype_labels.py","2026","Matches image IDs to allowed {'ABC', 'GCB'} labels and flags unrecognised or missing entries for review."],
@@ -331,9 +331,9 @@
         "description": "How should hundreds of patch vectors from one specimen be combined into a single case-level subtype prediction?",
         "related": ["subtype-ablations","validation"],
         "story": {
-          "tried": "Compared mean, max and attention-weighted patch pooling, sorted variable-size patch bags to reduce padding, and scored held-out specimen bags.",
-          "found": "Attention weighting learns which patches to emphasise, while size-sorted batching cut dummy padding slots from 21 to 5 in the 4-specimen example.",
-          "next": "Tested whether adding 2D spatial patch coordinates or cell-to-patch hierarchy improved bag predictions."
+          "tried": "Compared mean, max and softmax-attention bag pooling, size-sorted variable bags, and scored held-out bags.",
+          "found": "Attention learned instance weights [0.212, 0.212, 0.576], and size-sorted batching cut dummy padding by 76% (21 → 5 slots).",
+          "next": "Tested whether 2D spatial patch coordinates or cell-to-patch hierarchy improved bag predictions (#subtype-ablations)."
         },
         "files": [
           ["pool_patch_evidence.py","2022–2026","Compares mean, maximum and softmax-attention summaries on the same 3-patch bag."],
@@ -349,9 +349,9 @@
         "description": "Does giving the transformer 2D spatial patch coordinates or pooling cells within patches first improve subtype prediction?",
         "related": ["cost","explain"],
         "story": {
-          "tried": "Ablated 2D rotary position encodings (RoPE) on identical patch inputs and compared flat cell pooling against hierarchical cell-to-patch pooling.",
-          "found": "In the thesis (Ch. 4, §4.6.3), adding 2D positions increased compute cost without giving a clear accuracy advantage for subtype prediction at patch scale.",
-          "next": "Preserved this negative finding in the logbook and recommended testing on whole-slide cohorts where larger-scale tissue architecture is intact.",
+          "tried": "Ablated 2D rotary position encodings (RoPE) on identical patch bags and compared flat cell vs patch-then-core pooling.",
+          "found": "Adding 2D RoPE positions changed attention weights (0.500 → 0.369) and increased compute cost without improving patch-level subtype accuracy.",
+          "next": "Preserved this negative result in the logbook and recommended testing on intact whole-slide tissue (#limits).",
           "source": "Submitted thesis, Chapter 4, §4.6.3, pp. 186 and 189."
         },
         "default_file": "compare_spatial_attention.py",
@@ -366,9 +366,9 @@
         "title": "Cross-fold ROC & recall",
         "description": "Which subtype representation performed best across validation folds, and how do class recalls behave across thresholds?",
         "story": {
-          "tried": "Evaluated subtype accuracy, per-class recall and ROC AUC across validation folds in the main clinical cohort.",
-          "found": "The patch model using UNI features achieved the highest subtype accuracy (0.970) and macro AUC (0.992) in Thesis Table 4.4.",
-          "next": "Report per-fold denominators alongside pooled metrics and validate on independent external cohorts.",
+          "tried": "Evaluated fold-by-fold subtype accuracy, tie-aware ROC AUC and per-class recall (k/n) across 3 validation folds.",
+          "found": "Patch · UNI reached 0.970 accuracy and 0.992 macro AUC (vs 0.958 Patch-ResNet, 0.952 Cell-ResNet, 0.675 Core).",
+          "next": "Reported explicit per-fold denominators and scoped need for multi-centre external validation (#limits).",
           "source": "Submitted thesis, Table 4.4, p. 161, and limitations, p. 190."
         },
         "table": {
@@ -388,9 +388,9 @@
         "title": "Accuracy vs compute cost",
         "description": "Which models sit on the Pareto frontier when we weigh subtype accuracy against runtime, peak memory and storage?",
         "story": {
-          "tried": "Estimated raw RGB vs feature-vector storage, filtered candidates for Pareto efficiency across accuracy/time/RAM, and audited resource logs.",
-          "found": "Storing 256-D float32 vectors instead of 224 × 224 RGB patches shrank raw footprint 147× (75.26 MB → 0.51 MB for 500 regions), and Pareto filtering eliminated dominated models.",
-          "next": "Used Pareto-efficient feature representations for spatial heatmap and perturbation analysis."
+          "tried": "Compared raw RGB vs cached float32 vectors, filtered models on the 3D Pareto frontier, and audited timing/RAM logs.",
+          "found": "256-D vectors shrank 500 regions 147× (75.26 → 0.51 MB), and Pareto filtering dropped models beaten on accuracy, time and RAM.",
+          "next": "Carried Pareto-efficient representations into spatial heatmap and perturbation analysis (#heatmaps)."
         },
         "files": [
           ["estimate_representation_cost.py","Apr 2026","Shows 500 regions shrinking from 75.26 MB (224 × 224 RGB) to 0.51 MB (256-D float32 vectors)."],
@@ -410,9 +410,9 @@
         "default_file": "render_score_overlay.py",
         "description": "How do we project model scores back onto the source tissue image while clearly marking regions that were never scored?",
         "story": {
-          "tried": "Placed patch scores onto full-scan coordinate grids, averaged overlapping patches, and rendered shared-scale RGBA overlays with hatched unscored areas.",
-          "found": "Explicitly hatching unscored (NaN) pixels prevents readers from mistaking background or skipped tissue for a low-risk (0.0) prediction.",
-          "next": "Paired visual heatmaps with quantitative ROI coverage summaries and perturbation tests."
+          "tried": "Projected patch scores onto core grids, averaged overlaps, and rendered shared-scale heatmaps with hatched NaN areas.",
+          "found": "Hatching unscored (NaN) pixels prevented background glass or skipped tissue from being misread as a 0.0 score.",
+          "next": "Paired visual heatmaps with ROI coverage receipts and dimming controls (#explain)."
         },
         "files": [
           ["map_patch_scores.py","2024–2025","Places patch scores onto a 4 × 3 coordinate grid, averaging overlaps (0.60) and marking uncovered cells as NaN."],
@@ -425,9 +425,9 @@
         "title": "Dimming & perturbation",
         "description": "When an explanation highlights part of a tissue image, does dimming or removing that region change the score more than a uniform control?",
         "story": {
-          "tried": "Fitted class-specific dimming masks (Spectral Dream Dimming), compared targeted dimming against a uniform mask of equal mean brightness (0.80), and tested single-patch removal/repetition.",
-          "found": "Targeted dimming dropped the model score 3.5× more than uniform dimming at the same 0.80 brightness (−0.576 vs −0.164), confirming spatial model sensitivity.",
-          "next": "Distinguished model sensitivity from biological causation, which requires independent experimental validation."
+          "tried": "Fitted Spectral Dream Dimming masks, tested targeted vs uniform dimming at equal 0.80 brightness, and ran leave-one-out probes.",
+          "found": "Targeted dimming dropped the score 3.5× more than uniform dimming (−0.576 vs −0.164), confirming spatial model sensitivity.",
+          "next": "Separated network sensitivity from biological causation, which requires wet-lab assays (#limits)."
         },
         "files": [
           ["explain_prediction.py","Feb 2026","Fits separate bounded brightness masks for Class A and Class B against a fixed model."],
@@ -442,9 +442,9 @@
         "description": "How do we give every cluster experiment a deterministic ID and resume interrupted jobs without repeating committed work?",
         "related": ["run-results","figures"],
         "story": {
-          "tried": "Hashed canonical JSON specifications into 16-char SHA-256 run IDs and committed completed chunks atomically to disk checkpoints.",
-          "found": "Deterministic IDs prevented duplicate configurations, and atomic checkpoints let interrupted jobs resume cleanly from the last committed chunk.",
-          "next": "Reconciled completed output files against the manifest before building thesis tables."
+          "tried": "Hashed canonical JSON specs into 16-hex SHA-256 run IDs and saved completed chunks atomically to disk checkpoints.",
+          "found": "Deterministic IDs blocked duplicate jobs, and atomic checkpoints resumed interrupted runs from the last committed chunk.",
+          "next": "Reconciled finished cluster outputs against the manifest before building tables (#run-results)."
         },
         "files": [
           ["build_cluster_run_manifest.py","2026 thesis","Expands 2 configs × 2 folds × 2 seeds into 8 jobs with deterministic SHA-256 run IDs."],
@@ -456,9 +456,9 @@
         "title": "Audit completed runs",
         "description": "How do we catch missing, crashed or duplicate runs before aggregating fold metrics into a result table?",
         "story": {
-          "tried": "Checked collected CSV rows for duplicate (configuration, fold, seed) keys and compared finished job states against the planned run schedule.",
-          "found": "Separating 'missing metrics' (started but crashed) from 'missing' (never launched) pinpointed which cluster jobs needed log inspection vs resubmission.",
-          "next": "Passed only complete, verified run matrices to the figure and table builders."
+          "tried": "Guarded result merges against duplicate (config, fold, seed) keys and audited job states against the run manifest.",
+          "found": "Separating 'missing metrics' (crashed mid-run) from 'missing' (never launched) pinpointed log checks vs resubmissions.",
+          "next": "Passed only complete, verified run matrices to the figure and table builders (#figures)."
         },
         "files": [
           ["collect_fold_results.py","2026","Merges result CSVs by (configuration, fold, seed) and rejects duplicate keys before averaging."],
@@ -470,9 +470,9 @@
         "title": "Reproduce thesis figures",
         "description": "Can a reviewer start from one error bar in a results figure and trace it all the way back to the individual case, fold and raw ratings?",
         "story": {
-          "tried": "Built an end-to-end replay script that averages assessor ratings, assigns folds, fits scale graders, traces Case S02 and renders the SVG error chart.",
-          "found": "Across 12 synthetic cases (36 held-out predictions), patch scale achieved the lowest error (0.216 MAE), and Case S02 can be inspected step-by-step across all 3 scales.",
-          "next": "Run python run_grading_example.py --output grading-demo and verify report assets with SHA-256 checksums."
+          "tried": "Replayed the 12-case grading workflow end-to-end, traced Case S02 across 3 scales, and verified assets with SHA-256 hashes.",
+          "found": "Patch scale reached the lowest error (0.216 MAE vs 0.371 cell, 0.464 core), with Case S02 traceable back to ratings (2, 3).",
+          "next": "Run python run_grading_example.py --output grading-demo and verify report checksums."
         },
         "default_file": "run_grading_example.py",
         "files": [
@@ -489,9 +489,9 @@
         "title": "Study limits & next tests",
         "description": "What do the internal single-cohort comparisons establish, and what would a multi-centre external study need to test next?",
         "story": {
-          "tried": "Evaluated all grading and subtype models across cross-validation folds within the main clinical TMA cohort.",
-          "found": "Internal cross-validation measures agreement within this cohort and staining protocol; it does not establish generalisation across external hospitals or scanners.",
-          "next": "Pre-register fixed model weights and preprocessing rules, then evaluate across independent laboratories and patient cohorts.",
+          "tried": "Evaluated all grading and subtype models across 3-fold cross-validation within the main clinical TMA cohort.",
+          "found": "Internal CV establishes agreement within this cohort and scanner; it does not prove generalisation to external hospitals.",
+          "next": "Pre-register fixed weights and preprocessing rules, then test across independent multi-centre cohorts.",
           "source": "Submitted thesis, Chapter 5, §§5.5–5.6, pp. 189–190."
         },
         "files": [
@@ -510,9 +510,9 @@
         "description": "How do we group patches into repeatable positive and negative bags with fixed seeds so different encoders face the exact same benchmark?",
         "related": ["pcam-benchmarks"],
         "story": {
-          "tried": "Built seeded positive bags (containing 1 positive patch) and negative bags (0 positive patches) with preserved patch IDs.",
-          "found": "Saving bag manifests with separate train (seed 11) and test (seed 23) seeds guaranteed disjoint splits and identical bag compositions across runs.",
-          "next": "Fed the fixed bag manifests to candidate encoders in Compare bag encoders."
+          "tried": "Assembled seeded positive bags (1 pos patch in 4) and negative bags (0 pos) with disjoint train (11) and test (23) seeds.",
+          "found": "Locking bag manifests and patch IDs on disk guaranteed identical splits across every candidate encoder.",
+          "next": "Fed the fixed bag manifests to candidate encoders in Compare bag encoders (#pcam-benchmarks)."
         },
         "files": [
           ["build_benchmark_bags.py","2026 archive","Generates reproducible 4-patch positive and negative bag manifests for train (seed 11) and test (seed 23) splits."]
@@ -524,9 +524,9 @@
         "parent": "pcam-bags",
         "description": "When we hold the train/test bag manifests and max-pooling rule fixed, how clearly does the benchmark separate a signal encoder from noise?",
         "story": {
-          "tried": "Evaluated a signal stand-in encoder and a random-noise encoder on the exact same 8 training bags and 8 test bags.",
-          "found": "With bag manifests and max pooling held fixed, the signal encoder reached 1.000 balanced accuracy vs 0.625 for the noise encoder.",
-          "next": "Confirmed the bag evaluation pipeline before comparing pretrained histology backbones."
+          "tried": "Scored a signal encoder and a random-noise encoder on the exact same 8 train and 8 test bags using max pooling.",
+          "found": "Signal encoder reached 1.000 balanced accuracy vs 0.625 for the noise encoder on identical bags.",
+          "next": "Verified the MIL bag benchmark pipeline before comparing pretrained histology backbones."
         },
         "files": [
           ["compare_benchmark_encoders.py","2026 archive","Compares two encoders on identical train/test bag manifests using max pooling and balanced accuracy (1.000 vs 0.625)."]
