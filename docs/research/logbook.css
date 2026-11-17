@@ -274,3 +274,10 @@
   .lab-arc-table td, .lab-arc-table td:first-child { display: block; min-width: 0; border: 0; padding: 3px 0; }
   .lab-arc-table .lab-step-role { font-size: 12px; }
 }
+.lab-screen-reader { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.lab-home-detail { max-width: 76ch; margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--lab-rule); }
+.lab-home-detail summary { margin-bottom: 8px; font-size: 15px; }
+.lab-home-detail p { margin: 7px 0; }
+.lab-home-detail .lab-command { white-space: pre-wrap; overflow-wrap: anywhere; }
+.lab-goals .lab-home-link { display: inline-block; padding: 0; }
+.lab-goals .lab-home-link[aria-current="page"] { background: transparent; text-underline-offset: 3px; text-decoration: underline; }

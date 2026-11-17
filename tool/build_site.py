@@ -219,6 +219,7 @@ research = ROOT / 'site' / 'research'
 public_research = OUT / 'research'
 shutil.copytree(research / 'examples', public_research / 'examples', dirs_exist_ok=True,
                 ignore=shutil.ignore_patterns('__pycache__', 'crops', 'tiles', '*.pyc'))
+shutil.copyfile(research / 'entry-template.md', public_research / 'entry-template.md')
 versions = {}
 for name in ('logbook.css', 'logbook.js'):
     shutil.copyfile(research / name, public_research / name)

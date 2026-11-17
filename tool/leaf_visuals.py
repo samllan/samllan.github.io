@@ -2032,28 +2032,28 @@ def section_tentpole(group_id):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 132" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Three representation families compared on latent geometry and downstream cluster separation">'
             '<rect width="680" height="132" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="22" font-size="11" fill="#1b3126" font-weight="bold">Three Representation Families (Ch. 2, Fig. 2.7–2.9 &amp; 2.16–2.18) · Pixel codes vs invariant clusters</text>'
+            '<text x="16" y="22" font-size="11" fill="#1b3126" font-weight="bold">Three ways to describe an image patch</text>'
             # Card 1: Autoencoder / VAE
             '<rect x="16" y="34" width="204" height="84" rx="6" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.6"/>'
-            '<text x="26" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">1. Reconstruction (AE / VAE)</text>'
-            '<text x="26" y="68" font-size="9.4" fill="#244035">Patch → z (32–256-D) → Rebuild</text>'
+            '<text x="26" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">1. Rebuild the patch</text>'
+            '<text x="26" y="68" font-size="9.4" fill="#244035">Compress the patch, then rebuild it</text>'
             '<circle cx="48" cy="94" r="13" fill="#8a4b68" opacity="0.35"/><circle cx="54" cy="92" r="11" fill="#8a4b68" opacity="0.45"/>'
-            '<text x="76" y="90" font-size="9.4" fill="#8a4b68" font-weight="bold">Dense unseparated cloud</text>'
+            '<text x="76" y="90" font-size="9.4" fill="#8a4b68" font-weight="bold">Groups overlap</text>'
             '<text x="76" y="105" font-size="9" fill="#536052">Silhouette: 0.015 · DB: 2.81</text>'
             # Card 2: Barlow Twins Contrastive
             '<rect x="238" y="34" width="204" height="84" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
-            '<text x="248" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">2. Contrastive (Barlow Twins)</text>'
-            '<text x="248" y="68" font-size="9.4" fill="#244035">2 views → 8×8 C_ij → Identity I</text>'
+            '<text x="248" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">2. Learn from two views</text>'
+            '<text x="248" y="68" font-size="9.4" fill="#244035">Find what two versions have in common</text>'
             '<circle cx="262" cy="88" r="6.5" fill="#205841"/><circle cx="278" cy="100" r="6.5" fill="#8a5a19"/><circle cx="292" cy="86" r="6.5" fill="#b3472a"/>'
-            '<text x="306" y="90" font-size="9.4" fill="#205841" font-weight="bold">Separated clusters ★</text>'
-            '<text x="306" y="105" font-size="9" fill="#244035">Silhouette: 0.408 (27× AE)</text>'
+            '<text x="306" y="90" font-size="9.4" fill="#205841" font-weight="bold">Clearer groups</text>'
+            '<text x="306" y="105" font-size="9" fill="#244035">Silhouette: 0.408</text>'
             # Card 3: Pretrained Frozen Backbones
             '<rect x="460" y="34" width="204" height="84" rx="6" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.6"/>'
-            '<text x="470" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">3. Frozen (ResNet50 / UNI)</text>'
-            '<text x="470" y="68" font-size="9.4" fill="#244035">224² RGB → 1024-D / 2048-D</text>'
-            '<text x="470" y="88" font-size="9.4" fill="#8a5a19" font-weight="bold">147× smaller than raw RGB</text>'
-            '<text x="470" y="105" font-size="9" fill="#536052">Vectors keep (l, t, r, b) coords</text>'
-            "</svg></figure>"
+            '<text x="470" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">3. Reuse a trained model</text>'
+            '<text x="470" y="68" font-size="9.4" fill="#244035">Read out features from ResNet or UNI</text>'
+            '<text x="470" y="88" font-size="9.4" fill="#8a5a19" font-weight="bold">Less storage than raw image patches</text>'
+            '<text x="470" y="105" font-size="9" fill="#536052">Keep each patch’s original coordinates</text>'
+            "</svg><figcaption>Thesis, chapter 2, figures 2.7–2.9 and 2.16–2.18.</figcaption></figure>"
         )
 
     if group_id == "section-3-task-1-staining-grades":

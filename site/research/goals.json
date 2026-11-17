@@ -15,7 +15,6 @@
           ["5. Explain & verify","heatmaps","Project model scores back onto tissue coordinates, test dimming controls, and trace figures to raw predictions."]
         ],
         "links": [["Read study limits & next tests","limits"]],
-        "more": [["Try the same logbook on a different project","example/"]],
         "figure": ["image_scales.png","Schematic showing one scan and one selected core branching into patches and cells.","Synthetic schematic. The patch and cell views both come from core C01. The thesis crop was 5,000 × 5,000 pixels, covering 1.25 × 1.25 mm at the reported scan scale (Table 2.5, p. 70).",1305,529],
         "start": [["Why I chose 1-click cropping (6 s → 3 s)","crop/crop_benchmark.csv"],["Trace Case S02 to the grading chart","figures/run_grading_example.py"],["See what the subtype results support","validation"]],
         "files": [

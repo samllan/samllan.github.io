@@ -189,13 +189,36 @@ def breadcrumb_markup(ancestors):
     return f'<nav class="lab-kicker" aria-label="Breadcrumb">{links}</nav>'
 
 
+def render_project_home(goal, context, research):
+    starter = escape((research / "entry-template.md").read_text(encoding="utf-8").strip())
+    return f"""<article class="lab-experiment lab-goal-overview lab-project-home" data-goal-overview>
+  <div class="lab-experiment-head" id="question/research_questions.md" data-home-part>
+    <h2 tabindex="-1">{escape(goal["title"])}</h2>
+    <p class="lab-lede">{escape(goal["description"])}</p>
+  </div>
+  {context}
+  <details class="lab-detail lab-home-detail" id="question/README.md" data-home-part>
+    <summary>Run the grading example</summary>
+    <p>The example runs on generated data and saves the splits, predictions and chart. Run these commands from the examples folder with Python 3.9 or later.</p>
+    <pre class="lab-command">python -m pip install numpy pillow
+python run_grading_example.py --output grading-demo</pre>
+    <p><a href="examples/README.md">Full setup notes</a> · <a href="#figures/run_grading_example.py">See the worked example</a></p>
+  </details>
+  <details class="lab-detail lab-home-detail">
+    <summary>Start your own logbook</summary>
+    <p>Open an entry when you have a question. Add what you did and what happened as the work progresses.</p>
+    <pre class="lab-command">{starter}</pre>
+    <p><a href="entry-template.md" download>Download the blank entry</a> · <a href="example/">See a filled-in example</a></p>
+  </details>
+</article>"""
+
+
 def render_group_overview(root_crumb, group_id, group, titles):
     label = group["title"]
     kicker = breadcrumb_markup([root_crumb])
-    total_files = sum(len(goal["files"]) for goal in group["goals"])
     summary = group.get(
         "summary",
-        f"This section groups {len(group['goals'])} research goals and {total_files} experiment records.",
+        "Questions, experiments and outcomes.",
     )
     rows = []
     for index, goal in enumerate(group["goals"], start=1):
@@ -228,7 +251,7 @@ def render_group_overview(root_crumb, group_id, group, titles):
   {tentpole}
   <div class="lab-walkthrough-section" role="region" aria-label="Goals in this section">
     <table class="lab-result-table lab-arc-table lab-stack-table" role="table">
-      <caption>Narrative arc across {len(group["goals"])} goals ({total_files} experiments)</caption>
+      <caption class="lab-screen-reader">Goals and outcomes</caption>
       <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Goal</th><th scope="col" role="columnheader">Question tested</th><th scope="col" role="columnheader">Outcome &amp; scripts</th></tr></thead>
       <tbody role="rowgroup">{"".join(rows)}</tbody>
     </table>
@@ -283,7 +306,7 @@ def render_goal_overview(ancestors, goal, titles, descriptions, children, detail
   {context_block}
   <div class="lab-walkthrough-section" role="region" aria-label="Narrative walkthrough of experiments">
     <table class="lab-result-table lab-arc-table lab-stack-table" role="table">
-      <caption>Experiments in this step ({len(goal["files"])} {"entry" if len(goal["files"]) == 1 else "entries"})</caption>
+      <caption class="lab-screen-reader">Experiments and outcomes</caption>
       <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Step</th><th scope="col" role="columnheader">Role in the story</th><th scope="col" role="columnheader">Result / output</th></tr></thead>
       <tbody role="rowgroup">{"".join(rows)}</tbody>
     </table>
@@ -455,15 +478,18 @@ def render_logbook(research, *, project=None):
             default_file = goal.get("default_file", goal["files"][0][0])
             if default_file not in targets[key]:
                 raise ValueError(f"Unknown default entry for {key}: {default_file}")
+            is_home = project == research and key == root_crumb[0]
             context = narrative(goal, targets, examples, titles)
             featured = {link[1].partition("/")[0] for field in ("links", "path") for link in goal.get(field, ())}
             links = "".join(f'<a href="#{target}">{escape(titles[target])} →</a>'
                             for target in goal.get("related", ()) if target not in featured)
-            if links:
+            if links and not is_home:
                 context += f'<nav class="lab-next" aria-label="Related goals">{links}</nav>'
             ancestors = goal_ancestors(key)
-            overview = render_goal_overview(
-                ancestors, goal, titles, descriptions, children, details, snapshots, context, examples
+            overview = (
+                render_project_home(goal, context, research) if is_home else render_goal_overview(
+                    ancestors, goal, titles, descriptions, children, details, snapshots, context, examples
+                )
             )
             script_links, leaves = [], []
             for file in goal["files"]:
@@ -473,6 +499,8 @@ def render_logbook(research, *, project=None):
                 if filename in file_names:
                     raise ValueError(f"File is already listed under another goal: {filename}")
                 file_names.add(filename)
+                if is_home:
+                    continue
                 target = f"{key}/{filename}"
                 audit = f' data-open-goal="{key}"' if filename.endswith(".py") else ""
                 script_links.append(
@@ -484,8 +512,8 @@ def render_logbook(research, *, project=None):
                                           examples, demo, leaf_context, downstream, labels))
             sidebar[key] = title, "".join(script_links)
             default = escape(default_file, quote=True)
-            panels.append(f'<section id="{key}" class="lab-goal" data-goal>\n'
-                          f'{overview}\n<div data-default-file="{default}">{"".join(leaves)}</div>\n</section>')
+            leaf_markup = f'\n<div data-default-file="{default}">{"".join(leaves)}</div>' if leaves else ""
+            panels.append(f'<section id="{key}" class="lab-goal" data-goal>\n{overview}{leaf_markup}\n</section>')
 
         def branch(parent):
             items = []
@@ -513,8 +541,10 @@ def render_logbook(research, *, project=None):
                 f'<div id="branch-{group_id}" class="lab-children">'
                 f'<ul class="lab-group-tree">{branch(None)}</ul></div></li></ul>'
             )
-        else:
+        elif project != research:
             tree = f'<ul class="lab-tree">{branch(None)}</ul>'
+        else:
+            continue
         navigation.append(tree)
     missing = {path.name for path in examples.glob("*.py")} - file_names
     if missing:

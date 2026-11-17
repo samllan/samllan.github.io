@@ -89,6 +89,13 @@ function selectExperiment() {
   }
   activeExperiment = selected;
   fitDiagrams(selected);
+  if (filename && !selectedLeaf) {
+    const part = document.getElementById(goal.id + '/' + filename);
+    if (part?.hasAttribute('data-home-part')) {
+      if (part instanceof HTMLDetailsElement) part.open = true;
+      part.scrollIntoView({ block: 'start' });
+    }
+  }
   focusOnNavigation = false;
   toggledByRowClick = false;
 }
