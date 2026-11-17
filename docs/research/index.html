@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The PhD logbook — Samuel Llanwarne</title><meta name="description" content="A browsable record of the research questions, code and experiments behind the doctoral thesis.">
-<link rel="stylesheet" href="../style.css?v=2c230f6c43"><link rel="stylesheet" href="logbook.css?v=b0b7419dcf"></head><body><a class="skip" href="#main">Skip to content</a>
+<link rel="stylesheet" href="../style.css?v=2c230f6c43"><link rel="stylesheet" href="logbook.css?v=bc33adff79"></head><body><a class="skip" href="#main">Skip to content</a>
 <main id="main" class="lab">
   <div class="lab-toolbar">
     <a class="lab-back" href="../projects/phd.html">← PhD project</a>
@@ -12,189 +12,169 @@
   <div class="lab-layout">
     <nav class="lab-goals" aria-label="Research goals">
       <h2>Goals and scripts</h2>
-      <h3 class="lab-group">Start here</h3>
-<ul>
-<li><a href="#question">What did the PhD investigate?</a>
-</li>
-</ul>
+      <ul class="lab-tree"><li><a href="#question">What did the PhD investigate?</a></li></ul>
 <h3 class="lab-group">Make the images usable</h3>
-<ul>
-<li><a href="#crop">Mark and label tissue regions</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="crop" href="examples/prepare_image_regions.py"><code>prepare_image_regions.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="crop" href="examples/record_crop_marks.py"><code>record_crop_marks.py</code></a></li></ul>
-</li>
-<li><a href="#prepare">Extract crops and preserve their coordinates</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="prepare" href="examples/extract_labelled_crops.py"><code>extract_labelled_crops.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="prepare" href="examples/map_crop_to_scan.py"><code>map_crop_to_scan.py</code></a></li></ul>
-</li>
-<li><a href="#patches">Build and inspect patch datasets</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="patches" href="examples/filter_tissue_patches.py"><code>filter_tissue_patches.py</code></a></li>
+<ul class="lab-tree lab-group-tree"><li><a href="#crop">Mark and label tissue regions</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="crop" href="examples/prepare_image_regions.py"><code>prepare_image_regions.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="crop" href="examples/record_crop_marks.py"><code>record_crop_marks.py</code></a></li></ul><ul class="lab-branch"><li><a href="#prepare">Extract crops and preserve their coordinates</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="prepare" href="examples/extract_labelled_crops.py"><code>extract_labelled_crops.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="prepare" href="examples/map_crop_to_scan.py"><code>map_crop_to_scan.py</code></a></li></ul><ul class="lab-branch"><li><a href="#patches">Build and inspect patch datasets</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="patches" href="examples/filter_tissue_patches.py"><code>filter_tissue_patches.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="patches" href="examples/summarise_patch_counts.py"><code>summarise_patch_counts.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="patches" href="examples/extract_patch_images.py"><code>extract_patch_images.py</code></a></li></ul>
-</li>
-<li><a href="#cells">Build cell-level datasets</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="cells" href="examples/extract_cell_crops.py"><code>extract_cell_crops.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="patches" href="examples/extract_patch_images.py"><code>extract_patch_images.py</code></a></li></ul></li><li><a href="#cells">Build cell-level datasets</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="cells" href="examples/extract_cell_crops.py"><code>extract_cell_crops.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="cells" href="examples/index_segmented_cells.py"><code>index_segmented_cells.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="cells" href="examples/package_cell_arrays.py"><code>package_cell_arrays.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="cells" href="examples/summarise_cells_by_core.py"><code>summarise_cells_by_core.py</code></a></li></ul>
-</li>
-<li><a href="#storage">Check, bundle and compress datasets</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="storage" href="examples/compare_image_encodings.py"><code>compare_image_encodings.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="cells" href="examples/summarise_cells_by_core.py"><code>summarise_cells_by_core.py</code></a></li></ul></li></ul></li></ul></li><li><a href="#storage">Check, bundle and compress datasets</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="storage" href="examples/compare_image_encodings.py"><code>compare_image_encodings.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="storage" href="examples/audit_dataset_structure.py"><code>audit_dataset_structure.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="storage" href="examples/measure_storage_reads.py"><code>measure_storage_reads.py</code></a></li></ul>
-</li>
-</ul>
+<li><a class="lab-file lab-script" data-open-goal="storage" href="examples/measure_storage_reads.py"><code>measure_storage_reads.py</code></a></li></ul></li></ul>
 <h3 class="lab-group">Learn smaller representations</h3>
-<ul>
-<li><a href="#autoencoder">Learn by reconstructing images</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="autoencoder" href="examples/fit_linear_autoencoder.py"><code>fit_linear_autoencoder.py</code></a></li>
+<ul class="lab-tree lab-group-tree"><li><a href="#autoencoder">Learn by reconstructing images</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="autoencoder" href="examples/fit_linear_autoencoder.py"><code>fit_linear_autoencoder.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="autoencoder" href="examples/score_reconstructions.py"><code>score_reconstructions.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="autoencoder" href="examples/compare_bottleneck_sizes.py"><code>compare_bottleneck_sizes.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="autoencoder" href="examples/score_variational_reconstruction.py"><code>score_variational_reconstruction.py</code></a></li></ul>
-</li>
-<li><a href="#features">Learn features from two views</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="features" href="examples/learn_image_features.py"><code>learn_image_features.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="autoencoder" href="examples/score_variational_reconstruction.py"><code>score_variational_reconstruction.py</code></a></li></ul></li><li><a href="#features">Learn features from two views</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="features" href="examples/learn_image_features.py"><code>learn_image_features.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="features" href="examples/prepare_paired_views.py"><code>prepare_paired_views.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="features" href="examples/audit_feature_variation.py"><code>audit_feature_variation.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="features" href="examples/fit_shared_view_encoder.py"><code>fit_shared_view_encoder.py</code></a></li></ul>
-</li>
-<li><a href="#frozen-features">Extract features with existing models</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="frozen-features" href="examples/batch_frozen_features.py"><code>batch_frozen_features.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="features" href="examples/fit_shared_view_encoder.py"><code>fit_shared_view_encoder.py</code></a></li></ul></li><li><a href="#frozen-features">Extract features with existing models</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="frozen-features" href="examples/batch_frozen_features.py"><code>batch_frozen_features.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="frozen-features" href="examples/compare_encoder_dimensions.py"><code>compare_encoder_dimensions.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="frozen-features" href="examples/standardise_encoder_inputs.py"><code>standardise_encoder_inputs.py</code></a></li></ul>
-</li>
-<li><a href="#feature-benchmarks">Test which features are useful</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="examples/benchmark_frozen_features.py"><code>benchmark_frozen_features.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="frozen-features" href="examples/standardise_encoder_inputs.py"><code>standardise_encoder_inputs.py</code></a></li></ul></li><li><a href="#feature-benchmarks">Test which features are useful</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="examples/benchmark_frozen_features.py"><code>benchmark_frozen_features.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="examples/measure_feature_separation.py"><code>measure_feature_separation.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="examples/project_feature_space.py"><code>project_feature_space.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="examples/check_bag_classifier_on_known_signal.py"><code>check_bag_classifier_on_known_signal.py</code></a></li></ul>
-</li>
-<li><a href="#feature-export">Link feature vectors to the source image</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="feature-export" href="examples/export_feature_vectors.py"><code>export_feature_vectors.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="examples/check_bag_classifier_on_known_signal.py"><code>check_bag_classifier_on_known_signal.py</code></a></li></ul></li><li><a href="#feature-export">Link feature vectors to the source image</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="feature-export" href="examples/export_feature_vectors.py"><code>export_feature_vectors.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="feature-export" href="examples/align_features_to_regions.py"><code>align_features_to_regions.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="feature-export" href="examples/check_feature_cache.py"><code>check_feature_cache.py</code></a></li></ul>
-</li>
-</ul>
+<li><a class="lab-file lab-script" data-open-goal="feature-export" href="examples/check_feature_cache.py"><code>check_feature_cache.py</code></a></li></ul></li></ul>
 <h3 class="lab-group">Predict grading scores</h3>
-<ul>
-<li><a href="#grading-splits">Prepare reference grades and splits</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="grading-splits" href="examples/prepare_reference_grades.py"><code>prepare_reference_grades.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="grading-splits" href="examples/assign_validation_folds.py"><code>assign_validation_folds.py</code></a></li></ul>
-</li>
-<li><a href="#grading-models">Train and compare graders at three scales</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="grading-models" href="examples/train_scale_graders.py"><code>train_scale_graders.py</code></a></li>
+<ul class="lab-tree lab-group-tree"><li><a href="#grading-splits">Prepare reference grades and splits</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="grading-splits" href="examples/prepare_reference_grades.py"><code>prepare_reference_grades.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="grading-splits" href="examples/assign_validation_folds.py"><code>assign_validation_folds.py</code></a></li></ul><ul class="lab-branch"><li><a href="#grading-models">Train and compare graders at three scales</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="grading-models" href="examples/train_scale_graders.py"><code>train_scale_graders.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="grading-models" href="examples/save_held_out_grades.py"><code>save_held_out_grades.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="grading-models" href="examples/summarise_errors_by_grade.py"><code>summarise_errors_by_grade.py</code></a></li></ul>
-</li>
-<li><a href="#compare">Test changes against matched baseline runs</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="compare" href="examples/compare_experiments.py"><code>compare_experiments.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="grading-models" href="examples/summarise_errors_by_grade.py"><code>summarise_errors_by_grade.py</code></a></li></ul></li></ul></li><li><a href="#compare">Test changes against matched baseline runs</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="compare" href="examples/compare_experiments.py"><code>compare_experiments.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="compare" href="examples/plan_matched_runs.py"><code>plan_matched_runs.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="compare" href="examples/verify_run_configuration.py"><code>verify_run_configuration.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="compare" href="examples/summarise_matched_training_traces.py"><code>summarise_matched_training_traces.py</code></a></li></ul>
-</li>
-<li><a href="#sampling">Choose which training examples to revisit</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="sampling" href="examples/weight_grading_examples.py"><code>weight_grading_examples.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="sampling" href="examples/probe_grading_model_with_noise.py"><code>probe_grading_model_with_noise.py</code></a></li></ul>
-</li>
-<li><a href="#agreement">Compare model error with assessor disagreement</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="agreement" href="examples/compare_assessor_errors.py"><code>compare_assessor_errors.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="agreement" href="examples/score_ordinal_agreement.py"><code>score_ordinal_agreement.py</code></a></li></ul>
-</li>
-</ul>
+<li><a class="lab-file lab-script" data-open-goal="compare" href="examples/summarise_matched_training_traces.py"><code>summarise_matched_training_traces.py</code></a></li></ul></li><li><a href="#sampling">Choose which training examples to revisit</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="sampling" href="examples/weight_grading_examples.py"><code>weight_grading_examples.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="sampling" href="examples/probe_grading_model_with_noise.py"><code>probe_grading_model_with_noise.py</code></a></li></ul></li><li><a href="#agreement">Compare model error with assessor disagreement</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="agreement" href="examples/compare_assessor_errors.py"><code>compare_assessor_errors.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="agreement" href="examples/score_ordinal_agreement.py"><code>score_ordinal_agreement.py</code></a></li></ul></li></ul>
 <h3 class="lab-group">Predict the supplied subtype labels</h3>
-<ul>
-<li><a href="#subtype-cohort">Prepare the subtype dataset</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="subtype-cohort" href="examples/join_subtype_labels.py"><code>join_subtype_labels.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="subtype-cohort" href="examples/audit_cohort_filters.py"><code>audit_cohort_filters.py</code></a></li></ul>
-</li>
-<li><a href="#interpret">Compare models that combine patches</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="interpret" href="examples/pool_patch_evidence.py"><code>pool_patch_evidence.py</code></a></li>
+<ul class="lab-tree lab-group-tree"><li><a href="#subtype-cohort">Prepare the subtype dataset</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="subtype-cohort" href="examples/join_subtype_labels.py"><code>join_subtype_labels.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="subtype-cohort" href="examples/audit_cohort_filters.py"><code>audit_cohort_filters.py</code></a></li></ul></li><li><a href="#interpret">Compare models that combine patches</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="interpret" href="examples/pool_patch_evidence.py"><code>pool_patch_evidence.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="interpret" href="examples/batch_variable_patch_sets.py"><code>batch_variable_patch_sets.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="interpret" href="examples/predict_subtypes_from_bags.py"><code>predict_subtypes_from_bags.py</code></a></li></ul>
-</li>
-<li><a href="#subtype-ablations">Test spatial positions and model hierarchy</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="subtype-ablations" href="examples/compare_spatial_attention.py"><code>compare_spatial_attention.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="subtype-ablations" href="examples/compare_flat_and_hierarchical_pooling.py"><code>compare_flat_and_hierarchical_pooling.py</code></a></li></ul>
-</li>
-<li><a href="#validation">Check performance across folds</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="validation" href="examples/summarise_validation.py"><code>summarise_validation.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="interpret" href="examples/predict_subtypes_from_bags.py"><code>predict_subtypes_from_bags.py</code></a></li></ul><ul class="lab-branch"><li><a href="#subtype-ablations">Test spatial positions and model hierarchy</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="subtype-ablations" href="examples/compare_spatial_attention.py"><code>compare_spatial_attention.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="subtype-ablations" href="examples/compare_flat_and_hierarchical_pooling.py"><code>compare_flat_and_hierarchical_pooling.py</code></a></li></ul></li></ul></li><li><a href="#validation">Check performance across folds</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="validation" href="examples/summarise_validation.py"><code>summarise_validation.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="validation" href="examples/evaluate_subtype_roc.py"><code>evaluate_subtype_roc.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="validation" href="examples/compare_fold_class_recall.py"><code>compare_fold_class_recall.py</code></a></li></ul>
-</li>
-<li><a href="#cost">Compare accuracy, runtime and memory</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="cost" href="examples/estimate_representation_cost.py"><code>estimate_representation_cost.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="validation" href="examples/compare_fold_class_recall.py"><code>compare_fold_class_recall.py</code></a></li></ul></li><li><a href="#cost">Compare accuracy, runtime and memory</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="cost" href="examples/estimate_representation_cost.py"><code>estimate_representation_cost.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="cost" href="examples/rank_accuracy_compute_tradeoffs.py"><code>rank_accuracy_compute_tradeoffs.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="cost" href="examples/audit_compute_measurements.py"><code>audit_compute_measurements.py</code></a></li></ul>
-</li>
-</ul>
+<li><a class="lab-file lab-script" data-open-goal="cost" href="examples/audit_compute_measurements.py"><code>audit_compute_measurements.py</code></a></li></ul></li></ul>
 <h3 class="lab-group">Inspect and reproduce the findings</h3>
-<ul>
-<li><a href="#heatmaps">Map scores back onto the image</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="heatmaps" href="examples/map_patch_scores.py"><code>map_patch_scores.py</code></a></li>
+<ul class="lab-tree lab-group-tree"><li><a href="#heatmaps">Map scores back onto the image</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="heatmaps" href="examples/map_patch_scores.py"><code>map_patch_scores.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="heatmaps" href="examples/render_score_overlay.py"><code>render_score_overlay.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="heatmaps" href="examples/summarise_overlay_coverage.py"><code>summarise_overlay_coverage.py</code></a></li></ul>
-</li>
-<li><a href="#explain">Test what happens when regions are dimmed</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="explain" href="examples/explain_prediction.py"><code>explain_prediction.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="heatmaps" href="examples/summarise_overlay_coverage.py"><code>summarise_overlay_coverage.py</code></a></li></ul></li><li><a href="#explain">Test what happens when regions are dimmed</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="explain" href="examples/explain_prediction.py"><code>explain_prediction.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="explain" href="examples/test_mask_score_changes.py"><code>test_mask_score_changes.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="explain" href="examples/compare_patch_perturbations.py"><code>compare_patch_perturbations.py</code></a></li></ul>
-</li>
-<li><a href="#cluster-runs">Plan and resume experiment jobs</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="cluster-runs" href="examples/build_cluster_run_manifest.py"><code>build_cluster_run_manifest.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="cluster-runs" href="examples/resume_chunked_experiment.py"><code>resume_chunked_experiment.py</code></a></li></ul>
-</li>
-<li><a href="#run-results">Collect and check completed runs</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="run-results" href="examples/collect_fold_results.py"><code>collect_fold_results.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="run-results" href="examples/find_incomplete_runs.py"><code>find_incomplete_runs.py</code></a></li></ul>
-</li>
-<li><a href="#figures">Rebuild tables and figures from saved results</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="figures" href="examples/build_grading_table.py"><code>build_grading_table.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="explain" href="examples/compare_patch_perturbations.py"><code>compare_patch_perturbations.py</code></a></li></ul></li><li><a href="#cluster-runs">Plan and resume experiment jobs</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="cluster-runs" href="examples/build_cluster_run_manifest.py"><code>build_cluster_run_manifest.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="cluster-runs" href="examples/resume_chunked_experiment.py"><code>resume_chunked_experiment.py</code></a></li></ul></li><li><a href="#run-results">Collect and check completed runs</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="run-results" href="examples/collect_fold_results.py"><code>collect_fold_results.py</code></a></li>
+<li><a class="lab-file lab-script" data-open-goal="run-results" href="examples/find_incomplete_runs.py"><code>find_incomplete_runs.py</code></a></li></ul></li><li><a href="#figures">Rebuild tables and figures from saved results</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="figures" href="examples/build_grading_table.py"><code>build_grading_table.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="figures" href="examples/render_grading_figure.py"><code>render_grading_figure.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="figures" href="examples/run_grading_example.py"><code>run_grading_example.py</code></a></li>
 <li><a class="lab-file lab-script" data-open-goal="figures" href="examples/bin_patch_distribution.py"><code>bin_patch_distribution.py</code></a></li>
-<li><a class="lab-file lab-script" data-open-goal="figures" href="examples/verify_report_assets.py"><code>verify_report_assets.py</code></a></li></ul>
-</li>
-<li><a href="#limits">Record what needs another test</a>
-</li>
-</ul>
+<li><a class="lab-file lab-script" data-open-goal="figures" href="examples/verify_report_assets.py"><code>verify_report_assets.py</code></a></li></ul></li><li><a href="#limits">Record what needs another test</a></li></ul>
 <h3 class="lab-group">Adjacent benchmark work</h3>
-<ul>
-<li><a href="#pcam-bags">Build benchmark bags</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="pcam-bags" href="examples/build_benchmark_bags.py"><code>build_benchmark_bags.py</code></a></li></ul>
-</li>
-<li><a href="#pcam-benchmarks">Compare encoders on fixed benchmark bags</a>
-<ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="pcam-benchmarks" href="examples/compare_benchmark_encoders.py"><code>compare_benchmark_encoders.py</code></a></li></ul>
-</li>
-</ul>
+<ul class="lab-tree lab-group-tree"><li><a href="#pcam-bags">Build benchmark bags</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="pcam-bags" href="examples/build_benchmark_bags.py"><code>build_benchmark_bags.py</code></a></li></ul><ul class="lab-branch"><li><a href="#pcam-benchmarks">Compare encoders on fixed benchmark bags</a><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="pcam-benchmarks" href="examples/compare_benchmark_encoders.py"><code>compare_benchmark_encoders.py</code></a></li></ul></li></ul></li></ul>
       <p class="lab-date-note">Dates refer to saved research versions or the thesis. The scripts are runnable adaptations using generated data.</p>
     </nav>
 
     <div class="lab-content">
       <section id="question" class="lab-goal" data-goal>
-  <p class="eyebrow">Start here</p>
   <h2>What did the PhD investigate?</h2>
   <p class="lab-lede">I built a way to work with large scans of lymphoma tissue at three scales: cores, patches and cells. The thesis asks how well these images can reproduce assessors’ grading scores and predict the supplied subtype labels. The code examples use generated inputs.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="What did the PhD investigate?">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/research_questions.md"><code>research_questions.md</code></a> <small>(Nov 2026)</small></td><td>Sets out the grading and subtype questions, and the engineering problem of making the image data practical to work with.</td></tr>
-      <tr><td><a class="lab-file" href="examples/README.md"><code>README.md</code></a> <small>(Nov 2026)</small></td><td>Shows how to run a single example or reproduce the grading figure and its intermediate files.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/research_questions.md"><code>research_questions.md</code></a> <small>(Nov 2026)</small></td><td>Sets out the grading and subtype questions, and the engineering problem of making the image data practical to work with.<small class="lab-quantity">2 prediction tasks · 3 image scales</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/README.md"><code>README.md</code></a> <small>(Nov 2026)</small></td><td>Shows how to run a single example or reproduce the grading figure and its intermediate files.</td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="research_questions.md"><pre data-markdown># Research questions
+
+My doctoral thesis investigated how much useful information could be learned from images of diffuse large B-cell lymphoma tissue.
+
+- **Prepare the material.** Could large scans be converted into labelled image regions and representations that were practical to store and process?
+- **Estimate expert scores.** How closely could models using cells, patches or tissue cores match the supplied labelling scores?
+- **Compare subtype predictions.** Which representations worked best for predicting supplied subtype labels, and which image features appeared important to those predictions?
+
+These are different questions. Matching a supplied score or label tests agreement with that reference in the study design. The practical cost of preparing, storing and training on the inputs is a separate part of the comparison.
+
+Source — Samuel Llanwarne, *Multi-Scale and Multi-Stage Deep Learning for the Classification of Diffuse Large B-cell Lymphoma Histology*, University of Leeds, 2026, Chapter 1.
+</pre></template>
+<template data-file="README.md"><pre data-markdown># PhD research scripts
+
+This collection follows the work from preparing lymphoma tissue images through
+to comparing models, checking results and rebuilding thesis figures. Each
+script demonstrates one task on a small set of generated inputs.
+
+Run the examples from this folder with Python 3.9 or later. Install NumPy
+and Pillow with `python -m pip install numpy pillow`. The encoding comparison
+uses Pillow with WebP support.
+
+Run `python record_crop_marks.py` to see the annotation CSV, or
+`python run_grading_example.py --output grading-demo` to reproduce the grading
+workflow. The grading example saves split assignments, out-of-fold predictions,
+an assessor comparison and the SVG figure in that folder. Run
+`python build_grading_table.py grading-demo/predictions.csv` to build the
+summary from those predictions.
+
+The examples use small implementations to show the steps in the research.
+For instance, ridge regression illustrates the grading workflow and a linear
+autoencoder illustrates reconstruction. The historical extraction figures in
+[`crop_benchmark.csv`](crop_benchmark.csv) come from thesis Table 2.5.
+
+Run `python weight_grading_examples.py` to reproduce the sample-weight
+calculation in Appendix A, or `python probe_grading_model_with_noise.py` to
+see the structure of its independent Gaussian-noise probe. For the subtype
+model investigation, `python compare_spatial_attention.py` and
+`python compare_flat_and_hierarchical_pooling.py` isolate position and pooling.
+
+The separate PatchCamelyon archive work is illustrated by
+`build_benchmark_bags.py` and `compare_benchmark_encoders.py`. They use
+generated patch IDs and stand-in encoder outputs.
+
+The original archive includes [CLAM](https://github.com/mahmoodlab/CLAM)
+split tooling. The fold example illustrates the grouping described in the
+thesis with newly written code.
+
+The [research logbook](https://samllan.github.io/research/) puts the scripts in the
+context of the thesis and includes a browser demo of the crop workflow.
+</pre></template>
 <nav class="lab-next" aria-label="Related goals"><a href="#crop">Mark and label tissue regions →</a><a href="#grading-splits">Prepare reference grades and splits →</a><a href="#subtype-cohort">Prepare the subtype dataset →</a></nav>
 </section>
 <section id="crop" class="lab-goal" data-goal>
   <p class="eyebrow">Make the images usable</p>
   <h2>Mark and label tissue regions</h2>
   <p class="lab-lede">I compared drawing rectangles with marking a centre and letting the software position a fixed-size crop. The click tool halved the reported extraction time per sample in this comparison.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Mark and label tissue regions">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/prepare_image_regions.py"><code>prepare_image_regions.py</code></a> <small>(Aug 2020–Nov 2023)</small></td><td>Turns clicks or a grid into labelled image bounds. It shifts edge crops inward so they stay the same size.</td></tr>
-      <tr><td><a class="lab-file" href="examples/crop_benchmark.csv"><code>crop_benchmark.csv</code></a> <small>(2026 thesis)</small></td><td>Records the thesis comparison of six seconds per sample for rectangles and three seconds for clicks, alongside extraction precision and recall.</td></tr>
-      <tr><td><a class="lab-file" href="examples/record_crop_marks.py"><code>record_crop_marks.py</code></a> <small>(2020–2023)</small></td><td>Writes a CSV of labelled click centres and rectangle bounds for one scan.</td></tr>
+      <tr data-source-year="2023"><td><a class="lab-file lab-row-file" href="examples/prepare_image_regions.py"><code>prepare_image_regions.py</code></a> <small>(Aug 2020–Nov 2023)</small></td><td>Turns clicks or a grid into labelled image bounds. It shifts edge crops inward so they stay the same size.<small class="lab-quantity">Example · 2 marked crops · 6 grid patches · 4 × 4 pixels</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/crop_benchmark.csv"><code>crop_benchmark.csv</code></a> <small>(2026 thesis)</small></td><td>Records the thesis comparison of six seconds per sample for rectangles and three seconds for clicks, alongside extraction precision and recall.<small class="lab-quantity">Thesis Table 2.5 · 6 s → 3 s per sample · precision and recall 1.00</small></td></tr>
+      <tr data-source-year="2023"><td><a class="lab-file lab-row-file" href="examples/record_crop_marks.py"><code>record_crop_marks.py</code></a> <small>(2020–2023)</small></td><td>Writes a CSV of labelled click centres and rectangle bounds for one scan.<small class="lab-quantity">Example · 2 labelled rows · 7 CSV columns</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
         <section class="lab-demo" aria-labelledby="demo-title" hidden>
           <div class="lab-demo-head"><div><p class="eyebrow">Try the workflow</p><h3 id="demo-title">Click to mark a crop</h3></div><span>Synthetic image</span></div>
           <p id="demo-help">Click a centre to add a labelled crop. With the image focused, use arrow keys to move and Enter to mark.</p>
@@ -204,362 +184,957 @@
           </div>
           <div class="demo-actions"><button id="crop-undo" type="button" disabled>Undo last</button><button id="crop-download" type="button" disabled>Download clicks</button></div>
         </section>
+  </div>
+<template data-file="prepare_image_regions.py"><pre>crop-01 (0, 0, 4, 4)
+crop-02 (8, 4, 12, 8)
+6 complete patches, ending at (8, 4, 12, 8)</pre></template>
+<template data-file="crop_benchmark.csv"><table class="lab-result-table"><caption>Thesis Table 2.5</caption><thead><tr><th scope="col">Approach</th><th scope="col">Seconds per sample</th><th scope="col">Precision</th><th scope="col">Recall</th></tr></thead><tbody><tr><td>Manual rectangles</td><td>6</td><td>1.00</td><td>1.00</td></tr><tr><td>Point-and-click</td><td>3</td><td>1.00</td><td>1.00</td></tr></tbody></table></template>
+<template data-file="record_crop_marks.py"><pre>image,label,kind,x,y,right,bottom
+demo-scan,A,point,20,16,,
+demo-scan,B,rectangle,64,44,88,68</pre></template>
 <nav class="lab-next" aria-label="Related goals"><a href="#prepare">Extract crops and preserve their coordinates →</a><a href="#cells">Build cell-level datasets →</a></nav>
 </section>
 <section id="prepare" class="lab-goal" data-goal>
   <p class="eyebrow">Make the images usable</p>
   <h2>Extract crops and preserve their coordinates</h2>
   <p class="lab-lede">The crop is a smaller image with a record of the scan, label and source bounds it came from. That record lets a reader go back to the right place in a scan.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Extract crops and preserve their coordinates">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/extract_labelled_crops.py"><code>extract_labelled_crops.py</code></a> <small>(2020–2023)</small></td><td>Extracts one image per labelled region and writes a CSV linking crop names to the original pixel bounds.</td></tr>
-      <tr><td><a class="lab-file" href="examples/map_crop_to_scan.py"><code>map_crop_to_scan.py</code></a> <small>(2020–2023)</small></td><td>Converts a box drawn inside a crop back into coordinates on the original scan, including the downsampling factor.</td></tr>
+      <tr data-source-year="2023"><td><a class="lab-file lab-row-file" href="examples/extract_labelled_crops.py"><code>extract_labelled_crops.py</code></a> <small>(2020–2023)</small></td><td>Extracts one image per labelled region and writes a CSV linking crop names to the original pixel bounds.<small class="lab-quantity">Example · 2 crop images · 1 manifest</small></td></tr>
+      <tr data-source-year="2023"><td><a class="lab-file lab-row-file" href="examples/map_crop_to_scan.py"><code>map_crop_to_scan.py</code></a> <small>(2020–2023)</small></td><td>Converts a box drawn inside a crop back into coordinates on the original scan, including the downsampling factor.<small class="lab-quantity">Example · 20 × 20 crop pixels → 80 × 80 scan pixels</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="extract_labelled_crops.py"><pre>image,label,file,left,top,right,bottom
+demo-scan,rectangle,crop-001.png,2,3,12,13
+demo-scan,crop-01,crop-002.png,21,8,29,16</pre></template>
+<template data-file="map_crop_to_scan.py"><pre>(1240, 832, 1320, 912)</pre></template>
 </section>
 <section id="patches" class="lab-goal" data-goal>
   <p class="eyebrow">Make the images usable</p>
   <h2>Build and inspect patch datasets</h2>
   <p class="lab-lede">A grid turns a core into smaller patches. Coverage checks and counts help reveal empty regions and cores whose patch data are missing.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Build and inspect patch datasets">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/filter_tissue_patches.py"><code>filter_tissue_patches.py</code></a> <small>(2023–2025)</small></td><td>Produces a patch list with tissue coverage and rejects patches that contain too much background.</td></tr>
-      <tr><td><a class="lab-file" href="examples/summarise_patch_counts.py"><code>summarise_patch_counts.py</code></a> <small>(2023–2026)</small></td><td>Reports patch counts per core and identifies cores with no saved patches.</td></tr>
-      <tr><td><a class="lab-file" href="examples/extract_patch_images.py"><code>extract_patch_images.py</code></a> <small>(2023–2025)</small></td><td>Saves accepted patches and writes a manifest with their source core, coordinates and measured coverage.</td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/filter_tissue_patches.py"><code>filter_tissue_patches.py</code></a> <small>(2023–2025)</small></td><td>Produces a patch list with tissue coverage and rejects patches that contain too much background.<small class="lab-quantity">Example · 8 patches checked · 4 kept</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/summarise_patch_counts.py"><code>summarise_patch_counts.py</code></a> <small>(2023–2026)</small></td><td>Reports patch counts per core and identifies cores with no saved patches.<small class="lab-quantity">Example · 3 patches across 3 cores · 1 empty core</small></td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/extract_patch_images.py"><code>extract_patch_images.py</code></a> <small>(2023–2025)</small></td><td>Saves accepted patches and writes a manifest with their source core, coordinates and measured coverage.<small class="lab-quantity">Example · 2 patch images · 100% and 50% tissue coverage</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="filter_tissue_patches.py"><pre>patch-x0-y0 100% keep
+patch-x4-y0 100% keep
+patch-x8-y0 25% skip
+patch-x12-y0 0% skip
+patch-x0-y4 100% keep
+patch-x4-y4 100% keep
+patch-x8-y4 25% skip
+patch-x12-y4 0% skip</pre></template>
+<template data-file="summarise_patch_counts.py"><pre>A 2
+B 0
+C 1</pre></template>
+<template data-file="extract_patch_images.py"><pre>core,file,left,top,right,bottom,tissue_fraction
+core-1,patch-x0-y0.png,0,0,8,8,1.0
+core-1,patch-x8-y0.png,8,0,16,8,0.5</pre></template>
 </section>
 <section id="cells" class="lab-goal" data-goal>
   <p class="eyebrow">Make the images usable</p>
   <h2>Build cell-level datasets</h2>
   <p class="lab-lede">Cell extracts offer a different view of the same tissue. The durable dataset needs a cell identifier, the parent core, coordinates and the measurements used downstream.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Build cell-level datasets">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/extract_cell_crops.py"><code>extract_cell_crops.py</code></a> <small>(2023–2026)</small></td><td>Labels separated regions in a synthetic image, then extracts size-filtered cell crops with their source coordinates.</td></tr>
-      <tr><td><a class="lab-file" href="examples/index_segmented_cells.py"><code>index_segmented_cells.py</code></a> <small>(2021–2026)</small></td><td>Indexes segmented cells by core and records where each cell sits on the source scan.</td></tr>
-      <tr><td><a class="lab-file" href="examples/package_cell_arrays.py"><code>package_cell_arrays.py</code></a> <small>(2021–2025)</small></td><td>Writes aligned arrays of cell IDs, coordinates and features into a portable example dataset.</td></tr>
-      <tr><td><a class="lab-file" href="examples/summarise_cells_by_core.py"><code>summarise_cells_by_core.py</code></a> <small>(2026 thesis)</small></td><td>Summarises how many cell instances each core contributes and shows whether a few cores dominate the dataset.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/extract_cell_crops.py"><code>extract_cell_crops.py</code></a> <small>(2023–2026)</small></td><td>Labels separated regions in a synthetic image, then extracts size-filtered cell crops with their source coordinates.<small class="lab-quantity">Example · 2 crops · 8 × 8 pixels each</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/index_segmented_cells.py"><code>index_segmented_cells.py</code></a> <small>(2021–2026)</small></td><td>Indexes segmented cells by core and records where each cell sits on the source scan.<small class="lab-quantity">Example · 2 cells linked to their scan coordinates</small></td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/package_cell_arrays.py"><code>package_cell_arrays.py</code></a> <small>(2021–2025)</small></td><td>Writes aligned arrays of cell IDs, coordinates and features into a portable example dataset.<small class="lab-quantity">Example · 2 cells · 2 coordinates and 1 feature each</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/summarise_cells_by_core.py"><code>summarise_cells_by_core.py</code></a> <small>(2026 thesis)</small></td><td>Summarises how many cell instances each core contributes and shows whether a few cores dominate the dataset.<small class="lab-quantity">Example · 4 cells across 3 cores</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="extract_cell_crops.py"><pre>Cell 1: scan centre (249.0, 530.0), crop (8, 8)
+Cell 2: scan centre (262.0, 534.0), crop (8, 8)</pre></template>
+<template data-file="index_segmented_cells.py"><pre>{&#x27;core&#x27;: &#x27;C1&#x27;, &#x27;cell&#x27;: 1, &#x27;scan_x&#x27;: 669, &#x27;scan_y&#x27;: 498}
+{&#x27;core&#x27;: &#x27;C1&#x27;, &#x27;cell&#x27;: 2, &#x27;scan_x&#x27;: 701, &#x27;scan_y&#x27;: 550}</pre></template>
+<template data-file="package_cell_arrays.py"><pre>{np.str_(&#x27;C1-1&#x27;): [7, 6], np.str_(&#x27;C1-2&#x27;): [9, 3]}</pre></template>
+<template data-file="summarise_cells_by_core.py"><pre>{&#x27;counts&#x27;: {&#x27;A&#x27;: 3, &#x27;B&#x27;: 1, &#x27;C&#x27;: 0}, &#x27;cells&#x27;: 4, &#x27;median_cells_per_core&#x27;: 1, &#x27;largest_core_share&#x27;: 0.75}</pre></template>
 <nav class="lab-next" aria-label="Related goals"><a href="#autoencoder">Learn by reconstructing images →</a><a href="#features">Learn features from two views →</a></nav>
 </section>
 <section id="storage" class="lab-goal" data-goal>
   <p class="eyebrow">Make the images usable</p>
   <h2>Check, bundle and compress datasets</h2>
   <p class="lab-lede">I compared storage and access trade-offs so the same image collections could be used in repeated experiments. The thesis reports that WebP reduced patch storage from 26.94 GB to 3.63 GB.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Check, bundle and compress datasets">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/compare_image_encodings.py"><code>compare_image_encodings.py</code></a> <small>(Apr 2024)</small></td><td>Measures file size and decoded pixel differences for PNG and WebP on the same generated patch.</td></tr>
-      <tr><td><a class="lab-file" href="examples/audit_dataset_structure.py"><code>audit_dataset_structure.py</code></a> <small>(2024–2025)</small></td><td>Flags files that are missing, unexpected or the wrong shape before training begins.</td></tr>
-      <tr><td><a class="lab-file" href="examples/measure_storage_reads.py"><code>measure_storage_reads.py</code></a> <small>(2024–2025)</small></td><td>Times equivalent byte reads from separate files and a single bundled file for a small local comparison.</td></tr>
+      <tr data-source-year="2024"><td><a class="lab-file lab-row-file" href="examples/compare_image_encodings.py"><code>compare_image_encodings.py</code></a> <small>(Apr 2024)</small></td><td>Measures file size and decoded pixel differences for PNG and WebP on the same generated patch.<small class="lab-quantity">Example · 2 encodings of the same generated patch</small></td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/audit_dataset_structure.py"><code>audit_dataset_structure.py</code></a> <small>(2024–2025)</small></td><td>Flags files that are missing, unexpected or the wrong shape before training begins.<small class="lab-quantity">Example · 3 issues flagged</small></td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/measure_storage_reads.py"><code>measure_storage_reads.py</code></a> <small>(2024–2025)</small></td><td>Times equivalent byte reads from separate files and a single bundled file for a small local comparison.<small class="lab-quantity">Example · 12,288 bytes read by each method</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="compare_image_encodings.py"><pre>Format     Bytes   Mean channel difference
+PNG          129                      0.00
+WebP         174                      1.95</pre></template>
+<template data-file="audit_dataset_structure.py"><pre>{&#x27;missing&#x27;: [&#x27;B&#x27;], &#x27;unexpected&#x27;: [&#x27;spillover&#x27;], &#x27;wrong_shape&#x27;: {&#x27;A&#x27;: ((10, 64), (10, 32))}}</pre></template>
+<template data-file="measure_storage_reads.py"><p>Timings depend on the machine and filesystem cache.</p><pre>files: 12288 bytes in 11.244 ms
+bundle: 12288 bytes in 10.052 ms</pre></template>
 </section>
 <section id="autoencoder" class="lab-goal" data-goal>
   <p class="eyebrow">Learn smaller representations</p>
   <h2>Learn by reconstructing images</h2>
   <p class="lab-lede">I trained networks to reconstruct their input through a small set of numbers. Checking reconstruction mistakes helped show what information the representation preserved.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Learn by reconstructing images">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/fit_linear_autoencoder.py"><code>fit_linear_autoencoder.py</code></a> <small>(2021–2024)</small></td><td>Fits a small linear reconstruction model and prints the compact codes for generated image patches.</td></tr>
-      <tr><td><a class="lab-file" href="examples/score_reconstructions.py"><code>score_reconstructions.py</code></a> <small>(2021–2024)</small></td><td>Reports reconstruction error per example and ranks the cases the model reconstructed least accurately.</td></tr>
-      <tr><td><a class="lab-file" href="examples/compare_bottleneck_sizes.py"><code>compare_bottleneck_sizes.py</code></a> <small>(2021–2024)</small></td><td>Compares reconstruction error and storage as the same input passes through narrower or wider bottlenecks.</td></tr>
-      <tr><td><a class="lab-file" href="examples/score_variational_reconstruction.py"><code>score_variational_reconstruction.py</code></a> <small>(2026 thesis)</small></td><td>Reports reconstruction loss and latent regularisation separately for a generated batch.</td></tr>
+      <tr data-source-year="2024"><td><a class="lab-file lab-row-file" href="examples/fit_linear_autoencoder.py"><code>fit_linear_autoencoder.py</code></a> <small>(2021–2024)</small></td><td>Fits a small linear reconstruction model and prints the compact codes for generated image patches.<small class="lab-quantity">Example · 3 inputs reduced to 2 features each</small></td></tr>
+      <tr data-source-year="2024"><td><a class="lab-file lab-row-file" href="examples/score_reconstructions.py"><code>score_reconstructions.py</code></a> <small>(2021–2024)</small></td><td>Reports reconstruction error per example and ranks the cases the model reconstructed least accurately.<small class="lab-quantity">Example · 2 examples · squared errors 0.01 and 0.02</small></td></tr>
+      <tr data-source-year="2024"><td><a class="lab-file lab-row-file" href="examples/compare_bottleneck_sizes.py"><code>compare_bottleneck_sizes.py</code></a> <small>(2021–2024)</small></td><td>Compares reconstruction error and storage as the same input passes through narrower or wider bottlenecks.<small class="lab-quantity">Example · 2 bottlenecks · 16 vs 32 bytes</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/score_variational_reconstruction.py"><code>score_variational_reconstruction.py</code></a> <small>(2026 thesis)</small></td><td>Reports reconstruction loss and latent regularisation separately for a generated batch.<small class="lab-quantity">Example · Reconstruction 0.387 · regularisation 0.083</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="fit_linear_autoencoder.py"><pre>[[-0.436 -0.253]
+ [ 0.55  -0.123]
+ [-0.114  0.376]]</pre></template>
+<template data-file="score_reconstructions.py"><pre>[(&#x27;b&#x27;, 0.020000000000000004), (&#x27;a&#x27;, 0.009999999999999998)]</pre></template>
+<template data-file="compare_bottleneck_sizes.py"><pre>[(1, 16, 0.0014065427821041536), (2, 32, 0.000488215488215489)]</pre></template>
+<template data-file="score_variational_reconstruction.py"><pre>Reconstruction 0.387 | KL 0.083 | total 0.429</pre></template>
 </section>
 <section id="features" class="lab-goal" data-goal>
   <p class="eyebrow">Learn smaller representations</p>
   <h2>Learn features from two views</h2>
   <p class="lab-lede">I compared two transformed versions of a patch and trained a shared encoder to keep useful signals while reducing repeated information in the feature vector.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Learn features from two views">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/learn_image_features.py"><code>learn_image_features.py</code></a> <small>(Oct 2025)</small></td><td>Reports agreement and redundancy terms for paired feature vectors in an illustrative Barlow Twins calculation.</td></tr>
-      <tr><td><a class="lab-file" href="examples/prepare_paired_views.py"><code>prepare_paired_views.py</code></a> <small>(2023–2025)</small></td><td>Generates two independently augmented views of each synthetic patch and retains the source ID for pairing.</td></tr>
-      <tr><td><a class="lab-file" href="examples/audit_feature_variation.py"><code>audit_feature_variation.py</code></a> <small>(2023–2025)</small></td><td>Flags feature columns that barely vary across patches and pairs of columns that carry almost the same signal.</td></tr>
-      <tr><td><a class="lab-file" href="examples/fit_shared_view_encoder.py"><code>fit_shared_view_encoder.py</code></a> <small>(2026 thesis)</small></td><td>Fits one tiny shared encoder to two generated views and records a decreasing Barlow Twins objective.</td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/learn_image_features.py"><code>learn_image_features.py</code></a> <small>(Oct 2025)</small></td><td>Reports agreement and redundancy terms for paired feature vectors in an illustrative Barlow Twins calculation.<small class="lab-quantity">Example · 4 samples · loss 0.000 vs 0.010</small></td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/prepare_paired_views.py"><code>prepare_paired_views.py</code></a> <small>(2023–2025)</small></td><td>Generates two independently augmented views of each synthetic patch and retains the source ID for pairing.<small class="lab-quantity">Example · 1 source patch · 2 augmented views</small></td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/audit_feature_variation.py"><code>audit_feature_variation.py</code></a> <small>(2023–2025)</small></td><td>Flags feature columns that barely vary across patches and pairs of columns that carry almost the same signal.<small class="lab-quantity">Example · 1 constant column · 1 correlated pair</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/fit_shared_view_encoder.py"><code>fit_shared_view_encoder.py</code></a> <small>(2026 thesis)</small></td><td>Fits one tiny shared encoder to two generated views and records a decreasing Barlow Twins objective.<small class="lab-quantity">Example · 40 update steps · objective 0.1938 → 0.0003</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="learn_image_features.py"><pre>Independent features | agreement loss 0.000 | total loss 0.000
+Duplicated feature | agreement loss 0.000 | total loss 0.010</pre></template>
+<template data-file="prepare_paired_views.py"><pre>p1 [[0.09, 0.47], [0.66, 0.94]] [[0.52, 0.1], [1.0, 0.72]]</pre></template>
+<template data-file="audit_feature_variation.py"><pre>([1], [(0, 2)])</pre></template>
+<template data-file="fit_shared_view_encoder.py"><pre>Objective: 0.1938 to 0.0003
+Shared weights: [[0.52, 0.52], [0.884, -0.884]]</pre></template>
 </section>
 <section id="frozen-features" class="lab-goal" data-goal>
   <p class="eyebrow">Learn smaller representations</p>
   <h2>Extract features with existing models</h2>
   <p class="lab-lede">Pretrained encoders gave me a fixed comparison point. The pipeline had to keep feature dimensions and patch ordering clear so those outputs could be reused.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Extract features with existing models">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/batch_frozen_features.py"><code>batch_frozen_features.py</code></a> <small>(2024–2025)</small></td><td>Runs a fixed encoder on small batches and returns one feature vector per identified patch.</td></tr>
-      <tr><td><a class="lab-file" href="examples/compare_encoder_dimensions.py"><code>compare_encoder_dimensions.py</code></a> <small>(2025)</small></td><td>Builds a side-by-side table of vector dimensions and storage required for alternate fixed encoders.</td></tr>
-      <tr><td><a class="lab-file" href="examples/standardise_encoder_inputs.py"><code>standardise_encoder_inputs.py</code></a> <small>(2024–2025)</small></td><td>Converts an RGB image to the size and channel normalisation expected by a fixed encoder.</td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/batch_frozen_features.py"><code>batch_frozen_features.py</code></a> <small>(2024–2025)</small></td><td>Runs a fixed encoder on small batches and returns one feature vector per identified patch.<small class="lab-quantity">Example · 3 patches · 2 features each</small></td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/compare_encoder_dimensions.py"><code>compare_encoder_dimensions.py</code></a> <small>(2025)</small></td><td>Builds a side-by-side table of vector dimensions and storage required for alternate fixed encoders.<small class="lab-quantity">Example · 30 examples · 16 vs 64 features</small></td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/standardise_encoder_inputs.py"><code>standardise_encoder_inputs.py</code></a> <small>(2024–2025)</small></td><td>Converts an RGB image to the size and channel normalisation expected by a fixed encoder.<small class="lab-quantity">Example · 3 RGB channels resized to 8 × 8 pixels</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="batch_frozen_features.py"><pre>[(&#x27;p1&#x27;, [0.25, 0.15]), (&#x27;p2&#x27;, [0.8, 0.1]), (&#x27;p3&#x27;, [0.3, 0.1])]</pre></template>
+<template data-file="compare_encoder_dimensions.py"><pre>encoder,examples,features,dtype,bytes
+small,30,16,float32,1920
+wide,30,64,float32,7680</pre></template>
+<template data-file="standardise_encoder_inputs.py"><pre>(3, 8, 8) [0.337 0.933 0.745]</pre></template>
 </section>
 <section id="feature-benchmarks" class="lab-goal" data-goal>
   <p class="eyebrow">Learn smaller representations</p>
   <h2>Test which features are useful</h2>
   <p class="lab-lede">I compared representations on downstream tasks and measured how well examples grouped in the resulting feature space. The thesis distinguishes the external image benchmark from the lymphoma experiments.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Test which features are useful">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/benchmark_frozen_features.py"><code>benchmark_frozen_features.py</code></a> <small>(2025–2026)</small></td><td>Fits a simple classifier on training features and reports held-out accuracy for each feature representation.</td></tr>
-      <tr><td><a class="lab-file" href="examples/measure_feature_separation.py"><code>measure_feature_separation.py</code></a> <small>(2021–2026)</small></td><td>Reports silhouette scores for examples with known groups to distinguish overlap from separation in feature space.</td></tr>
-      <tr><td><a class="lab-file" href="examples/project_feature_space.py"><code>project_feature_space.py</code></a> <small>(2021–2025)</small></td><td>Fits a two-dimensional projection to feature vectors so group overlap can be plotted and examined.</td></tr>
-      <tr><td><a class="lab-file" href="examples/check_bag_classifier_on_known_signal.py"><code>check_bag_classifier_on_known_signal.py</code></a> <small>(2026 thesis)</small></td><td>Compares mean pooling with an instance-sensitive score on a generated bag task with a known signal.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/benchmark_frozen_features.py"><code>benchmark_frozen_features.py</code></a> <small>(2025–2026)</small></td><td>Fits a simple classifier on training features and reports held-out accuracy for each feature representation.<small class="lab-quantity">Example · 2 feature sets · 2 test samples</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/measure_feature_separation.py"><code>measure_feature_separation.py</code></a> <small>(2021–2026)</small></td><td>Reports silhouette scores for examples with known groups to distinguish overlap from separation in feature space.<small class="lab-quantity">Example · 4 samples · silhouette scores 0.85–0.87</small></td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/project_feature_space.py"><code>project_feature_space.py</code></a> <small>(2021–2025)</small></td><td>Fits a two-dimensional projection to feature vectors so group overlap can be plotted and examined.<small class="lab-quantity">Example · 3 samples projected onto 2 axes</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/check_bag_classifier_on_known_signal.py"><code>check_bag_classifier_on_known_signal.py</code></a> <small>(2026 thesis)</small></td><td>Compares mean pooling with an instance-sensitive score on a generated bag task with a known signal.<small class="lab-quantity">Example · 64 bags · 12 instances per bag</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="benchmark_frozen_features.py"><pre>{&#x27;first&#x27;: 1.0, &#x27;second&#x27;: 0.5}</pre></template>
+<template data-file="measure_feature_separation.py"><pre>[0.87, 0.85, 0.85, 0.87]</pre></template>
+<template data-file="project_feature_space.py"><pre>coordinates [[-0.359, 0.08], [-0.282, -0.086], [0.64, 0.007]]
+variance explained [0.978, 0.022]</pre></template>
+<template data-file="check_bag_classifier_on_known_signal.py"><pre>mean: area under ROC 0.830
+maximum: area under ROC 0.999</pre></template>
 </section>
 <section id="feature-export" class="lab-goal" data-goal>
   <p class="eyebrow">Learn smaller representations</p>
   <h2>Link feature vectors to the source image</h2>
   <p class="lab-lede">I saved features with the identifiers and coordinates needed to reuse them. Joining by ID matters when files have been sorted or exported in a different order.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Link feature vectors to the source image">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/export_feature_vectors.py"><code>export_feature_vectors.py</code></a> <small>(Sep–Oct 2025)</small></td><td>Writes features to a CSV alongside the original region IDs and coordinates, checking that every vector has the expected length.</td></tr>
-      <tr><td><a class="lab-file" href="examples/align_features_to_regions.py"><code>align_features_to_regions.py</code></a> <small>(2025)</small></td><td>Joins features to region metadata by ID and reports any missing or extra regions.</td></tr>
-      <tr><td><a class="lab-file" href="examples/check_feature_cache.py"><code>check_feature_cache.py</code></a> <small>(2025)</small></td><td>Checks a cached feature array against its encoder name, ID order and recorded vector size before reuse.</td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/export_feature_vectors.py"><code>export_feature_vectors.py</code></a> <small>(Sep–Oct 2025)</small></td><td>Writes features to a CSV alongside the original region IDs and coordinates, checking that every vector has the expected length.<small class="lab-quantity">Example · 2 patches · 2 features each</small></td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/align_features_to_regions.py"><code>align_features_to_regions.py</code></a> <small>(2025)</small></td><td>Joins features to region metadata by ID and reports any missing or extra regions.<small class="lab-quantity">Example · 2 regions joined by ID</small></td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/check_feature_cache.py"><code>check_feature_cache.py</code></a> <small>(2025)</small></td><td>Checks a cached feature array against its encoder name, ID order and recorded vector size before reuse.<small class="lab-quantity">Example · 2 cache mismatches detected</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="export_feature_vectors.py"><pre>region_id,left,top,right,bottom,feature_1,feature_2
+patch-x0-y0,0,0,4,4,0.12,0.68
+patch-x4-y0,4,0,8,4,0.43,0.19</pre></template>
+<template data-file="align_features_to_regions.py"><pre>A,12,6,0.3,0.4
+B,80,5,0.1,0.2</pre></template>
+<template data-file="check_feature_cache.py"><pre>[&#x27;region IDs or ordering changed&#x27;, &#x27;encoder changed&#x27;]</pre></template>
 </section>
 <section id="grading-splits" class="lab-goal" data-goal>
   <p class="eyebrow">Predict grading scores</p>
   <h2>Prepare reference grades and splits</h2>
   <p class="lab-lede">The grading target combines available assessor ratings. In Chapter 3, samples from the same tissue core stayed in the same fold. The example shows how to keep groups together and inspect the assignments before training.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Prepare reference grades and splits">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/prepare_reference_grades.py"><code>prepare_reference_grades.py</code></a> <small>(2026 thesis)</small></td><td>Averages available assessor grades per example and keeps the number and spread of ratings alongside the reference.</td></tr>
-      <tr><td><a class="lab-file" href="examples/assign_validation_folds.py"><code>assign_validation_folds.py</code></a> <small>(2024–2025)</small></td><td>Assigns each known group to one held-out fold and writes split memberships that can be inspected before training.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/prepare_reference_grades.py"><code>prepare_reference_grades.py</code></a> <small>(2026 thesis)</small></td><td>Averages available assessor grades per example and keeps the number and spread of ratings alongside the reference.<small class="lab-quantity">Example · 3 ratings combined for 2 samples</small></td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/assign_validation_folds.py"><code>assign_validation_folds.py</code></a> <small>(2024–2025)</small></td><td>Assigns each known group to one held-out fold and writes split memberships that can be inspected before training.<small class="lab-quantity">Example · 4 samples across 2 folds</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="prepare_reference_grades.py"><pre>a,1.5,2,1
+b,3,1,0</pre></template>
+<template data-file="assign_validation_folds.py"><pre>sample,held_out_fold
+a,0
+b,0
+c,1
+d,1</pre></template>
 <nav class="lab-next" aria-label="Related goals"><a href="#grading-models">Train and compare graders at three scales →</a><a href="#sampling">Choose which training examples to revisit →</a></nav>
 </section>
 <section id="grading-models" class="lab-goal" data-goal>
   <p class="eyebrow">Predict grading scores</p>
   <h2>Train and compare graders at three scales</h2>
   <p class="lab-lede">The research compared core, patch and cell representations for the same grading task. The small examples fit separate baseline models and keep a prediction for each held-out sample.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Train and compare graders at three scales">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/train_scale_graders.py"><code>train_scale_graders.py</code></a> <small>(2022–2026)</small></td><td>Fits a small independent grader on each scale using the same training IDs, and returns predictions by scale.</td></tr>
-      <tr><td><a class="lab-file" href="examples/save_held_out_grades.py"><code>save_held_out_grades.py</code></a> <small>(2025–2026)</small></td><td>Writes one out-of-fold prediction per sample and image scale, with its fold and reference grade.</td></tr>
-      <tr><td><a class="lab-file" href="examples/summarise_errors_by_grade.py"><code>summarise_errors_by_grade.py</code></a> <small>(2026 thesis)</small></td><td>Reports signed and absolute errors by reference grade to show where predictions run high or low.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/train_scale_graders.py"><code>train_scale_graders.py</code></a> <small>(2022–2026)</small></td><td>Fits a small independent grader on each scale using the same training IDs, and returns predictions by scale.<small class="lab-quantity">Example · 2 scale-specific models · 1 shared test sample</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/save_held_out_grades.py"><code>save_held_out_grades.py</code></a> <small>(2025–2026)</small></td><td>Writes one out-of-fold prediction per sample and image scale, with its fold and reference grade.<small class="lab-quantity">Example · 4 held-out predictions across 2 folds</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/summarise_errors_by_grade.py"><code>summarise_errors_by_grade.py</code></a> <small>(2026 thesis)</small></td><td>Reports signed and absolute errors by reference grade to show where predictions run high or low.<small class="lab-quantity">Example · 5 predictions grouped into 3 reference grades</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="train_scale_graders.py"><pre>patch {&#x27;c&#x27;: 2.1666666666666674}
+cell {&#x27;c&#x27;: 1.7586206896551726}</pre></template>
+<template data-file="save_held_out_grades.py"><pre>sample,scale,fold,reference,prediction
+a,patch,0,0.0,1.0387596899224802
+d,patch,0,3.0,1.9069767441860468
+b,patch,1,1.0,1.0714285714285714
+c,patch,1,2.0,2.071428571428571</pre></template>
+<template data-file="summarise_errors_by_grade.py"><pre>grade,count,signed_error,absolute_error
+0,2,0.44999999999999996,0.44999999999999996
+1,1,0.19999999999999996,0.19999999999999996
+3,2,-0.55,0.55</pre></template>
 </section>
 <section id="compare" class="lab-goal" data-goal>
   <p class="eyebrow">Predict grading scores</p>
   <h2>Test changes against matched baseline runs</h2>
   <p class="lab-lede">Changing one setting at a time makes results easier to interpret. I compared runs on matching folds and seeds, and the thesis describes cases where the settings or controls needed closer checks.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Test changes against matched baseline runs">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/compare_experiments.py"><code>compare_experiments.py</code></a> <small>(Sep 2026)</small></td><td>Compares error, runtime and memory against baseline runs matched by fold and seed.</td></tr>
-      <tr><td><a class="lab-file" href="examples/plan_matched_runs.py"><code>plan_matched_runs.py</code></a> <small>(2025–2026)</small></td><td>Produces a schedule of baseline and single-change runs with shared folds and seeds.</td></tr>
-      <tr><td><a class="lab-file" href="examples/verify_run_configuration.py"><code>verify_run_configuration.py</code></a> <small>(2026)</small></td><td>Flags a run when the settings recorded at startup differ from the settings intended by the experiment plan.</td></tr>
-      <tr><td><a class="lab-file" href="examples/summarise_matched_training_traces.py"><code>summarise_matched_training_traces.py</code></a> <small>(2026 thesis)</small></td><td>Summarises the same final epoch window in each matched run and reports validation score alongside elapsed time.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/compare_experiments.py"><code>compare_experiments.py</code></a> <small>(Sep 2026)</small></td><td>Compares error, runtime and memory against baseline runs matched by fold and seed.<small class="lab-quantity">Example · 2 matched folds · 43.9% less time in the example</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/plan_matched_runs.py"><code>plan_matched_runs.py</code></a> <small>(2025–2026)</small></td><td>Produces a schedule of baseline and single-change runs with shared folds and seeds.<small class="lab-quantity">Example · 12 runs across 3 configurations</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/verify_run_configuration.py"><code>verify_run_configuration.py</code></a> <small>(2026)</small></td><td>Flags a run when the settings recorded at startup differ from the settings intended by the experiment plan.<small class="lab-quantity">Example · 2 settings flagged</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/summarise_matched_training_traces.py"><code>summarise_matched_training_traces.py</code></a> <small>(2026 thesis)</small></td><td>Summarises the same final epoch window in each matched run and reports validation score alongside elapsed time.<small class="lab-quantity">Example · 4 matched runs · mean time 66 s vs 51 s</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="compare_experiments.py"><pre>compact | error +3.1% | time -43.9% | memory -35.0%</pre></template>
+<template data-file="plan_matched_runs.py"><pre>{&#x27;configuration&#x27;: &#x27;baseline&#x27;, &#x27;fold&#x27;: 0, &#x27;seed&#x27;: 7, &#x27;pool&#x27;: &#x27;mean&#x27;, &#x27;batch_size&#x27;: 16}
+{&#x27;configuration&#x27;: &#x27;baseline&#x27;, &#x27;fold&#x27;: 0, &#x27;seed&#x27;: 11, &#x27;pool&#x27;: &#x27;mean&#x27;, &#x27;batch_size&#x27;: 16}
+{&#x27;configuration&#x27;: &#x27;baseline&#x27;, &#x27;fold&#x27;: 1, &#x27;seed&#x27;: 7, &#x27;pool&#x27;: &#x27;mean&#x27;, &#x27;batch_size&#x27;: 16}
+{&#x27;configuration&#x27;: &#x27;baseline&#x27;, &#x27;fold&#x27;: 1, &#x27;seed&#x27;: 11, &#x27;pool&#x27;: &#x27;mean&#x27;, &#x27;batch_size&#x27;: 16}
+{&#x27;configuration&#x27;: &#x27;max_pool&#x27;, &#x27;fold&#x27;: 0, &#x27;seed&#x27;: 7, &#x27;pool&#x27;: &#x27;max&#x27;, &#x27;batch_size&#x27;: 16}
+{&#x27;configuration&#x27;: &#x27;max_pool&#x27;, &#x27;fold&#x27;: 0, &#x27;seed&#x27;: 11, &#x27;pool&#x27;: &#x27;max&#x27;, &#x27;batch_size&#x27;: 16}
+{&#x27;configuration&#x27;: &#x27;max_pool&#x27;, &#x27;fold&#x27;: 1, &#x27;seed&#x27;: 7, &#x27;pool&#x27;: &#x27;max&#x27;, &#x27;batch_size&#x27;: 16}
+{&#x27;configuration&#x27;: &#x27;max_pool&#x27;, &#x27;fold&#x27;: 1, &#x27;seed&#x27;: 11, &#x27;pool&#x27;: &#x27;max&#x27;, &#x27;batch_size&#x27;: 16}
+{&#x27;configuration&#x27;: &#x27;large_batch&#x27;, &#x27;fold&#x27;: 0, &#x27;seed&#x27;: 7, &#x27;pool&#x27;: &#x27;mean&#x27;, &#x27;batch_size&#x27;: 32}
+{&#x27;configuration&#x27;: &#x27;large_batch&#x27;, &#x27;fold&#x27;: 0, &#x27;seed&#x27;: 11, &#x27;pool&#x27;: &#x27;mean&#x27;, &#x27;batch_size&#x27;: 32}
+{&#x27;configuration&#x27;: &#x27;large_batch&#x27;, &#x27;fold&#x27;: 1, &#x27;seed&#x27;: 7, &#x27;pool&#x27;: &#x27;mean&#x27;, &#x27;batch_size&#x27;: 32}
+{&#x27;configuration&#x27;: &#x27;large_batch&#x27;, &#x27;fold&#x27;: 1, &#x27;seed&#x27;: 11, &#x27;pool&#x27;: &#x27;mean&#x27;, &#x27;batch_size&#x27;: 32}</pre></template>
+<template data-file="verify_run_configuration.py"><pre>depth {&#x27;planned&#x27;: 2, &#x27;effective&#x27;: 1, &#x27;recorded&#x27;: True}
+position_encoding {&#x27;planned&#x27;: True, &#x27;effective&#x27;: None, &#x27;recorded&#x27;: False}</pre></template>
+<template data-file="summarise_matched_training_traces.py"><pre>baseline: mean balanced accuracy 0.760, mean time 66.0s
+variant: mean balanced accuracy 0.770, mean time 51.0s</pre></template>
 <nav class="lab-next" aria-label="Related goals"><a href="#agreement">Compare model error with assessor disagreement →</a><a href="#cluster-runs">Plan and resume experiment jobs →</a></nav>
 </section>
 <section id="sampling" class="lab-goal" data-goal>
   <p class="eyebrow">Predict grading scores</p>
   <h2>Choose which training examples to revisit</h2>
   <p class="lab-lede">Chapter 3 used hybrid sampling to balance grade frequency and focus on examples with higher loss. Appendix A also tested how the grading models responded to independent Gaussian noise.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Choose which training examples to revisit">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/weight_grading_examples.py"><code>weight_grading_examples.py</code></a> <small>(2026 thesis)</small></td><td>Combines label frequency, current loss and previous sampling weights using the coefficients from Appendix A.</td></tr>
-      <tr><td><a class="lab-file" href="examples/probe_grading_model_with_noise.py"><code>probe_grading_model_with_noise.py</code></a> <small>(2026 thesis)</small></td><td>Compares a fixed model&#x27;s null scores for synthetic signal bags and matched Gaussian noise at the same input boundary.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/weight_grading_examples.py"><code>weight_grading_examples.py</code></a> <small>(2026 thesis)</small></td><td>Combines label frequency, current loss and previous sampling weights using the coefficients from Appendix A.<small class="lab-quantity">Example · 4 samples · initial and next-epoch weights</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/probe_grading_model_with_noise.py"><code>probe_grading_model_with_noise.py</code></a> <small>(2026 thesis)</small></td><td>Compares a fixed model&#x27;s null scores for synthetic signal bags and matched Gaussian noise at the same input boundary.<small class="lab-quantity">Example · 12 signal bags and 12 noise bags</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="weight_grading_examples.py"><pre>Initial: [0.136, 0.322, 0.136, 0.406]
+Next epoch: [0.157, 0.293, 0.157, 0.392]</pre></template>
+<template data-file="probe_grading_model_with_noise.py"><pre>signal: median null 0.009, 0/12 null calls
+noise: median null 0.683, 12/12 null calls</pre></template>
 <nav class="lab-next" aria-label="Related goals"><a href="#compare">Test changes against matched baseline runs →</a></nav>
 </section>
 <section id="agreement" class="lab-goal" data-goal>
   <p class="eyebrow">Predict grading scores</p>
   <h2>Compare model error with assessor disagreement</h2>
   <p class="lab-lede">Assessors can give different grades to the same example. Reporting this on matched samples gives context for the distance between the model prediction and the averaged reference grade.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Compare model error with assessor disagreement">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/compare_assessor_errors.py"><code>compare_assessor_errors.py</code></a> <small>(2026)</small></td><td>Reports matched sample counts, assessor-to-assessor disagreement, and model error against the mean grade on those same samples.</td></tr>
-      <tr><td><a class="lab-file" href="examples/score_ordinal_agreement.py"><code>score_ordinal_agreement.py</code></a> <small>(2026)</small></td><td>Computes quadratic-weighted kappa for paired ordinal grades while accounting for the expected agreement from the grade frequencies.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/compare_assessor_errors.py"><code>compare_assessor_errors.py</code></a> <small>(2026)</small></td><td>Reports matched sample counts, assessor-to-assessor disagreement, and model error against the mean grade on those same samples.<small class="lab-quantity">Example · 2 matched samples · 0.15 model MAE</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/score_ordinal_agreement.py"><code>score_ordinal_agreement.py</code></a> <small>(2026)</small></td><td>Computes quadratic-weighted kappa for paired ordinal grades while accounting for the expected agreement from the grade frequencies.<small class="lab-quantity">Example · 4 paired grades · weighted κ 0.90</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="compare_assessor_errors.py"><pre>{&#x27;matched_samples&#x27;: 2, &#x27;assessor_gap&#x27;: 0.5, &#x27;model_to_consensus_mae&#x27;: 0.15000000000000002}</pre></template>
+<template data-file="score_ordinal_agreement.py"><pre>0.9</pre></template>
 </section>
 <section id="subtype-cohort" class="lab-goal" data-goal>
   <p class="eyebrow">Predict the supplied subtype labels</p>
   <h2>Prepare the subtype dataset</h2>
   <p class="lab-lede">The subtype experiment depends on matching supplied labels to usable images and recording which examples pass the data checks. The thesis describes the limits of the available reference metadata.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Prepare the subtype dataset">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/join_subtype_labels.py"><code>join_subtype_labels.py</code></a> <small>(2026)</small></td><td>Matches supplied labels to image IDs and lists missing or unrecognised labels for review.</td></tr>
-      <tr><td><a class="lab-file" href="examples/audit_cohort_filters.py"><code>audit_cohort_filters.py</code></a> <small>(2026 thesis)</small></td><td>Records which synthetic specimens pass each eligibility rule and why the other specimens are excluded.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/join_subtype_labels.py"><code>join_subtype_labels.py</code></a> <small>(2026)</small></td><td>Matches supplied labels to image IDs and lists missing or unrecognised labels for review.<small class="lab-quantity">Example · 3 images checked · 1 accepted label</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/audit_cohort_filters.py"><code>audit_cohort_filters.py</code></a> <small>(2026 thesis)</small></td><td>Records which synthetic specimens pass each eligibility rule and why the other specimens are excluded.<small class="lab-quantity">Example · 2 specimens checked · 1 retained</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="join_subtype_labels.py"><pre>([(&#x27;a&#x27;, &#x27;R1&#x27;, &#x27;ABC&#x27;)], [(&#x27;b&#x27;, &#x27;R2&#x27;, &#x27;unrecognised&#x27;), (&#x27;c&#x27;, &#x27;R3&#x27;, &#x27;missing&#x27;)])</pre></template>
+<template data-file="audit_cohort_filters.py"><pre>([&#x27;a&#x27;], {&#x27;b&#x27;: [&#x27;target unavailable&#x27;, &#x27;required stain unavailable&#x27;, &#x27;not enough retained patches&#x27;]})</pre></template>
 <nav class="lab-next" aria-label="Related goals"><a href="#interpret">Compare models that combine patches →</a></nav>
 </section>
 <section id="interpret" class="lab-goal" data-goal>
   <p class="eyebrow">Predict the supplied subtype labels</p>
   <h2>Compare models that combine patches</h2>
   <p class="lab-lede">A model has to turn many patch measurements into one specimen prediction. I tested different ways to combine the measurements and explored how to batch specimens with varying patch counts.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Compare models that combine patches">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/pool_patch_evidence.py"><code>pool_patch_evidence.py</code></a> <small>(2022–2026)</small></td><td>Compares mean, maximum and attention-weighted summaries of the same group of patch features.</td></tr>
-      <tr><td><a class="lab-file" href="examples/batch_variable_patch_sets.py"><code>batch_variable_patch_sets.py</code></a> <small>(2026 thesis)</small></td><td>Groups specimens of similar patch counts into batches and reports how many dummy slots each batch needs.</td></tr>
-      <tr><td><a class="lab-file" href="examples/predict_subtypes_from_bags.py"><code>predict_subtypes_from_bags.py</code></a> <small>(2026 thesis)</small></td><td>Fits an illustrative binary classifier on pooled training specimens and produces subtype scores on held-out specimens.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/pool_patch_evidence.py"><code>pool_patch_evidence.py</code></a> <small>(2022–2026)</small></td><td>Compares mean, maximum and attention-weighted summaries of the same group of patch features.<small class="lab-quantity">Example · 3 patches · 3 pooling methods</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/batch_variable_patch_sets.py"><code>batch_variable_patch_sets.py</code></a> <small>(2026 thesis)</small></td><td>Groups specimens of similar patch counts into batches and reports how many dummy slots each batch needs.<small class="lab-quantity">Example · 4 specimens · 2 batches · 5 padding slots</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/predict_subtypes_from_bags.py"><code>predict_subtypes_from_bags.py</code></a> <small>(2026 thesis)</small></td><td>Fits an illustrative binary classifier on pooled training specimens and produces subtype scores on held-out specimens.<small class="lab-quantity">Example · 2 training bags · 1 held-out score</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="pool_patch_evidence.py"><pre>{&#x27;mean&#x27;: [0.433, 0.6], &#x27;maximum&#x27;: [0.9, 0.9], &#x27;attention&#x27;: [0.603, 0.454]}</pre></template>
+<template data-file="batch_variable_patch_sets.py"><pre>[([&#x27;b&#x27;, &#x27;c&#x27;], 2), ([&#x27;a&#x27;, &#x27;d&#x27;], 3)]</pre></template>
+<template data-file="predict_subtypes_from_bags.py"><pre>{&#x27;c&#x27;: -0.3999999999999996}</pre></template>
 <nav class="lab-next" aria-label="Related goals"><a href="#subtype-ablations">Test spatial positions and model hierarchy →</a><a href="#validation">Check performance across folds →</a></nav>
 </section>
 <section id="subtype-ablations" class="lab-goal" data-goal>
   <p class="eyebrow">Predict the supplied subtype labels</p>
   <h2>Test spatial positions and model hierarchy</h2>
   <p class="lab-lede">The Chapter 4 ablations examined whether position, hierarchy or masking changed the model. These examples expose the individual operations on small generated inputs.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Test spatial positions and model hierarchy">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/compare_spatial_attention.py"><code>compare_spatial_attention.py</code></a> <small>(2026 thesis)</small></td><td>Holds the query, keys and values fixed while comparing attention with and without 2D rotary positions and padding.</td></tr>
-      <tr><td><a class="lab-file" href="examples/compare_flat_and_hierarchical_pooling.py"><code>compare_flat_and_hierarchical_pooling.py</code></a> <small>(2026 thesis)</small></td><td>Compares pooling all cells together with pooling within patches first, and checks that empty or padded patches do not contribute.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/compare_spatial_attention.py"><code>compare_spatial_attention.py</code></a> <small>(2026 thesis)</small></td><td>Holds the query, keys and values fixed while comparing attention with and without 2D rotary positions and padding.<small class="lab-quantity">Example · 2 valid patches · scores 0.500 and 0.369</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/compare_flat_and_hierarchical_pooling.py"><code>compare_flat_and_hierarchical_pooling.py</code></a> <small>(2026 thesis)</small></td><td>Compares pooling all cells together with pooling within patches first, and checks that empty or padded patches do not contribute.<small class="lab-quantity">Example · 4 valid cells · pooled results 0.25 and 0.50</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="compare_spatial_attention.py"><pre>Positions False: pooled score 0.500
+Positions True: pooled score 0.369</pre></template>
+<template data-file="compare_flat_and_hierarchical_pooling.py"><pre>flat: 0.25
+hierarchical: 0.50</pre></template>
 <nav class="lab-next" aria-label="Related goals"><a href="#cost">Compare accuracy, runtime and memory →</a><a href="#explain">Test what happens when regions are dimmed →</a></nav>
 </section>
 <section id="validation" class="lab-goal" data-goal>
   <p class="eyebrow">Predict the supplied subtype labels</p>
   <h2>Check performance across folds</h2>
   <p class="lab-lede">Looking at each held-out fold shows variation hidden by a single overall score. The thesis reports internal validation and identifies independent evaluation as further work.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Check performance across folds">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/summarise_validation.py"><code>summarise_validation.py</code></a> <small>(Feb–Sep 2026)</small></td><td>Reports grading error and subtype accuracy by fold using two sets of example predictions.</td></tr>
-      <tr><td><a class="lab-file" href="examples/evaluate_subtype_roc.py"><code>evaluate_subtype_roc.py</code></a> <small>(2026)</small></td><td>Calculates subtype ROC points and area under the curve across score thresholds, keeping tied scores together.</td></tr>
-      <tr><td><a class="lab-file" href="examples/compare_fold_class_recall.py"><code>compare_fold_class_recall.py</code></a> <small>(2026)</small></td><td>Reports the fraction of each subtype detected in each fold, along with the number of examples behind each figure.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/summarise_validation.py"><code>summarise_validation.py</code></a> <small>(Feb–Sep 2026)</small></td><td>Reports grading error and subtype accuracy by fold using two sets of example predictions.<small class="lab-quantity">Example · 2 tasks, each reported across 2 folds</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/evaluate_subtype_roc.py"><code>evaluate_subtype_roc.py</code></a> <small>(2026)</small></td><td>Calculates subtype ROC points and area under the curve across score thresholds, keeping tied scores together.<small class="lab-quantity">Example · 4 predictions · AUC 0.875</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/compare_fold_class_recall.py"><code>compare_fold_class_recall.py</code></a> <small>(2026)</small></td><td>Reports the fraction of each subtype detected in each fold, along with the number of examples behind each figure.<small class="lab-quantity">Example · 2 classes across 2 folds</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="summarise_validation.py"><pre>Grading | mean absolute error
+Fold 0  | 0.25
+Fold 1  | 0.30
+Subtype | accuracy
+Fold 0  | 100%
+Fold 1  | 50%</pre></template>
+<template data-file="evaluate_subtype_roc.py"><pre>([(0.0, 0.0), (0.0, 0.5), (0.5, 1.0), (1.0, 1.0)], 0.875)</pre></template>
+<template data-file="compare_fold_class_recall.py"><pre>0,ABC,1,1.0
+0,GCB,1,0.0
+1,ABC,1,0.0
+1,GCB,1,1.0</pre></template>
 </section>
 <section id="cost" class="lab-goal" data-goal>
   <p class="eyebrow">Predict the supplied subtype labels</p>
   <h2>Compare accuracy, runtime and memory</h2>
   <p class="lab-lede">A wider model may improve one measure while costing more time or storage. I compared these trade-offs so choices could reflect the computing resources available for the research.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Compare accuracy, runtime and memory">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/estimate_representation_cost.py"><code>estimate_representation_cost.py</code></a> <small>(Apr 2026)</small></td><td>Compares the storage required for raw RGB patches and fixed-length feature vectors for the same number of regions.</td></tr>
-      <tr><td><a class="lab-file" href="examples/rank_accuracy_compute_tradeoffs.py"><code>rank_accuracy_compute_tradeoffs.py</code></a> <small>(2026)</small></td><td>Finds models for which no alternative improves accuracy, time and memory together.</td></tr>
-      <tr><td><a class="lab-file" href="examples/audit_compute_measurements.py"><code>audit_compute_measurements.py</code></a> <small>(2026)</small></td><td>Reports missing timing or memory measurements for individual model and fold pairs before comparing their costs.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/estimate_representation_cost.py"><code>estimate_representation_cost.py</code></a> <small>(Apr 2026)</small></td><td>Compares the storage required for raw RGB patches and fixed-length feature vectors for the same number of regions.<small class="lab-quantity">Example · 500 regions · 75.26 MB vs 0.51 MB</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/rank_accuracy_compute_tradeoffs.py"><code>rank_accuracy_compute_tradeoffs.py</code></a> <small>(2026)</small></td><td>Finds models for which no alternative improves accuracy, time and memory together.<small class="lab-quantity">Example · 3 candidates compared · 2 on the frontier</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/audit_compute_measurements.py"><code>audit_compute_measurements.py</code></a> <small>(2026)</small></td><td>Reports missing timing or memory measurements for individual model and fold pairs before comparing their costs.<small class="lab-quantity">Example · 2 runs checked · 2 issues</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="estimate_representation_cost.py"><pre>500 regions of 224 x 224 pixels, 256 features per vector
+Representation      Bytes per region     Total bytes
+RGB patches                  150,528      75,264,000
+Feature vectors                1,024         512,000</pre></template>
+<template data-file="rank_accuracy_compute_tradeoffs.py"><pre>[&#x27;wide&#x27;, &#x27;small&#x27;]</pre></template>
+<template data-file="audit_compute_measurements.py"><pre>[((&#x27;baseline&#x27;, 0), &#x27;missing or invalid peak_memory_mib&#x27;), ((&#x27;compact&#x27;, 0), &#x27;run missing&#x27;)]</pre></template>
 </section>
 <section id="heatmaps" class="lab-goal" data-goal>
   <p class="eyebrow">Inspect and reproduce the findings</p>
   <h2>Map scores back onto the image</h2>
   <p class="lab-lede">I made plots at different scales to see where scores fell on the tissue. Keeping coordinates and colour scales consistent makes overlays easier to compare.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Map scores back onto the image">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/map_patch_scores.py"><code>map_patch_scores.py</code></a> <small>(2024–2025)</small></td><td>Places patch scores on an image grid and averages overlapping patches, leaving uncovered pixels marked as missing.</td></tr>
-      <tr><td><a class="lab-file" href="examples/render_score_overlay.py"><code>render_score_overlay.py</code></a> <small>(2024–2026)</small></td><td>Creates a transparent heatmap overlay with the same colour scale across examples and no colour over uncovered image areas.</td></tr>
-      <tr><td><a class="lab-file" href="examples/summarise_overlay_coverage.py"><code>summarise_overlay_coverage.py</code></a> <small>(2026)</small></td><td>Reports the share of a reference region covered by patch scores and the spread of scores there.</td></tr>
+      <tr data-source-year="2025"><td><a class="lab-file lab-row-file" href="examples/map_patch_scores.py"><code>map_patch_scores.py</code></a> <small>(2024–2025)</small></td><td>Places patch scores on an image grid and averages overlapping patches, leaving uncovered pixels marked as missing.<small class="lab-quantity">Example · 2 patches placed on a 4 × 3 grid</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/render_score_overlay.py"><code>render_score_overlay.py</code></a> <small>(2024–2026)</small></td><td>Creates a transparent heatmap overlay with the same colour scale across examples and no colour over uncovered image areas.<small class="lab-quantity">Example · 64 × 48 pixel overlay</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/summarise_overlay_coverage.py"><code>summarise_overlay_coverage.py</code></a> <small>(2026)</small></td><td>Reports the share of a reference region covered by patch scores and the spread of scores there.<small class="lab-quantity">Example · 2 of 3 points in the region have scores</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="map_patch_scores.py"><pre>[[0.4 0.4 0.4 nan]
+ [0.4 0.4 0.6 0.8]
+ [nan nan 0.8 0.8]]</pre></template>
+<template data-file="render_score_overlay.py"><pre>Rendered (64, 48) RGBA</pre></template>
+<template data-file="summarise_overlay_coverage.py"><pre>{&#x27;coverage&#x27;: 0.6666666666666666, &#x27;median&#x27;: 0.6000000000000001, &#x27;range&#x27;: (0.4, 0.8)}</pre></template>
 </section>
 <section id="explain" class="lab-goal" data-goal>
   <p class="eyebrow">Inspect and reproduce the findings</p>
   <h2>Test what happens when regions are dimmed</h2>
   <p class="lab-lede">I held the model fixed and measured how its scores changed when different parts of the input were dimmed. These changes describe model behaviour in the experiment.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Test what happens when regions are dimmed">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/explain_prediction.py"><code>explain_prediction.py</code></a> <small>(Feb 2026)</small></td><td>Returns a brightness mask per class and compares original and masked scores from the same illustrative model.</td></tr>
-      <tr><td><a class="lab-file" href="examples/model_explanations.md"><code>model_explanations.md</code></a> <small>(Nov 2026)</small></td><td>Summarises what model masks can tell us and what validation of their meaning would require.</td></tr>
-      <tr><td><a class="lab-file" href="examples/test_mask_score_changes.py"><code>test_mask_score_changes.py</code></a> <small>(2026)</small></td><td>Compares model scores after applying an explanation mask and a uniform mask with the same average dimming.</td></tr>
-      <tr><td><a class="lab-file" href="examples/compare_patch_perturbations.py"><code>compare_patch_perturbations.py</code></a> <small>(2026 thesis)</small></td><td>Measures class scores after removing a patch and after repeating only that patch, using the same fixed scoring rule.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/explain_prediction.py"><code>explain_prediction.py</code></a> <small>(Feb 2026)</small></td><td>Returns a brightness mask per class and compares original and masked scores from the same illustrative model.<small class="lab-quantity">Example · 2 class masks · 4 regions per mask</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/model_explanations.md"><code>model_explanations.md</code></a> <small>(Nov 2026)</small></td><td>Summarises what model masks can tell us and what validation of their meaning would require.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/test_mask_score_changes.py"><code>test_mask_score_changes.py</code></a> <small>(2026)</small></td><td>Compares model scores after applying an explanation mask and a uniform mask with the same average dimming.<small class="lab-quantity">Example · 1 spatial mask compared with 1 uniform control</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/compare_patch_perturbations.py"><code>compare_patch_perturbations.py</code></a> <small>(2026 thesis)</small></td><td>Measures class scores after removing a patch and after repeating only that patch, using the same fixed scoring rule.<small class="lab-quantity">Example · 3 patches · 2 perturbations per patch</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="explain_prediction.py"><pre>Class A: 0.24 -&gt; 1.16 | 1.00 0.00 1.00 0.00
+Class B: 0.01 -&gt; 0.96 | 0.00 1.00 0.00 1.00</pre></template>
+<template data-file="model_explanations.md"><pre data-markdown># Reading model explanations
+
+An explanation map asks what in an image contributed to a particular model output. A useful inspection starts with the original image, shows the explanation next to it and makes clear which prediction the explanation refers to.
+
+The thesis also explored Spectral Dream Dimming. Starting from the same input, it fits a separate brightness mask for each class, seeking to increase that class&#x27;s score while keeping the model fixed. Comparing the masks shows which regions the model retains when favouring each class.
+
+The runnable example uses four invented regions and a linear scoring rule. It isolates the idea of fitting one bounded mask per class. The thesis analysis applied the idea to trained models and displayed the masks as overlays.
+
+To interpret a highlighted area, ask whether the signal repeats across examples, changes when the input is perturbed, or corresponds to something an expert recognises. A feature may matter to the model because of a biological pattern, a preparation artefact, or another correlation in the data. Those explanations require separate evidence.
+
+Source — Samuel Llanwarne, *Multi-Scale and Multi-Stage Deep Learning for the Classification of Diffuse Large B-cell Lymphoma Histology*, University of Leeds, 2026, Chapter 4.
+</pre></template>
+<template data-file="test_mask_score_changes.py"><pre>{&#x27;baseline&#x27;: array([0.82]), &#x27;spatial_delta&#x27;: array([-0.576]), &#x27;uniform_delta&#x27;: array([-0.164])}</pre></template>
+<template data-file="compare_patch_perturbations.py"><pre>Patch 0: remove [ 0.133 -0.183], repeat [-0.267  0.367]
+Patch 1: remove [ 0.083 -0.033], repeat [-0.167  0.067]
+Patch 2: remove [-0.217  0.217], repeat [ 0.433 -0.433]</pre></template>
 </section>
 <section id="cluster-runs" class="lab-goal" data-goal>
   <p class="eyebrow">Inspect and reproduce the findings</p>
   <h2>Plan and resume experiment jobs</h2>
   <p class="lab-lede">Many comparisons required the same combinations of model, fold and seed. A job manifest makes that plan inspectable. A checkpoint lets a stopped run continue from completed work.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Plan and resume experiment jobs">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/build_cluster_run_manifest.py"><code>build_cluster_run_manifest.py</code></a> <small>(2026 thesis)</small></td><td>Writes a reusable run manifest with a stable ID for every configuration, fold and seed.</td></tr>
-      <tr><td><a class="lab-file" href="examples/resume_chunked_experiment.py"><code>resume_chunked_experiment.py</code></a> <small>(2026 archive)</small></td><td>Saves results one chunk at a time and resumes after the last committed chunk when interrupted.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/build_cluster_run_manifest.py"><code>build_cluster_run_manifest.py</code></a> <small>(2026 thesis)</small></td><td>Writes a reusable run manifest with a stable ID for every configuration, fold and seed.<small class="lab-quantity">Example · 8 jobs · 2 configurations × 2 folds × 2 seeds</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/resume_chunked_experiment.py"><code>resume_chunked_experiment.py</code></a> <small>(2026 archive)</small></td><td>Saves results one chunk at a time and resumes after the last committed chunk when interrupted.<small class="lab-quantity">Example · 3 chunks · resumes after chunk 1</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="build_cluster_run_manifest.py"><pre>[
+  {
+    &quot;run_id&quot;: &quot;55b2ba45f220d664&quot;,
+    &quot;specification&quot;: {
+      &quot;configuration&quot;: &quot;baseline&quot;,
+      &quot;fold&quot;: 0,
+      &quot;seed&quot;: 7,
+      &quot;pool&quot;: &quot;mean&quot;,
+      &quot;batch_size&quot;: 16
+    }
+  },
+  {
+    &quot;run_id&quot;: &quot;9616e1407eb20cf1&quot;,
+    &quot;specification&quot;: {
+      &quot;configuration&quot;: &quot;baseline&quot;,
+      &quot;fold&quot;: 0,
+      &quot;seed&quot;: 11,
+      &quot;pool&quot;: &quot;mean&quot;,
+      &quot;batch_size&quot;: 16
+    }
+  },
+  {
+    &quot;run_id&quot;: &quot;23ef391e9274be92&quot;,
+    &quot;specification&quot;: {
+      &quot;configuration&quot;: &quot;baseline&quot;,
+      &quot;fold&quot;: 1,
+      &quot;seed&quot;: 7,
+      &quot;pool&quot;: &quot;mean&quot;,
+      &quot;batch_size&quot;: 16
+    }
+  },
+  {
+    &quot;run_id&quot;: &quot;055a5ebb4aa7e2cc&quot;,
+    &quot;specification&quot;: {
+      &quot;configuration&quot;: &quot;baseline&quot;,
+      &quot;fold&quot;: 1,
+      &quot;seed&quot;: 11,
+      &quot;pool&quot;: &quot;mean&quot;,
+      &quot;batch_size&quot;: 16
+    }
+  },
+  {
+    &quot;run_id&quot;: &quot;04a29607846ac864&quot;,
+    &quot;specification&quot;: {
+      &quot;configuration&quot;: &quot;max_pool&quot;,
+      &quot;fold&quot;: 0,
+      &quot;seed&quot;: 7,
+      &quot;pool&quot;: &quot;max&quot;,
+      &quot;batch_size&quot;: 16
+    }
+  },
+  {
+    &quot;run_id&quot;: &quot;f2c8f509b50ca851&quot;,
+    &quot;specification&quot;: {
+      &quot;configuration&quot;: &quot;max_pool&quot;,
+      &quot;fold&quot;: 0,
+      &quot;seed&quot;: 11,
+      &quot;pool&quot;: &quot;max&quot;,
+      &quot;batch_size&quot;: 16
+    }
+  },
+  {
+    &quot;run_id&quot;: &quot;59549bad03250a39&quot;,
+    &quot;specification&quot;: {
+      &quot;configuration&quot;: &quot;max_pool&quot;,
+      &quot;fold&quot;: 1,
+      &quot;seed&quot;: 7,
+      &quot;pool&quot;: &quot;max&quot;,
+      &quot;batch_size&quot;: 16
+    }
+  },
+  {
+    &quot;run_id&quot;: &quot;71b7301425bdd0bc&quot;,
+    &quot;specification&quot;: {
+      &quot;configuration&quot;: &quot;max_pool&quot;,
+      &quot;fold&quot;: 1,
+      &quot;seed&quot;: 11,
+      &quot;pool&quot;: &quot;max&quot;,
+      &quot;batch_size&quot;: 16
+    }
+  }
+]</pre></template>
+<template data-file="resume_chunked_experiment.py"><pre>Interrupted after the first committed chunk
+Resumed results: [4, 9, 16]</pre></template>
 <nav class="lab-next" aria-label="Related goals"><a href="#run-results">Collect and check completed runs →</a><a href="#figures">Rebuild tables and figures from saved results →</a></nav>
 </section>
 <section id="run-results" class="lab-goal" data-goal>
   <p class="eyebrow">Inspect and reproduce the findings</p>
   <h2>Collect and check completed runs</h2>
   <p class="lab-lede">Repeated experiments produce separate files. A reliable summary needs stable run identifiers and a way to spot missing, duplicate or unfinished results before aggregating them.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Collect and check completed runs">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/collect_fold_results.py"><code>collect_fold_results.py</code></a> <small>(2026)</small></td><td>Combines one metrics row per run and flags duplicate run IDs before aggregation.</td></tr>
-      <tr><td><a class="lab-file" href="examples/find_incomplete_runs.py"><code>find_incomplete_runs.py</code></a> <small>(2026)</small></td><td>Distinguishes missing runs from runs that started but failed or never saved their final metrics.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/collect_fold_results.py"><code>collect_fold_results.py</code></a> <small>(2026)</small></td><td>Combines one metrics row per run and flags duplicate run IDs before aggregation.<small class="lab-quantity">Example · 1 run keyed by configuration, fold and seed</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/find_incomplete_runs.py"><code>find_incomplete_runs.py</code></a> <small>(2026)</small></td><td>Distinguishes missing runs from runs that started but failed or never saved their final metrics.<small class="lab-quantity">Example · 2 incomplete runs flagged</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="collect_fold_results.py"><pre>baseline,0,11,0.28</pre></template>
+<template data-file="find_incomplete_runs.py"><pre>compact,0,7,missing metrics
+compact,1,7,missing</pre></template>
 </section>
 <section id="figures" class="lab-goal" data-goal>
   <p class="eyebrow">Inspect and reproduce the findings</p>
   <h2>Rebuild tables and figures from saved results</h2>
   <p class="lab-lede">The thesis figures can be traced back to prediction tables and run comparisons. The synthetic replay below takes small generated inputs through the grading workflow and regenerates a figure.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Rebuild tables and figures from saved results">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/build_grading_table.py"><code>build_grading_table.py</code></a> <small>(2025–2026)</small></td><td>Builds a comparison table from saved out-of-fold predictions with one error summary per image scale.</td></tr>
-      <tr><td><a class="lab-file" href="examples/render_grading_figure.py"><code>render_grading_figure.py</code></a> <small>(2026)</small></td><td>Renders the comparison table as a labelled SVG figure that can be regenerated from the prediction file.</td></tr>
-      <tr><td><a class="lab-file" href="examples/run_grading_example.py"><code>run_grading_example.py</code></a> <small>(2026 thesis)</small></td><td>Runs the synthetic grading workflow end to end and saves the splits, held-out predictions, assessor comparison and regenerated figure.</td></tr>
-      <tr><td><a class="lab-file" href="examples/bin_patch_distribution.py"><code>bin_patch_distribution.py</code></a> <small>(2026)</small></td><td>Turns saved per-core patch counts into a histogram table for the patch distribution figure.</td></tr>
-      <tr><td><a class="lab-file" href="examples/grading_figure.svg"><code>grading_figure.svg</code></a> <small>(Nov 2026)</small></td><td>A figure generated by the grading example. The bars use synthetic scores and can be regenerated from the example predictions.</td></tr>
-      <tr><td><a class="lab-file" href="examples/verify_report_assets.py"><code>verify_report_assets.py</code></a> <small>(2026 archive)</small></td><td>Checks that a report&#x27;s figures and tables are present and records checksums for the exact files to publish.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/build_grading_table.py"><code>build_grading_table.py</code></a> <small>(2025–2026)</small></td><td>Builds a comparison table from saved out-of-fold predictions with one error summary per image scale.<small class="lab-quantity">Example · 2 scales · 1 matched sample</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/render_grading_figure.py"><code>render_grading_figure.py</code></a> <small>(2026)</small></td><td>Renders the comparison table as a labelled SVG figure that can be regenerated from the prediction file.<small class="lab-quantity">Example · 3 scales in one SVG figure</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/run_grading_example.py"><code>run_grading_example.py</code></a> <small>(2026 thesis)</small></td><td>Runs the synthetic grading workflow end to end and saves the splits, held-out predictions, assessor comparison and regenerated figure.<small class="lab-quantity">Example · 3 folds · 36 held-out predictions · 1 figure</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/bin_patch_distribution.py"><code>bin_patch_distribution.py</code></a> <small>(2026)</small></td><td>Turns saved per-core patch counts into a histogram table for the patch distribution figure.<small class="lab-quantity">Example · 7 cores across 4 bins</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/grading_figure.svg"><code>grading_figure.svg</code></a> <small>(Nov 2026)</small></td><td>A figure generated by the grading example. The bars use synthetic scores and can be regenerated from the example predictions.<small class="lab-quantity">3 scales · 12 held-out predictions per scale</small></td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/verify_report_assets.py"><code>verify_report_assets.py</code></a> <small>(2026 archive)</small></td><td>Checks that a report&#x27;s figures and tables are present and records checksums for the exact files to publish.<small class="lab-quantity">Example · 2 assets expected · 1 verified and 1 missing</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="build_grading_table.py"><pre>scale,samples,mae
+core,1,0.400
+patch,1,0.200</pre></template>
+<template data-file="render_grading_figure.py"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20680%20219%22%20role%3D%22img%22%3E%0A%3Ctitle%3EMean%20absolute%20grading%20error%20%28synthetic%20example%29%3C%2Ftitle%3E%0A%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20rx%3D%228%22%20fill%3D%22%23f8f6ed%22%2F%3E%0A%3Cg%20font-family%3D%22system-ui%2C%20sans-serif%22%20fill%3D%22%23243e31%22%3E%0A%3Ctext%20x%3D%2224%22%20y%3D%2235%22%20font-size%3D%2221%22%3EMean%20absolute%20grading%20error%20%28synthetic%20example%29%3C%2Ftext%3E%0A%3Ctext%20x%3D%2224%22%20y%3D%2279%22%20font-size%3D%2215%22%3Ecore%3C%2Ftext%3E%0A%3Crect%20x%3D%22142%22%20y%3D%2261%22%20width%3D%22330%22%20height%3D%2224%22%20rx%3D%223%22%20fill%3D%22%23e2e8dc%22%2F%3E%0A%3Crect%20x%3D%22142%22%20y%3D%2261%22%20width%3D%22330.0%22%20height%3D%2224%22%20rx%3D%223%22%20fill%3D%22%23527c67%22%2F%3E%0A%3Ctext%20x%3D%22490%22%20y%3D%2279%22%20font-size%3D%2214%22%3E0.350%20%28n%3D6%29%3C%2Ftext%3E%0A%3Ctext%20x%3D%2224%22%20y%3D%22122%22%20font-size%3D%2215%22%3Epatch%3C%2Ftext%3E%0A%3Crect%20x%3D%22142%22%20y%3D%22104%22%20width%3D%22330%22%20height%3D%2224%22%20rx%3D%223%22%20fill%3D%22%23e2e8dc%22%2F%3E%0A%3Crect%20x%3D%22142%22%20y%3D%22104%22%20width%3D%22226.3%22%20height%3D%2224%22%20rx%3D%223%22%20fill%3D%22%23527c67%22%2F%3E%0A%3Ctext%20x%3D%22490%22%20y%3D%22122%22%20font-size%3D%2214%22%3E0.240%20%28n%3D6%29%3C%2Ftext%3E%0A%3Ctext%20x%3D%2224%22%20y%3D%22165%22%20font-size%3D%2215%22%3Ecell%3C%2Ftext%3E%0A%3Crect%20x%3D%22142%22%20y%3D%22147%22%20width%3D%22330%22%20height%3D%2224%22%20rx%3D%223%22%20fill%3D%22%23e2e8dc%22%2F%3E%0A%3Crect%20x%3D%22142%22%20y%3D%22147%22%20width%3D%22301.7%22%20height%3D%2224%22%20rx%3D%223%22%20fill%3D%22%23527c67%22%2F%3E%0A%3Ctext%20x%3D%22490%22%20y%3D%22165%22%20font-size%3D%2214%22%3E0.320%20%28n%3D6%29%3C%2Ftext%3E%0A%3C%2Fg%3E%3C%2Fsvg%3E" alt="Example grading error bars by image scale"></template>
+<template data-file="run_grading_example.py"><img src="examples/grading_figure.svg" alt="Grading workflow figure for its 36 synthetic predictions"><pre>[(&#x27;cell&#x27;, 12, 0.39392411533457666), (&#x27;core&#x27;, 12, 0.48858962935568573), (&#x27;patch&#x27;, 12, 0.20219014829686496)]</pre></template>
+<template data-file="bin_patch_distribution.py"><pre>lower_inclusive,upper_exclusive,cores
+0,50,3
+50,100,1
+100,200,2
+200,None,1</pre></template>
+<template data-file="grading_figure.svg"><img src="examples/grading_figure.svg" alt="Output: grading_figure.svg" loading="lazy"></template>
+<template data-file="verify_report_assets.py"><pre>Verified: {&#x27;scores.csv&#x27;: {&#x27;bytes&#x27;: 27, &#x27;sha256&#x27;: &#x27;cf1e81825e6bf460b9b2630f5e4121e2fa87ed97bd438a03cd8f9818ce051375&#x27;}}
+Missing: [&#x27;figure.pdf&#x27;]</pre></template>
 </section>
 <section id="limits" class="lab-goal" data-goal>
   <p class="eyebrow">Inspect and reproduce the findings</p>
   <h2>Record what needs another test</h2>
   <p class="lab-lede">The thesis sets out what the internal comparisons support and what better-controlled and independent testing would need to establish.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Record what needs another test">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/research_limits.md"><code>research_limits.md</code></a> <small>(Nov 2026)</small></td><td>Records the limits of the internal comparisons and what independent validation would need.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/research_limits.md"><code>research_limits.md</code></a> <small>(Nov 2026)</small></td><td>Records the limits of the internal comparisons and what independent validation would need.</td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="research_limits.md"><pre data-markdown># Research limits and next tests
+
+The thesis reports results under its internal evaluation design. It identifies the need for external validation across laboratories, preparation protocols, scanners and patient populations.
+
+An independent study could fix the model and comparison protocol in advance, evaluate on separate data, and report results across sites. A useful follow-up would examine where predictions agree with the supplied references and where changes in image preparation or sample mix alter performance.
+
+For research software, the corresponding work is to record the input version, model setup and inclusion rules alongside each result so another team can tell what was actually compared.
+
+Source — Samuel Llanwarne, *Multi-Scale and Multi-Stage Deep Learning for the Classification of Diffuse Large B-cell Lymphoma Histology*, University of Leeds, 2026, conclusion and limitations.
+</pre></template>
 </section>
 <section id="pcam-bags" class="lab-goal" data-goal>
   <p class="eyebrow">Adjacent benchmark work</p>
   <h2>Build benchmark bags</h2>
   <p class="lab-lede">The archive includes a separate PatchCamelyon benchmark branch. The runnable example uses generated patches and preserves membership for each bag.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Build benchmark bags">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/build_benchmark_bags.py"><code>build_benchmark_bags.py</code></a> <small>(2026 archive)</small></td><td>Produces reproducible positive and negative bag manifests with stable patch IDs and a separate seed for each split.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/build_benchmark_bags.py"><code>build_benchmark_bags.py</code></a> <small>(2026 archive)</small></td><td>Produces reproducible positive and negative bag manifests with stable patch IDs and a separate seed for each split.<small class="lab-quantity">Example · 2 splits · 4 bags per split · 4 patches per bag</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="build_benchmark_bags.py"><pre>train [{&#x27;patches&#x27;: [&#x27;train-04&#x27;, &#x27;train-00&#x27;, &#x27;train-05&#x27;, &#x27;train-06&#x27;], &#x27;label&#x27;: 1, &#x27;positive_count&#x27;: 1}, {&#x27;patches&#x27;: [&#x27;train-04&#x27;, &#x27;train-06&#x27;, &#x27;train-00&#x27;, &#x27;train-03&#x27;], &#x27;label&#x27;: 1, &#x27;positive_count&#x27;: 1}, {&#x27;patches&#x27;: [&#x27;train-01&#x27;, &#x27;train-05&#x27;, &#x27;train-04&#x27;, &#x27;train-00&#x27;], &#x27;label&#x27;: 0, &#x27;positive_count&#x27;: 0}, {&#x27;patches&#x27;: [&#x27;train-05&#x27;, &#x27;train-01&#x27;, &#x27;train-03&#x27;, &#x27;train-04&#x27;], &#x27;label&#x27;: 0, &#x27;positive_count&#x27;: 0}]
+test [{&#x27;patches&#x27;: [&#x27;test-03&#x27;, &#x27;test-05&#x27;, &#x27;test-09&#x27;, &#x27;test-00&#x27;], &#x27;label&#x27;: 1, &#x27;positive_count&#x27;: 1}, {&#x27;patches&#x27;: [&#x27;test-04&#x27;, &#x27;test-01&#x27;, &#x27;test-05&#x27;, &#x27;test-02&#x27;], &#x27;label&#x27;: 0, &#x27;positive_count&#x27;: 0}, {&#x27;patches&#x27;: [&#x27;test-01&#x27;, &#x27;test-04&#x27;, &#x27;test-03&#x27;, &#x27;test-06&#x27;], &#x27;label&#x27;: 1, &#x27;positive_count&#x27;: 1}, {&#x27;patches&#x27;: [&#x27;test-02&#x27;, &#x27;test-05&#x27;, &#x27;test-00&#x27;, &#x27;test-04&#x27;], &#x27;label&#x27;: 0, &#x27;positive_count&#x27;: 0}]</pre></template>
 <nav class="lab-next" aria-label="Related goals"><a href="#pcam-benchmarks">Compare encoders on fixed benchmark bags →</a></nav>
 </section>
 <section id="pcam-benchmarks" class="lab-goal" data-goal>
   <p class="eyebrow">Adjacent benchmark work</p>
   <h2>Compare encoders on fixed benchmark bags</h2>
   <p class="lab-lede">The archive compares representations while keeping the benchmark protocol consistent. This example uses numerical features in place of pretrained embeddings and reports illustrative scores.</p>
+  <div class="lab-order" hidden><label>Sort <select>
+    <option value="workflow">Workflow order</option>
+    <option value="file">Filename A–Z</option>
+    <option value="year">Newest source year</option>
+  </select></label></div>
   <table class="lab-files" aria-label="Compare encoders on fixed benchmark bags">
     <thead><tr><th scope="col">File and date</th><th scope="col">Outcome</th></tr></thead>
     <tbody>
-      <tr><td><a class="lab-file" href="examples/compare_benchmark_encoders.py"><code>compare_benchmark_encoders.py</code></a> <small>(2026 archive)</small></td><td>Uses fixed training and test bag manifests to compare two encoders with the same pooling rule and metric.</td></tr>
+      <tr data-source-year="2026"><td><a class="lab-file lab-row-file" href="examples/compare_benchmark_encoders.py"><code>compare_benchmark_encoders.py</code></a> <small>(2026 archive)</small></td><td>Uses fixed training and test bag manifests to compare two encoders with the same pooling rule and metric.<small class="lab-quantity">Example · 2 encoders · 8 training bags · 8 test bags</small></td></tr>
     </tbody>
   </table>
+  <div class="lab-output" hidden>
+    <div class="lab-output-head">
+      <div><p class="eyebrow lab-output-kind"></p><h3 class="lab-output-title" aria-live="polite"></h3></div>
+      <a class="lab-preview-link" data-preview>View file ↗</a>
+    </div>
+    <div class="lab-output-content"></div>
+  </div>
+<template data-file="compare_benchmark_encoders.py"><pre>signal: balanced accuracy 1.000
+noise: balanced accuracy 0.625</pre></template>
 </section>
     </div>
   </div>
@@ -569,4 +1144,4 @@
     <div class="preview-links"><a id="preview-open" target="_blank" rel="noopener">Open file ↗</a><a id="preview-download" download>Download</a></div>
   </dialog>
 </main>
-<script src="logbook.js?v=35fb7d2e63" defer></script></body></html>
+<script src="logbook.js?v=be9ede34f6" defer></script></body></html>

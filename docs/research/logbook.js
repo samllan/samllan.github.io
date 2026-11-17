@@ -2,20 +2,73 @@ const logbook = document.querySelector('.lab');
 const content = logbook.querySelector('.lab-content');
 const goals = [...logbook.querySelectorAll('[data-goal]')];
 const goalLinks = [...logbook.querySelectorAll('.lab-goals a[href^="#"]')];
+const cropDemo = document.querySelector('.lab-demo');
+let currentGoal;
+let cropReady = false;
 
 function selectGoal() {
-  const active = goals.find(goal => `#${goal.id}` === location.hash) || goals[0];
-  goals.forEach(goal => { goal.hidden = goal !== active; });
+  const active = document.getElementById(location.hash.slice(1));
+  const goal = goals.includes(active) ? active : goals[0];
+  if (goal === currentGoal) return;
+  currentGoal = goal;
+  goals.forEach(section => { section.hidden = section !== goal; });
   goalLinks.forEach(link => {
-    if (link.hash === `#${active.id}`) link.setAttribute('aria-current', 'location');
+    if (link.hash === '#' + goal.id) link.setAttribute('aria-current', 'location');
     else link.removeAttribute('aria-current');
   });
+  if (!goal.querySelector('[data-selected]')) selectRow(goal.querySelector('.lab-row-file'));
   content.scrollTop = 0;
 }
 
+function selectRow(link, reveal = false) {
+  const goal = link.closest('[data-goal]');
+  const row = link.closest('tr');
+  const panel = goal.querySelector('.lab-output');
+  const filename = link.textContent;
+  const former = goal.querySelector('[data-selected]');
+  if (former !== row) {
+    former?.removeAttribute('data-selected');
+    former?.querySelector('.lab-row-file').removeAttribute('aria-current');
+    row.dataset.selected = '';
+    link.setAttribute('aria-current', 'true');
+
+    const template = [...goal.querySelectorAll('template[data-file]')].find(item => item.dataset.file === filename);
+    const example = template.content.cloneNode(true);
+    const guide = example.querySelector('[data-markdown]');
+    if (guide) guide.replaceWith(filePreview(guide.textContent, link.href));
+    panel.querySelector('.lab-output-content').replaceChildren(example);
+    panel.querySelector('.lab-output-kind').textContent = filename === 'crop_benchmark.csv'
+      ? 'Thesis benchmark'
+      : filename.endsWith('.md') ? 'Research notes' : 'Synthetic example';
+    panel.querySelector('.lab-output-title').textContent = filename;
+    panel.querySelector('[data-preview]').href = link.href;
+    panel.hidden = false;
+  }
+  if (goal.id === 'crop') {
+    cropDemo.hidden = !cropReady || filename !== 'prepare_image_regions.py';
+  }
+  if (reveal) panel.querySelector('.lab-output-head').scrollIntoView({ block: 'nearest' });
+}
+
+function setupSort(goal) {
+  const body = goal.querySelector('.lab-files tbody');
+  const workflowOrder = [...body.rows];
+  if (workflowOrder.length < 2) return;
+  const control = goal.querySelector('.lab-order');
+  const names = new Intl.Collator('en', { numeric: true });
+  control.hidden = false;
+  control.querySelector('select').addEventListener('change', event => {
+    const order = event.target.value;
+    const rows = [...workflowOrder];
+    if (order === 'file') rows.sort((a, b) => names.compare(a.querySelector('code').textContent, b.querySelector('code').textContent));
+    if (order === 'year') rows.sort((a, b) => Number(b.dataset.sourceYear) - Number(a.dataset.sourceYear));
+    body.append(...rows);
+  });
+}
+
 logbook.classList.add('enhanced');
+goals.forEach(setupSort);
 window.addEventListener('hashchange', selectGoal);
-selectGoal();
 
 const dialog = document.querySelector('#file-preview');
 const previewContent = document.querySelector('#preview-content');
@@ -50,43 +103,60 @@ function filePreview(text, url) {
   return guide;
 }
 
-logbook.querySelectorAll('.lab-file').forEach(link => {
-  link.addEventListener('click', async event => {
-    if (!dialog.showModal || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+async function previewFile(link) {
+  previewRequest?.abort();
+  const request = new AbortController();
+  previewRequest = request;
+  document.querySelector('#preview-title').textContent = link.closest('.lab-output').querySelector('.lab-output-title').textContent;
+  const isScript = link.href.endsWith('.py');
+  previewOpen.href = isScript ? sourceDirectory + '/' + link.href.split('/').pop() : link.href;
+  previewOpen.textContent = isScript ? 'Open on GitHub ↗' : 'Open file ↗';
+  document.querySelector('#preview-download').href = link.href;
+  previewContent.textContent = 'Loading file…';
+  dialog.showModal();
+
+  if (link.href.endsWith('.png') || link.href.endsWith('.svg')) {
+    const image = new Image();
+    image.alt = document.querySelector('#preview-title').textContent;
+    image.src = link.href;
+    previewContent.replaceChildren(image);
+    return;
+  }
+
+  try {
+    const response = await fetch(link.href, { signal: request.signal });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const text = await response.text();
+    if (!request.signal.aborted) previewContent.replaceChildren(filePreview(text, link.href));
+  } catch (error) {
+    if (!request.signal.aborted) previewContent.textContent = 'Preview unavailable. Use the links below.';
+  }
+}
+
+logbook.addEventListener('click', event => {
+  if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+  const link = event.target.closest('a');
+  if (link?.hasAttribute('data-preview')) {
+    if (dialog.showModal) {
+      event.preventDefault();
+      previewFile(link);
+    }
+  } else if (link?.classList.contains('lab-script')) {
     event.preventDefault();
-    if (link.dataset.openGoal && location.hash !== `#${link.dataset.openGoal}`) {
-      location.hash = link.dataset.openGoal;
-      selectGoal();
-    }
-    previewRequest?.abort();
-    const request = new AbortController();
-    previewRequest = request;
-    document.querySelector('#preview-title').textContent = link.textContent;
-    const isScript = link.href.endsWith('.py');
-    previewOpen.href = isScript ? `${sourceDirectory}/${link.href.split('/').pop()}` : link.href;
-    previewOpen.textContent = isScript ? 'Open on GitHub ↗' : 'Open file ↗';
-    document.querySelector('#preview-download').href = link.href;
-    previewContent.textContent = 'Loading file…';
-    dialog.showModal();
-
-    if (link.href.endsWith('.png') || link.href.endsWith('.svg')) {
-      const image = new Image();
-      image.alt = link.textContent;
-      image.src = link.href;
-      previewContent.replaceChildren(image);
-      return;
-    }
-
-    try {
-      const response = await fetch(link.href, { signal: request.signal });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const text = await response.text();
-      if (!request.signal.aborted) previewContent.replaceChildren(filePreview(text, link.href));
-    } catch (error) {
-      if (!request.signal.aborted) previewContent.textContent = 'Preview unavailable. Use the links below.';
-    }
-  });
+    const goal = document.getElementById(link.dataset.openGoal);
+    if (location.hash !== '#' + goal.id) location.hash = goal.id;
+    selectGoal();
+    const rowLink = [...goal.querySelectorAll('.lab-row-file')].find(item => item.href === link.href);
+    if (rowLink) selectRow(rowLink, true);
+  } else if (link?.classList.contains('lab-row-file')) {
+    event.preventDefault();
+    selectRow(link, true);
+  } else if (!event.target.closest('a, button, select') && !getSelection()?.toString()) {
+    const rowLink = event.target.closest('.lab-files tbody tr')?.querySelector('.lab-row-file');
+    if (rowLink) selectRow(rowLink, true);
+  }
 });
+
 dialog.addEventListener('close', () => previewRequest?.abort());
 
 const scene = document.querySelector('#crop-image');
@@ -177,7 +247,11 @@ download.addEventListener('click', () => {
 });
 
 source.addEventListener('load', () => {
-  document.querySelector('.lab-demo').hidden = false;
+  cropReady = true;
+  const selected = cropDemo.closest('[data-goal]').querySelector('[data-selected] code');
+  cropDemo.hidden = selected?.textContent !== 'prepare_image_regions.py';
   updateCrop();
 });
 source.src = 'examples/example_grid.png';
+
+selectGoal();

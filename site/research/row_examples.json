@@ -1,0 +1,311 @@
+{
+  "align_features_to_regions.py": {
+    "quantity": "2 regions joined by ID",
+    "stdout": "A,12,6,0.3,0.4\nB,80,5,0.1,0.2"
+  },
+  "assign_validation_folds.py": {
+    "quantity": "4 samples across 2 folds",
+    "stdout": "sample,held_out_fold\na,0\nb,0\nc,1\nd,1"
+  },
+  "audit_cohort_filters.py": {
+    "quantity": "2 specimens checked · 1 retained",
+    "stdout": "(['a'], {'b': ['target unavailable', 'required stain unavailable', 'not enough retained patches']})"
+  },
+  "audit_compute_measurements.py": {
+    "quantity": "2 runs checked · 2 issues",
+    "stdout": "[(('baseline', 0), 'missing or invalid peak_memory_mib'), (('compact', 0), 'run missing')]"
+  },
+  "audit_dataset_structure.py": {
+    "quantity": "3 issues flagged",
+    "stdout": "{'missing': ['B'], 'unexpected': ['spillover'], 'wrong_shape': {'A': ((10, 64), (10, 32))}}"
+  },
+  "audit_feature_variation.py": {
+    "quantity": "1 constant column · 1 correlated pair",
+    "stdout": "([1], [(0, 2)])"
+  },
+  "batch_frozen_features.py": {
+    "quantity": "3 patches · 2 features each",
+    "stdout": "[('p1', [0.25, 0.15]), ('p2', [0.8, 0.1]), ('p3', [0.3, 0.1])]"
+  },
+  "batch_variable_patch_sets.py": {
+    "quantity": "4 specimens · 2 batches · 5 padding slots",
+    "stdout": "[(['b', 'c'], 2), (['a', 'd'], 3)]"
+  },
+  "benchmark_frozen_features.py": {
+    "quantity": "2 feature sets · 2 test samples",
+    "stdout": "{'first': 1.0, 'second': 0.5}"
+  },
+  "bin_patch_distribution.py": {
+    "quantity": "7 cores across 4 bins",
+    "stdout": "lower_inclusive,upper_exclusive,cores\n0,50,3\n50,100,1\n100,200,2\n200,None,1"
+  },
+  "build_benchmark_bags.py": {
+    "quantity": "2 splits · 4 bags per split · 4 patches per bag",
+    "stdout": "train [{'patches': ['train-04', 'train-00', 'train-05', 'train-06'], 'label': 1, 'positive_count': 1}, {'patches': ['train-04', 'train-06', 'train-00', 'train-03'], 'label': 1, 'positive_count': 1}, {'patches': ['train-01', 'train-05', 'train-04', 'train-00'], 'label': 0, 'positive_count': 0}, {'patches': ['train-05', 'train-01', 'train-03', 'train-04'], 'label': 0, 'positive_count': 0}]\ntest [{'patches': ['test-03', 'test-05', 'test-09', 'test-00'], 'label': 1, 'positive_count': 1}, {'patches': ['test-04', 'test-01', 'test-05', 'test-02'], 'label': 0, 'positive_count': 0}, {'patches': ['test-01', 'test-04', 'test-03', 'test-06'], 'label': 1, 'positive_count': 1}, {'patches': ['test-02', 'test-05', 'test-00', 'test-04'], 'label': 0, 'positive_count': 0}]"
+  },
+  "build_cluster_run_manifest.py": {
+    "quantity": "8 jobs · 2 configurations × 2 folds × 2 seeds",
+    "stdout": "[\n  {\n    \"run_id\": \"55b2ba45f220d664\",\n    \"specification\": {\n      \"configuration\": \"baseline\",\n      \"fold\": 0,\n      \"seed\": 7,\n      \"pool\": \"mean\",\n      \"batch_size\": 16\n    }\n  },\n  {\n    \"run_id\": \"9616e1407eb20cf1\",\n    \"specification\": {\n      \"configuration\": \"baseline\",\n      \"fold\": 0,\n      \"seed\": 11,\n      \"pool\": \"mean\",\n      \"batch_size\": 16\n    }\n  },\n  {\n    \"run_id\": \"23ef391e9274be92\",\n    \"specification\": {\n      \"configuration\": \"baseline\",\n      \"fold\": 1,\n      \"seed\": 7,\n      \"pool\": \"mean\",\n      \"batch_size\": 16\n    }\n  },\n  {\n    \"run_id\": \"055a5ebb4aa7e2cc\",\n    \"specification\": {\n      \"configuration\": \"baseline\",\n      \"fold\": 1,\n      \"seed\": 11,\n      \"pool\": \"mean\",\n      \"batch_size\": 16\n    }\n  },\n  {\n    \"run_id\": \"04a29607846ac864\",\n    \"specification\": {\n      \"configuration\": \"max_pool\",\n      \"fold\": 0,\n      \"seed\": 7,\n      \"pool\": \"max\",\n      \"batch_size\": 16\n    }\n  },\n  {\n    \"run_id\": \"f2c8f509b50ca851\",\n    \"specification\": {\n      \"configuration\": \"max_pool\",\n      \"fold\": 0,\n      \"seed\": 11,\n      \"pool\": \"max\",\n      \"batch_size\": 16\n    }\n  },\n  {\n    \"run_id\": \"59549bad03250a39\",\n    \"specification\": {\n      \"configuration\": \"max_pool\",\n      \"fold\": 1,\n      \"seed\": 7,\n      \"pool\": \"max\",\n      \"batch_size\": 16\n    }\n  },\n  {\n    \"run_id\": \"71b7301425bdd0bc\",\n    \"specification\": {\n      \"configuration\": \"max_pool\",\n      \"fold\": 1,\n      \"seed\": 11,\n      \"pool\": \"max\",\n      \"batch_size\": 16\n    }\n  }\n]"
+  },
+  "build_grading_table.py": {
+    "quantity": "2 scales · 1 matched sample",
+    "stdout": "scale,samples,mae\ncore,1,0.400\npatch,1,0.200"
+  },
+  "check_bag_classifier_on_known_signal.py": {
+    "quantity": "64 bags · 12 instances per bag",
+    "stdout": "mean: area under ROC 0.830\nmaximum: area under ROC 0.999"
+  },
+  "check_feature_cache.py": {
+    "quantity": "2 cache mismatches detected",
+    "stdout": "['region IDs or ordering changed', 'encoder changed']"
+  },
+  "collect_fold_results.py": {
+    "quantity": "1 run keyed by configuration, fold and seed",
+    "stdout": "baseline,0,11,0.28"
+  },
+  "compare_assessor_errors.py": {
+    "quantity": "2 matched samples · 0.15 model MAE",
+    "stdout": "{'matched_samples': 2, 'assessor_gap': 0.5, 'model_to_consensus_mae': 0.15000000000000002}"
+  },
+  "compare_benchmark_encoders.py": {
+    "quantity": "2 encoders · 8 training bags · 8 test bags",
+    "stdout": "signal: balanced accuracy 1.000\nnoise: balanced accuracy 0.625"
+  },
+  "compare_bottleneck_sizes.py": {
+    "quantity": "2 bottlenecks · 16 vs 32 bytes",
+    "stdout": "[(1, 16, 0.0014065427821041536), (2, 32, 0.000488215488215489)]"
+  },
+  "compare_encoder_dimensions.py": {
+    "quantity": "30 examples · 16 vs 64 features",
+    "stdout": "encoder,examples,features,dtype,bytes\nsmall,30,16,float32,1920\nwide,30,64,float32,7680"
+  },
+  "compare_experiments.py": {
+    "quantity": "2 matched folds · 43.9% less time in the example",
+    "stdout": "compact | error +3.1% | time -43.9% | memory -35.0%"
+  },
+  "compare_flat_and_hierarchical_pooling.py": {
+    "quantity": "4 valid cells · pooled results 0.25 and 0.50",
+    "stdout": "flat: 0.25\nhierarchical: 0.50"
+  },
+  "compare_fold_class_recall.py": {
+    "quantity": "2 classes across 2 folds",
+    "stdout": "0,ABC,1,1.0\n0,GCB,1,0.0\n1,ABC,1,0.0\n1,GCB,1,1.0"
+  },
+  "compare_image_encodings.py": {
+    "quantity": "2 encodings of the same generated patch",
+    "stdout": "Format     Bytes   Mean channel difference\nPNG          129                      0.00\nWebP         174                      1.95"
+  },
+  "compare_patch_perturbations.py": {
+    "quantity": "3 patches · 2 perturbations per patch",
+    "stdout": "Patch 0: remove [ 0.133 -0.183], repeat [-0.267  0.367]\nPatch 1: remove [ 0.083 -0.033], repeat [-0.167  0.067]\nPatch 2: remove [-0.217  0.217], repeat [ 0.433 -0.433]"
+  },
+  "compare_spatial_attention.py": {
+    "quantity": "2 valid patches · scores 0.500 and 0.369",
+    "stdout": "Positions False: pooled score 0.500\nPositions True: pooled score 0.369"
+  },
+  "crop_benchmark.csv": {
+    "quantity": "Thesis Table 2.5 · 6 s → 3 s per sample · precision and recall 1.00"
+  },
+  "estimate_representation_cost.py": {
+    "quantity": "500 regions · 75.26 MB vs 0.51 MB",
+    "stdout": "500 regions of 224 x 224 pixels, 256 features per vector\nRepresentation      Bytes per region     Total bytes\nRGB patches                  150,528      75,264,000\nFeature vectors                1,024         512,000"
+  },
+  "evaluate_subtype_roc.py": {
+    "quantity": "4 predictions · AUC 0.875",
+    "stdout": "([(0.0, 0.0), (0.0, 0.5), (0.5, 1.0), (1.0, 1.0)], 0.875)"
+  },
+  "explain_prediction.py": {
+    "quantity": "2 class masks · 4 regions per mask",
+    "stdout": "Class A: 0.24 -> 1.16 | 1.00 0.00 1.00 0.00\nClass B: 0.01 -> 0.96 | 0.00 1.00 0.00 1.00"
+  },
+  "export_feature_vectors.py": {
+    "quantity": "2 patches · 2 features each",
+    "stdout": "region_id,left,top,right,bottom,feature_1,feature_2\npatch-x0-y0,0,0,4,4,0.12,0.68\npatch-x4-y0,4,0,8,4,0.43,0.19"
+  },
+  "extract_cell_crops.py": {
+    "quantity": "2 crops · 8 × 8 pixels each",
+    "stdout": "Cell 1: scan centre (249.0, 530.0), crop (8, 8)\nCell 2: scan centre (262.0, 534.0), crop (8, 8)"
+  },
+  "extract_labelled_crops.py": {
+    "quantity": "2 crop images · 1 manifest",
+    "stdout": "image,label,file,left,top,right,bottom\ndemo-scan,rectangle,crop-001.png,2,3,12,13\ndemo-scan,crop-01,crop-002.png,21,8,29,16"
+  },
+  "extract_patch_images.py": {
+    "quantity": "2 patch images · 100% and 50% tissue coverage",
+    "stdout": "core,file,left,top,right,bottom,tissue_fraction\ncore-1,patch-x0-y0.png,0,0,8,8,1.0\ncore-1,patch-x8-y0.png,8,0,16,8,0.5"
+  },
+  "filter_tissue_patches.py": {
+    "quantity": "8 patches checked · 4 kept",
+    "stdout": "patch-x0-y0 100% keep\npatch-x4-y0 100% keep\npatch-x8-y0 25% skip\npatch-x12-y0 0% skip\npatch-x0-y4 100% keep\npatch-x4-y4 100% keep\npatch-x8-y4 25% skip\npatch-x12-y4 0% skip"
+  },
+  "find_incomplete_runs.py": {
+    "quantity": "2 incomplete runs flagged",
+    "stdout": "compact,0,7,missing metrics\ncompact,1,7,missing"
+  },
+  "fit_linear_autoencoder.py": {
+    "quantity": "3 inputs reduced to 2 features each",
+    "stdout": "[[-0.436 -0.253]\n [ 0.55  -0.123]\n [-0.114  0.376]]"
+  },
+  "fit_shared_view_encoder.py": {
+    "quantity": "40 update steps · objective 0.1938 → 0.0003",
+    "stdout": "Objective: 0.1938 to 0.0003\nShared weights: [[0.52, 0.52], [0.884, -0.884]]"
+  },
+  "grading_figure.svg": {
+    "quantity": "3 scales · 12 held-out predictions per scale"
+  },
+  "index_segmented_cells.py": {
+    "quantity": "2 cells linked to their scan coordinates",
+    "stdout": "{'core': 'C1', 'cell': 1, 'scan_x': 669, 'scan_y': 498}\n{'core': 'C1', 'cell': 2, 'scan_x': 701, 'scan_y': 550}"
+  },
+  "join_subtype_labels.py": {
+    "quantity": "3 images checked · 1 accepted label",
+    "stdout": "([('a', 'R1', 'ABC')], [('b', 'R2', 'unrecognised'), ('c', 'R3', 'missing')])"
+  },
+  "learn_image_features.py": {
+    "quantity": "4 samples · loss 0.000 vs 0.010",
+    "stdout": "Independent features | agreement loss 0.000 | total loss 0.000\nDuplicated feature | agreement loss 0.000 | total loss 0.010"
+  },
+  "map_crop_to_scan.py": {
+    "quantity": "20 × 20 crop pixels → 80 × 80 scan pixels",
+    "stdout": "(1240, 832, 1320, 912)"
+  },
+  "map_patch_scores.py": {
+    "quantity": "2 patches placed on a 4 × 3 grid",
+    "stdout": "[[0.4 0.4 0.4 nan]\n [0.4 0.4 0.6 0.8]\n [nan nan 0.8 0.8]]"
+  },
+  "measure_feature_separation.py": {
+    "quantity": "4 samples · silhouette scores 0.85–0.87",
+    "stdout": "[0.87, 0.85, 0.85, 0.87]"
+  },
+  "measure_storage_reads.py": {
+    "quantity": "12,288 bytes read by each method",
+    "stdout": "files: 12288 bytes in 11.244 ms\nbundle: 12288 bytes in 10.052 ms"
+  },
+  "package_cell_arrays.py": {
+    "quantity": "2 cells · 2 coordinates and 1 feature each",
+    "stdout": "{np.str_('C1-1'): [7, 6], np.str_('C1-2'): [9, 3]}"
+  },
+  "plan_matched_runs.py": {
+    "quantity": "12 runs across 3 configurations",
+    "stdout": "{'configuration': 'baseline', 'fold': 0, 'seed': 7, 'pool': 'mean', 'batch_size': 16}\n{'configuration': 'baseline', 'fold': 0, 'seed': 11, 'pool': 'mean', 'batch_size': 16}\n{'configuration': 'baseline', 'fold': 1, 'seed': 7, 'pool': 'mean', 'batch_size': 16}\n{'configuration': 'baseline', 'fold': 1, 'seed': 11, 'pool': 'mean', 'batch_size': 16}\n{'configuration': 'max_pool', 'fold': 0, 'seed': 7, 'pool': 'max', 'batch_size': 16}\n{'configuration': 'max_pool', 'fold': 0, 'seed': 11, 'pool': 'max', 'batch_size': 16}\n{'configuration': 'max_pool', 'fold': 1, 'seed': 7, 'pool': 'max', 'batch_size': 16}\n{'configuration': 'max_pool', 'fold': 1, 'seed': 11, 'pool': 'max', 'batch_size': 16}\n{'configuration': 'large_batch', 'fold': 0, 'seed': 7, 'pool': 'mean', 'batch_size': 32}\n{'configuration': 'large_batch', 'fold': 0, 'seed': 11, 'pool': 'mean', 'batch_size': 32}\n{'configuration': 'large_batch', 'fold': 1, 'seed': 7, 'pool': 'mean', 'batch_size': 32}\n{'configuration': 'large_batch', 'fold': 1, 'seed': 11, 'pool': 'mean', 'batch_size': 32}"
+  },
+  "pool_patch_evidence.py": {
+    "quantity": "3 patches · 3 pooling methods",
+    "stdout": "{'mean': [0.433, 0.6], 'maximum': [0.9, 0.9], 'attention': [0.603, 0.454]}"
+  },
+  "predict_subtypes_from_bags.py": {
+    "quantity": "2 training bags · 1 held-out score",
+    "stdout": "{'c': -0.3999999999999996}"
+  },
+  "prepare_image_regions.py": {
+    "quantity": "2 marked crops · 6 grid patches · 4 × 4 pixels",
+    "stdout": "crop-01 (0, 0, 4, 4)\ncrop-02 (8, 4, 12, 8)\n6 complete patches, ending at (8, 4, 12, 8)"
+  },
+  "prepare_paired_views.py": {
+    "quantity": "1 source patch · 2 augmented views",
+    "stdout": "p1 [[0.09, 0.47], [0.66, 0.94]] [[0.52, 0.1], [1.0, 0.72]]"
+  },
+  "prepare_reference_grades.py": {
+    "quantity": "3 ratings combined for 2 samples",
+    "stdout": "a,1.5,2,1\nb,3,1,0"
+  },
+  "probe_grading_model_with_noise.py": {
+    "quantity": "12 signal bags and 12 noise bags",
+    "stdout": "signal: median null 0.009, 0/12 null calls\nnoise: median null 0.683, 12/12 null calls"
+  },
+  "project_feature_space.py": {
+    "quantity": "3 samples projected onto 2 axes",
+    "stdout": "coordinates [[-0.359, 0.08], [-0.282, -0.086], [0.64, 0.007]]\nvariance explained [0.978, 0.022]"
+  },
+  "rank_accuracy_compute_tradeoffs.py": {
+    "quantity": "3 candidates compared · 2 on the frontier",
+    "stdout": "['wide', 'small']"
+  },
+  "record_crop_marks.py": {
+    "quantity": "2 labelled rows · 7 CSV columns",
+    "stdout": "image,label,kind,x,y,right,bottom\ndemo-scan,A,point,20,16,,\ndemo-scan,B,rectangle,64,44,88,68"
+  },
+  "render_grading_figure.py": {
+    "quantity": "3 scales in one SVG figure",
+    "stdout": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 680 219\" role=\"img\">\n<title>Mean absolute grading error (synthetic example)</title>\n<rect width=\"100%\" height=\"100%\" rx=\"8\" fill=\"#f8f6ed\"/>\n<g font-family=\"system-ui, sans-serif\" fill=\"#243e31\">\n<text x=\"24\" y=\"35\" font-size=\"21\">Mean absolute grading error (synthetic example)</text>\n<text x=\"24\" y=\"79\" font-size=\"15\">core</text>\n<rect x=\"142\" y=\"61\" width=\"330\" height=\"24\" rx=\"3\" fill=\"#e2e8dc\"/>\n<rect x=\"142\" y=\"61\" width=\"330.0\" height=\"24\" rx=\"3\" fill=\"#527c67\"/>\n<text x=\"490\" y=\"79\" font-size=\"14\">0.350 (n=6)</text>\n<text x=\"24\" y=\"122\" font-size=\"15\">patch</text>\n<rect x=\"142\" y=\"104\" width=\"330\" height=\"24\" rx=\"3\" fill=\"#e2e8dc\"/>\n<rect x=\"142\" y=\"104\" width=\"226.3\" height=\"24\" rx=\"3\" fill=\"#527c67\"/>\n<text x=\"490\" y=\"122\" font-size=\"14\">0.240 (n=6)</text>\n<text x=\"24\" y=\"165\" font-size=\"15\">cell</text>\n<rect x=\"142\" y=\"147\" width=\"330\" height=\"24\" rx=\"3\" fill=\"#e2e8dc\"/>\n<rect x=\"142\" y=\"147\" width=\"301.7\" height=\"24\" rx=\"3\" fill=\"#527c67\"/>\n<text x=\"490\" y=\"165\" font-size=\"14\">0.320 (n=6)</text>\n</g></svg>"
+  },
+  "render_score_overlay.py": {
+    "quantity": "64 × 48 pixel overlay",
+    "stdout": "Rendered (64, 48) RGBA"
+  },
+  "research_questions.md": {
+    "quantity": "2 prediction tasks · 3 image scales"
+  },
+  "resume_chunked_experiment.py": {
+    "quantity": "3 chunks · resumes after chunk 1",
+    "stdout": "Interrupted after the first committed chunk\nResumed results: [4, 9, 16]"
+  },
+  "run_grading_example.py": {
+    "quantity": "3 folds · 36 held-out predictions · 1 figure",
+    "stdout": "[('cell', 12, 0.39392411533457666), ('core', 12, 0.48858962935568573), ('patch', 12, 0.20219014829686496)]"
+  },
+  "save_held_out_grades.py": {
+    "quantity": "4 held-out predictions across 2 folds",
+    "stdout": "sample,scale,fold,reference,prediction\na,patch,0,0.0,1.0387596899224802\nd,patch,0,3.0,1.9069767441860468\nb,patch,1,1.0,1.0714285714285714\nc,patch,1,2.0,2.071428571428571"
+  },
+  "score_ordinal_agreement.py": {
+    "quantity": "4 paired grades · weighted κ 0.90",
+    "stdout": "0.9"
+  },
+  "score_reconstructions.py": {
+    "quantity": "2 examples · squared errors 0.01 and 0.02",
+    "stdout": "[('b', 0.020000000000000004), ('a', 0.009999999999999998)]"
+  },
+  "score_variational_reconstruction.py": {
+    "quantity": "Reconstruction 0.387 · regularisation 0.083",
+    "stdout": "Reconstruction 0.387 | KL 0.083 | total 0.429"
+  },
+  "standardise_encoder_inputs.py": {
+    "quantity": "3 RGB channels resized to 8 × 8 pixels",
+    "stdout": "(3, 8, 8) [0.337 0.933 0.745]"
+  },
+  "summarise_cells_by_core.py": {
+    "quantity": "4 cells across 3 cores",
+    "stdout": "{'counts': {'A': 3, 'B': 1, 'C': 0}, 'cells': 4, 'median_cells_per_core': 1, 'largest_core_share': 0.75}"
+  },
+  "summarise_errors_by_grade.py": {
+    "quantity": "5 predictions grouped into 3 reference grades",
+    "stdout": "grade,count,signed_error,absolute_error\n0,2,0.44999999999999996,0.44999999999999996\n1,1,0.19999999999999996,0.19999999999999996\n3,2,-0.55,0.55"
+  },
+  "summarise_matched_training_traces.py": {
+    "quantity": "4 matched runs · mean time 66 s vs 51 s",
+    "stdout": "baseline: mean balanced accuracy 0.760, mean time 66.0s\nvariant: mean balanced accuracy 0.770, mean time 51.0s"
+  },
+  "summarise_overlay_coverage.py": {
+    "quantity": "2 of 3 points in the region have scores",
+    "stdout": "{'coverage': 0.6666666666666666, 'median': 0.6000000000000001, 'range': (0.4, 0.8)}"
+  },
+  "summarise_patch_counts.py": {
+    "quantity": "3 patches across 3 cores · 1 empty core",
+    "stdout": "A 2\nB 0\nC 1"
+  },
+  "summarise_validation.py": {
+    "quantity": "2 tasks, each reported across 2 folds",
+    "stdout": "Grading | mean absolute error\nFold 0  | 0.25\nFold 1  | 0.30\nSubtype | accuracy\nFold 0  | 100%\nFold 1  | 50%"
+  },
+  "test_mask_score_changes.py": {
+    "quantity": "1 spatial mask compared with 1 uniform control",
+    "stdout": "{'baseline': array([0.82]), 'spatial_delta': array([-0.576]), 'uniform_delta': array([-0.164])}"
+  },
+  "train_scale_graders.py": {
+    "quantity": "2 scale-specific models · 1 shared test sample",
+    "stdout": "patch {'c': 2.1666666666666674}\ncell {'c': 1.7586206896551726}"
+  },
+  "verify_report_assets.py": {
+    "quantity": "2 assets expected · 1 verified and 1 missing",
+    "stdout": "Verified: {'scores.csv': {'bytes': 27, 'sha256': 'cf1e81825e6bf460b9b2630f5e4121e2fa87ed97bd438a03cd8f9818ce051375'}}\nMissing: ['figure.pdf']"
+  },
+  "verify_run_configuration.py": {
+    "quantity": "2 settings flagged",
+    "stdout": "depth {'planned': 2, 'effective': 1, 'recorded': True}\nposition_encoding {'planned': True, 'effective': None, 'recorded': False}"
+  },
+  "weight_grading_examples.py": {
+    "quantity": "4 samples · initial and next-epoch weights",
+    "stdout": "Initial: [0.136, 0.322, 0.136, 0.406]\nNext epoch: [0.157, 0.293, 0.157, 0.392]"
+  }
+}

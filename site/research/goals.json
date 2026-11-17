@@ -1,6 +1,6 @@
 [
   {
-    "title": "Start here",
+    "title": "",
     "goals": [
       {
         "id": "question",
@@ -31,6 +31,7 @@
       {
         "id": "prepare",
         "title": "Extract crops and preserve their coordinates",
+        "parent": "crop",
         "description": "The crop is a smaller image with a record of the scan, label and source bounds it came from. That record lets a reader go back to the right place in a scan.",
         "files": [
           ["extract_labelled_crops.py","2020–2023","Extracts one image per labelled region and writes a CSV linking crop names to the original pixel bounds."],
@@ -40,6 +41,7 @@
       {
         "id": "patches",
         "title": "Build and inspect patch datasets",
+        "parent": "prepare",
         "description": "A grid turns a core into smaller patches. Coverage checks and counts help reveal empty regions and cores whose patch data are missing.",
         "files": [
           ["filter_tissue_patches.py","2023–2025","Produces a patch list with tissue coverage and rejects patches that contain too much background."],
@@ -50,6 +52,7 @@
       {
         "id": "cells",
         "title": "Build cell-level datasets",
+        "parent": "prepare",
         "description": "Cell extracts offer a different view of the same tissue. The durable dataset needs a cell identifier, the parent core, coordinates and the measurements used downstream.",
         "related": ["autoencoder","features"],
         "files": [
@@ -145,6 +148,7 @@
       {
         "id": "grading-models",
         "title": "Train and compare graders at three scales",
+        "parent": "grading-splits",
         "description": "The research compared core, patch and cell representations for the same grading task. The small examples fit separate baseline models and keep a prediction for each held-out sample.",
         "files": [
           ["train_scale_graders.py","2022–2026","Fits a small independent grader on each scale using the same training IDs, and returns predictions by scale."],
@@ -212,6 +216,7 @@
       {
         "id": "subtype-ablations",
         "title": "Test spatial positions and model hierarchy",
+        "parent": "interpret",
         "description": "The Chapter 4 ablations examined whether position, hierarchy or masking changed the model. These examples expose the individual operations on small generated inputs.",
         "related": ["cost","explain"],
         "files": [
@@ -322,6 +327,7 @@
       {
         "id": "pcam-benchmarks",
         "title": "Compare encoders on fixed benchmark bags",
+        "parent": "pcam-bags",
         "description": "The archive compares representations while keeping the benchmark protocol consistent. This example uses numerical features in place of pretrained embeddings and reports illustrative scores.",
         "files": [
           ["compare_benchmark_encoders.py","2026 archive","Uses fixed training and test bag manifests to compare two encoders with the same pooling rule and metric."]

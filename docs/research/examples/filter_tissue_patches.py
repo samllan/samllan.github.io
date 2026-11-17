@@ -9,8 +9,9 @@ def patch_selection(mask, size, stride, minimum_coverage):
         raise ValueError("Coverage must be between zero and one")
     binary = mask.convert("1", dither=Image.Dither.NONE)
     for patch in grid_patches(mask.size, size, stride):
-        foreground = binary.crop(patch.bounds).histogram()[255]
-        fraction = foreground / (size * size)
+        area = size * size
+        background = binary.crop(patch.bounds).histogram()[0]
+        fraction = (area - background) / area
         yield patch, fraction, fraction >= minimum_coverage
 
 
