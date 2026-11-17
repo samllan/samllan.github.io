@@ -8,7 +8,7 @@ from pathlib import Path
 import re
 from urllib.parse import quote
 
-from leaf_visuals import goal_tentpole, leaf_visuals, section_tentpole
+from leaf_visuals import goal_tentpole, leaf_visuals, mini_table, section_tentpole, table_cell
 
 
 CROP_COLUMNS = (
@@ -37,14 +37,7 @@ def evidence_data(table, examples):
 
 def evidence_table(table, examples):
     headings, rows = evidence_data(table, examples)
-    columns = "".join(f'<th scope="col">{escape(heading)}</th>' for heading in headings)
-    cells = "".join("<tr>" + "".join(f"<td>{escape(item)}</td>" for item in row) + "</tr>" for row in rows)
-    note = f'<p>{escape(table["note"])}</p>' if table.get("note") else ""
-    return (
-        f'<div class="lab-evidence-table"><table class="lab-result-table">'
-        f'<caption>{escape(table["title"])}</caption><thead><tr>{columns}</tr></thead>'
-        f'<tbody>{cells}</tbody></table>{note}</div>'
-    )
+    return mini_table(table["title"], headings, rows, note=table.get("note", ""))
 
 
 def example_markup(examples, filename, captured):
@@ -54,14 +47,8 @@ def example_markup(examples, filename, captured):
         return f'<img src="{path}" alt="Output: {escape(filename, quote=True)}" loading="lazy">'
     if filename == "crop_benchmark.csv":
         with (examples / filename).open(encoding="utf-8", newline="") as stream:
-            reader = csv.DictReader(stream)
-            rows = "".join(
-                "<tr>" + "".join(f"<td>{escape(row[key])}</td>" for key, _ in CROP_COLUMNS) + "</tr>"
-                for row in reader
-            )
-        headings = "".join(f'<th scope="col">{label}</th>' for _, label in CROP_COLUMNS)
-        return ('<table class="lab-result-table"><caption>Thesis Table 2.5</caption><thead><tr>'
-                f'{headings}</tr></thead><tbody>{rows}</tbody></table>')
+            rows = [[row[key] for key, _ in CROP_COLUMNS] for row in csv.DictReader(stream)]
+        return mini_table("Thesis Table 2.5", [label for _, label in CROP_COLUMNS], rows)
     if suffix == ".md":
         text = (examples / filename).read_text(encoding="utf-8")
         blocks = re.split(r"\n\s*\n", text.strip())
@@ -105,12 +92,18 @@ def example_markup(examples, filename, captured):
     return f'{visual}{note_html}<pre>{escape(output)}</pre>'
 
 
-def narrative(goal, targets, examples):
+def narrative(goal, targets, examples, titles):
     def route(target):
         key, marker, name = target.partition("/")
         if key not in targets or (marker and name not in targets[key]):
             raise ValueError(f"Unknown goal or output: {target}")
         return "#" + key + ("/" + quote(name, safe="") if marker else "")
+
+    def prose(value):
+        return re.sub(r"#([a-z]+(?:-[a-z]+)*)", lambda match: (
+            f'<a href="#{match[1]}">{escape(titles[match[1]])}</a>'
+            if match[1] in targets else match[0]
+        ), escape(value))
 
     blocks = []
     if goal.get("start"):
@@ -129,7 +122,7 @@ def narrative(goal, targets, examples):
     if story:
         items = "".join(
             f'<div><dt>{escape(goal.get("next_label", label) if key == "next" else label)}</dt>'
-            f'<dd>{escape(story[key])}</dd></div>'
+            f'<dd>{prose(story[key])}</dd></div>'
             for key, label in STORY_LABELS
         )
         blocks.append(f'<dl class="lab-story">{items}</dl>')
@@ -218,11 +211,11 @@ def render_group_overview(root_crumb, group_id, group, titles):
             for filename, _, _ in goal["files"]
         )
         rows.append(
-            f"<tr>"
-            f'<td><a class="lab-step-link" href="#{escape(key, quote=True)}">{prefix}{escape(goal["title"])} →</a>{parent_note}</td>'
-            f"<td>{escape(goal['description'])}</td>"
-            f'<td>{finding_html}<ul class="lab-inline-files">{file_pills}</ul></td>'
-            f"</tr>"
+            f'<tr role="row">'
+            f'<td role="cell"><a class="lab-step-link" href="#{escape(key, quote=True)}">{prefix}{escape(goal["title"])} →</a>{parent_note}</td>'
+            + table_cell("Question", escape(goal["description"]))
+            + table_cell("Outcome and scripts", f'{finding_html}<ul class="lab-inline-files">{file_pills}</ul>')
+            + "</tr>"
         )
     tentpole = section_tentpole(group_id)
     markup = f"""<section id="{escape(group_id, quote=True)}" class="lab-goal" data-group-section>
@@ -234,10 +227,10 @@ def render_group_overview(root_crumb, group_id, group, titles):
   </div>
   {tentpole}
   <div class="lab-walkthrough-section" role="region" aria-label="Goals in this section">
-    <table class="lab-result-table lab-arc-table">
+    <table class="lab-result-table lab-arc-table lab-stack-table" role="table">
       <caption>Narrative arc across {len(group["goals"])} goals ({total_files} experiments)</caption>
-      <thead><tr><th scope="col">Goal</th><th scope="col">Question tested</th><th scope="col">Outcome &amp; scripts</th></tr></thead>
-      <tbody>{"".join(rows)}</tbody>
+      <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Goal</th><th scope="col" role="columnheader">Question tested</th><th scope="col" role="columnheader">Outcome &amp; scripts</th></tr></thead>
+      <tbody role="rowgroup">{"".join(rows)}</tbody>
     </table>
   </div>
 </article>
@@ -248,7 +241,7 @@ def render_group_overview(root_crumb, group_id, group, titles):
 def render_goal_overview(ancestors, goal, titles, descriptions, children, details, snapshots, context, examples=None):
     key = goal["id"]
     kicker = breadcrumb_markup(ancestors)
-    tentpole = goal_tentpole(key, examples)
+    tentpole = goal_tentpole(key, examples) if key != "question" else ""
     rows = []
     for index, (filename, date, outcome) in enumerate(goal["files"], start=1):
         target = f"{key}/{filename}"
@@ -258,26 +251,26 @@ def render_goal_overview(ancestors, goal, titles, descriptions, children, detail
         quantity = snapshots.get(filename, {}).get("quantity", "")
         badge_html = f'<div class="lab-arc-badge"><span class="lab-step-badge">{escape(quantity)}</span></div>' if quantity else ""
         rows.append(
-            f"<tr>"
-            f'<td><a class="lab-step-link" href="{leaf_href(target)}">{index}. {escape(leaf_title)} →</a>'
+            f'<tr role="row">'
+            f'<td role="cell"><a class="lab-step-link" href="{leaf_href(target)}">{index}. {escape(leaf_title)} →</a>'
             f'<div class="lab-step-meta"><code>{escape(filename)}</code> · {escape(date_label(date))}</div></td>'
-            f'<td class="lab-step-role">{escape(role)}</td>'
-            f"<td>{escape(outcome)}{badge_html}</td>"
-            f"</tr>"
+            + table_cell("Role", escape(role), class_name="lab-step-role")
+            + table_cell("Result", escape(outcome) + badge_html)
+            + "</tr>"
         )
     subgoals_html = ""
     if children.get(key):
         sub_rows = "".join(
-            f'<tr><td><a class="lab-step-link" href="#{escape(child, quote=True)}">↳ {escape(titles[child])} →</a></td>'
-            f"<td>{escape(descriptions[child])}</td></tr>"
+            f'<tr role="row"><td role="cell"><a class="lab-step-link" href="#{escape(child, quote=True)}">↳ {escape(titles[child])} →</a></td>'
+            + table_cell("Question", escape(descriptions[child])) + "</tr>"
             for child in children[key]
         )
         subgoals_html = (
             '<div class="lab-subgoals" role="region" aria-label="Next sub-goals in this branch">'
-            '<table class="lab-result-table lab-arc-table">'
+            '<table class="lab-result-table lab-arc-table lab-stack-table" role="table">'
             '<caption>Follow-on sub-goals in this branch</caption>'
-            '<thead><tr><th scope="col">Sub-goal</th><th scope="col">Question tested</th></tr></thead>'
-            f"<tbody>{sub_rows}</tbody></table></div>"
+            '<thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Sub-goal</th><th scope="col" role="columnheader">Question tested</th></tr></thead>'
+            f'<tbody role="rowgroup">{sub_rows}</tbody></table></div>'
         )
     context_block = f'<div class="lab-goal-context">{context}</div>' if context else ""
     markup = f"""<article class="lab-experiment lab-goal-overview" data-goal-overview>
@@ -289,10 +282,10 @@ def render_goal_overview(ancestors, goal, titles, descriptions, children, detail
   {tentpole}
   {context_block}
   <div class="lab-walkthrough-section" role="region" aria-label="Narrative walkthrough of experiments">
-    <table class="lab-result-table lab-arc-table">
+    <table class="lab-result-table lab-arc-table lab-stack-table" role="table">
       <caption>Experiments in this step ({len(goal["files"])} {"entry" if len(goal["files"]) == 1 else "entries"})</caption>
-      <thead><tr><th scope="col">Step</th><th scope="col">Role in the story</th><th scope="col">Result / output</th></tr></thead>
-      <tbody>{"".join(rows)}</tbody>
+      <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Step</th><th scope="col" role="columnheader">Role in the story</th><th scope="col" role="columnheader">Result / output</th></tr></thead>
+      <tbody role="rowgroup">{"".join(rows)}</tbody>
     </table>
   </div>
   {subgoals_html}
@@ -313,6 +306,7 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, conte
     method = details.get("method")
     method_html = f'<p>{escape(method)}</p>' if method else ""
     kind = ("Thesis benchmark" if filename == "crop_benchmark.csv" else
+            "Demo and thesis comparison" if filename == "compare_image_encodings.py" else
             "Fictional pilot" if date.startswith("Fictional") else
             "Research notes" if filename.endswith(".md") else "Synthetic example")
 
@@ -363,7 +357,7 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, conte
     <small class="lab-framing-status" role="status"></small>
   </section>
   <a class="lab-script-banner" data-preview href="{path}">
-    <span class="lab-script-tag">{source_tag}</span>
+    <span class="lab-script-tag" aria-hidden="true">{source_tag}</span>
     <code>{escape(filename)}</code>
     <span class="lab-script-meta">{escape(role)} · {escape(date_label(date))}</span>
     <span class="lab-script-cta">{source_action} ↗</span>
@@ -461,7 +455,7 @@ def render_logbook(research, *, project=None):
             default_file = goal.get("default_file", goal["files"][0][0])
             if default_file not in targets[key]:
                 raise ValueError(f"Unknown default entry for {key}: {default_file}")
-            context = narrative(goal, targets, examples)
+            context = narrative(goal, targets, examples, titles)
             featured = {link[1].partition("/")[0] for field in ("links", "path") for link in goal.get(field, ())}
             links = "".join(f'<a href="#{target}">{escape(titles[target])} →</a>'
                             for target in goal.get("related", ()) if target not in featured)

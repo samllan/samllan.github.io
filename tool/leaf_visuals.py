@@ -4,18 +4,25 @@ from html import escape
 from urllib.parse import quote
 
 
+def table_cell(heading, body, *, class_name=""):
+    css_class = f' class="{escape(class_name, quote=True)}"' if class_name else ""
+    return f'<td role="cell" data-label="{escape(heading, quote=True)}"{css_class}>{body}</td>'
+
+
 def mini_table(title, headings, rows, *, note="", highlight_row=None):
-    cols = "".join(f'<th scope="col">{escape(str(h))}</th>' for h in headings)
+    cols = "".join(f'<th scope="col" role="columnheader">{escape(str(h))}</th>' for h in headings)
     body = []
     for idx, row in enumerate(rows):
         row_class = ' class="lab-row-highlight"' if idx == highlight_row else ""
-        cells = "".join(f"<td>{escape(str(cell))}</td>" for cell in row)
-        body.append(f"<tr{row_class}>{cells}</tr>")
+        cells = "".join(table_cell(str(heading), escape(str(cell))) for heading, cell in zip(headings, row))
+        body.append(f'<tr role="row"{row_class}>{cells}</tr>')
     caption = f"<caption>{escape(title)}</caption>" if title else ""
     note_html = f'<p class="lab-card-note">{escape(note)}</p>' if note else ""
+    body_html = "".join(body)
     return (
-        f'<div class="lab-evidence-table"><table class="lab-result-table">'
-        f"{caption}<thead><tr>{cols}</tr></thead><tbody>{''.join(body)}</tbody></table>{note_html}</div>"
+        f'<div class="lab-evidence-table"><table class="lab-result-table lab-stack-table" role="table">'
+        f'{caption}<thead role="rowgroup"><tr role="row">{cols}</tr></thead>'
+        f'<tbody role="rowgroup">{body_html}</tbody></table>{note_html}</div>'
     )
 
 
@@ -48,72 +55,47 @@ def figure_tag(filename, alt, caption, *size):
     )
 
 
-def svg_swatches(title, swatches, *, note=""):
-    """Render a row of labelled colour-coded tiles or mini grids."""
-    width = max(280, 92 * len(swatches))
-    parts = [
-        f'<svg viewBox="0 0 {width} 86" class="lab-diagram" role="img" aria-label="{escape(title, quote=True)}">',
-        f'<rect width="{width}" height="86" rx="6" fill="#f7f4ea"/>',
-        f'<text x="12" y="18" font-size="11" fill="#244035" font-weight="bold">{escape(title)}</text>',
-    ]
-    for i, (label, sublabel, fill, stroke) in enumerate(swatches):
-        x = 12 + i * 90
-        parts.extend((
-            f'<rect x="{x}" y="26" width="76" height="34" rx="4" fill="{fill}" stroke="{stroke}" stroke-width="2"/>',
-            f'<text x="{x + 38}" y="47" text-anchor="middle" font-size="11" fill="#1b3126" font-weight="bold">{escape(label)}</text>',
-            f'<text x="{x + 38}" y="74" text-anchor="middle" font-size="9.5" fill="#4b5c51">{escape(sublabel)}</text>',
-        ))
-    parts.append("</svg>")
+def chart_caption(title, note, inside):
+    caption = f'<figcaption>{escape(title)}</figcaption>' if title else ""
     foot = f'<p class="lab-card-note">{escape(note)}</p>' if note else ""
-    return "".join(parts) + foot
+    return f'<figure class="lab-chart">{caption}{inside}{foot}</figure>'
 
 
-def svg_hbars(title, bars, *, max_val=1.0, note=""):
-    """Render a colourful horizontal bar chart with custom bar colours."""
-    height = 34 + len(bars) * 28
-    parts = [
-        f'<svg viewBox="0 0 320 {height}" class="lab-diagram" role="img" aria-label="{escape(title, quote=True)}">',
-        f'<rect width="320" height="{height}" rx="6" fill="#f7f4ea"/>',
-        f'<text x="12" y="19" font-size="11" fill="#244035" font-weight="bold">{escape(title)}</text>',
-    ]
-    for i, (label, val, text_val, color) in enumerate(bars):
-        y = 28 + i * 26
-        w = max(3.0, min(1.0, val / max_val)) * 136 if max_val else 3.0
-        parts.extend((
-            f'<text x="12" y="{y + 13}" font-size="10.5" fill="#244035">{escape(label)}</text>',
-            f'<rect x="118" y="{y + 2}" width="136" height="14" rx="3" fill="#e2e8dc"/>',
-            f'<rect x="118" y="{y + 2}" width="{w:.1f}" height="14" rx="3" fill="{color}"/>',
-            f'<text x="260" y="{y + 13}" font-size="10.5" fill="#1b3126" font-weight="bold">{escape(text_val)}</text>',
-        ))
-    parts.append("</svg>")
-    foot = f'<p class="lab-card-note">{escape(note)}</p>' if note else ""
-    return "".join(parts) + foot
+def swatch_chart(title, swatches, *, note=""):
+    items = "".join(
+        f'<div style="--swatch:{fill};--swatch-line:{stroke}">'
+        f'<dt>{escape(label)}</dt><dd>{escape(sublabel)}</dd></div>'
+        for label, sublabel, fill, stroke in swatches
+    )
+    return chart_caption(title, note, f'<dl class="lab-swatches">{items}</dl>')
 
 
-def svg_diverging_bars(title, rows, *, scale=1.0, note=""):
-    """Zero-centred diverging bar chart (left = negative/coral, right = positive/teal)."""
-    height = 36 + len(rows) * 28
-    mid = 185
-    span = 70
-    parts = [
-        f'<svg viewBox="0 0 320 {height}" class="lab-diagram" role="img" aria-label="{escape(title, quote=True)}">',
-        f'<rect width="320" height="{height}" rx="6" fill="#f7f4ea"/>',
-        f'<text x="12" y="19" font-size="11" fill="#244035" font-weight="bold">{escape(title)}</text>',
-        f'<line x1="{mid}" y1="26" x2="{mid}" y2="{height - 6}" stroke="#536052" stroke-width="1.5"/>',
-    ]
-    for i, (label, signed_val, display) in enumerate(rows):
-        y = 28 + i * 26
-        w = min(1.0, abs(signed_val) / scale) * span
-        x = mid if signed_val >= 0 else mid - w
-        color = "#2f6f55" if signed_val >= 0 else "#b3472a"
-        parts.extend((
-            f'<text x="12" y="{y + 13}" font-size="10.5" fill="#244035">{escape(label)}</text>',
-            f'<rect x="{x:.1f}" y="{y + 2}" width="{max(2.0, w):.1f}" height="14" rx="2" fill="{color}"/>',
-            f'<text x="262" y="{y + 13}" font-size="10" fill="{color}" font-weight="bold">{escape(display)}</text>',
-        ))
-    parts.append("</svg>")
-    foot = f'<p class="lab-card-note">{escape(note)}</p>' if note else ""
-    return "".join(parts) + foot
+def chart_bar(label, value, colour, *, start, width, signed=False):
+    axis = " lab-chart-axis" if signed else ""
+    return (
+        f'<li><span>{escape(label)}</span><strong>{escape(value)}</strong>'
+        f'<span class="lab-chart-track{axis}" aria-hidden="true">'
+        f'<i style="--bar-start:{start:.3f}%;--bar-width:{width:.3f}%;--bar-colour:{colour}"></i>'
+        f'</span></li>'
+    )
+
+
+def bar_chart(title, bars, *, max_val=1.0, note=""):
+    items = "".join(
+        chart_bar(label, display, colour, start=0, width=100 * max(0, min(1, value / max_val)))
+        for label, value, display, colour in bars
+    )
+    return chart_caption(title, note, f'<ul class="lab-chart-bars">{items}</ul>')
+
+
+def diverging_chart(title, rows, *, scale=1.0, note=""):
+    items = []
+    for label, value, display in rows:
+        width = 50 * min(1, abs(value) / scale)
+        start = 50 - width if value < 0 else 50
+        colour = "#b3472a" if value < 0 else "#2f6f55"
+        items.append(chart_bar(label, display, colour, start=start, width=width, signed=True))
+    return chart_caption(title, note, '<ul class="lab-chart-bars">' + "".join(items) + '</ul>')
 
 
 def leaf_visuals(filename, examples, demo, captured):
@@ -125,7 +107,7 @@ def leaf_visuals(filename, examples, demo, captured):
             "Synthetic schematic: one whole-slide scan branches into a 5,000 × 5,000 px core (C01), patches and individual cells.",
         )
         out = (
-            svg_swatches(
+            swatch_chart(
                 "Three biological scales tested across two clinical tasks",
                 (
                     ("Core view", "5,000 × 5,000 px", "#e6c5d4", "#8a4b68"),
@@ -147,7 +129,7 @@ def leaf_visuals(filename, examples, demo, captured):
     if filename == "README.md":
         if (examples / "trial_waits.csv").is_file():
             return (
-                svg_swatches(
+                swatch_chart(
                     "Four JSON/Markdown files define any logbook project",
                     (
                         ("project.json", "Title & links", "#e2e8dc", "#205841"),
@@ -169,7 +151,7 @@ def leaf_visuals(filename, examples, demo, captured):
         inp = (
             '<p class="lab-card-note"><strong>Dependencies</strong> · Python 3.9+ with NumPy and Pillow:</p>'
             '<pre class="lab-command">python -m pip install numpy pillow\npython run_grading_example.py --output grading-demo</pre>'
-            + svg_swatches(
+            + swatch_chart(
                 "One command replays the full grading pipeline",
                 (
                     ("1. Splits", "splits.csv", "#e2e8dc", "#527c67"),
@@ -193,7 +175,7 @@ def leaf_visuals(filename, examples, demo, captured):
     # --- Pilot example ---
     if filename == "trial_waits.csv":
         return (
-            svg_hbars(
+            bar_chart(
                 "Observed visitor wait times (minutes, lower is faster)",
                 (("Paper list (AM)", 8.0, "8 min median", "#8a5a19"), ("Arrival list (PM)", 4.0, "4 min median", "#205841")),
                 max_val=10.0,
@@ -206,11 +188,11 @@ def leaf_visuals(filename, examples, demo, captured):
         )
     if filename == "summarise_waits.py":
         return (
-            svg_swatches(
+            swatch_chart(
                 "Two groups of 4 observations",
                 (("Paper list", "7, 8, 9, 12 min", "#f7e7ba", "#8a5a19"), ("Prepared list", "3, 4, 4, 6 min", "#d5e5dc", "#205841")),
             ),
-            svg_hbars(
+            bar_chart(
                 "Recomputed median wait from CSV",
                 (("Paper list", 8.0, "8 min (n=4)", "#8a5a19"), ("Prepared list", 4.0, "4 min (n=4)", "#205841")),
                 max_val=10.0,
@@ -219,7 +201,7 @@ def leaf_visuals(filename, examples, demo, captured):
         )
     if filename == "decision.md":
         return (
-            svg_swatches(
+            swatch_chart(
                 "Confounded pilot vs balanced follow-up design",
                 (
                     ("Pilot 1", "AM vs PM (confounded)", "#f5d0c5", "#b3472a"),
@@ -240,19 +222,19 @@ def leaf_visuals(filename, examples, demo, captured):
     # --- Goal: crop (Locate tissue cores) ---
     if filename == "select_core_rectangles.py":
         inp = (
-            '<svg viewBox="0 0 320 116" class="lab-diagram" role="img" aria-label="Two hand-drawn boxes of slightly different sizes around tissue cores">'
-            '<rect width="320" height="116" rx="6" fill="#f7f4ea"/>'
+            '<svg viewBox="0 0 340 116" class="lab-diagram" role="img" aria-label="Two hand-drawn boxes of slightly different sizes around tissue cores">'
+            '<rect width="340" height="116" rx="6" fill="#f7f4ea"/>'
             '<circle cx="78" cy="60" r="32" fill="#c98ca7" opacity="0.85"/>'
             '<rect x="38" y="24" width="76" height="80" fill="none" stroke="#205841" stroke-width="2" stroke-dasharray="4 2"/>'
-            '<text x="40" y="19" font-size="10.5" fill="#205841" font-weight="bold">1A · 122 × 128 preview px</text>'
+            '<text x="38" y="19" font-size="10.5" fill="#205841" font-weight="bold">1A · 122 × 128 preview px</text>'
             '<circle cx="222" cy="58" r="32" fill="#c98ca7" opacity="0.85"/>'
             '<rect x="178" y="22" width="84" height="74" fill="none" stroke="#8a5a19" stroke-width="2" stroke-dasharray="4 2"/>'
-            '<text x="180" y="17" font-size="10.5" fill="#8a5a19" font-weight="bold">1B · 129 × 123 preview px</text>'
+            '<text x="174" y="17" font-size="10.5" fill="#8a5a19" font-weight="bold">1B · 129 × 123 preview px</text>'
             "</svg>"
             '<p class="lab-card-note">Preview zoom: <code>1.25×</code> · Scan multiplier: <code>50×</code> (scale factor <code>40×</code>).</p>'
         )
         out = (
-            svg_swatches(
+            swatch_chart(
                 "Resulting full-scan crops have uneven pixel dimensions",
                 (
                     ("Core 1A", "4,880 × 5,120 px (tall)", "#e6c5d4", "#205841"),
@@ -273,8 +255,8 @@ def leaf_visuals(filename, examples, demo, captured):
 
     if filename == "interpolate_core_grid.py":
         inp = (
-            '<svg viewBox="0 0 320 126" class="lab-diagram" role="img" aria-label="Tilted microarray grid projected from two reference corners, showing one drifted core">'
-            '<rect width="320" height="126" rx="6" fill="#f7f4ea"/>'
+            '<svg viewBox="0 0 360 126" class="lab-diagram" role="img" aria-label="Tilted microarray grid projected from two reference corners, showing one drifted core">'
+            '<rect width="360" height="126" rx="6" fill="#f7f4ea"/>'
             '<line x1="55" y1="22" x2="67" y2="104" stroke="#6b8577" stroke-width="1.5" stroke-dasharray="3 3"/>'
             '<circle cx="55" cy="22" r="12" fill="#c98ca7"/><circle cx="55" cy="22" r="3" fill="#1b3126"/>'
             '<text x="72" y="26" font-size="10.5" fill="#1b3126">1A corner click (20, 20)</text>'
@@ -284,11 +266,11 @@ def leaf_visuals(filename, examples, demo, captured):
             '<text x="84" y="108" font-size="10.5" fill="#1b3126">3A corner click (26, 80)</text>'
             '<circle cx="222" cy="54" r="12" fill="#c98ca7"/>'
             '<rect x="195" y="45" width="30" height="30" fill="none" stroke="#b3472a" stroke-width="2"/>'
-            '<text x="172" y="38" font-size="10.5" fill="#b3472a" font-weight="bold">2B drifted core (5.8 px off grid)</text>'
+            '<text x="164" y="38" font-size="10.5" fill="#b3472a" font-weight="bold">2B drifted core (5.8 px off grid)</text>'
             "</svg>"
         )
         out = (
-            svg_hbars(
+            bar_chart(
                 "Centre drift from projected grid slot (px)",
                 (
                     ("Core 1A (on-grid)", 0.0, "0.0 px", "#205841"),
@@ -323,18 +305,19 @@ def leaf_visuals(filename, examples, demo, captured):
         with (examples / filename).open(encoding="utf-8", newline="") as stream:
             rows = list(csv.DictReader(stream))
         inp = (
-            svg_swatches(
+            swatch_chart(
                 "Four core-extraction strategies evaluated in Thesis Table 2.5",
                 (
                     ("Hough", "0.06 s · auto circles", "#f5d0c5", "#b3472a"),
                     ("Tilted grid", "0.5 s · 2 corner clicks", "#f7e7ba", "#8a5a19"),
+                    ("Manual rectangles", "6 s · draw each box", "#e2e8dc", "#527c67"),
                     ("1-click crop", "3 s · 1.00 prec/recall", "#d5e5dc", "#205841"),
                 ),
                 note="Precision = share of extracted regions that were valid cores (no wrong selections). Recall = share of target cores found (no missed cores).",
             )
         )
-        chart = svg_hbars(
-            "Thesis Table 2.5 · Seconds per sample vs accuracy",
+        chart = bar_chart(
+            "Thesis Table 2.5 · Time per tissue core",
             (
                 ("Hough (0.89 rec)", 0.06, "0.06 s", "#b3472a"),
                 ("Grid (0.98 prec)", 0.5, "0.5 s", "#8a5a19"),
@@ -365,7 +348,7 @@ def leaf_visuals(filename, examples, demo, captured):
             "</svg>"
         )
         out = (
-            svg_swatches(
+            swatch_chart(
                 "Two annotation schemas stored in one CSV",
                 (
                     ("Row A · point", "(x=20, y=16, blank, blank)", "#f7e7ba", "#8a5a19"),
@@ -397,7 +380,7 @@ def leaf_visuals(filename, examples, demo, captured):
             "</svg>"
         )
         out = (
-            svg_swatches(
+            swatch_chart(
                 "Extracted image files paired with crops.csv manifest",
                 (
                     ("crop-001.png", "10 × 10 px from (2, 3)", "#e6c5d4", "#205841"),
@@ -418,19 +401,19 @@ def leaf_visuals(filename, examples, demo, captured):
 
     if filename == "map_crop_to_scan.py":
         inp = (
-            '<svg viewBox="0 0 310 106" class="lab-diagram" role="img" aria-label="Downsampled crop box mapped by 4x scale and offset">'
+            '<svg viewBox="0 0 330 106" class="lab-diagram" role="img" aria-label="Downsampled crop box mapped by 4x scale and offset">'
             '<rect x="14" y="18" width="84" height="72" rx="4" fill="#e2e8dc" stroke="#527c67"/>'
             '<rect x="34" y="34" width="36" height="36" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
             '<text x="14" y="13" font-size="10.5" fill="#244035" font-weight="bold">4× downsampled crop · box 20 × 20 px</text>'
             '<text x="112" y="50" font-size="12" fill="#205841" font-weight="bold">×4 scale</text>'
             '<text x="108" y="66" font-size="10" fill="#536052">+ (1200, 800)</text>'
-            '<rect x="190" y="14" width="106" height="80" rx="4" fill="#f5f0e2" stroke="#527c67"/>'
+            '<rect x="190" y="14" width="116" height="80" rx="4" fill="#f5f0e2" stroke="#527c67"/>'
             '<rect x="216" y="30" width="54" height="48" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
             '<text x="190" y="11" font-size="10.5" fill="#244035" font-weight="bold">Full scan · 80 × 80 px</text>'
             "</svg>"
         )
         out = (
-            svg_hbars(
+            bar_chart(
                 "Pixel width before and after ×4 scan mapping",
                 (("Local crop box", 20, "20 × 20 px", "#8a5a19"), ("Full-scan box", 80, "80 × 80 px", "#205841")),
                 max_val=80,
@@ -446,7 +429,7 @@ def leaf_visuals(filename, examples, demo, captured):
     # --- Goal: patches (Tile into patches) ---
     if filename == "filter_tissue_patches.py":
         inp = (
-            '<svg viewBox="0 0 280 100" class="lab-diagram" role="img" aria-label="8 grid squares over a binary tissue mask">'
+            '<svg viewBox="0 0 300 100" class="lab-diagram" role="img" aria-label="8 grid squares over a binary tissue mask">'
             '<rect x="16" y="14" width="144" height="72" fill="#eef1eb" stroke="#9ab0a2"/>'
             '<rect x="16" y="14" width="81" height="72" fill="#c98ca7" opacity="0.85"/>'
             '<g fill="none" stroke="#244035" stroke-width="1.2">'
@@ -464,7 +447,7 @@ def leaf_visuals(filename, examples, demo, captured):
             '<text x="172" y="70" font-size="10" fill="#b3472a">✕ 4 squares skipped</text>'
             "</svg>"
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Measured tissue coverage across the 4 grid columns (threshold = 50%)",
             (
                 ("x=0 (2 patches)", 100, "100% · Keep", "#205841"),
@@ -478,7 +461,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "summarise_patch_counts.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Expected cohort cores vs saved patch manifest",
             (
                 ("Core A", "2 patches saved", "#d5e5dc", "#205841"),
@@ -486,7 +469,7 @@ def leaf_visuals(filename, examples, demo, captured):
                 ("Core C", "1 patch saved", "#d5e5dc", "#205841"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Retained patch count per expected core (keeping B = 0 visible)",
             (
                 ("Core A", 2, "2 patches", "#205841"),
@@ -526,7 +509,7 @@ def leaf_visuals(filename, examples, demo, captured):
     # --- Goal: cells (Segment single cells) ---
     if filename == "extract_cell_crops.py":
         inp = (
-            '<svg viewBox="0 0 290 98" class="lab-diagram" role="img" aria-label="Segmented cell regions with two accepted 8x8 cell crops">'
+            '<svg viewBox="0 0 330 98" class="lab-diagram" role="img" aria-label="Segmented cell regions with two accepted 8x8 cell crops">'
             '<rect x="14" y="12" width="128" height="72" rx="4" fill="#dcdcdc" stroke="#9ab0a2"/>'
             '<circle cx="50" cy="44" r="10" fill="#7d4e6d"/>'
             '<rect x="34" y="28" width="32" height="32" fill="none" stroke="#205841" stroke-width="2"/>'
@@ -539,7 +522,7 @@ def leaf_visuals(filename, examples, demo, captured):
             "</svg>"
         )
         out = (
-            svg_swatches(
+            swatch_chart(
                 "Extracted 8 × 8 px cell crops linked to full-scan centres",
                 (
                     ("Cell 1 (8×8)", "Scan (249.0, 530.0)", "#e6c5d4", "#205841"),
@@ -576,7 +559,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "package_cell_arrays.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Three aligned per-cell arrays before packaging",
             (
                 ("identifiers", "['C1-1', 'C1-2']", "#e2e8dc", "#527c67"),
@@ -597,7 +580,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "summarise_cells_by_core.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "4 indexed cells spread unevenly across 3 expected cores",
             (
                 ("Core A", "3 cells (75% share)", "#f7e7ba", "#8a5a19"),
@@ -605,7 +588,7 @@ def leaf_visuals(filename, examples, demo, captured):
                 ("Core C", "0 cells (empty!)", "#f5d0c5", "#b3472a"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Cell count per core (revealing 75% concentration in Core A)",
             (
                 ("Core A (dominates)", 3, "3 cells (75%)", "#8a5a19"),
@@ -619,26 +602,23 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: storage (Compress & audit storage) ---
     if filename == "compare_image_encodings.py":
-        inp = svg_swatches(
-            "Same 48 × 48 RGB patch encoded as lossless PNG vs WebP (Q=75)",
-            (
-                ("Original RGB", "48 × 48 gradient", "#e6c5d4", "#527c67"),
-                ("Decoded PNG", "Diff = 0.00 / 255", "#d5e5dc", "#205841"),
-                ("Decoded WebP", "Diff = 1.95 / 255", "#f7e7ba", "#8a5a19"),
-            ),
+        inp = '<p class="lab-card-note">The generated example encodes a 48 × 48 RGB patch as lossless PNG and as WebP at quality 75.</p>'
+        generated = mini_table(
+            "Generated example · one patch",
+            ("Format", "File size", "Mean channel difference"),
+            (("PNG", "129 B", "0.00 / 255"), ("WebP", "174 B", "1.95 / 255")),
         )
-        out = (
-            svg_hbars(
-                "Thesis collection storage (229,683 patches): 86.5% reduction",
-                (("PNG collection", 26.94, "26.94 GB", "#8a5a19"), ("WebP collection", 3.63, "3.63 GB (−86.5%)", "#205841")),
-                max_val=27.0,
-                note="On 1 tiny smooth synthetic patch, PNG is 129 B vs 174 B (WebP container header); across 229,683 histology patches, WebP saved 23.31 GB.",
-            )
+        historical = bar_chart(
+            "Thesis result · storage for 229,683 patches",
+            (("PNG collection", 26.94, "26.94 GB", "#8a5a19"), ("WebP collection", 3.63, "3.63 GB", "#205841")),
+            max_val=26.94,
+            note="Storage fell by 86.5%. The thesis describes a compression ratio of 0.85 (pp. 71–72, Fig. 2.12).",
         )
+        out = generated + historical
         return inp, out
 
     if filename == "audit_dataset_structure.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Pre-flight audit comparing manifest against storage arrays",
             (
                 ("Array A · ⚠ Shape", "(10, 32) vs (10, 64)", "#f7e7ba", "#8a5a19"),
@@ -659,7 +639,7 @@ def leaf_visuals(filename, examples, demo, captured):
 
     if filename == "measure_storage_reads.py":
         inp = (
-            '<svg viewBox="0 0 300 84" class="lab-diagram" role="img" aria-label="20 separate 4 KB files compared with one contiguous bundle file">'
+            '<svg viewBox="0 0 330 84" class="lab-diagram" role="img" aria-label="20 separate 4 KB files compared with one contiguous bundle file">'
             '<rect x="12" y="12" width="24" height="22" rx="2" fill="#e2e8dc" stroke="#527c67"/>'
             '<rect x="42" y="12" width="24" height="22" rx="2" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
             '<rect x="72" y="12" width="24" height="22" rx="2" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
@@ -670,7 +650,7 @@ def leaf_visuals(filename, examples, demo, captured):
             '<text x="136" y="63" font-size="10.5" fill="#244035">1 bundle: seek inside <code>bundle.bin</code></text>'
             "</svg>"
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Local read time for 3 chunks = 12,288 bytes (single run)",
             (("Separate files", 11.244, "11.24 ms (12,288 B)", "#8a5a19"), ("Single bundle", 10.052, "10.05 ms (12,288 B)", "#205841")),
             max_val=12.0,
@@ -707,14 +687,14 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "score_reconstructions.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Original vs reconstructed pairs (highlighting Sample b's 0.2 residual)",
             (
                 ("Sample a", "[0.0, 1.0] → [0.1, 0.9]", "#d5e5dc", "#205841"),
                 ("Sample b (worst)", "[0.2, 0.4] → [0.4, 0.4]", "#f5d0c5", "#b3472a"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Samples ranked worst-first by mean squared reconstruction error",
             (
                 ("1. Sample b (inspect)", 0.020, "MSE 0.020", "#b3472a"),
@@ -726,14 +706,14 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "compare_bottleneck_sizes.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Same held-out test set passed through 1-number vs 2-number bottlenecks",
             (
                 ("Width = 1", "16 bytes (2 test rows)", "#f7e7ba", "#8a5a19"),
                 ("Width = 2", "32 bytes (2 test rows)", "#d5e5dc", "#205841"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Held-out reconstruction error (MSE, lower retains more detail)",
             (
                 ("1 number (16 B)", 0.00141, "0.00141 MSE", "#8a5a19"),
@@ -744,7 +724,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "score_variational_reconstruction.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Two-part VAE objective: image fidelity + code distribution penalty",
             (
                 ("Image error (BCE)", "0.387", "#e6c5d4", "#8a4b68"),
@@ -752,7 +732,7 @@ def leaf_visuals(filename, examples, demo, captured):
                 ("Weight β = 0.5", "0.5 × 0.083 = 0.042", "#d5e5dc", "#205841"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Receipt: 0.387 (image) + 0.5 × 0.083 (code KL) = 0.429 total",
             (
                 ("Reconstruction", 0.387, "0.387", "#8a4b68"),
@@ -765,14 +745,14 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: features (Contrastive view learning) ---
     if filename == "learn_image_features.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Orthogonal vs duplicated feature columns across 4 samples",
             (
                 ("Independent cols", "Col 1 ⊥ Col 2 (r = 0)", "#d5e5dc", "#205841"),
                 ("Duplicated col", "Col 1 = Col 2 (r = 1)", "#f5d0c5", "#b3472a"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Barlow Twins total loss (agreement + 0.005 × off-diagonal redundancy)",
             (
                 ("Independent (r=0)", 0.0005, "0.000 total loss", "#205841"),
@@ -784,7 +764,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "prepare_paired_views.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Source 2 × 2 patch p1 and two stochastic augmentations (seed = 9)",
             (
                 ("p1 (original)", "[[0.10, 0.50], [0.70, 1.00]]", "#e6c5d4", "#8a4b68"),
@@ -803,7 +783,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "audit_feature_variation.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "3-column feature matrix with 1 constant column and 1 correlated pair",
             (
                 ("Col 0 · Varies", "[1, 2, 3]", "#d5e5dc", "#205841"),
@@ -850,7 +830,7 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: frozen-features (Pretrained encoders) ---
     if filename == "batch_frozen_features.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Three identified patches processed in batches of 2 (weights frozen)",
             (
                 ("Batch 1 · p1", "[[0.1, 0.4]]", "#d5e5dc", "#205841"),
@@ -866,14 +846,14 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "compare_encoder_dimensions.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "30 patches encoded at two vector widths (float32 = 4 B/value)",
             (
                 ("small encoder", "30 × 16 float32", "#d5e5dc", "#205841"),
                 ("wide encoder", "30 × 64 float32", "#f7e7ba", "#8a5a19"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "In-memory array size for 30 patches (bytes)",
             (("small (16-D)", 1920, "1,920 B", "#205841"), ("wide (64-D)", 7680, "7,680 B (4×)", "#8a5a19")),
             max_val=8000,
@@ -883,15 +863,15 @@ def leaf_visuals(filename, examples, demo, captured):
 
     if filename == "standardise_encoder_inputs.py":
         inp = (
-            '<svg viewBox="0 0 280 84" class="lab-diagram" role="img" aria-label="16 by 20 RGB patch resized to 8 by 8 and normalised">'
+            '<svg viewBox="0 0 310 84" class="lab-diagram" role="img" aria-label="16 by 20 RGB patch resized to 8 by 8 and normalised">'
             '<rect x="16" y="12" width="44" height="56" rx="3" fill="#95bbaf" stroke="#244035"/>'
             '<text x="12" y="79" font-size="9.5" fill="#244035">16 × 20 RGB (#95bbaf)</text>'
             '<text x="76" y="44" font-size="11" fill="#205841" font-weight="bold">→ resize 8×8 &amp; norm →</text>'
-            '<rect x="202" y="20" width="38" height="38" rx="3" fill="#95bbaf" stroke="#205841" stroke-width="2"/>'
-            '<text x="184" y="74" font-size="9.5" fill="#244035">Tensor (3, 8, 8) float32</text>'
+            '<rect x="212" y="20" width="38" height="38" rx="3" fill="#95bbaf" stroke="#205841" stroke-width="2"/>'
+            '<text x="180" y="74" font-size="9.5" fill="#244035">Tensor (3, 8, 8) float32</text>'
             "</svg>"
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Normalised channel values (mean = 0.5, std = 0.25)",
             (
                 ("R (149 → 0.584)", 0.337, "+0.337", "#b3472a"),
@@ -904,7 +884,7 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: feature-benchmarks (Benchmark feature quality) ---
     if filename == "benchmark_frozen_features.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Shared train centroids [0, 1] and held-out test split [2, 3]",
             (
                 ("Train [0, 1]", "Labels ['a', 'b'] at 0.0, 4.0", "#e2e8dc", "#527c67"),
@@ -912,7 +892,7 @@ def leaf_visuals(filename, examples, demo, captured):
                 ("Test · second", "[3.5, 3.7] → ['b', 'b']", "#f5d0c5", "#b3472a"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Held-out nearest-centroid accuracy on shared test cases [2, 3]",
             (("first encoder", 1.0, "2/2 (100%)", "#205841"), ("second encoder", 0.5, "1/2 (50%)", "#b3472a")),
             max_val=1.0,
@@ -921,18 +901,18 @@ def leaf_visuals(filename, examples, demo, captured):
 
     if filename == "measure_feature_separation.py":
         inp = (
-            '<svg viewBox="0 0 290 74" class="lab-diagram" role="img" aria-label="Four 1D points in two groups showing within-group distance 0.5 vs nearest other-group distance 3.25">'
-            '<rect width="290" height="74" rx="6" fill="#f7f4ea"/>'
-            '<line x1="24" y1="38" x2="266" y2="38" stroke="#9ab0a2" stroke-width="2"/>'
-            '<circle cx="40" cy="38" r="6" fill="#205841"/><text x="28" y="24" font-size="10" fill="#205841" font-weight="bold">s0 (0.0)</text>'
-            '<circle cx="70" cy="38" r="6" fill="#205841"/><text x="60" y="24" font-size="10" fill="#205841" font-weight="bold">s1 (0.5)</text>'
-            '<circle cx="220" cy="38" r="6" fill="#8a5a19"/><text x="204" y="24" font-size="10" fill="#8a5a19" font-weight="bold">s2 (3.5)</text>'
-            '<circle cx="250" cy="38" r="6" fill="#8a5a19"/><text x="240" y="24" font-size="10" fill="#8a5a19" font-weight="bold">s3 (4.0)</text>'
-            '<text x="32" y="60" font-size="10" fill="#205841">Group g1 (within = 0.5)</text>'
+            '<svg viewBox="0 0 340 74" class="lab-diagram" role="img" aria-label="Four 1D points in two groups showing within-group distance 0.5 vs nearest other-group distance 3.25">'
+            '<rect width="340" height="74" rx="6" fill="#f7f4ea"/>'
+            '<line x1="24" y1="38" x2="286" y2="38" stroke="#9ab0a2" stroke-width="2"/>'
+            '<circle cx="40" cy="38" r="6" fill="#205841"/><text x="24" y="24" font-size="10" fill="#205841" font-weight="bold">s0 (0.0)</text>'
+            '<circle cx="80" cy="38" r="6" fill="#205841"/><text x="68" y="24" font-size="10" fill="#205841" font-weight="bold">s1 (0.5)</text>'
+            '<circle cx="220" cy="38" r="6" fill="#8a5a19"/><text x="200" y="24" font-size="10" fill="#8a5a19" font-weight="bold">s2 (3.5)</text>'
+            '<circle cx="266" cy="38" r="6" fill="#8a5a19"/><text x="252" y="24" font-size="10" fill="#8a5a19" font-weight="bold">s3 (4.0)</text>'
+            '<text x="24" y="60" font-size="10" fill="#205841">Group g1 (within = 0.5)</text>'
             '<text x="176" y="60" font-size="10" fill="#8a5a19">Group g2 (across = 3.25–3.75)</text>'
             "</svg>"
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Per-sample silhouette score (1 representation split into g1 and g2)",
             (
                 ("s0 (g1, x=0.0)", 0.87, "0.87", "#205841"),
@@ -945,7 +925,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "project_feature_space.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Three 3D feature vectors projected onto 2 principal axes",
             (
                 ("Sample 1", "[0.10, 0.30, 0.20]", "#d5e5dc", "#205841"),
@@ -954,21 +934,21 @@ def leaf_visuals(filename, examples, demo, captured):
             ),
         )
         out = (
-            '<svg viewBox="0 0 280 112" class="lab-diagram" role="img" aria-label="2D PCA scatter plot of three samples with variance explained on each axis">'
-            '<rect x="36" y="10" width="224" height="78" rx="4" fill="#f7f4ea" stroke="#9ab0a2"/>'
-            '<line x1="36" y1="49" x2="260" y2="49" stroke="#d0d8cd" stroke-dasharray="3 3"/>'
+            '<svg viewBox="0 0 310 112" class="lab-diagram" role="img" aria-label="2D PCA scatter plot of three samples with variance explained on each axis">'
+            '<rect x="36" y="10" width="244" height="78" rx="4" fill="#f7f4ea" stroke="#9ab0a2"/>'
+            '<line x1="36" y1="49" x2="280" y2="49" stroke="#d0d8cd" stroke-dasharray="3 3"/>'
             '<circle cx="74" cy="34" r="5.5" fill="#205841"/><text x="83" y="37" font-size="10" fill="#205841" font-weight="bold">S1 (-0.359, +0.080)</text>'
             '<circle cx="88" cy="66" r="5.5" fill="#205841"/><text x="97" y="69" font-size="10" fill="#205841" font-weight="bold">S2 (-0.282, -0.086)</text>'
-            '<circle cx="222" cy="48" r="5.5" fill="#8a5a19"/><text x="148" y="44" font-size="10" fill="#8a5a19" font-weight="bold">S3 (+0.640, +0.007)</text>'
-            '<text x="86" y="104" font-size="10" fill="#244035" font-weight="bold">PC1: 97.8% variance · PC2: 2.2% variance</text>'
+            '<circle cx="242" cy="48" r="5.5" fill="#8a5a19"/><text x="148" y="44" font-size="10" fill="#8a5a19" font-weight="bold">S3 (+0.640, +0.007)</text>'
+            '<text x="54" y="104" font-size="10" fill="#244035" font-weight="bold">PC1: 97.8% variance · PC2: 2.2% variance</text>'
             "</svg>"
         )
         return inp, out
 
     if filename == "check_bag_classifier_on_known_signal.py":
         inp = (
-            '<svg viewBox="0 0 300 84" class="lab-diagram" role="img" aria-label="Positive bag with 1 planted +5 signal among 12 patches vs negative bag of background noise">'
-            '<rect width="300" height="84" rx="6" fill="#f7f4ea"/>'
+            '<svg viewBox="0 0 320 84" class="lab-diagram" role="img" aria-label="Positive bag with 1 planted +5 signal among 12 patches vs negative bag of background noise">'
+            '<rect width="320" height="84" rx="6" fill="#f7f4ea"/>'
             '<text x="12" y="20" font-size="10.5" fill="#244035" font-weight="bold">Positive bag (1 of 12 patches carries +5 signal):</text>'
             + "".join(
                 f'<rect x="{12 + i * 22}" y="26" width="18" height="16" rx="2" fill="{"#b3472a" if i == 4 else "#d0d8cd"}"/>'
@@ -981,7 +961,7 @@ def leaf_visuals(filename, examples, demo, captured):
             )
             + "</svg>"
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Bag-level ROC AUC across 64 bags (32 positive, 32 negative)",
             (
                 ("Mean pooling", 0.830, "0.830 AUC (diluted)", "#8a5a19"),
@@ -995,7 +975,7 @@ def leaf_visuals(filename, examples, demo, captured):
     # --- Goal: feature-export (Keep vector coordinates) ---
     if filename == "export_feature_vectors.py":
         inp = (
-            '<svg viewBox="0 0 270 76" class="lab-diagram" role="img" aria-label="Two adjacent 4x4 patches on an 8x4 grid with their IDs and bounds">'
+            '<svg viewBox="0 0 295 76" class="lab-diagram" role="img" aria-label="Two adjacent 4x4 patches on an 8x4 grid with their IDs and bounds">'
             '<rect x="14" y="12" width="52" height="52" fill="#d5e5dc" stroke="#205841" stroke-width="2"/>'
             '<text x="18" y="34" font-size="9.5" fill="#1b3126" font-weight="bold">patch-x0-y0</text>'
             '<text x="18" y="48" font-size="9" fill="#536052">(0, 0, 4, 4)</text>'
@@ -1015,13 +995,13 @@ def leaf_visuals(filename, examples, demo, captured):
 
     if filename == "align_features_to_regions.py":
         inp = (
-            '<svg viewBox="0 0 290 78" class="lab-diagram" role="img" aria-label="Region table ordered A, B joined by ID to feature table ordered B, A">'
-            '<rect x="12" y="12" width="96" height="24" rx="3" fill="#d5e5dc" stroke="#205841"/><text x="18" y="28" font-size="10" fill="#1b3126">Regions: A (12, 6)</text>'
-            '<rect x="12" y="42" width="96" height="24" rx="3" fill="#f7e7ba" stroke="#8a5a19"/><text x="18" y="58" font-size="10" fill="#1b3126">Regions: B (80, 5)</text>'
-            '<rect x="176" y="12" width="102" height="24" rx="3" fill="#f7e7ba" stroke="#8a5a19"/><text x="182" y="28" font-size="10" fill="#1b3126">Vectors: B (0.1, 0.2)</text>'
-            '<rect x="176" y="42" width="102" height="24" rx="3" fill="#d5e5dc" stroke="#205841"/><text x="182" y="58" font-size="10" fill="#1b3126">Vectors: A (0.3, 0.4)</text>'
-            '<line x1="108" y1="24" x2="176" y2="54" stroke="#205841" stroke-width="2"/>'
-            '<line x1="108" y1="54" x2="176" y2="24" stroke="#8a5a19" stroke-width="2"/>'
+            '<svg viewBox="0 0 305 78" class="lab-diagram" role="img" aria-label="Region table ordered A, B joined by ID to feature table ordered B, A">'
+            '<rect x="12" y="12" width="102" height="24" rx="3" fill="#d5e5dc" stroke="#205841"/><text x="18" y="28" font-size="10" fill="#1b3126">Regions: A (12, 6)</text>'
+            '<rect x="12" y="42" width="102" height="24" rx="3" fill="#f7e7ba" stroke="#8a5a19"/><text x="18" y="58" font-size="10" fill="#1b3126">Regions: B (80, 5)</text>'
+            '<rect x="176" y="12" width="116" height="24" rx="3" fill="#f7e7ba" stroke="#8a5a19"/><text x="182" y="28" font-size="10" fill="#1b3126">Vectors: B (0.1, 0.2)</text>'
+            '<rect x="176" y="42" width="116" height="24" rx="3" fill="#d5e5dc" stroke="#205841"/><text x="182" y="58" font-size="10" fill="#1b3126">Vectors: A (0.3, 0.4)</text>'
+            '<line x1="114" y1="24" x2="176" y2="54" stroke="#205841" stroke-width="2"/>'
+            '<line x1="114" y1="54" x2="176" y2="24" stroke="#8a5a19" stroke-width="2"/>'
             "</svg>"
         )
         out = mini_table(
@@ -1032,7 +1012,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "check_feature_cache.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Cached feature array checked against experiment requirements",
             (
                 ("ID order · ✕", "['B', 'A'] vs ['A', 'B']", "#f5d0c5", "#b3472a"),
@@ -1053,7 +1033,7 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: grading-splits (Reference grades & splits) ---
     if filename == "prepare_reference_grades.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Assessor stain ratings (0–3 scale) supplied for Samples a and b",
             (
                 ("Sample a", "r1 = 1, r2 = 2 (n=2)", "#d5e5dc", "#205841"),
@@ -1095,14 +1075,14 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: grading-models (Compare scale graders) ---
     if filename == "train_scale_graders.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Shared split (Train: a=1, b=2 · Test: c=3) at Patch vs Cell scale",
             (
                 ("Patch features", "a:0.1, b:0.5 → test c:0.9", "#d5e5dc", "#205841"),
                 ("Cell features", "a:0.3, b:0.6 → test c:0.7", "#f7e7ba", "#8a5a19"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Held-out prediction error on Sample c (reference grade = 3.000)",
             (
                 ("Patch grader (pred 2.17)", 0.833, "0.833 error", "#205841"),
@@ -1114,7 +1094,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "save_held_out_grades.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "2-fold cross-validation rotates which samples are held out",
             (
                 ("Fold 0 eval", "Train {b, c} → Predict {a, d}", "#d5e5dc", "#205841"),
@@ -1134,7 +1114,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "summarise_errors_by_grade.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "5 held-out predictions grouped by ordinal reference grade",
             (
                 ("Grade 0 (n=2)", "Preds: 0.7, 0.2", "#d5e5dc", "#205841"),
@@ -1143,7 +1123,7 @@ def leaf_visuals(filename, examples, demo, captured):
             ),
         )
         out = (
-            svg_diverging_bars(
+            diverging_chart(
                 "Signed error by reference grade (prediction − reference)",
                 (
                     ("Grade 0 (n=2)", 0.45, "+0.45 (high)"),
@@ -1166,7 +1146,7 @@ def leaf_visuals(filename, examples, demo, captured):
                 ("compact", "0.32 · 29 s · 60 MiB", "0.34 · 31 s · 59 MiB"),
             ),
         )
-        out = svg_diverging_bars(
+        out = diverging_chart(
             "Paired % change (compact vs baseline across 2 folds, seed 7)",
             (
                 ("Error (+worse)", 3.1, "+3.1%"),
@@ -1179,7 +1159,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "plan_matched_runs.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Baseline + 2 single-parameter changes × 2 folds × 2 seeds = 12 runs",
             (
                 ("baseline", "pool=mean, bs=16", "#e2e8dc", "#527c67"),
@@ -1199,7 +1179,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "verify_run_configuration.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Planned run settings vs recorded startup log (seed = 7)",
             (
                 ("seed = 7 · ✓", "Recorded 7", "#d5e5dc", "#205841"),
@@ -1218,7 +1198,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "summarise_matched_training_traces.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Validation window fixed to final Epochs 2–3 across 2 paired runs",
             (
                 ("Epoch 1", "Warmup (excluded)", "#e2e8dc", "#7b8c80"),
@@ -1227,7 +1207,7 @@ def leaf_visuals(filename, examples, demo, captured):
             ),
         )
         out = (
-            svg_hbars(
+            bar_chart(
                 "Final-window mean balanced accuracy & elapsed time (Epochs 2–3)",
                 (
                     ("baseline (0.760 acc)", 66.0, "66.0 s · 0.760 acc", "#8a5a19"),
@@ -1249,7 +1229,7 @@ def leaf_visuals(filename, examples, demo, captured):
                 ("s4", "Grade 1 (rare, n=1)", "0.40", "0.30"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Updated sampling probabilities (boosting rare s4 & high-loss s2)",
             (
                 ("s1 (common, low loss)", 0.157, "0.136 → 0.157", "#7b8c80"),
@@ -1262,14 +1242,14 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "probe_grading_model_with_noise.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "12 signal bags vs 12 Gaussian noise bags fed to null-aware scorer",
             (
                 ("Signal bags (n=12)", "N(mean=1.5, std=0.4)", "#d5e5dc", "#205841"),
                 ("Noise probe (n=12)", "N(mean=0.0, std=1.0)", "#f5d0c5", "#b3472a"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Median probability assigned to the outside-input (null) class",
             (
                 ("Signal (0/12 null)", 0.009, "0.009 (0/12 calls)", "#205841"),
@@ -1287,7 +1267,7 @@ def leaf_visuals(filename, examples, demo, captured):
             ("Sample", "Assessor A", "Assessor B", "Consensus mean", "Model prediction"),
             (("a", "1.0", "2.0", "1.50", "1.40"), ("b", "2.0", "2.0", "2.00", "1.80")),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Person-to-person disagreement vs model-to-consensus error (grade pts)",
             (
                 ("Demo: Rater gap |A−B|", 0.50, "0.50 grade pts", "#8a5a19"),
@@ -1301,14 +1281,14 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "score_ordinal_agreement.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Four paired ratings on the 0–3 ordinal staining scale",
             (
                 ("3 exact matches", "(0,0), (2,2), (3,3) · Δ²=0", "#d5e5dc", "#205841"),
                 ("1 one-grade miss", "(1,2) · Δ²=1", "#f7e7ba", "#8a5a19"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Chance-adjusted ordinal agreement (quadratic-weighted κ)",
             (
                 ("Observed exact rate", 0.75, "3 / 4 pairs", "#527c67"),
@@ -1321,7 +1301,7 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: subtype-cohort (Curate subtype cohort) ---
     if filename == "join_subtype_labels.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Three image IDs matched against supplied reference subtype table",
             (
                 ("a → R1", "'ABC' (valid)", "#d5e5dc", "#205841"),
@@ -1342,7 +1322,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "audit_cohort_filters.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Three inclusion gates: valid label, required stain-a, and ≥ 8 patches",
             (
                 ("Specimen a · ✓ Keep", "ABC · stain-a · 12 patches", "#d5e5dc", "#205841"),
@@ -1362,7 +1342,7 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: interpret (Pool patches per case) ---
     if filename == "pool_patch_evidence.py":
-        inp = svg_hbars(
+        inp = bar_chart(
             "Softmax attention weights across the 3 patches in the bag",
             (
                 ("Patch 1 [0.1, 0.9]", 0.212, "w = 0.212 (logit 0)", "#527c67"),
@@ -1396,25 +1376,25 @@ def leaf_visuals(filename, examples, demo, captured):
             '<rect x="174" y="74" width="40" height="12" rx="2" fill="#f5d0c5" stroke="#b3472a" stroke-dasharray="2 2"/>'
             "</svg>"
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Dummy padding slots required across the 4 specimens (batch_size = 2)",
             (
-                ("Unsorted (b=3 with d=15)", 21, "21 pad slots", "#b3472a"),
-                ("Sorted ([b,c], [a,d])", 5, "5 pad slots (−76%)", "#205841"),
+                ("Unsorted (3 with 15; 5 with 12)", 19, "19 pad slots", "#b3472a"),
+                ("Sorted ([b,c], [a,d])", 5, "5 pad slots (−74%)", "#205841"),
             ),
-            max_val=22,
-            note="Validity masks prevent the 5 padded slots from contributing to pooled bag predictions.",
+            max_val=19,
+            note="This script groups the sets and counts padding. A downstream validity mask can exclude those slots from pooling.",
         )
         return inp, out
 
     if filename == "predict_subtypes_from_bags.py":
         inp = (
-            '<svg viewBox="0 0 290 74" class="lab-diagram" role="img" aria-label="1D feature line showing ABC centroid at 0.15, held-out bag c at 0.70, and GCB centroid at 0.85">'
-            '<rect width="290" height="74" rx="6" fill="#f7f4ea"/>'
+            '<svg viewBox="0 0 305 74" class="lab-diagram" role="img" aria-label="1D feature line showing ABC centroid at 0.15, held-out bag c at 0.70, and GCB centroid at 0.85">'
+            '<rect width="305" height="74" rx="6" fill="#f7f4ea"/>'
             '<line x1="28" y1="40" x2="262" y2="40" stroke="#9ab0a2" stroke-width="2"/>'
-            '<circle cx="52" cy="40" r="6" fill="#205841"/><text x="32" y="24" font-size="10" fill="#205841" font-weight="bold">Bag a · ABC (0.15)</text>'
-            '<circle cx="196" cy="40" r="6" fill="#b3472a"/><text x="150" y="62" font-size="10" fill="#b3472a" font-weight="bold">Test bag c (mean 0.70)</text>'
-            '<circle cx="238" cy="40" r="6" fill="#8a5a19"/><text x="186" y="24" font-size="10" fill="#8a5a19" font-weight="bold">Bag b · GCB (0.85)</text>'
+            '<circle cx="52" cy="40" r="6" fill="#205841"/><text x="24" y="24" font-size="10" fill="#205841" font-weight="bold">Bag a · ABC (0.15)</text>'
+            '<circle cx="196" cy="40" r="6" fill="#b3472a"/><text x="142" y="62" font-size="10" fill="#b3472a" font-weight="bold">Test bag c (mean 0.70)</text>'
+            '<circle cx="238" cy="40" r="6" fill="#8a5a19"/><text x="178" y="24" font-size="10" fill="#8a5a19" font-weight="bold">Bag b · GCB (0.85)</text>'
             "</svg>"
         )
         out = mini_table(
@@ -1426,7 +1406,7 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: subtype-ablations (Test position & hierarchy) ---
     if filename == "compare_spatial_attention.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "2 valid patches + 1 masked pad slot with 2D rotary positions off vs on",
             (
                 ("Patch 0 (0, 0)", "Value = 0.20 (valid)", "#d5e5dc", "#205841"),
@@ -1434,7 +1414,7 @@ def leaf_visuals(filename, examples, demo, captured):
                 ("Patch 2 (3, 1)", "Value = 100 (masked)", "#e2e8dc", "#7b8c80"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Pooled attention score on identical inputs (Positions False vs True)",
             (
                 ("Positions False", 0.500, "0.500 (equal weights)", "#527c67"),
@@ -1461,7 +1441,7 @@ def leaf_visuals(filename, examples, demo, captured):
             '<text x="222" y="50" font-size="9.5" fill="#b3472a">Excluded</text>'
             "</svg>"
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Flat cell average vs hierarchical patch-then-core average",
             (
                 ("Flat (4 cells equal)", 0.25, "0.25 ((0+0+0+1)/4)", "#8a5a19"),
@@ -1473,15 +1453,15 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: validation (Cross-fold ROC & recall) ---
     if filename == "summarise_validation.py":
-        inp = svg_swatches(
-            "Two independent validation tasks across Fold 0 and Fold 1 (n=2/fold)",
+        inp = swatch_chart(
+            "Example results for grading and subtyping across two folds",
             (
                 ("Grading (MAE ↓)", "Fold 0: 0.25 · Fold 1: 0.30", "#d5e5dc", "#205841"),
                 ("Subtype (Acc ↑)", "Fold 0: 100% · Fold 1: 50%", "#f7e7ba", "#8a5a19"),
             ),
         )
         out = (
-            svg_hbars(
+            bar_chart(
                 "Fold-by-fold subtype accuracy (exposing the weaker 50% fold)",
                 (("Fold 0 (n=2)", 1.0, "100% (2/2)", "#205841"), ("Fold 1 (n=2)", 0.5, "50% (1/2) ⚠", "#b3472a")),
                 max_val=1.0,
@@ -1502,8 +1482,8 @@ def leaf_visuals(filename, examples, demo, captured):
             highlight_row=1,
         )
         out = (
-            '<svg viewBox="0 0 280 120" class="lab-diagram" role="img" aria-label="ROC curve plotting FPR vs TPR with area 0.875 shaded">'
-            '<rect width="280" height="120" rx="6" fill="#f7f4ea"/>'
+            '<svg viewBox="0 0 325 120" class="lab-diagram" role="img" aria-label="ROC curve plotting FPR vs TPR with area 0.875 shaded">'
+            '<rect width="325" height="120" rx="6" fill="#f7f4ea"/>'
             '<polygon points="44,96 44,54 114,16 184,16 184,96" fill="#d5e5dc" opacity="0.75"/>'
             '<line x1="44" y1="96" x2="184" y2="16" stroke="#9ab0a2" stroke-dasharray="3 3"/>'
             '<polyline points="44,96 44,56 114,16 184,16" fill="none" stroke="#205841" stroke-width="2.5"/>'
@@ -1517,7 +1497,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "compare_fold_class_recall.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Each fold contains 1 ABC case and 1 GCB case (n=1 per cell)",
             (
                 ("Fold 0", "ABC: 1/1 · GCB: 0/1", "#d5e5dc", "#205841"),
@@ -1539,14 +1519,14 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: cost (Accuracy vs compute cost) ---
     if filename == "estimate_representation_cost.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "500 regions represented as raw RGB pixels vs 256-D float32 vectors",
             (
                 ("RGB patch", "224×224×3 = 150,528 B", "#f7e7ba", "#8a5a19"),
                 ("Feature vector", "256 × 4 B = 1,024 B", "#d5e5dc", "#205841"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Raw storage for 500 regions (147× reduction with feature vectors)",
             (
                 ("RGB patches", 75.26, "75.26 MB", "#8a5a19"),
@@ -1564,20 +1544,20 @@ def leaf_visuals(filename, examples, demo, captured):
             highlight_row=2,
         )
         out = (
-            '<svg viewBox="0 0 290 112" class="lab-diagram" role="img" aria-label="Pareto frontier plot showing small and wide undominated while slow is dominated">'
-            '<rect width="290" height="112" rx="6" fill="#f7f4ea"/>'
-            '<rect x="170" y="54" width="104" height="40" rx="3" fill="#f5d0c5" opacity="0.45"/>'
+            '<svg viewBox="0 0 355 112" class="lab-diagram" role="img" aria-label="Pareto frontier plot showing small and wide undominated while slow is dominated">'
+            '<rect width="355" height="112" rx="6" fill="#f7f4ea"/>'
+            '<rect x="170" y="54" width="172" height="40" rx="3" fill="#f5d0c5" opacity="0.45"/>'
             '<polyline points="68,48 144,24" fill="none" stroke="#205841" stroke-width="2" stroke-dasharray="4 2"/>'
             '<circle cx="68" cy="48" r="7" fill="#205841"/><text x="78" y="52" font-size="10" fill="#205841" font-weight="bold">small (21 s, 0.91 ★)</text>'
             '<circle cx="144" cy="24" r="9" fill="#205841"/><text x="156" y="28" font-size="10" fill="#205841" font-weight="bold">wide (40 s, 0.93 ★)</text>'
-            '<circle cx="204" cy="70" r="9.5" fill="#b3472a"/><text x="180" y="88" font-size="10" fill="#b3472a" font-weight="bold">slow (53 s, 0.90 ✕ dominated)</text>'
+            '<circle cx="204" cy="70" r="9.5" fill="#b3472a"/><text x="178" y="88" font-size="10" fill="#b3472a" font-weight="bold">slow (53 s, 0.90 ✕ dominated)</text>'
             '<text x="14" y="106" font-size="9.5" fill="#536052">← Faster runtime (s) · Higher accuracy ↑ (bubble = RAM)</text>'
             "</svg>"
         )
         return inp, out
 
     if filename == "audit_compute_measurements.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Expected run list checked for complete timing and memory logs",
             (
                 ("('baseline', 0) · ⚠", "10.4 s · RAM missing", "#f7e7ba", "#8a5a19"),
@@ -1631,7 +1611,7 @@ def leaf_visuals(filename, examples, demo, captured):
                 "Heatmap of the same overlapping patches, with unscored pixels hatched",
                 "Output (64 × 48 px): Overlap averages 0.30 and 0.80 to 0.55. Hatched pixels have no score.",
             )
-            + svg_swatches(
+            + swatch_chart(
                 "Shared heatmap colour legend",
                 (
                     ("0.30 · Lower", "Patch 1", "#f9d56e", "#8a5a19"),
@@ -1644,7 +1624,7 @@ def leaf_visuals(filename, examples, demo, captured):
 
     if filename == "summarise_overlay_coverage.py":
         inp = (
-            '<svg viewBox="0 0 260 80" class="lab-diagram" role="img" aria-label="2 by 2 grid with 3 ROI points: 0.40, unscored NaN, and 0.80">'
+            '<svg viewBox="0 0 300 80" class="lab-diagram" role="img" aria-label="2 by 2 grid with 3 ROI points: 0.40, unscored NaN, and 0.80">'
             '<rect x="14" y="10" width="54" height="28" rx="3" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
             '<text x="20" y="28" font-size="10" fill="#1b3126" font-weight="bold">ROI: 0.40</text>'
             '<rect x="72" y="10" width="54" height="28" rx="3" fill="#f5d0c5" stroke="#b3472a" stroke-width="1.5"/>'
@@ -1665,7 +1645,7 @@ def leaf_visuals(filename, examples, demo, captured):
     # --- Goal: explain (Dimming & perturbation) ---
     if filename == "explain_prediction.py":
         inp = (
-            '<svg viewBox="0 0 290 88" class="lab-diagram" role="img" aria-label="4 input regions and opposing Class A and Class B brightness masks">'
+            '<svg viewBox="0 0 320 88" class="lab-diagram" role="img" aria-label="4 input regions and opposing Class A and Class B brightness masks">'
             '<text x="12" y="18" font-size="10.5" fill="#244035" font-weight="bold">Class A mask (1.00 = bright kept, 0.00 = dimmed):</text>'
             '<rect x="12" y="24" width="56" height="20" rx="3" fill="#f9ecb2" stroke="#205841" stroke-width="1.5"/><text x="26" y="38" font-size="9.5" fill="#1b3126">R1: 1.0</text>'
             '<rect x="74" y="24" width="56" height="20" rx="3" fill="#26382e"/><text x="88" y="38" font-size="9.5" fill="#fffae7">R2: 0.0</text>'
@@ -1678,7 +1658,7 @@ def leaf_visuals(filename, examples, demo, captured):
             '<rect x="198" y="64" width="56" height="20" rx="3" fill="#f9ecb2" stroke="#8a5a19" stroke-width="1.5"/><text x="212" y="78" font-size="9.5" fill="#1b3126">R4: 1.0</text>'
             "</svg>"
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Class score before and after applying fitted dimming mask",
             (
                 ("Class A baseline", 0.24, "0.24", "#7b8c80"),
@@ -1691,7 +1671,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "model_explanations.md":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Two-stage check for any highlighted tissue region",
             (
                 ("1. Model check", "Targeted vs uniform control", "#d5e5dc", "#205841"),
@@ -1709,7 +1689,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "test_mask_score_changes.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Targeted mask vs uniform control at identical 0.80 mean brightness",
             (
                 ("Baseline (1.00)", "Score = 0.820", "#e2e8dc", "#527c67"),
@@ -1717,7 +1697,7 @@ def leaf_visuals(filename, examples, demo, captured):
                 ("Targeted (0.80)", "Top-left dimmed to 0.20", "#f5d0c5", "#b3472a"),
             ),
         )
-        out = svg_diverging_bars(
+        out = diverging_chart(
             "Score drop from baseline (0.820) at equal 0.80 mean brightness",
             (
                 ("Uniform control", -0.164, "−0.164 (to 0.656)"),
@@ -1728,7 +1708,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "compare_patch_perturbations.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "3-patch bag where Patch 0 favours Class 1 and Patch 2 favours Class 0",
             (
                 ("Patch 0", "[0.1, 0.9] · Class 1", "#d5e5dc", "#205841"),
@@ -1749,7 +1729,7 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: cluster-runs (Schedule & resume jobs) ---
     if filename == "build_cluster_run_manifest.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Run grid expansion: 2 configs × 2 folds × 2 seeds = 8 jobs",
             (
                 ("2 configs", "baseline, max_pool", "#d5e5dc", "#205841"),
@@ -1771,14 +1751,14 @@ def leaf_visuals(filename, examples, demo, captured):
 
     if filename == "resume_chunked_experiment.py":
         inp = (
-            '<svg viewBox="0 0 300 76" class="lab-diagram" role="img" aria-label="Three-step strip showing Chunk 1 committed, Chunk 2 interrupted, and resumption">'
-            '<rect x="10" y="12" width="84" height="48" rx="4" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<svg viewBox="0 0 320 76" class="lab-diagram" role="img" aria-label="Three-step strip showing Chunk 1 committed, Chunk 2 interrupted, and resumption">'
+            '<rect x="10" y="12" width="88" height="48" rx="4" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
             '<text x="16" y="30" font-size="10" fill="#1b3126" font-weight="bold">1. Chunk 2 → 4</text>'
             '<text x="16" y="46" font-size="9" fill="#205841">✓ Committed</text>'
-            '<rect x="106" y="12" width="84" height="48" rx="4" fill="#f5d0c5" stroke="#b3472a" stroke-width="1.5"/>'
+            '<rect x="106" y="12" width="88" height="48" rx="4" fill="#f5d0c5" stroke="#b3472a" stroke-width="1.5"/>'
             '<text x="112" y="30" font-size="10" fill="#b3472a" font-weight="bold">2. Chunk 3 fails</text>'
             '<text x="112" y="46" font-size="9" fill="#536052">✕ Interrupted</text>'
-            '<rect x="202" y="12" width="88" height="48" rx="4" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
+            '<rect x="202" y="12" width="106" height="48" rx="4" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
             '<text x="208" y="30" font-size="10" fill="#1b3126" font-weight="bold">3. Resume</text>'
             '<text x="208" y="46" font-size="9" fill="#8a5a19">Reuses [4], runs 3, 4</text>'
             "</svg>"
@@ -1796,7 +1776,7 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: run-results (Audit completed runs) ---
     if filename == "collect_fold_results.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Result CSV streams keyed by (configuration, fold, seed)",
             (
                 ("('baseline', 0, 11)", "metric = 0.28 · ✓ Unique", "#d5e5dc", "#205841"),
@@ -1814,7 +1794,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "find_incomplete_runs.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Planned 3-job schedule audited against observed job states",
             (
                 ("baseline (0, 7)", "✓ completed", "#d5e5dc", "#205841"),
@@ -1834,14 +1814,14 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: figures (Reproduce thesis figures) ---
     if filename == "build_grading_table.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Matched sample a scored at Core (1.6) and Patch (2.2) vs Ref (2.0)",
             (
                 ("Core prediction", "|1.6 − 2.0| = 0.400", "#f7e7ba", "#8a5a19"),
                 ("Patch prediction", "|2.2 − 2.0| = 0.200", "#d5e5dc", "#205841"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Aggregated mean absolute error (grade points, n = 1 matched sample)",
             (("Core scale", 0.400, "0.400 MAE", "#8a5a19"), ("Patch scale", 0.200, "0.200 MAE", "#205841")),
             max_val=0.45,
@@ -1849,7 +1829,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "render_grading_figure.py":
-        inp = svg_hbars(
+        inp = bar_chart(
             "Input scale summaries passed to the SVG figure renderer (n = 6/scale)",
             (
                 ("Core (n=6)", 0.350, "0.350 grade pts", "#8a5a19"),
@@ -1881,7 +1861,7 @@ def leaf_visuals(filename, examples, demo, captured):
             for scale in scales for ref, pred in [predictions[scale]]
         )
         inp = (
-            svg_swatches(
+            swatch_chart(
                 "End-to-end trace for Case S02 (Fold 1 held-out evaluation)",
                 (
                     ("Assessor A & B", "Grades 2 & 3", "#f7e7ba", "#8a5a19"),
@@ -1917,11 +1897,11 @@ def leaf_visuals(filename, examples, demo, captured):
             table_rows,
             note="Lower-inclusive, upper-exclusive: a core with 50 patches enters 50–99, not 0–49.",
         )
-        out = svg_hbars("Cores in each patch-count range", items, max_val=highest)
+        out = bar_chart("Cores in each patch-count range", items, max_val=highest)
         return inp, out
 
     if filename == "grading_figure.svg":
-        inp = svg_hbars(
+        inp = bar_chart(
             "3-scale MAE summaries feeding grading_figure.svg (12 cases/scale)",
             (
                 ("Core (n=12)", 0.464, "0.464 MAE", "#8a5a19"),
@@ -1933,7 +1913,7 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, ""
 
     if filename == "verify_report_assets.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Expected report assets checked on disk and fingerprinted",
             (
                 ("scores.csv · ✓", "27 B · SHA-256 verified", "#d5e5dc", "#205841"),
@@ -1952,7 +1932,7 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: limits (Study limits & next tests) ---
     if filename == "research_limits.md":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Internal single-cohort evidence vs external multi-centre validation",
             (
                 ("Internal (done)", "3-fold CV within 1 cohort", "#d5e5dc", "#205841"),
@@ -1972,7 +1952,7 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: pcam-bags & pcam-benchmarks (Appendix: PCam benchmark) ---
     if filename == "build_benchmark_bags.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Disjoint seeded bag manifests (4 bags/split, 4 patches/bag)",
             (
                 ("Train (seed 11)", "2 pos bags (1 pos patch), 2 neg", "#d5e5dc", "#205841"),
@@ -1992,14 +1972,14 @@ def leaf_visuals(filename, examples, demo, captured):
         return inp, out
 
     if filename == "compare_benchmark_encoders.py":
-        inp = svg_swatches(
+        inp = swatch_chart(
             "Identical 8 train bags & 8 test bags fed to both encoders",
             (
                 ("signal encoder", "Label + N(0, 0.1) noise", "#d5e5dc", "#205841"),
                 ("noise encoder", "Pure N(0, 1) noise", "#f5d0c5", "#b3472a"),
             ),
         )
-        out = svg_hbars(
+        out = bar_chart(
             "Held-out balanced accuracy on fixed benchmark bags (max pooling)",
             (
                 ("signal encoder", 1.000, "1.000 (100%)", "#205841"),
@@ -2019,34 +1999,34 @@ def section_tentpole(group_id):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 128" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Multi-scale data reduction funnel from 925.93 GB whole-slide scans to cores, patches and single cells">'
             '<rect width="680" height="128" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="22" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Data Funnel (Fig. 1.2, 2.1 &amp; Table 2.4) · Turning 925.9 GB of raw scans into traceable biological scales</text>'
+            '<text x="16" y="22" font-size="11" fill="#1b3126" font-weight="bold">Thesis Data Funnel (Fig. 1.2, 2.1 &amp; Table 2.4) · 925.9 GB raw scans → traceable cores, patches &amp; cells</text>'
             # Stage 1: Raw TMA Scans
             '<rect x="16" y="34" width="144" height="78" rx="6" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.8"/>'
-            '<text x="26" y="53" font-size="11" fill="#1b3126" font-weight="bold">1. Whole TMA Scans</text>'
-            '<text x="26" y="70" font-size="10" fill="#244035">63 slides · 0.25 µm/px</text>'
-            '<text x="26" y="86" font-size="10.5" fill="#8a4b68" font-weight="bold">925.93 GB raw</text>'
-            '<text x="26" y="102" font-size="9.5" fill="#536052">Too large for GPU RAM</text>'
-            '<text x="166" y="76" font-size="14" fill="#205841" font-weight="bold">→</text>'
+            '<text x="24" y="53" font-size="10.2" fill="#1b3126" font-weight="bold">1. Whole TMA Scans</text>'
+            '<text x="24" y="70" font-size="9.5" fill="#244035">63 slides · 0.25 µm/px</text>'
+            '<text x="24" y="86" font-size="10" fill="#8a4b68" font-weight="bold">925.93 GB raw</text>'
+            '<text x="24" y="102" font-size="9.2" fill="#536052">Too large for GPU RAM</text>'
+            '<text x="165" y="76" font-size="13" fill="#205841" font-weight="bold">→</text>'
             # Stage 2: Cores
-            '<rect x="182" y="34" width="148" height="78" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
-            '<text x="192" y="53" font-size="11" fill="#1b3126" font-weight="bold">2. Tissue Cores (#crop)</text>'
-            '<text x="192" y="70" font-size="10" fill="#244035">1,109 cores · 5,000² px</text>'
-            '<text x="192" y="86" font-size="10.5" fill="#205841" font-weight="bold">5.24 GB WebP (3 s/core)</text>'
-            '<text x="192" y="102" font-size="9.5" fill="#536052">1.00 prec &amp; recall</text>'
-            '<text x="336" y="76" font-size="14" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="180" y="34" width="150" height="78" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
+            '<text x="188" y="53" font-size="10.2" fill="#1b3126" font-weight="bold">2. Tissue Cores (#crop)</text>'
+            '<text x="188" y="70" font-size="9.5" fill="#244035">1,109 cores · 5,000² px</text>'
+            '<text x="188" y="86" font-size="9.8" fill="#205841" font-weight="bold">5.24 GB WebP (3 s/core)</text>'
+            '<text x="188" y="102" font-size="9.2" fill="#536052">1.00 prec &amp; recall</text>'
+            '<text x="335" y="76" font-size="13" fill="#205841" font-weight="bold">→</text>'
             # Stage 3: Patches
-            '<rect x="352" y="34" width="150" height="78" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
-            '<text x="362" y="53" font-size="11" fill="#1b3126" font-weight="bold">3. Patches (#patches)</text>'
-            '<text x="362" y="70" font-size="10" fill="#244035">229,683 tiles · 256² px</text>'
-            '<text x="362" y="86" font-size="10.5" fill="#205841" font-weight="bold">3.63 GB WebP (−86.5%)</text>'
-            '<text x="362" y="102" font-size="9.5" fill="#536052">Otsu tissue mask ≥ 50%</text>'
-            '<text x="508" y="76" font-size="14" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="350" y="34" width="150" height="78" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
+            '<text x="358" y="53" font-size="10.2" fill="#1b3126" font-weight="bold">3. Patches (#patches)</text>'
+            '<text x="358" y="70" font-size="9.5" fill="#244035">229,683 tiles · 256² px</text>'
+            '<text x="358" y="86" font-size="9.8" fill="#205841" font-weight="bold">3.63 GB WebP (−86.5%)</text>'
+            '<text x="358" y="102" font-size="9.2" fill="#536052">Otsu tissue mask ≥ 50%</text>'
+            '<text x="505" y="76" font-size="13" fill="#205841" font-weight="bold">→</text>'
             # Stage 4: Single Cells
-            '<rect x="524" y="34" width="140" height="78" rx="6" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.8"/>'
-            '<text x="534" y="53" font-size="11" fill="#1b3126" font-weight="bold">4. Single Cells (#cells)</text>'
-            '<text x="534" y="70" font-size="10" fill="#244035">9,126,415 instances</text>'
-            '<text x="534" y="86" font-size="10.5" fill="#8a5a19" font-weight="bold">12.51 GB HDF5/NPZ</text>'
-            '<text x="534" y="102" font-size="9.5" fill="#536052">Exact (x, y) scan coords</text>'
+            '<rect x="520" y="34" width="144" height="78" rx="6" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.8"/>'
+            '<text x="528" y="53" font-size="10.2" fill="#1b3126" font-weight="bold">4. Single Cells (#cells)</text>'
+            '<text x="528" y="70" font-size="9.5" fill="#244035">9,126,415 instances</text>'
+            '<text x="528" y="86" font-size="9.8" fill="#8a5a19" font-weight="bold">12.51 GB HDF5/NPZ</text>'
+            '<text x="528" y="102" font-size="9.2" fill="#536052">Exact (x, y) scan coords</text>'
             "</svg></figure>"
         )
 
@@ -2054,27 +2034,27 @@ def section_tentpole(group_id):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 132" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Three representation families compared on latent geometry and downstream cluster separation">'
             '<rect width="680" height="132" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="22" font-size="11.5" fill="#1b3126" font-weight="bold">Three Representation Families (Ch. 2, Fig. 2.7–2.9 &amp; 2.16–2.18) · From pixel reconstruction to invariant clusters</text>'
+            '<text x="16" y="22" font-size="11" fill="#1b3126" font-weight="bold">Three Representation Families (Ch. 2, Fig. 2.7–2.9 &amp; 2.16–2.18) · Pixel codes vs invariant clusters</text>'
             # Card 1: Autoencoder / VAE
             '<rect x="16" y="34" width="204" height="84" rx="6" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.6"/>'
-            '<text x="26" y="52" font-size="11" fill="#1b3126" font-weight="bold">1. Reconstruction (AE / VAE)</text>'
-            '<text x="26" y="68" font-size="9.8" fill="#244035">Patch → z (32–256-D) → Rebuild</text>'
-            '<circle cx="52" cy="94" r="14" fill="#8a4b68" opacity="0.35"/><circle cx="58" cy="92" r="12" fill="#8a4b68" opacity="0.45"/>'
-            '<text x="82" y="90" font-size="9.8" fill="#8a4b68" font-weight="bold">Dense unseparated cloud</text>'
-            '<text x="82" y="105" font-size="9.2" fill="#536052">Silhouette: 0.015 · DB: 2.81</text>'
+            '<text x="26" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">1. Reconstruction (AE / VAE)</text>'
+            '<text x="26" y="68" font-size="9.4" fill="#244035">Patch → z (32–256-D) → Rebuild</text>'
+            '<circle cx="48" cy="94" r="13" fill="#8a4b68" opacity="0.35"/><circle cx="54" cy="92" r="11" fill="#8a4b68" opacity="0.45"/>'
+            '<text x="76" y="90" font-size="9.4" fill="#8a4b68" font-weight="bold">Dense unseparated cloud</text>'
+            '<text x="76" y="105" font-size="9" fill="#536052">Silhouette: 0.015 · DB: 2.81</text>'
             # Card 2: Barlow Twins Contrastive
             '<rect x="238" y="34" width="204" height="84" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
-            '<text x="248" y="52" font-size="11" fill="#1b3126" font-weight="bold">2. Contrastive (Barlow Twins)</text>'
-            '<text x="248" y="68" font-size="9.8" fill="#244035">2 views → 8×8 C_ij → Identity I</text>'
-            '<circle cx="264" cy="88" r="7" fill="#205841"/><circle cx="282" cy="100" r="7" fill="#8a5a19"/><circle cx="298" cy="86" r="7" fill="#b3472a"/>'
-            '<text x="314" y="90" font-size="9.8" fill="#205841" font-weight="bold">Separated clusters ★</text>'
-            '<text x="314" y="105" font-size="9.2" fill="#244035">Silhouette: 0.408 (27× higher)</text>'
+            '<text x="248" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">2. Contrastive (Barlow Twins)</text>'
+            '<text x="248" y="68" font-size="9.4" fill="#244035">2 views → 8×8 C_ij → Identity I</text>'
+            '<circle cx="262" cy="88" r="6.5" fill="#205841"/><circle cx="278" cy="100" r="6.5" fill="#8a5a19"/><circle cx="292" cy="86" r="6.5" fill="#b3472a"/>'
+            '<text x="306" y="90" font-size="9.4" fill="#205841" font-weight="bold">Separated clusters ★</text>'
+            '<text x="306" y="105" font-size="9" fill="#244035">Silhouette: 0.408 (27× AE)</text>'
             # Card 3: Pretrained Frozen Backbones
             '<rect x="460" y="34" width="204" height="84" rx="6" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.6"/>'
-            '<text x="470" y="52" font-size="11" fill="#1b3126" font-weight="bold">3. Frozen Backbones (ResNet/UNI)</text>'
-            '<text x="470" y="68" font-size="9.8" fill="#244035">224² RGB → 1024-D / 2048-D</text>'
-            '<text x="470" y="88" font-size="9.8" fill="#8a5a19" font-weight="bold">147× smaller than raw RGB</text>'
-            '<text x="470" y="105" font-size="9.2" fill="#536052">Every vector keeps (l, t, r, b) coords</text>'
+            '<text x="470" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">3. Frozen (ResNet50 / UNI)</text>'
+            '<text x="470" y="68" font-size="9.4" fill="#244035">224² RGB → 1024-D / 2048-D</text>'
+            '<text x="470" y="88" font-size="9.4" fill="#8a5a19" font-weight="bold">147× smaller than raw RGB</text>'
+            '<text x="470" y="105" font-size="9" fill="#536052">Vectors keep (l, t, r, b) coords</text>'
             "</svg></figure>"
         )
 
@@ -2082,23 +2062,23 @@ def section_tentpole(group_id):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 132" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Attention-MIL grading pipeline and multi-scale MAE comparison against inter-observer disagreement">'
             '<rect width="680" height="132" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="22" font-size="11.5" fill="#1b3126" font-weight="bold">Task 1 · Expert IHC Staining Grades (Ch. 3, Fig. 3.3, 3.8 &amp; 3.10) · Patch Attention-MIL vs Human Disagreement</text>'
+            '<text x="16" y="22" font-size="11" fill="#1b3126" font-weight="bold">Task 1 · Expert IHC Staining Grades (Ch. 3, Fig. 3.3, 3.8 &amp; 3.10) · Attention-MIL vs Human Gap</text>'
             # Left: Attention-MIL 5-step flow
             '<rect x="16" y="34" width="330" height="84" rx="6" fill="#eef2eb" stroke="#9ab0a2"/>'
-            '<text x="26" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">5-Step Attention-MIL Grader (Fig. 3.3):</text>'
-            '<text x="26" y="68" font-size="9.8" fill="#244035">1. N patch vectors → 2. Shared attention → 3. Softmax α_i</text>'
-            '<text x="26" y="84" font-size="9.8" fill="#244035">4. Weighted sum → 5. 8 logits (Null + 0.0..3.0 half-steps)</text>'
-            '<text x="26" y="104" font-size="9.5" fill="#205841" font-weight="bold">✓ Grouped folds + hybrid loss/rarity sampler (81-run ablation)</text>'
+            '<text x="26" y="51" font-size="10.2" fill="#1b3126" font-weight="bold">5-Step Attention-MIL Grader (Fig. 3.3):</text>'
+            '<text x="26" y="68" font-size="9.4" fill="#244035">1. N patch vectors → 2. Shared attention → 3. Softmax α_i</text>'
+            '<text x="26" y="84" font-size="9.4" fill="#244035">4. Weighted sum → 5. 8 logits (Null + 0.0..3.0 half-steps)</text>'
+            '<text x="26" y="104" font-size="9" fill="#205841" font-weight="bold">✓ Grouped folds + hybrid loss/rarity sampler (81-run grid)</text>'
             # Right: Scale MAE bars vs Expert gap
-            '<text x="364" y="48" font-size="10.5" fill="#1b3126" font-weight="bold">Held-out MAE (0–3 scale, lower is closer):</text>'
-            '<text x="364" y="67" font-size="10" fill="#205841" font-weight="bold">Patch-ResNet</text>'
-            '<rect x="456" y="56" width="95" height="13" rx="3" fill="#205841"/><text x="557" y="67" font-size="10" fill="#205841" font-weight="bold">0.238 MAE ★</text>'
-            '<text x="364" y="85" font-size="10" fill="#244035">Cell-Image</text>'
-            '<rect x="456" y="74" width="111" height="13" rx="3" fill="#527c67"/><text x="573" y="85" font-size="10" fill="#244035">0.278 MAE</text>'
-            '<text x="364" y="103" font-size="10" fill="#244035">Core-ResNet</text>'
-            '<rect x="456" y="92" width="138" height="13" rx="3" fill="#8a5a19"/><text x="600" y="103" font-size="10" fill="#8a5a19">0.346 MAE</text>'
-            '<text x="364" y="120" font-size="10" fill="#b3472a" font-weight="bold">Rater gap |A−B|</text>'
-            '<rect x="456" y="109" width="152" height="13" rx="3" fill="#b3472a"/><text x="614" y="120" font-size="10" fill="#b3472a" font-weight="bold">0.382 gap</text>'
+            '<text x="364" y="48" font-size="10.2" fill="#1b3126" font-weight="bold">Held-out MAE (0–3 scale, lower is closer):</text>'
+            '<text x="364" y="67" font-size="9.8" fill="#205841" font-weight="bold">Patch-ResNet</text>'
+            '<rect x="456" y="56" width="95" height="13" rx="3" fill="#205841"/><text x="557" y="67" font-size="9.8" fill="#205841" font-weight="bold">0.238 MAE ★</text>'
+            '<text x="364" y="85" font-size="9.8" fill="#244035">Cell-Image</text>'
+            '<rect x="456" y="74" width="111" height="13" rx="3" fill="#527c67"/><text x="573" y="85" font-size="9.8" fill="#244035">0.278 MAE</text>'
+            '<text x="364" y="103" font-size="9.8" fill="#244035">Core-ResNet</text>'
+            '<rect x="456" y="92" width="138" height="13" rx="3" fill="#8a5a19"/><text x="600" y="103" font-size="9.8" fill="#8a5a19">0.346 MAE</text>'
+            '<text x="364" y="120" font-size="9.8" fill="#b3472a" font-weight="bold">Rater gap |A−B|</text>'
+            '<rect x="456" y="109" width="152" height="13" rx="3" fill="#b3472a"/><text x="614" y="120" font-size="9.8" fill="#b3472a" font-weight="bold">0.382 gap</text>'
             "</svg></figure>"
         )
 
@@ -2106,23 +2086,23 @@ def section_tentpole(group_id):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 132" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Cohort curation funnel, parallel transformer architecture and scale jump in subtype ROC AUC">'
             '<rect width="680" height="132" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="22" font-size="11.5" fill="#1b3126" font-weight="bold">Task 2 · ABC vs GCB Subtype Prediction (Ch. 4, Fig. 4.2–4.6 &amp; Table 4.4) · Scale Jump &amp; Spatial Ablation</text>'
+            '<text x="16" y="22" font-size="11" fill="#1b3126" font-weight="bold">Task 2 · ABC vs GCB Subtype Prediction (Ch. 4, Fig. 4.2–4.6 &amp; Table 4.4) · Scale Jump &amp; RoPE Ablation</text>'
             # Left: Cohort funnel & Transformer
-            '<rect x="16" y="34" width="324" height="84" rx="6" fill="#eef2eb" stroke="#9ab0a2"/>'
-            '<text x="26" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">Audited Cohort Funnel (Fig. 4.2): 1,109 → 962 cores</text>'
-            '<text x="26" y="67" font-size="9.6" fill="#244035">Filters: cell ≤ 220 px · patches ≥ 87 · cells ≥ 1,000 · gap ≤ 1</text>'
-            '<text x="26" y="85" font-size="10.5" fill="#1b3126" font-weight="bold">4-Block Parallel Transformer (Fig. 4.3):</text>'
-            '<text x="26" y="101" font-size="9.6" fill="#8a5a19" font-weight="bold">Negative result (§4.6.3): 2D RoPE positions gave no patch gain</text>'
+            '<rect x="16" y="34" width="328" height="84" rx="6" fill="#eef2eb" stroke="#9ab0a2"/>'
+            '<text x="26" y="51" font-size="10.2" fill="#1b3126" font-weight="bold">Audited Cohort Funnel (Fig. 4.2): 1,109 → 962 cores</text>'
+            '<text x="26" y="67" font-size="9.2" fill="#244035">Filters: cell ≤ 220 px · patches ≥ 87 · cells ≥ 1,000 · gap ≤ 1</text>'
+            '<text x="26" y="85" font-size="10.2" fill="#1b3126" font-weight="bold">4-Block Parallel Transformer (Fig. 4.3):</text>'
+            '<text x="26" y="101" font-size="9" fill="#8a5a19" font-weight="bold">Negative result (§4.6.3): 2D RoPE gave no patch subtype gain</text>'
             # Right: Scale jump in AUC
-            '<text x="356" y="48" font-size="10.5" fill="#1b3126" font-weight="bold">3-Fold Macro ROC AUC by Scale (Fig. 4.5):</text>'
-            '<text x="356" y="67" font-size="10" fill="#205841" font-weight="bold">Patch · UNI</text>'
-            '<rect x="454" y="56" width="148" height="13" rx="3" fill="#205841"/><text x="608" y="67" font-size="10" fill="#205841" font-weight="bold">0.992 ★</text>'
-            '<text x="356" y="85" font-size="10" fill="#205841">Patch · ResNet</text>'
-            '<rect x="454" y="74" width="142" height="13" rx="3" fill="#2f6f55"/><text x="602" y="85" font-size="10" fill="#244035">0.958</text>'
-            '<text x="356" y="103" font-size="10" fill="#527c67">Cell · ResNet</text>'
-            '<rect x="454" y="92" width="140" height="13" rx="3" fill="#527c67"/><text x="600" y="103" font-size="10" fill="#244035">0.952</text>'
-            '<text x="356" y="120" font-size="10" fill="#b3472a">Core · ResNet</text>'
-            '<rect x="454" y="109" width="100" height="13" rx="3" fill="#b3472a"/><text x="560" y="120" font-size="10" fill="#b3472a">0.675 (coarse)</text>'
+            '<text x="356" y="48" font-size="10.2" fill="#1b3126" font-weight="bold">3-Fold Macro ROC AUC by Scale (Fig. 4.5):</text>'
+            '<text x="356" y="67" font-size="9.8" fill="#205841" font-weight="bold">Patch · UNI</text>'
+            '<rect x="454" y="56" width="148" height="13" rx="3" fill="#205841"/><text x="608" y="67" font-size="9.8" fill="#205841" font-weight="bold">0.992 ★</text>'
+            '<text x="356" y="85" font-size="9.8" fill="#205841">Patch · ResNet</text>'
+            '<rect x="454" y="74" width="142" height="13" rx="3" fill="#2f6f55"/><text x="602" y="85" font-size="9.8" fill="#244035">0.958</text>'
+            '<text x="356" y="103" font-size="9.8" fill="#527c67">Cell · ResNet</text>'
+            '<rect x="454" y="92" width="140" height="13" rx="3" fill="#527c67"/><text x="600" y="103" font-size="9.8" fill="#244035">0.952</text>'
+            '<text x="356" y="120" font-size="9.8" fill="#b3472a">Core · ResNet</text>'
+            '<rect x="454" y="109" width="100" height="13" rx="3" fill="#b3472a"/><text x="560" y="120" font-size="9.8" fill="#b3472a">0.675 (coarse)</text>'
             "</svg></figure>"
         )
 
@@ -2130,27 +2110,27 @@ def section_tentpole(group_id):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 132" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Four spatial interpretability methods and SHA-256 cluster run verification pipeline">'
             '<rect width="680" height="132" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="22" font-size="11.5" fill="#1b3126" font-weight="bold">Spatial Interpretability &amp; Reproducibility (Fig. 3.5, 4.11–4.15) · Tracing scores back onto tissue</text>'
+            '<text x="16" y="22" font-size="11" fill="#1b3126" font-weight="bold">Spatial Interpretability &amp; Reproducibility (Fig. 3.5, 4.11–4.15) · Tracing scores back onto tissue</text>'
             '<rect x="16" y="34" width="154" height="84" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.6"/>'
-            '<text x="24" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Score Heatmaps</text>'
-            '<text x="24" y="68" font-size="9.5" fill="#244035">Shared RGBA scale</text>'
-            '<text x="24" y="84" font-size="9.5" fill="#205841" font-weight="bold">Hatched NaN regions</text>'
-            '<text x="24" y="100" font-size="9.2" fill="#536052">Never conflates 0 &amp; NaN</text>'
+            '<text x="24" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">1. Score Heatmaps</text>'
+            '<text x="24" y="68" font-size="9.3" fill="#244035">Shared RGBA scale</text>'
+            '<text x="24" y="84" font-size="9.3" fill="#205841" font-weight="bold">Hatched NaN regions</text>'
+            '<text x="24" y="100" font-size="9" fill="#536052">Never conflates 0 &amp; NaN</text>'
             '<rect x="182" y="34" width="166" height="84" rx="6" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.6"/>'
-            '<text x="190" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. Dream Dimming (XAI)</text>'
-            '<text x="190" y="68" font-size="9.5" fill="#244035">Class masks + occlusion</text>'
-            '<text x="190" y="84" font-size="9.5" fill="#8a4b68" font-weight="bold">3.5× score drop vs uniform</text>'
-            '<text x="190" y="100" font-size="9.2" fill="#536052">Crisp patch/cell masks</text>'
+            '<text x="190" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">2. Dream Dimming (XAI)</text>'
+            '<text x="190" y="68" font-size="9.3" fill="#244035">Class masks + occlusion</text>'
+            '<text x="190" y="84" font-size="9.3" fill="#8a4b68" font-weight="bold">3.5× score drop vs uniform</text>'
+            '<text x="190" y="100" font-size="9" fill="#536052">Crisp patch/cell masks</text>'
             '<rect x="360" y="34" width="150" height="84" rx="6" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.6"/>'
-            '<text x="368" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">3. Cluster Checkpoints</text>'
-            '<text x="368" y="68" font-size="9.5" fill="#244035">16-hex SHA-256 run IDs</text>'
-            '<text x="368" y="84" font-size="9.5" fill="#8a5a19" font-weight="bold">Atomic chunk resume</text>'
-            '<text x="368" y="100" font-size="9.2" fill="#536052">Catches crashed jobs</text>'
+            '<text x="368" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">3. Cluster Checkpoints</text>'
+            '<text x="368" y="68" font-size="9.3" fill="#244035">16-hex SHA-256 run IDs</text>'
+            '<text x="368" y="84" font-size="9.3" fill="#8a5a19" font-weight="bold">Atomic chunk resume</text>'
+            '<text x="368" y="100" font-size="9" fill="#536052">Catches crashed jobs</text>'
             '<rect x="522" y="34" width="142" height="84" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.6"/>'
-            '<text x="530" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">4. Figure Provenance</text>'
-            '<text x="530" y="68" font-size="9.5" fill="#244035">Case S02 → SVG chart</text>'
-            '<text x="530" y="84" font-size="9.5" fill="#205841" font-weight="bold">SHA-256 asset audit</text>'
-            '<text x="530" y="100" font-size="9.2" fill="#536052">+ Multi-centre limits</text>'
+            '<text x="530" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">4. Figure Provenance</text>'
+            '<text x="530" y="68" font-size="9.3" fill="#244035">Case S02 → SVG chart</text>'
+            '<text x="530" y="84" font-size="9.3" fill="#205841" font-weight="bold">SHA-256 asset audit</text>'
+            '<text x="530" y="100" font-size="9" fill="#536052">+ Multi-centre limits</text>'
             "</svg></figure>"
         )
 
@@ -2158,16 +2138,16 @@ def section_tentpole(group_id):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 116" class="lab-diagram lab-tentpole-svg" role="img" aria-label="PCam synthetic multiple-instance bag benchmark comparing signal and noise encoders">'
             '<rect width="680" height="116" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="22" font-size="11.5" fill="#1b3126" font-weight="bold">External Bag Benchmark (Appendix) · Disjoint Seeded Bag Manifests &amp; Max-Pooling Separation</text>'
-            '<rect x="16" y="34" width="310" height="68" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.6"/>'
-            '<text x="26" y="54" font-size="10.5" fill="#1b3126" font-weight="bold">1. Seeded Bag Manifests (#pcam-bags)</text>'
-            '<text x="26" y="72" font-size="9.8" fill="#244035">Train (seed 11) &amp; Test (seed 23) · Pos bag = 1 pos patch in 4</text>'
-            '<text x="26" y="89" font-size="9.5" fill="#205841">Preserves exact patch IDs so every encoder faces identical bags</text>'
-            '<text x="336" y="72" font-size="14" fill="#205841" font-weight="bold">→</text>'
-            '<rect x="354" y="34" width="310" height="68" rx="6" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.6"/>'
-            '<text x="364" y="54" font-size="10.5" fill="#1b3126" font-weight="bold">2. Encoder Comparison (#pcam-benchmarks)</text>'
-            '<text x="364" y="72" font-size="9.8" fill="#205841" font-weight="bold">Signal encoder: 1.000 bal acc ★ vs Noise: 0.625</text>'
-            '<text x="364" y="89" font-size="9.5" fill="#536052">Max pooling isolates the single positive instance per bag</text>'
+            '<text x="16" y="22" font-size="11" fill="#1b3126" font-weight="bold">External Bag Benchmark (Appendix) · Disjoint Seeded Bag Manifests &amp; Max-Pooling Separation</text>'
+            '<rect x="16" y="34" width="314" height="68" rx="6" fill="#d5e5dc" stroke="#205841" stroke-width="1.6"/>'
+            '<text x="26" y="54" font-size="10.2" fill="#1b3126" font-weight="bold">1. Seeded Bag Manifests (#pcam-bags)</text>'
+            '<text x="26" y="72" font-size="9.2" fill="#244035">Train (seed 11) &amp; Test (seed 23) · Pos bag = 1 pos in 4</text>'
+            '<text x="26" y="89" font-size="9" fill="#205841">Locks exact patch IDs so all encoders face identical bags</text>'
+            '<text x="335" y="72" font-size="13" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="350" y="34" width="314" height="68" rx="6" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.6"/>'
+            '<text x="360" y="54" font-size="10.2" fill="#1b3126" font-weight="bold">2. Encoder Comparison (#pcam-benchmarks)</text>'
+            '<text x="360" y="72" font-size="9.4" fill="#205841" font-weight="bold">Signal encoder: 1.000 bal acc ★ vs Noise: 0.625</text>'
+            '<text x="360" y="89" font-size="9" fill="#536052">Max pooling isolates the single positive instance per bag</text>'
             "</svg></figure>"
         )
 
@@ -2182,30 +2162,30 @@ def goal_tentpole(goal_id, examples=None):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 124" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Thesis multi-scale hypothesis spine from 63 whole-slide scans to Task 1 staining grades and Task 2 molecular subtypes">'
             '<rect width="680" height="124" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Hypothesis Spine (Ch. 1–5) · Three Biological Scales × Two Clinical Tasks + Spatial Traceability</text>'
-            '<rect x="16" y="34" width="146" height="76" rx="5" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.5"/>'
-            '<text x="24" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Three Scales (Ch. 2)</text>'
-            '<text x="24" y="68" font-size="9.4" fill="#244035">• 1,109 Cores (5,000² px)</text>'
-            '<text x="24" y="83" font-size="9.4" fill="#205841" font-weight="bold">• 229,683 Patches (256² px)</text>'
-            '<text x="24" y="98" font-size="9.4" fill="#244035">• 9.13M Single Cells</text>'
-            '<text x="167" y="74" font-size="12" fill="#205841" font-weight="bold">→</text>'
-            '<rect x="180" y="34" width="146" height="76" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
-            '<text x="188" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. Vectors (Ch. 2)</text>'
-            '<text x="188" y="68" font-size="9.4" fill="#244035">• AE / VAE (32–256-D)</text>'
-            '<text x="188" y="83" font-size="9.4" fill="#205841" font-weight="bold">• Barlow Twins (0.408 sil.)</text>'
-            '<text x="188" y="98" font-size="9.4" fill="#244035">• Frozen ResNet50 &amp; UNI</text>'
-            '<text x="331" y="74" font-size="12" fill="#205841" font-weight="bold">→</text>'
+            '<text x="16" y="21" font-size="11" fill="#1b3126" font-weight="bold">Thesis Hypothesis Spine (Ch. 1–5) · 3 Biological Scales × 2 Clinical Tasks + Spatial Traceability</text>'
+            '<rect x="16" y="34" width="148" height="76" rx="5" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.5"/>'
+            '<text x="24" y="52" font-size="10" fill="#1b3126" font-weight="bold">1. Three Scales (Ch. 2)</text>'
+            '<text x="24" y="68" font-size="9" fill="#244035">• 1,109 Cores (5,000² px)</text>'
+            '<text x="24" y="83" font-size="9" fill="#205841" font-weight="bold">• 229k Patches (256² px)</text>'
+            '<text x="24" y="98" font-size="9" fill="#244035">• 9.13M Single Cells</text>'
+            '<text x="168" y="74" font-size="12" fill="#205841" font-weight="bold">→</text>'
+            '<rect x="180" y="34" width="148" height="76" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
+            '<text x="188" y="52" font-size="10" fill="#1b3126" font-weight="bold">2. Vectors (Ch. 2)</text>'
+            '<text x="188" y="68" font-size="9" fill="#244035">• AE / VAE (32–256-D)</text>'
+            '<text x="188" y="83" font-size="9" fill="#205841" font-weight="bold">• Barlow Twins (0.408 sil)</text>'
+            '<text x="188" y="98" font-size="9" fill="#244035">• Frozen ResNet50 &amp; UNI</text>'
+            '<text x="332" y="74" font-size="12" fill="#205841" font-weight="bold">→</text>'
             '<rect x="344" y="34" width="154" height="76" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
-            '<text x="352" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">3. Two Tasks (Ch. 3–4)</text>'
-            '<text x="352" y="68" font-size="9.4" fill="#205841" font-weight="bold">• IHC Grade: 0.238 MAE ★</text>'
-            '<text x="352" y="83" font-size="9.4" fill="#536052">  (vs 0.382 rater gap)</text>'
-            '<text x="352" y="98" font-size="9.4" fill="#205841" font-weight="bold">• Subtype: 0.992 AUC ★</text>'
+            '<text x="352" y="52" font-size="10" fill="#1b3126" font-weight="bold">3. Two Tasks (Ch. 3–4)</text>'
+            '<text x="352" y="68" font-size="9" fill="#205841" font-weight="bold">• IHC Grade: 0.238 MAE ★</text>'
+            '<text x="352" y="83" font-size="9" fill="#536052">  (vs 0.382 rater gap)</text>'
+            '<text x="352" y="98" font-size="9" fill="#205841" font-weight="bold">• Subtype: 0.992 AUC ★</text>'
             '<text x="503" y="74" font-size="12" fill="#205841" font-weight="bold">→</text>'
             '<rect x="516" y="34" width="148" height="76" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
-            '<text x="524" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">4. Traceable (Ch. 3–5)</text>'
-            '<text x="524" y="68" font-size="9.4" fill="#244035">• Hatched NaN heatmaps</text>'
-            '<text x="524" y="83" font-size="9.4" fill="#8a4b68" font-weight="bold">• Dream Dimming (3.5×)</text>'
-            '<text x="524" y="98" font-size="9.4" fill="#244035">• SHA-256 run provenance</text>'
+            '<text x="524" y="52" font-size="10" fill="#1b3126" font-weight="bold">4. Traceable (Ch. 3–5)</text>'
+            '<text x="524" y="68" font-size="9" fill="#244035">• Hatched NaN heatmaps</text>'
+            '<text x="524" y="83" font-size="9" fill="#8a4b68" font-weight="bold">• Dream Dimming (3.5×)</text>'
+            '<text x="524" y="98" font-size="9" fill="#244035">• SHA-256 run provenance</text>'
             "</svg></figure>"
         )
 
@@ -2216,7 +2196,7 @@ def goal_tentpole(goal_id, examples=None):
             '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 2.12 &amp; Table 2.4 · 86.5% Storage Reduction + Pre-Flight Array Audits</text>'
             '<text x="16" y="46" font-size="10" fill="#8a5a19" font-weight="bold">PNG (229,683 patches)</text>'
             '<rect x="162" y="35" width="230" height="14" rx="3" fill="#8a5a19"/><text x="398" y="46" font-size="10" fill="#8a5a19" font-weight="bold">26.94 GB</text>'
-            '<text x="16" y="68" font-size="10" fill="#205841" font-weight="bold">WebP Q=75 (adopted)</text>'
+            '<text x="16" y="68" font-size="10" fill="#205841" font-weight="bold">WebP (thesis)</text>'
             '<rect x="162" y="57" width="31" height="14" rx="3" fill="#205841"/><text x="200" y="68" font-size="10" fill="#205841" font-weight="bold">3.63 GB (−86.5% · saves 23.31 GB)</text>'
             '<text x="16" y="96" font-size="9.5" fill="#536052">• Pre-flight audit checks manifest keys vs disk shapes before GPU jobs start · Contiguous bundle avoids 20× file-open overhead.</text>'
             "</svg></figure>"
@@ -2248,15 +2228,15 @@ def goal_tentpole(goal_id, examples=None):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 120" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Latent cluster separation and planted-signal MIL bag benchmark">'
             '<rect width="680" height="120" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Tables 2.7–2.9 &amp; MIL Signal Probe · Cluster Geometry &amp; Rare-Instance Detection</text>'
+            '<text x="16" y="21" font-size="11" fill="#1b3126" font-weight="bold">Thesis Tables 2.7–2.9 &amp; MIL Signal Probe · Cluster Geometry &amp; Rare-Instance Detection</text>'
             '<rect x="16" y="34" width="318" height="72" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
-            '<text x="26" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Geometry &amp; Generalisation (Ch. 2)</text>'
-            '<text x="26" y="69" font-size="9.5" fill="#205841" font-weight="bold">• Contrastive Silhouette: 0.408 vs 0.015 (AE)</text>'
-            '<text x="26" y="85" font-size="9.5" fill="#244035">• PC1 + PC2 explain 97.8% + 2.2% variance in demo</text>'
+            '<text x="26" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">1. Geometry &amp; Generalisation (Ch. 2)</text>'
+            '<text x="26" y="69" font-size="9.3" fill="#205841" font-weight="bold">• Contrastive Silhouette: 0.408 vs 0.015 (AE)</text>'
+            '<text x="26" y="85" font-size="9.3" fill="#244035">• PC1 + PC2 explain 97.8% + 2.2% variance in demo</text>'
             '<rect x="348" y="34" width="316" height="72" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
-            '<text x="358" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. Planted-Signal Bag Probe (1 of 12 patches +5)</text>'
-            '<text x="358" y="69" font-size="9.5" fill="#8a5a19">• Mean pooling: 0.830 AUC (11 noise patches dilute signal)</text>'
-            '<text x="358" y="85" font-size="9.5" fill="#205841" font-weight="bold">• Max pooling: 0.999 AUC ★ (isolates the 1 positive patch)</text>'
+            '<text x="358" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">2. Planted-Signal Bag Probe (1 of 12 patches +5)</text>'
+            '<text x="358" y="69" font-size="9.3" fill="#8a5a19">• Mean pooling: 0.830 AUC (11 noise tiles dilute signal)</text>'
+            '<text x="358" y="85" font-size="9.2" fill="#205841" font-weight="bold">• Max pooling: 0.999 AUC ★ (isolates positive patch)</text>'
             "</svg></figure>"
         )
 
@@ -2317,17 +2297,17 @@ def goal_tentpole(goal_id, examples=None):
 
     if goal_id == "sampling":
         return (
-            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 116" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Dynamic loss-and-rarity sampler and 8th null-class Gaussian noise probe">'
+            '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 116" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Dynamic loss-and-rarity sampler and generated Gaussian noise probe">'
             '<rect width="680" height="116" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Appendix A (Alg. 3 &amp; §A.4) · Hybrid Rare/Hard Sampler &amp; Dedicated Null Class Probe</text>'
+            '<text x="16" y="21" font-size="11" fill="#1b3126" font-weight="bold">Thesis Appendix A (Alg. 3 &amp; §A.4) · Hybrid Rare/Hard Sampler &amp; Dedicated Null Class Probe</text>'
             '<rect x="16" y="34" width="318" height="68" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
-            '<text x="26" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Hybrid Sampler (Rarity + Loss + EMA)</text>'
-            '<text x="26" y="69" font-size="9.5" fill="#205841" font-weight="bold">• Rare Grade 1 (s4) boosted to 0.392 probability</text>'
-            '<text x="26" y="85" font-size="9.5" fill="#8a5a19">• High-loss Grade 0 (s2) boosted to 0.293 vs 0.157 easy</text>'
+            '<text x="26" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">1. Hybrid Sampler (Rarity + Loss + EMA)</text>'
+            '<text x="26" y="69" font-size="9.2" fill="#205841" font-weight="bold">• Rare Grade 1 (s4) boosted to 0.392 probability</text>'
+            '<text x="26" y="85" font-size="9.2" fill="#8a5a19">• High-loss Grade 0 (s2) boosted to 0.293 vs 0.157 easy</text>'
             '<rect x="348" y="34" width="316" height="68" rx="5" fill="#f5d0c5" stroke="#b3472a" stroke-width="1.5"/>'
-            '<text x="358" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. 8th Class Outside-Input (Null) Probe</text>'
-            '<text x="358" y="69" font-size="9.5" fill="#205841">• Tissue signal bags (n=12): 0.009 null prob (0/12 calls)</text>'
-            '<text x="358" y="85" font-size="9.5" fill="#b3472a" font-weight="bold">• Gaussian noise bags (n=12): 0.683 null prob (12/12 calls)</text>'
+            '<text x="358" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">2. Generated three-class noise probe</text>'
+            '<text x="358" y="69" font-size="9.2" fill="#205841">• Tissue signal bags (n=12): 0.009 null prob (0/12)</text>'
+            '<text x="358" y="85" font-size="9.2" fill="#b3472a" font-weight="bold">• Gaussian noise bags (n=12): 0.683 null prob (12/12)</text>'
             "</svg></figure>"
         )
 
@@ -2335,15 +2315,15 @@ def goal_tentpole(goal_id, examples=None):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 120" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Bag pooling rules and size-sorted variable bag batching">'
             '<rect width="680" height="120" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Multiple-Instance Bag Pooling &amp; Size-Sorted Batching (Ch. 4, Fig. 4.3)</text>'
+            '<text x="16" y="21" font-size="11" fill="#1b3126" font-weight="bold">Multiple-Instance Bag Pooling &amp; Size-Sorted Batching (Ch. 4, Fig. 4.3)</text>'
             '<rect x="16" y="34" width="318" height="72" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
-            '<text x="26" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Mean vs Max vs Softmax Attention</text>'
-            '<text x="26" y="69" font-size="9.5" fill="#244035">• Attention weights [0.212, 0.212, 0.576] emphasise Patch 3</text>'
-            '<text x="26" y="85" font-size="9.5" fill="#205841" font-weight="bold">• Shifts pooled Feature 1 from 0.433 (mean) to 0.603</text>'
+            '<text x="26" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">1. Mean vs Max vs Softmax Attention</text>'
+            '<text x="26" y="69" font-size="9.2" fill="#244035">• Attention weights [0.212, 0.212, 0.576] emphasise Patch 3</text>'
+            '<text x="26" y="85" font-size="9.2" fill="#205841" font-weight="bold">• Shifts pooled Feature 1 from 0.433 (mean) to 0.603</text>'
             '<rect x="348" y="34" width="316" height="72" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
-            '<text x="358" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">2. Size-Sorted Bag Batching + Validity Masks</text>'
-            '<text x="358" y="69" font-size="9.5" fill="#b3472a">• Unsorted bags [3, 15] &amp; [12, 5] waste 21 pad slots</text>'
-            '<text x="358" y="85" font-size="9.5" fill="#205841" font-weight="bold">• Sorted [3, 5] &amp; [12, 15] cuts padding by 76% (to 5 slots)</text>'
+            '<text x="358" y="52" font-size="10.2" fill="#1b3126" font-weight="bold">2. Size-Sorted Bag Batching + Validity Masks</text>'
+            '<text x="358" y="69" font-size="9.2" fill="#b3472a">• Unsorted bags [3, 15] &amp; [12, 5] waste 21 pad slots</text>'
+            '<text x="358" y="85" font-size="9.2" fill="#205841" font-weight="bold">• Sorted [3, 5] &amp; [12, 15] cuts padding about 74% (19 → 5 slots)</text>'
             "</svg></figure>"
         )
 
@@ -2371,7 +2351,7 @@ def goal_tentpole(goal_id, examples=None):
             '<text x="16" y="45" font-size="10" fill="#205841" font-weight="bold">Patch · UNI (1024-D)</text>'
             '<rect x="166" y="34" width="160" height="13" rx="3" fill="#205841"/><text x="332" y="45" font-size="10" fill="#205841" font-weight="bold">0.970 Acc · 0.992 AUC ★</text>'
             '<text x="16" y="64" font-size="10" fill="#244035">Patch · ResNet50</text>'
-            '<rect x="166" y="53" width="152" height="13" rx="3" fill="#2f6f55"/><text x="324" y="64" font-size="10" fill="#244035">0.916 Acc · 0.958 AUC</text>'
+            '<rect x="166" y="53" width="152" height="13" rx="3" fill="#2f6f55"/><text x="324" y="64" font-size="10" fill="#244035">0.913 Acc · 0.958 AUC</text>'
             '<text x="16" y="83" font-size="10" fill="#527c67">Cell · ResNet50</text>'
             '<rect x="166" y="72" width="150" height="13" rx="3" fill="#527c67"/><text x="322" y="83" font-size="10" fill="#244035">0.892 Acc · 0.952 AUC</text>'
             '<text x="16" y="102" font-size="10" fill="#b3472a">Core · ResNet50</text>'
@@ -2515,35 +2495,35 @@ def goal_tentpole(goal_id, examples=None):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 134" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Four core extraction methods from Thesis Figure 2.3 and Table 2.5">'
             '<rect width="680" height="134" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 2.3 &amp; Table 2.5 · Comparing 4 ways to locate tissue microarray cores</text>'
+            '<text x="16" y="21" font-size="11" fill="#1b3126" font-weight="bold">Thesis Fig. 2.3 &amp; Table 2.5 · Comparing 4 ways to locate tissue microarray cores</text>'
             # Panel 1: Hough
             '<rect x="16" y="32" width="152" height="88" rx="5" fill="#f5d0c5" stroke="#b3472a" stroke-width="1.5"/>'
-            '<text x="24" y="49" font-size="10.5" fill="#b3472a" font-weight="bold">1. Hough circles (0.06 s)</text>'
+            '<text x="22" y="49" font-size="9.8" fill="#b3472a" font-weight="bold">1. Hough circles (0.06 s)</text>'
             '<circle cx="52" cy="74" r="13" fill="#c98ca7" stroke="#205841" stroke-width="1.5"/>'
             '<circle cx="92" cy="74" r="13" fill="#c98ca7" opacity="0.4" stroke="#b3472a" stroke-dasharray="3 2"/>'
             '<circle cx="130" cy="70" r="9" fill="none" stroke="#b3472a" stroke-width="1.5"/>'
-            '<text x="24" y="108" font-size="9.5" fill="#1b3126">0.89 recall · misses 11%</text>'
+            '<text x="22" y="108" font-size="9" fill="#1b3126">0.89 recall · misses 11%</text>'
             # Panel 2: Tilted Grid
             '<rect x="180" y="32" width="152" height="88" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
-            '<text x="188" y="49" font-size="10.5" fill="#8a5a19" font-weight="bold">2. Tilted grid (0.5 s)</text>'
+            '<text x="186" y="49" font-size="9.8" fill="#8a5a19" font-weight="bold">2. Tilted grid (0.5 s)</text>'
             '<line x1="202" y1="62" x2="310" y2="78" stroke="#8a5a19" stroke-dasharray="3 2"/>'
             '<circle cx="216" cy="64" r="11" fill="#c98ca7"/><rect x="204" y="52" width="24" height="24" fill="none" stroke="#205841"/>'
             '<circle cx="292" cy="66" r="11" fill="#c98ca7"/><rect x="274" y="64" width="24" height="24" fill="none" stroke="#b3472a" stroke-width="1.8"/>'
-            '<text x="188" y="108" font-size="9.5" fill="#1b3126">0.98 prec · clips drifted core</text>'
+            '<text x="186" y="108" font-size="9" fill="#1b3126">0.98 prec · clips drifted</text>'
             # Panel 3: Manual Rectangles
             '<rect x="344" y="32" width="152" height="88" rx="5" fill="#e2e8dc" stroke="#527c67" stroke-width="1.5"/>'
-            '<text x="352" y="49" font-size="10.5" fill="#244035" font-weight="bold">3. Drawn boxes (6.0 s)</text>'
+            '<text x="350" y="49" font-size="9.8" fill="#244035" font-weight="bold">3. Drawn boxes (6.0 s)</text>'
             '<circle cx="384" cy="74" r="12" fill="#c98ca7"/><rect x="368" y="56" width="30" height="36" fill="none" stroke="#527c67" stroke-dasharray="3 2"/>'
             '<circle cx="446" cy="74" r="12" fill="#c98ca7"/><rect x="426" y="60" width="38" height="28" fill="none" stroke="#527c67" stroke-dasharray="3 2"/>'
-            '<text x="352" y="108" font-size="9.5" fill="#1b3126">1.00 prec/rec · uneven sizes</text>'
+            '<text x="350" y="108" font-size="9" fill="#1b3126">1.00 prec/rec · uneven</text>'
             # Panel 4: 1-Click Fixed Square
             '<rect x="508" y="32" width="156" height="88" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="2"/>'
-            '<text x="516" y="49" font-size="10.5" fill="#205841" font-weight="bold">4. 1-click box (3.0 s ★)</text>'
+            '<text x="514" y="49" font-size="9.8" fill="#205841" font-weight="bold">4. 1-click box (3.0 s ★)</text>'
             '<circle cx="552" cy="74" r="12" fill="#c98ca7"/><rect x="536" y="58" width="32" height="32" fill="none" stroke="#205841" stroke-width="2"/>'
             '<circle cx="552" cy="74" r="2.5" fill="#1b3126"/>'
             '<circle cx="616" cy="74" r="12" fill="#c98ca7"/><rect x="600" y="58" width="32" height="32" fill="none" stroke="#205841" stroke-width="2"/>'
             '<circle cx="616" cy="74" r="2.5" fill="#1b3126"/>'
-            '<text x="516" y="108" font-size="9.5" fill="#205841" font-weight="bold">1.00 prec/rec · uniform 5000²</text>'
+            '<text x="514" y="108" font-size="9" fill="#205841" font-weight="bold">1.00 prec/rec · 5000² px</text>'
             "</svg></figure>"
         )
 
@@ -2551,16 +2531,16 @@ def goal_tentpole(goal_id, examples=None):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 112" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Reversible coordinate mapping between downsampled preview crops and full-resolution whole-slide scans">'
             '<rect width="680" height="112" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Reversible Coordinate Chain · Every crop records its source scan origin and scale factor</text>'
+            '<text x="16" y="21" font-size="11" fill="#1b3126" font-weight="bold">Reversible Coordinate Chain · Every crop records its source scan origin and scale factor</text>'
             '<rect x="16" y="32" width="190" height="66" rx="5" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.5"/>'
-            '<text x="26" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">1. Preview Mark (1.25×)</text>'
-            '<text x="26" y="68" font-size="9.5" fill="#244035">Local box: (10, 8) → (30, 28)</text>'
-            '<text x="26" y="84" font-size="9.5" fill="#8a4b68">Saved in crops.csv manifest</text>'
-            '<text x="218" y="68" font-size="13" fill="#205841" font-weight="bold">→ ×Scale + Origin →</text>'
+            '<text x="26" y="51" font-size="10.2" fill="#1b3126" font-weight="bold">1. Preview Mark (1.25×)</text>'
+            '<text x="26" y="68" font-size="9.3" fill="#244035">Local box: (10, 8) → (30, 28)</text>'
+            '<text x="26" y="84" font-size="9.3" fill="#8a4b68">Saved in crops.csv manifest</text>'
+            '<text x="218" y="68" font-size="12.5" fill="#205841" font-weight="bold">→ ×Scale + Origin →</text>'
             '<rect x="348" y="32" width="316" height="66" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
-            '<text x="360" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">2. Full-Resolution Scan Coordinates (50×)</text>'
-            '<text x="360" y="68" font-size="9.8" fill="#205841" font-weight="bold">Scan = (1200, 800) + 4 × Local = (1240, 832, 1320, 912)</text>'
-            '<text x="360" y="84" font-size="9.5" fill="#536052">Allows any patch or cell score to be projected back onto the slide</text>'
+            '<text x="358" y="51" font-size="10.2" fill="#1b3126" font-weight="bold">2. Full-Resolution Scan Coordinates (50×)</text>'
+            '<text x="358" y="68" font-size="9.3" fill="#205841" font-weight="bold">Scan = (1200, 800) + 4 × Local = (1240, 832, 1320, 912)</text>'
+            '<text x="358" y="84" font-size="9" fill="#536052">Projects any patch or cell score back onto the source slide</text>'
             "</svg></figure>"
         )
 
@@ -2615,22 +2595,22 @@ def goal_tentpole(goal_id, examples=None):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 120" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Comparison of deterministic autoencoder, variational autoencoder and bottleneck width trade-off">'
             '<rect width="680" height="120" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 2.7 &amp; 2.8 · Deterministic AE vs Variational (μ, log σ²) &amp; Bottleneck Byte Trade-Off</text>'
+            '<text x="16" y="21" font-size="11" fill="#1b3126" font-weight="bold">Thesis Fig. 2.7 &amp; 2.8 · Deterministic AE vs Variational (μ, log σ²) &amp; Bottleneck Byte Trade-Off</text>'
             '<rect x="16" y="32" width="212" height="74" rx="5" fill="#e6c5d4" stroke="#8a4b68" stroke-width="1.5"/>'
-            '<text x="26" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">Standard Autoencoder</text>'
-            '<text x="26" y="67" font-size="9.5" fill="#244035">Patch → Bottleneck z → Decoded</text>'
-            '<text x="26" y="83" font-size="9.5" fill="#8a4b68" font-weight="bold">2 numbers cut MSE 2.9× vs 1 number</text>'
-            '<text x="26" y="98" font-size="9.2" fill="#536052">Worst-first MSE queue flags outliers</text>'
+            '<text x="26" y="50" font-size="10.2" fill="#1b3126" font-weight="bold">Standard Autoencoder</text>'
+            '<text x="26" y="67" font-size="9.3" fill="#244035">Patch → Bottleneck z → Decoded</text>'
+            '<text x="26" y="83" font-size="9.3" fill="#8a4b68" font-weight="bold">2 numbers cut MSE 2.9× vs 1 number</text>'
+            '<text x="26" y="98" font-size="9" fill="#536052">Worst-first MSE queue flags outliers</text>'
             '<rect x="240" y="32" width="212" height="74" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
-            '<text x="250" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">Variational (VAE / NVAE)</text>'
-            '<text x="250" y="67" font-size="9.5" fill="#244035">Splits code into mean μ &amp; log σ²</text>'
-            '<text x="250" y="83" font-size="9.5" fill="#8a5a19" font-weight="bold">Loss = BCE (0.387) + β·KL (0.042)</text>'
-            '<text x="250" y="98" font-size="9.2" fill="#536052">Prevents unregularised code spikes</text>'
+            '<text x="250" y="50" font-size="10.2" fill="#1b3126" font-weight="bold">Variational (VAE / NVAE)</text>'
+            '<text x="250" y="67" font-size="9.3" fill="#244035">Splits code into mean μ &amp; log σ²</text>'
+            '<text x="250" y="83" font-size="9.3" fill="#8a5a19" font-weight="bold">Loss = BCE (0.387) + β·KL (0.042)</text>'
+            '<text x="250" y="98" font-size="9" fill="#536052">Prevents unregularised code spikes</text>'
             '<rect x="464" y="32" width="200" height="74" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.5"/>'
-            '<text x="474" y="50" font-size="10.5" fill="#1b3126" font-weight="bold">Thesis Finding (Fig. 2.16)</text>'
-            '<text x="474" y="67" font-size="9.5" fill="#244035">Reconstructing every pixel forces</text>'
-            '<text x="474" y="82" font-size="9.5" fill="#244035">codes to store stain/background</text>'
-            '<text x="474" y="98" font-size="9.5" fill="#b3472a" font-weight="bold">→ Motivated Barlow Twins (#features)</text>'
+            '<text x="472" y="50" font-size="10.2" fill="#1b3126" font-weight="bold">Thesis Finding (Fig. 2.16)</text>'
+            '<text x="472" y="67" font-size="9.3" fill="#244035">Reconstructing every pixel forces</text>'
+            '<text x="472" y="82" font-size="9.3" fill="#244035">codes to store stain/background</text>'
+            '<text x="472" y="98" font-size="9" fill="#b3472a" font-weight="bold">→ Motivated Barlow Twins (#features)</text>'
             "</svg></figure>"
         )
 
@@ -2638,26 +2618,26 @@ def goal_tentpole(goal_id, examples=None):
         return (
             '<figure class="lab-figure lab-tentpole"><svg viewBox="0 0 680 124" class="lab-diagram lab-tentpole-svg" role="img" aria-label="Barlow Twins dual-view cross-correlation matrix pushed toward the identity matrix">'
             '<rect width="680" height="124" rx="8" fill="#f7f4ea" stroke="#cdd6ca"/>'
-            '<text x="16" y="21" font-size="11.5" fill="#1b3126" font-weight="bold">Thesis Fig. 2.9 &amp; 2.18 · Barlow Twins Cross-Correlation Matrix (C_ii → 1, C_ij → 0)</text>'
-            '<rect x="16" y="34" width="186" height="76" rx="5" fill="#e2e8dc" stroke="#527c67" stroke-width="1.5"/>'
-            '<text x="26" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">1. Paired Views (seed=9)</text>'
-            '<text x="26" y="69" font-size="9.5" fill="#244035">View A (×0.94) &amp; View B (flip, ×1.04)</text>'
-            '<text x="26" y="85" font-size="9.5" fill="#205841" font-weight="bold">Shared patch ID + shared encoder W</text>'
-            '<text x="26" y="100" font-size="9.2" fill="#536052">ResNet-50 → 2048 → 128 → 64 → 8-D</text>'
+            '<text x="16" y="21" font-size="11" fill="#1b3126" font-weight="bold">Thesis Fig. 2.9 &amp; 2.18 · Barlow Twins Cross-Correlation Matrix (C_ii → 1, C_ij → 0)</text>'
+            '<rect x="16" y="34" width="194" height="76" rx="5" fill="#e2e8dc" stroke="#527c67" stroke-width="1.5"/>'
+            '<text x="24" y="52" font-size="10" fill="#1b3126" font-weight="bold">1. Paired Views (seed=9)</text>'
+            '<text x="24" y="69" font-size="9" fill="#244035">View A (×0.94) &amp; View B (flip, ×1.04)</text>'
+            '<text x="24" y="85" font-size="9" fill="#205841" font-weight="bold">Shared patch ID + shared encoder W</text>'
+            '<text x="24" y="100" font-size="8.8" fill="#536052">ResNet-50 → 2048 → 128 → 64 → 8-D</text>'
             # Cross-correlation matrix graphic
-            '<rect x="216" y="34" width="224" height="76" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
-            '<text x="226" y="51" font-size="10.5" fill="#1b3126" font-weight="bold">2. Cross-Correlation C → Identity</text>'
-            '<rect x="228" y="58" width="14" height="14" fill="#205841"/><rect x="244" y="58" width="14" height="14" fill="#f7f4ea"/><rect x="260" y="58" width="14" height="14" fill="#f7f4ea"/>'
-            '<rect x="228" y="74" width="14" height="14" fill="#f7f4ea"/><rect x="244" y="74" width="14" height="14" fill="#205841"/><rect x="260" y="74" width="14" height="14" fill="#f7f4ea"/>'
-            '<rect x="228" y="90" width="14" height="14" fill="#f7f4ea"/><rect x="244" y="90" width="14" height="14" fill="#f7f4ea"/><rect x="260" y="90" width="14" height="14" fill="#205841"/>'
-            '<text x="284" y="70" font-size="9.5" fill="#205841" font-weight="bold">Diag = 1 (invariance)</text>'
-            '<text x="284" y="86" font-size="9.5" fill="#b3472a" font-weight="bold">Off-diag = 0 (no dupes)</text>'
-            '<text x="284" y="101" font-size="9.2" fill="#244035">Loss: 0.1938 → 0.0003</text>'
+            '<rect x="220" y="34" width="222" height="76" rx="5" fill="#d5e5dc" stroke="#205841" stroke-width="1.8"/>'
+            '<text x="230" y="51" font-size="10" fill="#1b3126" font-weight="bold">2. Cross-Correlation C → Identity</text>'
+            '<rect x="232" y="58" width="14" height="14" fill="#205841"/><rect x="248" y="58" width="14" height="14" fill="#f7f4ea"/><rect x="264" y="58" width="14" height="14" fill="#f7f4ea"/>'
+            '<rect x="232" y="74" width="14" height="14" fill="#f7f4ea"/><rect x="248" y="74" width="14" height="14" fill="#205841"/><rect x="264" y="74" width="14" height="14" fill="#f7f4ea"/>'
+            '<rect x="232" y="90" width="14" height="14" fill="#f7f4ea"/><rect x="248" y="90" width="14" height="14" fill="#f7f4ea"/><rect x="264" y="90" width="14" height="14" fill="#205841"/>'
+            '<text x="288" y="70" font-size="9.3" fill="#205841" font-weight="bold">Diag = 1 (invariance)</text>'
+            '<text x="288" y="86" font-size="9.3" fill="#b3472a" font-weight="bold">Off-diag = 0 (no dupes)</text>'
+            '<text x="288" y="101" font-size="9" fill="#244035">Loss: 0.1938 → 0.0003</text>'
             '<rect x="454" y="34" width="210" height="76" rx="5" fill="#f7e7ba" stroke="#8a5a19" stroke-width="1.5"/>'
-            '<text x="464" y="52" font-size="10.5" fill="#1b3126" font-weight="bold">3. Cluster Quality (Table 2.7)</text>'
-            '<text x="464" y="69" font-size="9.5" fill="#205841" font-weight="bold">Silhouette: 0.408 vs 0.015 (AE)</text>'
-            '<text x="464" y="85" font-size="9.5" fill="#244035">Davies-Bouldin: 0.82 vs 2.81 (AE)</text>'
-            '<text x="464" y="100" font-size="9.2" fill="#536052">Zero train/val overfitting gap (Ch. 2)</text>'
+            '<text x="464" y="52" font-size="10" fill="#1b3126" font-weight="bold">3. Cluster Quality (Table 2.7)</text>'
+            '<text x="464" y="69" font-size="9.3" fill="#205841" font-weight="bold">Silhouette: 0.408 vs 0.015 (AE)</text>'
+            '<text x="464" y="85" font-size="9.3" fill="#244035">Davies-Bouldin: 0.82 vs 2.81 (AE)</text>'
+            '<text x="464" y="100" font-size="9" fill="#536052">Zero train/val overfitting gap (Ch. 2)</text>'
             "</svg></figure>"
         )
 

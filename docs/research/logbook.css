@@ -76,6 +76,9 @@
 .lab-output-content img + pre { margin-top: 8px; }
 .lab-output-content > p { font-size: 12px; margin: 0 0 7px; color: #536052; }
 .lab-result-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; font-variant-numeric: tabular-nums; }
+.lab-io-card .lab-evidence-table { max-width: 100%; margin: 10px 0 0; overflow-x: auto; }
+.lab-io-card .lab-result-table { font-size: 12.5px; }
+.lab-io-card .lab-result-table th, .lab-io-card .lab-result-table td { padding: 6px 7px; overflow-wrap: break-word; }
 .lab-result-table caption { text-align: left; color: #536052; padding-bottom: 5px; }
 .lab-result-table th, .lab-result-table td { padding: 7px 9px; border-bottom: 1px solid var(--lab-rule); }
 .lab-result-table th { background: #eef1eb; }
@@ -230,4 +233,44 @@
 .lab-card-list li + li { margin-top: 4px; }
 @media (max-width: 590px) {
   .lab-io { grid-template-columns: 1fr; gap: 8px; }
+}
+.lab-chart { margin: 10px 0; padding: 11px 13px; border-radius: 6px; background: #f7f4ea; }
+.lab-chart figcaption { margin-bottom: 8px; color: #244035; font-size: 13px; font-weight: 650; }
+.lab-chart .lab-card-note { margin: 8px 0 0; }
+.lab-swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 106px), 1fr)); gap: 6px; margin: 0; }
+.lab-swatches div { border: 1px solid var(--swatch-line); border-radius: 5px; background: var(--swatch); padding: 5px 8px; }
+.lab-swatches dt { font-size: 12px; font-weight: 650; color: #1b3126; overflow-wrap: anywhere; }
+.lab-swatches dd { margin: 2px 0 0; font-size: 12px; color: #263e31; overflow-wrap: anywhere; }
+.lab-swatches dd:empty { display: none; }
+.lab-chart-bars { list-style: none; display: grid; padding: 0; margin: 0; gap: 9px; }
+.lab-chart-bars li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 9px; align-items: baseline; font-size: 12px; color: #244035; }
+.lab-chart-bars strong { font-variant-numeric: tabular-nums; text-align: right; }
+.lab-chart-track { position: relative; grid-column: 1 / -1; height: 7px; background: #e0e7dc; border-radius: 3px; }
+.lab-chart-track i { position: absolute; height: 100%; inset-inline-start: var(--bar-start); width: var(--bar-width); background: var(--bar-colour); border-radius: 3px; }
+.lab-chart-axis::after { content: ""; position: absolute; inset: -2px auto -2px 50%; border-left: 1px solid #52675a; }
+.lab-evidence-table { container-type: inline-size; }
+.lab-stack-table td, .lab-stack-table code, .lab-script-banner code { overflow-wrap: anywhere; }
+
+@container (max-width: 470px) {
+  .lab-evidence-table .lab-stack-table { display: block; }
+  .lab-evidence-table .lab-stack-table caption { display: block; margin-bottom: 4px; }
+  .lab-evidence-table .lab-stack-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .lab-evidence-table .lab-stack-table tbody { display: grid; gap: 6px; }
+  .lab-evidence-table .lab-stack-table tr { display: grid; padding: 6px 9px; background: #f8f8f0; border: 1px solid var(--lab-rule); border-radius: 5px; }
+  .lab-evidence-table .lab-stack-table td { display: grid; grid-template-columns: minmax(0, 38%) minmax(0, 1fr); gap: 8px; padding: 4px 0; border: 0; }
+  .lab-evidence-table .lab-stack-table td::before { content: attr(data-label); color: #4a6152; font-weight: 650; }
+}
+@media (max-width: 700px) {
+  .lab-tentpole { display: none; }
+  .lab-script-banner { padding: 5px 9px; gap: 4px 8px; flex-wrap: nowrap; }
+  .lab-script-banner code { min-width: 0; font-size: 12px; }
+  .lab-script-banner .lab-script-meta, .lab-script-tag { display: none; }
+  .lab-script-cta { flex: none; white-space: nowrap; font-size: 12px; padding: 4px 6px; }
+  .lab-arc-table { display: block; }
+  .lab-arc-table caption { display: block; }
+  .lab-arc-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .lab-arc-table tbody { display: grid; gap: 8px; }
+  .lab-arc-table tr { display: grid; border: 1px solid var(--lab-rule); border-radius: 5px; padding: 8px 11px; }
+  .lab-arc-table td, .lab-arc-table td:first-child { display: block; min-width: 0; border: 0; padding: 3px 0; }
+  .lab-arc-table .lab-step-role { font-size: 12px; }
 }

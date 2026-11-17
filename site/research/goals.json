@@ -4,8 +4,8 @@
     "goals": [
       {
         "id": "question",
-        "title": "Overview & hypothesis",
-        "description": "Core hypothesis: whole-slide lymphoma scans are too large to train on directly, so extracting each specimen at three biological scales (cores, patches, cells) and compressing them into feature vectors lets us test which scale best predicts (1) expert staining grades and (2) molecular subtypes while keeping predictions traceable to the tissue.",
+        "title": "From tissue scans to results",
+        "description": "A whole-slide scan is too large to work with as one image. I broke it into tissue cores, smaller patches and individual cells, then tested which view best matched expert staining grades and supplied lymphoma subtype labels. Each result can be traced back to where it came from.",
         "related": ["crop","grading-splits","subtype-cohort"],
         "path": [
           ["1. Prepare tissue scales","crop/crop_benchmark.csv","Turn whole scans into traceable cores, patches and single cells (point-and-click halved core marking time from 6 s to 3 s; WebP cut patch storage by 86.5%)."],
@@ -17,7 +17,7 @@
         "links": [["Read study limits & next tests","limits"]],
         "more": [["Try the same logbook on a different project","example/"]],
         "figure": ["image_scales.png","Schematic showing one scan and one selected core branching into patches and cells.","Synthetic schematic. The patch and cell views both come from core C01. The thesis crop was 5,000 × 5,000 pixels, covering 1.25 × 1.25 mm at the reported scan scale (Table 2.5, p. 70).",1305,529],
-        "start": [["Why I chose 1-click cropping (6 s → 3 s)","crop/crop_benchmark.csv"],["Trace Case S02 to the grading chart","figures/run_grading_example.py"],["Inspect the 0.992 AUC subtype result","validation"]],
+        "start": [["Why I chose 1-click cropping (6 s → 3 s)","crop/crop_benchmark.csv"],["Trace Case S02 to the grading chart","figures/run_grading_example.py"],["See what the subtype results support","validation"]],
         "files": [
           ["research_questions.md","Nov 2026","Frames the three-scale thesis hypothesis across image preparation, expert staining grades and molecular subtype prediction."],
           ["README.md","Nov 2026","Provides one copyable command to rerun the end-to-end grading workflow and inspect the generated CSVs and SVG figure."]
@@ -36,7 +36,7 @@
         "related": ["prepare","cells"],
         "story": {
           "tried": "4 core-finding methods (Hough, 2-click grid, drawn boxes, 1-click fixed box).",
-          "found": "1-click halved manual time (6 s → 3 s/core) at 1.00 prec/recall; grid clipped drifted cores (0.98 prec); Hough missed 11% (0.89 rec).",
+          "found": "Point-and-click took 3 seconds per core instead of 6 for rectangles. Both found all the target cores in the comparison and made no wrong selections. The grid was faster but could clip off-centre cores. Hough missed more cores.",
           "next": "Adopted 1-click fixed-size (5,000 × 5,000 px) cropping across all 1,109 cores.",
           "source": "Submitted thesis, Table 2.5, p. 70, and August 2020 annotation scripts."
         },
@@ -105,8 +105,8 @@
         "title": "Compress & audit storage",
         "description": "How can we shrink 229,683 patches enough for repeated training runs and catch corrupted dataset shapes before jobs launch?",
         "story": {
-          "tried": "Compared PNG vs WebP (Q=75), audited array shapes against manifests, and timed bundled vs split reads.",
-          "found": "WebP shrank 229,683 patches by 86.5% (26.94 → 3.63 GB) with ~1.95/255 channel diff; pre-flight audit caught shape/file faults.",
+          "tried": "Compared PNG and WebP in the thesis. The public examples separately check a generated patch, dataset structure and local read times.",
+          "found": "In the thesis, WebP reduced storage for 229,683 patches from 26.94 GB to 3.63 GB (86.5%). The generated patch example measures a separate pixel difference.",
           "next": "Stored patch and core collections in WebP and ran pre-flight array audits before GPU jobs.",
           "source": "Submitted thesis, Chapter 2 results, p. 72 and Fig. 2.12."
         },
@@ -280,7 +280,7 @@
         "related": ["compare"],
         "story": {
           "tried": "Combined class rarity, training loss and EMA weights for dynamic sampling, and probed the 8th null class with Gaussian noise.",
-          "found": "Hybrid weighting boosted rare Grade 1 (0.392) and hard Grade 0 (0.293); the null class caught 12/12 noise bags vs 0/12 signal bags.",
+          "found": "In the generated examples, weighting gives rare or difficult grades more chances to appear. The toy classifier labels all 12 noise bags and none of the 12 signal bags as outside its expected inputs.",
           "next": "Evaluated trained grading error alongside human inter-assessor disagreement (#agreement)."
         },
         "links": [["See hybrid sampling weights","sampling/weight_grading_examples.py"],["See Gaussian noise probe","sampling/probe_grading_model_with_noise.py"]],
@@ -332,7 +332,7 @@
         "related": ["subtype-ablations","validation"],
         "story": {
           "tried": "Compared mean, max and softmax-attention bag pooling, size-sorted variable bags, and scored held-out bags.",
-          "found": "Attention learned instance weights [0.212, 0.212, 0.576], and size-sorted batching cut dummy padding by 76% (21 → 5 slots).",
+          "found": "In generated examples, attention gives patches different weights. Sorting four bags by size reduces padding from 19 slots to 5 (about 74%).",
           "next": "Tested whether 2D spatial patch coordinates or cell-to-patch hierarchy improved bag predictions (#subtype-ablations)."
         },
         "files": [
@@ -350,7 +350,7 @@
         "related": ["cost","explain"],
         "story": {
           "tried": "Ablated 2D rotary position encodings (RoPE) on identical patch bags and compared flat cell vs patch-then-core pooling.",
-          "found": "Adding 2D RoPE positions changed attention weights (0.500 → 0.369) and increased compute cost without improving patch-level subtype accuracy.",
+          "found": "In the generated example, using 2D positions changes the pooled score from 0.500 to 0.369. The thesis reports no clear patch-scale subtype advantage from adding positions.",
           "next": "Preserved this negative result in the logbook and recommended testing on intact whole-slide tissue (#limits).",
           "source": "Submitted thesis, Chapter 4, §4.6.3, pp. 186 and 189."
         },
@@ -367,7 +367,7 @@
         "description": "Which subtype representation performed best across validation folds, and how do class recalls behave across thresholds?",
         "story": {
           "tried": "Evaluated fold-by-fold subtype accuracy, tie-aware ROC AUC and per-class recall (k/n) across 3 validation folds.",
-          "found": "Patch · UNI reached 0.970 accuracy and 0.992 macro AUC (vs 0.958 Patch-ResNet, 0.952 Cell-ResNet, 0.675 Core).",
+          "found": "Patch · UNI reached 0.970 accuracy and 0.992 macro AUC in internal validation. Macro AUC was 0.958 for Patch · ResNet, 0.952 for Cell · ResNet and 0.675 for Core · Contrastive.",
           "next": "Reported explicit per-fold denominators and scoped need for multi-centre external validation (#limits).",
           "source": "Submitted thesis, Table 4.4, p. 161, and limitations, p. 190."
         },

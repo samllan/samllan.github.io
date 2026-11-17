@@ -40,6 +40,23 @@ function revealNavigation(link) {
   }
 }
 
+// Some diagrams have hand-positioned labels. Give the drawing room for the
+// longest label at the actual font size rather than letting its edge clip.
+function fitDiagrams(container) {
+  for (const chart of container.querySelectorAll('svg.lab-diagram[viewBox]')) {
+    if (!chart.getClientRects().length) continue;
+    const { x, y, width, height } = chart.viewBox.baseVal;
+    const bounds = chart.getBBox();
+    const left = Math.min(x, bounds.x - 2);
+    const top = Math.min(y, bounds.y - 2);
+    const right = Math.max(x + width, bounds.x + bounds.width + 2);
+    const bottom = Math.max(y + height, bounds.y + bounds.height + 2);
+    if (left < x || top < y || right > x + width || bottom > y + height) {
+      chart.setAttribute('viewBox', [left, top, right - left, bottom - top].join(' '));
+    }
+  }
+}
+
 function selectExperiment() {
   const [key, encodedFile] = location.hash.slice(1).split('/');
   const goal = goals.find(item => item.id === key) || goals.find(item => item.hasAttribute('data-goal'));
@@ -71,6 +88,7 @@ function selectExperiment() {
     if (matchMedia('(max-width: 700px)').matches) window.scrollTo(0, 0);
   }
   activeExperiment = selected;
+  fitDiagrams(selected);
   focusOnNavigation = false;
   toggledByRowClick = false;
 }
@@ -358,3 +376,7 @@ if (!location.hash) {
 }
 if (cropDemo) setupCropDemo();
 selectExperiment();
+document.fonts.ready.then(() => fitDiagrams(activeExperiment));
+logbook.addEventListener('toggle', event => {
+  if (event.target.matches('details[open]')) fitDiagrams(event.target);
+}, true);

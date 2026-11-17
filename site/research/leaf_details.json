@@ -114,7 +114,7 @@
     "title": "Compare PNG vs WebP compression",
     "role": "Measure byte savings & pixel diff",
     "input": "The same generated patch saved using PNG and WebP.",
-    "framing": "Can WebP shrink 229,683 histology patches from 26.94 GB to 3.63 GB (−86.5%) while keeping decoded RGB values within ~2/255 of lossless PNG?"
+    "framing": "How much storage did WebP save in the thesis, and how does a small generated example measure changes in decoded pixels?"
   },
   "audit_dataset_structure.py": {
     "title": "Audit dataset shapes before training",
@@ -260,7 +260,7 @@
     "framing": "How do we assign cross-validation folds so cores from the same patient or group never leak across the train/test boundary?"
   },
   "train_scale_graders.py": {
-    "title": "Train core, patch & cell graders",
+    "title": "Train patch and cell graders",
     "role": "Compare scales on shared held-out split",
     "input": "Generated features at two image scales with shared training and test IDs.",
     "from": ["grading-splits/prepare_reference_grades.py", "grading-splits/assign_validation_folds.py"],
@@ -315,9 +315,9 @@
   },
   "probe_grading_model_with_noise.py": {
     "title": "Probe null class with Gaussian noise",
-    "role": "Test 8th outside-input class (12/12 flagged)",
+    "role": "Check noise rejection in a three-class demo",
     "input": "Twelve generated signal sets and twelve noise sets for the outside-input class.",
-    "framing": "If pure out-of-distribution Gaussian noise is fed into the grading model, does the dedicated 8th null class catch it instead of assigning a false stain grade?"
+    "framing": "Can a generated three-class scorer flag noise as outside its expected inputs? The thesis used an eighth class for this purpose."
   },
   "compare_assessor_errors.py": {
     "title": "Compare model MAE with human rater gap",
@@ -352,7 +352,7 @@
     "framing": "One core contains hundreds of patches but only one subtype label. How do mean, maximum and softmax-attention pooling weight the patches inside a bag?"
   },
   "batch_variable_patch_sets.py": {
-    "title": "Sort variable bags to cut padding 76%",
+    "title": "Sort patch sets to reduce padding",
     "role": "Group similar bag sizes + mask pad slots",
     "input": "Four specimens that contain different numbers of patches.",
     "framing": "Cores yield anywhere from 87 to 300+ patches. How much dummy padding do we eliminate by sorting bags by length before batching—and masking padded slots?"
@@ -425,7 +425,7 @@
     "role": "Shared colour scale + hatched unscored regions",
     "input": "A generated 64 × 48 pixel image with two overlapping scored patches.",
     "from": ["heatmaps/map_patch_scores.py"],
-    "framing": "Can a pathologist see where high-risk patch scores sit on the tissue image without mistaking unscored background glass for a low-risk (0.0) score?",
+    "framing": "Where do higher and lower model scores fall on the image, and which areas were never scored?",
     "method": "Average scores where patch bounds overlap, render scored pixels on a shared RGBA colour scale, and hatch pixels that received no score (NaN)."
   },
   "summarise_overlay_coverage.py": {
@@ -506,7 +506,7 @@
     "role": "End-to-end 12-case, 3-scale replay",
     "input": "Two assessor grades for case S02, its fold assignment and feature vectors at three image scales.",
     "from": ["grading-splits/prepare_reference_grades.py", "grading-splits/assign_validation_folds.py"],
-    "framing": "Can a reader pick one error bar in the final chart and trace Case S02 step by step from two assessor ratings (2 and 3) through Fold 1 to its 3-scale predictions?",
+    "framing": "Can a reader pick one bar in the final chart and trace Case S02 step by step from two assessor ratings (2 and 3) through Fold 1 to its 3-scale predictions?",
     "method": "Average the two assessor grades (2.500), fit each scale's model on the other folds, predict S02 held out in Fold 1, and rebuild the 3-scale SVG chart."
   },
   "bin_patch_distribution.py": {
