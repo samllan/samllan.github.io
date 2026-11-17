@@ -77,6 +77,10 @@ def score_overlay():
                                         facecolor=color, hatch="///" if i == 3 else None))
         figure.text(x + .034, .126, label, fontsize=10, color="#244035")
     figure.savefig(EXAMPLES / "score_overlay_example.png", dpi=145)
+    for axis, side in zip(axes, ("input", "output")):
+        axis.title.set_visible(False)
+        clip = axis.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
+        figure.savefig(EXAMPLES / f"score_overlay_{side}.png", dpi=145, bbox_inches=clip)
     plt.close(figure)
 
 

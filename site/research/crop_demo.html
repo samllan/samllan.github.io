@@ -1,9 +1,10 @@
-        <section class="lab-demo" aria-labelledby="demo-title" hidden>
-          <div class="lab-demo-head"><h3 id="demo-title">Mark a core with one click</h3><span>Synthetic image</span></div>
-          <p id="demo-help">Click the middle of a core. The tool records the marked centre and the crop’s four borders. Close to an edge, the crop shifts inward to keep its size. With the image focused, use the arrow keys to move and Enter to mark.</p>
-          <div class="demo-grid">
-            <canvas id="crop-image" width="640" height="240" tabindex="0" aria-label="Example image for marking crop centres" aria-describedby="demo-help"></canvas>
-            <div class="demo-preview"><canvas id="crop-preview" width="96" height="96" aria-label="Newest marked crop"></canvas><p id="crop-status" aria-live="polite">No crops marked</p><p id="crop-coordinates"></p></div>
-          </div>
-          <div class="demo-actions"><button id="crop-undo" type="button" disabled>Undo last</button><button id="crop-download" type="button" disabled>Download crop records (CSV)</button></div>
-        </section>
+<div class="lab-demo">
+  <canvas id="crop-image" width="640" height="240" tabindex="0" aria-label="Generated scan for marking crop centres" aria-describedby="demo-help"></canvas>
+  <p id="demo-help" class="lab-card-note">Click a core, or use arrow keys and Enter. Near the edge, the crop shifts inward to keep its size.</p>
+</div>
+<!-- output panel -->
+<div class="demo-preview">
+  <canvas id="crop-preview" width="96" height="96" aria-label="Most recent 96 by 96 pixel crop"></canvas>
+  <div><p class="crop-size">96 × 96 pixels per crop</p><p id="crop-status" aria-live="polite">No crops marked</p><p id="crop-coordinates"></p></div>
+</div>
+<div class="demo-actions"><button id="crop-undo" type="button" disabled>Undo last</button><button id="crop-download" type="button" disabled>Download marks (CSV)</button></div>

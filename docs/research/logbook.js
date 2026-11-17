@@ -1,15 +1,16 @@
 const logbook = document.querySelector('.lab');
 const content = logbook.querySelector('.lab-content');
 const goals = [...logbook.querySelectorAll('[data-goal]')];
-const goalLinks = [...logbook.querySelectorAll('.lab-goals a[href^="#"]')];
+const tree = logbook.querySelector('.lab-goals');
 const cropDemo = document.querySelector('.lab-demo');
 const browseGoals = document.querySelector('.lab-nav-toggle');
-let currentGoal;
-let cropReady = false;
+let activeExperiment;
+let focusOnNavigation = false;
 
 function showGoalMenu(open) {
   logbook.toggleAttribute('data-nav-open', open);
   browseGoals.setAttribute('aria-expanded', String(open));
+  if (open) tree.querySelector('[aria-current]')?.scrollIntoView({ block: 'nearest' });
 }
 
 browseGoals.addEventListener('click', () => showGoalMenu(!logbook.hasAttribute('data-nav-open')));
@@ -20,104 +21,123 @@ function setBranch(button, open) {
 }
 
 function revealNavigation(link) {
-  if (!link) return;
-  for (let item = link.parentElement; item; item = item.parentElement) {
+  for (let item = link?.parentElement; item && item !== tree; item = item.parentElement) {
     if (item.matches('details.lab-group')) item.open = true;
-    if (item.matches('ul.lab-branch')) {
-      setBranch(item.parentElement.querySelector(':scope > .lab-branch-toggle'), true);
+    if (item.id.startsWith('branch-')) {
+      setBranch(item.previousElementSibling, true);
     }
   }
-  const button = link.parentElement.querySelector(':scope > .lab-branch-toggle');
-  if (button) setBranch(button, true);
+  if (tree.clientHeight) {
+    const bounds = tree.getBoundingClientRect();
+    const leaf = link?.getBoundingClientRect();
+    if (leaf && (leaf.top < bounds.top || leaf.bottom > bounds.bottom)) {
+      tree.scrollTop += leaf.top - bounds.top - tree.clientHeight / 3;
+    }
+  }
 }
 
-function selectGoal() {
-  const [id, encodedFile] = location.hash.slice(1).split('/');
-  const active = document.getElementById(id);
-  const goal = goals.includes(active) ? active : goals[0];
-  const changed = goal !== currentGoal;
-  const wasOpen = Boolean(currentGoal);
-  if (changed) {
-    currentGoal = goal;
-    goals.forEach(section => { section.hidden = section !== goal; });
-    goalLinks.forEach(link => {
-      if (link.hash === '#' + goal.id) {
-        link.setAttribute('aria-current', 'location');
-        revealNavigation(link);
-      } else link.removeAttribute('aria-current');
-    });
+function selectExperiment() {
+  const [key, encodedFile] = location.hash.slice(1).split('/');
+  const goal = goals.find(item => item.id === key) || goals[0];
+  let filename;
+  try { filename = decodeURIComponent(encodedFile || ''); } catch { filename = ''; }
+  const entries = [...goal.querySelectorAll('[data-experiment]')];
+  const selected = entries.find(item => item.dataset.experiment === filename)
+    || entries.find(item => item.dataset.experiment === goal.firstElementChild.dataset.defaultFile);
+  if (activeExperiment && activeExperiment !== selected) closeEditor(activeExperiment);
+  goals.forEach(item => { item.hidden = item !== goal; });
+  for (const item of entries) item.hidden = item !== selected;
+  tree.querySelector('[aria-current]')?.removeAttribute('aria-current');
+  const link = [...tree.querySelectorAll('.lab-script')].find(item => decodeURIComponent(item.hash.slice(1)) === selected.id);
+  link?.setAttribute('aria-current', 'page');
+  revealNavigation(link);
+  if (selected !== activeExperiment || focusOnNavigation) {
     content.scrollTop = 0;
-    if (wasOpen && matchMedia('(max-width: 700px)').matches) {
-      goal.scrollIntoView({ block: 'start', behavior: 'instant' });
-    }
+    if (focusOnNavigation) selected.querySelector('h2').focus({ preventScroll: true });
+    if (matchMedia('(max-width: 700px)').matches) window.scrollTo(0, 0);
   }
-  let filename = '';
-  try { filename = decodeURIComponent(encodedFile || ''); } catch { /* Ignore a malformed bookmark. */ }
-  const links = [...goal.querySelectorAll('.lab-row-file')];
-  const selected = links.find(link => link.textContent === filename);
-  const files = goal.querySelector('.lab-files-panel');
-  if (selected) {
-    files.open = true;
-    selectRow(selected, !changed);
-  } else if (!goal.querySelector('[data-selected]') && links.length) {
-    selectRow(links.find(link => link.textContent === files.dataset.defaultFile) || links[0]);
-  }
+  activeExperiment = selected;
+  focusOnNavigation = false;
 }
 
-function selectRow(link, reveal = false) {
-  const goal = link.closest('[data-goal]');
-  const row = link.closest('tr');
-  const panel = goal.querySelector('.lab-output');
-  const filename = link.textContent;
-  const former = goal.querySelector('[data-selected]');
-  if (former !== row) {
-    former?.removeAttribute('data-selected');
-    former?.querySelector('.lab-row-file').removeAttribute('aria-current');
-    row.dataset.selected = '';
-    link.setAttribute('aria-current', 'true');
-
-    const template = [...goal.querySelectorAll('template[data-file]')].find(item => item.dataset.file === filename);
-    const example = template.content.cloneNode(true);
-    const guide = example.querySelector('[data-markdown]');
-    if (guide) guide.replaceWith(filePreview(guide.textContent, link.href));
-    panel.querySelector('.lab-output-content').replaceChildren(example);
-    panel.querySelector('.lab-output-kind').textContent = template.dataset.kind;
-    panel.querySelector('.lab-output-title').textContent = filename;
-    panel.querySelector('[data-preview]').href = link.href;
-    panel.querySelector('.lab-share-link').href = '#' + goal.id + '/' + encodeURIComponent(filename);
-    panel.hidden = false;
-  }
-  if (cropDemo && goal.id === 'crop') {
-    cropDemo.hidden = !cropReady || filename !== 'prepare_image_regions.py';
-  }
-  if (reveal) panel.querySelector('.lab-output-head').scrollIntoView({ block: 'nearest' });
+function framingKey(entry) {
+  return 'research-logbook:framing:' + location.pathname + ':' + entry.id;
 }
 
-function setupSort(goal) {
-  const body = goal.querySelector('.lab-files tbody');
-  const workflowOrder = [...body.rows];
-  if (workflowOrder.length < 2) return;
-  const control = goal.querySelector('.lab-order');
-  const names = new Intl.Collator('en', { numeric: true });
-  control.hidden = false;
-  control.querySelector('select').addEventListener('change', event => {
-    const order = event.target.value;
-    const rows = [...workflowOrder];
-    if (order === 'file') rows.sort((a, b) => names.compare(a.querySelector('code').textContent, b.querySelector('code').textContent));
-    if (order === 'year') rows.sort((a, b) => Number(b.dataset.sourceYear) - Number(a.dataset.sourceYear));
-    body.append(...rows);
+function savedFraming(entry) {
+  try { return localStorage.getItem(framingKey(entry)); } catch { return null; }
+}
+
+function closeEditor(entry) {
+  entry.querySelector('.lab-framing-form').hidden = true;
+  entry.querySelector('.lab-framing-text').hidden = false;
+  entry.querySelector('.lab-edit').hidden = false;
+}
+
+function setupFraming(entry) {
+  const text = entry.querySelector('.lab-framing-text');
+  const original = text.textContent;
+  const edit = entry.querySelector('.lab-edit');
+  const form = entry.querySelector('.lab-framing-form');
+  const field = form.elements.framing;
+  const restore = form.querySelector('[data-restore]');
+  const status = entry.querySelector('.lab-framing-status');
+  const saved = savedFraming(entry);
+  if (saved !== null) {
+    text.textContent = saved;
+    status.textContent = 'Edited in this browser';
+  }
+  edit.hidden = false;
+  edit.addEventListener('click', () => {
+    field.value = text.textContent;
+    restore.hidden = savedFraming(entry) === null;
+    form.hidden = false;
+    edit.hidden = true;
+    text.hidden = true;
+    field.focus();
   });
+
+  function save(value) {
+    try {
+      if (value === original) localStorage.removeItem(framingKey(entry));
+      else localStorage.setItem(framingKey(entry), value);
+    } catch {
+      status.textContent = 'Browser storage is unavailable. Your text is still in the editor.';
+      return;
+    }
+    text.textContent = value;
+    status.textContent = value === original ? 'Original framing restored' : 'Saved in this browser';
+    closeEditor(entry);
+    edit.focus();
+  }
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const value = field.value.trim();
+    if (value) save(value);
+    else status.textContent = 'Enter a note before saving.';
+  });
+  form.querySelector('[data-cancel]').addEventListener('click', () => {
+    closeEditor(entry);
+    edit.focus();
+  });
+  restore.addEventListener('click', () => save(original));
 }
 
 logbook.classList.add('enhanced');
-goals.forEach(setupSort);
-logbook.querySelectorAll('.lab-branch-toggle').forEach(button => {
+for (const button of tree.querySelectorAll('.lab-branch-toggle')) {
   button.hidden = false;
   setBranch(button, false);
   button.addEventListener('click', () => setBranch(button, button.getAttribute('aria-expanded') !== 'true'));
+}
+for (const entry of logbook.querySelectorAll('[data-experiment]')) setupFraming(entry);
+logbook.addEventListener('change', event => {
+  if (!event.target.matches('[data-image-scale]')) return;
+  for (const result of event.target.closest('.lab-io-card').querySelectorAll('[data-scale-result]')) {
+    result.hidden = result.dataset.scaleResult !== event.target.value;
+  }
 });
-window.addEventListener('hashchange', selectGoal);
-
+window.addEventListener('hashchange', selectExperiment);
 const dialog = document.querySelector('#file-preview');
 const previewContent = document.querySelector('#preview-content');
 const previewOpen = document.querySelector('#preview-open');
@@ -155,7 +175,7 @@ async function previewFile(link) {
   previewRequest?.abort();
   const request = new AbortController();
   previewRequest = request;
-  document.querySelector('#preview-title').textContent = link.closest('.lab-output').querySelector('.lab-output-title').textContent;
+  document.querySelector('#preview-title').textContent = link.closest('[data-experiment]').dataset.experiment;
   const isScript = link.href.endsWith('.py');
   previewOpen.href = isScript ? sourceDirectory + '/' + link.href.split('/').pop() : link.href;
   previewOpen.textContent = isScript ? 'Open on GitHub ↗' : 'Open file ↗';
@@ -182,31 +202,19 @@ async function previewFile(link) {
 }
 
 logbook.addEventListener('click', event => {
-  if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+  if (event.defaultPrevented || event.button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
   const link = event.target.closest('a');
-  if (link?.closest('.lab-goals')) showGoalMenu(false);
-  if (link?.hasAttribute('data-preview')) {
-    if (dialog.showModal) {
-      event.preventDefault();
-      previewFile(link);
-    }
-  } else if (link?.classList.contains('lab-script')) {
+  if (link?.hasAttribute('data-preview') && dialog.showModal) {
     event.preventDefault();
-    const goal = document.getElementById(link.dataset.openGoal);
-    const target = '#' + goal.id + '/' + encodeURIComponent(link.textContent);
-    if (location.hash !== target) location.hash = target;
-    selectGoal();
-    const rowLink = [...goal.querySelectorAll('.lab-row-file')].find(item => item.href === link.href);
-    if (rowLink) selectRow(rowLink, true);
-  } else if (link?.classList.contains('lab-row-file')) {
+    previewFile(link);
+  } else if (link?.getAttribute('href')?.startsWith('#')) {
     event.preventDefault();
-    selectRow(link, true);
-  } else if (!event.target.closest('a, button, select') && !getSelection()?.toString()) {
-    const rowLink = event.target.closest('.lab-files tbody tr')?.querySelector('.lab-row-file');
-    if (rowLink) selectRow(rowLink, true);
+    focusOnNavigation = true;
+    showGoalMenu(false);
+    if (link.hash !== location.hash) history.pushState(null, '', link.hash);
+    selectExperiment();
   }
 });
-
 dialog.addEventListener('close', () => previewRequest?.abort());
 
 function setupCropDemo() {
@@ -255,7 +263,7 @@ function setupCropDemo() {
     previewContext.clearRect(0, 0, size, size);
     const count = marks.length;
     const mark = marks.at(-1);
-    if (mark) previewContext.drawImage(source, ...cropPosition(mark), size, size, 0, 0, size, size);
+    previewContext.drawImage(source, ...cropPosition(mark || cursor), size, size, 0, 0, size, size);
     status.textContent = count ? `${count} crop${count === 1 ? '' : 's'} marked` : 'No crops marked';
     if (mark) {
       const [left, top] = cropPosition(mark);
@@ -286,7 +294,7 @@ function setupCropDemo() {
       event.preventDefault();
       const [dx, dy] = moves[event.key];
       keepInImage(cursor.x + dx, cursor.y + dy);
-      drawScene();
+      updateCrop();
     } else if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       marks.push({ ...cursor });
@@ -310,14 +318,10 @@ function setupCropDemo() {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
 
-  source.addEventListener('load', () => {
-    cropReady = true;
-    const selected = cropDemo.closest('[data-goal]').querySelector('[data-selected] code');
-    cropDemo.hidden = selected?.textContent !== 'prepare_image_regions.py';
-    updateCrop();
-  });
+  source.addEventListener('load', updateCrop);
   source.src = 'examples/example_grid.png';
 }
 
+if (!location.hash) tree.querySelector('details.lab-group')?.setAttribute('open', '');
 if (cropDemo) setupCropDemo();
-selectGoal();
+selectExperiment();

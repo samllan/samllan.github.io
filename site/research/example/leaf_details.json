@@ -1,0 +1,6 @@
+{
+  "README.md": {"title": "Start a reading room logbook", "input": "A fictional reading room pilot and a reusable project structure."},
+  "trial_waits.csv": {"title": "Record the two groups of waits", "input": "Four arrivals using a paper list and four using a prepared arrival list."},
+  "summarise_waits.py": {"title": "Compare the median waits", "input": "Eight fictional waits, in minutes, grouped by sign-in method.", "from": ["trial/trial_waits.csv"]},
+  "decision.md": {"title": "Choose a fairer follow-up test", "input": "The two median waits and the session notes showing the groups arrived at different times.", "from": ["trial/summarise_waits.py"]}
+}
