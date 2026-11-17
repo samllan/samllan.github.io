@@ -1543,16 +1543,14 @@ def leaf_visuals(filename, examples, demo, captured):
             (("wide", "0.93", "40 s", "900 MiB"), ("small", "0.91", "21 s", "600 MiB"), ("slow", "0.90", "53 s", "950 MiB")),
             highlight_row=2,
         )
-        out = (
-            '<svg viewBox="0 0 355 112" class="lab-diagram" role="img" aria-label="Pareto frontier plot showing small and wide undominated while slow is dominated">'
-            '<rect width="355" height="112" rx="6" fill="#f7f4ea"/>'
-            '<rect x="170" y="54" width="172" height="40" rx="3" fill="#f5d0c5" opacity="0.45"/>'
-            '<polyline points="68,48 144,24" fill="none" stroke="#205841" stroke-width="2" stroke-dasharray="4 2"/>'
-            '<circle cx="68" cy="48" r="7" fill="#205841"/><text x="78" y="52" font-size="10" fill="#205841" font-weight="bold">small (21 s, 0.91 ★)</text>'
-            '<circle cx="144" cy="24" r="9" fill="#205841"/><text x="156" y="28" font-size="10" fill="#205841" font-weight="bold">wide (40 s, 0.93 ★)</text>'
-            '<circle cx="204" cy="70" r="9.5" fill="#b3472a"/><text x="178" y="88" font-size="10" fill="#b3472a" font-weight="bold">slow (53 s, 0.90 ✕ dominated)</text>'
-            '<text x="14" y="106" font-size="9.5" fill="#536052">← Faster runtime (s) · Higher accuracy ↑ (bubble = RAM)</text>'
-            "</svg>"
+        out = mini_table(
+            "Which candidates are worth comparing further?",
+            ("Candidate", "Result", "Why"),
+            (
+                ("wide", "Keep", "Highest accuracy in the example."),
+                ("small", "Keep", "Fastest and lowest peak memory."),
+                ("slow", "Drop", "Both alternatives are faster, use less memory and have higher accuracy."),
+            ),
         )
         return inp, out
 
