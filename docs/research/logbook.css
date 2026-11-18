@@ -103,10 +103,8 @@
 
 #file-preview { padding: 0; color: #24332b; background: var(--lab-surface); border: 1px solid var(--lab-rule); border-radius: 6px; width: min(820px, calc(100% - 28px)); max-height: calc(100% - 36px); }
 #file-preview::backdrop { background: rgb(22 35 27 / 56%); }
-.preview-head, .preview-links { display: flex; align-items: center; justify-content: space-between; padding: 13px 18px; gap: 16px; }
-.preview-head { border-bottom: 1px solid var(--lab-rule); }
+.preview-head { display: flex; align-items: center; justify-content: space-between; padding: 13px 18px; gap: 16px; border-bottom: 1px solid var(--lab-rule); }
 .preview-head h2 { font-size: clamp(17px, 4vw, 22px); font-weight: 650; margin: 0; overflow-wrap: anywhere; }
-.preview-links { justify-content: start; border-top: 1px solid var(--lab-rule); color: var(--lab-green); font-size: 13px; }
 #preview-content { overflow: auto; max-height: 65vh; padding: 14px 18px; }
 #preview-content pre { margin: 0; font: 13px/1.6 'Cascadia Code', Consolas, monospace; }
 #preview-content img { display: block; width: 100%; height: auto; }

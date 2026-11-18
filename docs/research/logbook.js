@@ -113,8 +113,6 @@ logbook.addEventListener('change', event => {
 window.addEventListener('hashchange', selectExperiment);
 const dialog = document.querySelector('#file-preview');
 const previewContent = document.querySelector('#preview-content');
-const previewOpen = document.querySelector('#preview-open');
-const sourceDirectory = document.querySelector('.lab-source').href.replace('/tree/', '/blob/');
 let previewRequest;
 
 function filePreview(text, url) {
@@ -150,12 +148,6 @@ async function previewFile(link) {
   previewRequest = request;
   const filename = link.closest('[data-experiment]').dataset.experiment;
   document.querySelector('#preview-title').textContent = filename;
-  const isScript = link.href.endsWith('.py');
-  previewOpen.href = isScript ? sourceDirectory + '/' + link.href.split('/').pop() : link.href;
-  previewOpen.textContent = isScript ? 'Open on GitHub ↗' : 'Open file ↗';
-  const download = document.querySelector('#preview-download');
-  download.href = link.href;
-  download.download = filename;
   previewContent.textContent = 'Loading file…';
   dialog.showModal();
 
@@ -173,7 +165,7 @@ async function previewFile(link) {
     const text = await response.text();
     if (!request.signal.aborted) previewContent.replaceChildren(filePreview(text, filename));
   } catch (error) {
-    if (!request.signal.aborted) previewContent.textContent = 'Preview unavailable. Use the links below.';
+    if (!request.signal.aborted) previewContent.textContent = 'Couldn’t load the preview. Close it and try again.';
   }
 }
 
