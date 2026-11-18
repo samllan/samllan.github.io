@@ -312,6 +312,36 @@ def render_goal_overview(ancestors, goal, titles, descriptions, children, detail
     return "\n".join(line.rstrip() for line in markup.splitlines())
 
 
+def render_panel(key, title, text, visual, links):
+    return f"""<section class="lab-io-card lab-{key}" data-entry-panel="{key}">
+  <div class="lab-io-head">
+    <h3>{title}</h3><button type="button" class="lab-panel-edit" aria-label="Edit {title.lower()}" hidden>Edit</button>
+  </div>
+  <div class="lab-panel-text">{text}</div>
+  <form class="lab-panel-form" hidden>
+    <label>Text<textarea name="description" rows="4"></textarea></label>
+    <label class="lab-panel-file-label">Add or replace figure
+      <input type="file" name="figure" accept="image/png,image/jpeg,image/webp,image/gif">
+    </label>
+    <div class="lab-panel-figure-options" hidden>
+      <label>Caption and image description<input name="caption" type="text"></label>
+      <button type="button" class="lab-panel-use-original">Use original figure</button>
+    </div>
+    <div class="lab-form-actions">
+      <button type="submit">Save</button><button type="button" class="lab-panel-cancel">Cancel</button>
+      <button type="button" class="lab-panel-reset" hidden>Restore original panel</button>
+      <small>Changes save in this browser.</small>
+    </div>
+  </form>
+  <small class="lab-panel-status" role="status"></small>
+  <div class="lab-panel-visual">{visual}</div>
+  <figure class="lab-figure lab-panel-replacement" hidden>
+    <img alt=""><figcaption></figcaption>
+  </figure>
+  {links}
+</section>"""
+
+
 def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downstream, labels, *, project_samples, illustrate):
     key = goal["id"]
     filename, date, outcome = file
@@ -324,11 +354,6 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downs
     situation_html = f'<p class="lab-card-note">{situation}</p>' if situation else ""
     method = details.get("method")
     method_html = f'<p>{escape(method)}</p>' if method else ""
-    kind = details.get("kind") or ("Thesis benchmark" if project_samples and filename == "crop_benchmark.csv" else
-            "Demo and thesis comparison" if project_samples and filename == "compare_image_encodings.py" else
-            "Fictional pilot" if date.startswith("Fictional") else
-            "Research notes" if filename.endswith(".md") else "Synthetic example" if project_samples else "Recorded output")
-
     def connections(targets, heading):
         if not targets:
             return ""
@@ -360,6 +385,13 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downs
     source_tag = "Script" if filename.endswith(".py") else "File"
     experiment = escape(target, quote=True)
     kicker = breadcrumb_markup([*ancestors, (key, goal["title"])])
+    method_panel = render_panel("input", "What we did", input_text + method_html, input_visual, upstream)
+    result_panel = render_panel("result", "Result and next step", f'<p class="lab-io-description">{escape(outcome)}</p>',
+                                output_visual, evidence + onward)
+    crop_note = (
+        '<p class="lab-card-note" data-crop-replacement-note hidden>Restore both figures to use the crop demo.</p>'
+        if filename == "prepare_image_regions.py" and demo else ""
+    )
     markup = f"""<article class="lab-experiment" id="{experiment}" data-experiment="{escape(filename, quote=True)}">
   <div class="lab-experiment-head">
     {kicker}
@@ -383,14 +415,10 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downs
     <span class="lab-script-cta">{source_action} ↗</span>
   </a>
   <div class="lab-io">
-    <section class="lab-io-card lab-input"><h3>What we did</h3>
-      {input_text}{method_html}{input_visual}{upstream}
-    </section>
-    <section class="lab-io-card lab-result"><div class="lab-io-head"><h3>Result and next step</h3><span>{kind}</span></div>
-      <p class="lab-io-description">{escape(outcome)}</p>
-      {output_visual}{evidence}{onward}
-    </section>
+    {method_panel}
+    {result_panel}
   </div>
+  {crop_note}
 </article>"""
     return "\n".join(line.rstrip() for line in markup.splitlines())
 

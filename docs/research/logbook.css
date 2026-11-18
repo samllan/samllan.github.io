@@ -134,7 +134,6 @@
 .lab-kicker a:hover { text-decoration: underline; }
 .lab-crumb-sep { color: #7b8c80; font-weight: 500; }
 .lab-step-sub { color: #536052; font-weight: 500; font-size: 12px; }
-.lab-framing, .lab-experiment-notes { max-width: 76ch; }
 .lab-framing { border-block: 1px solid var(--lab-rule); padding: 12px 0; margin-bottom: 14px; }
 .lab-script-banner {
   display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px;
@@ -172,7 +171,6 @@
 .lab-io-card { min-width: 0; border: 1px solid #d0d9ce; border-radius: 8px; padding: clamp(13px, 2vw, 22px); }
 .lab-input { background: #f0eee6; }
 .lab-result { background: #e9eee5; }
-.lab-io-head span { font-size: 11px; font-weight: 650; color: #415f4e; text-align: right; }
 .lab-io-description { margin: 10px 0 12px; }
 .lab-card-note { margin: 5px 0 10px; font-size: 13px; color: #4b5c51; line-height: 1.5; }
 .lab-metrics { display: flex; flex-wrap: wrap; gap: 5px; list-style: none; padding: 0; margin: 10px 0 8px; }
@@ -270,4 +268,20 @@
 .lab-home-detail .lab-command { white-space: pre-wrap; overflow-wrap: anywhere; }
 .lab-goals .lab-home-link { display: inline-block; padding: 0; }
 .lab-goals .lab-home-link[aria-current="page"] { background: transparent; text-underline-offset: 3px; text-decoration: underline; }
-.lab-input > p:not(.lab-card-note) { margin: 8px 0; }
+.lab-framing-text, .lab-framing > .lab-card-note, .lab-framing-form { max-width: 76ch; }
+.lab-panel-text { margin: 8px 0; overflow-wrap: anywhere; }
+.lab-panel-text > :first-child { margin-top: 0; }
+.lab-panel-draft { white-space: pre-wrap; }
+.lab-panel-form { margin: 10px 0; }
+.lab-panel-form label { display: block; margin-bottom: 9px; color: #294535; font-size: 13px; font-weight: 650; }
+.lab-panel-form :is(textarea, input) { display: block; box-sizing: border-box; width: 100%; font: inherit; }
+.lab-panel-form :is(textarea, input[type="text"]) {
+  margin-top: 4px; padding: 7px 9px; color: #25352b;
+  background: var(--lab-surface); border: 1px solid #aebeb1; border-radius: 4px;
+}
+.lab-panel-form textarea { resize: vertical; }
+.lab-panel-form input[type="file"] { margin-top: 5px; }
+.lab-panel-figure-options { margin-bottom: 10px; }
+.lab-panel-status { display: block; color: #536052; }
+.lab-panel-status:empty { display: none; }
+.lab-panel-replacement img { max-width: 100%; max-height: 65vh; object-fit: contain; }

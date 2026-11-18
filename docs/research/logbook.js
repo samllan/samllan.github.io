@@ -57,6 +57,170 @@ function fitDiagrams(container) {
   }
 }
 
+const preparedPanels = new WeakSet();
+let panelDatabase;
+
+function panelStore(key, action, draft) {
+  panelDatabase ??= new Promise((resolve, reject) => {
+    const request = indexedDB.open('research-logbook-panels', 1);
+    request.onupgradeneeded = () => request.result.createObjectStore('drafts');
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+
+  return panelDatabase.then(database => new Promise((resolve, reject) => {
+    const transaction = database.transaction('drafts', action === 'get' ? 'readonly' : 'readwrite');
+    const store = transaction.objectStore('drafts');
+    const request = action === 'put' ? store.put(draft, key) : store[action](key);
+    transaction.oncomplete = () => resolve(request.result);
+    transaction.onabort = () => reject(transaction.error);
+  }));
+}
+
+function updateCropControls(entry) {
+  const note = entry.querySelector('[data-crop-replacement-note]');
+  if (!note) return;
+  const visuals = [...entry.querySelectorAll('.lab-panel-visual')];
+  const replaced = visuals.some(visual => visual.hidden);
+  for (const visual of visuals) visual.inert = replaced;
+  note.hidden = !replaced;
+}
+
+function setupPanel(entry, panel) {
+  if (preparedPanels.has(panel)) return;
+  preparedPanels.add(panel);
+  const key = JSON.stringify([location.pathname, entry.id, panel.dataset.entryPanel]);
+  const edit = panel.querySelector('.lab-panel-edit');
+  const form = panel.querySelector('.lab-panel-form');
+  const text = panel.querySelector('.lab-panel-text');
+  const originalText = [...text.querySelectorAll('p')].map(p => p.textContent.trim()).join('\n\n');
+  const originalHTML = text.innerHTML;
+  const visual = panel.querySelector('.lab-panel-visual');
+  const figure = panel.querySelector('.lab-panel-replacement');
+  const image = figure.querySelector('img');
+  const caption = figure.querySelector('figcaption');
+  const figureOptions = panel.querySelector('.lab-panel-figure-options');
+  const status = panel.querySelector('.lab-panel-status');
+  const restore = panel.querySelector('.lab-panel-reset');
+  let draft;
+  let pendingImage;
+  let imageUrl;
+  let busy = false;
+
+  function readView() {
+    if (!draft || draft.text === originalText) {
+      if (text.querySelector('.lab-panel-draft')) text.innerHTML = originalHTML;
+    } else {
+      const p = document.createElement('p');
+      p.className = 'lab-panel-draft';
+      p.textContent = draft.text;
+      text.replaceChildren(p);
+    }
+    if (imageUrl) URL.revokeObjectURL(imageUrl);
+    imageUrl = draft?.image ? URL.createObjectURL(draft.image) : undefined;
+    if (imageUrl) image.src = imageUrl;
+    else image.removeAttribute('src');
+    image.alt = draft?.caption || 'Figure added to this panel';
+    caption.textContent = draft?.caption || '';
+    caption.hidden = !draft?.caption;
+    figure.hidden = !imageUrl;
+    visual.hidden = Boolean(imageUrl);
+    updateCropControls(entry);
+    fitDiagrams(panel);
+  }
+
+  function close() {
+    edit.hidden = false;
+    text.hidden = false;
+    form.hidden = true;
+    edit.focus();
+  }
+
+  function setBusy(value) {
+    busy = value;
+    for (const control of form.elements) control.disabled = value;
+  }
+
+  async function save(next) {
+    if (busy) return;
+    setBusy(true);
+    try {
+      if (next?.image && next.image !== draft?.image) {
+        const url = URL.createObjectURL(next.image);
+        try {
+          const test = new Image();
+          test.src = url;
+          await test.decode();
+        } catch {
+          status.textContent = 'This image could not be opened. Choose a PNG, JPEG, WebP or GIF.';
+          return;
+        } finally {
+          URL.revokeObjectURL(url);
+        }
+      }
+      await panelStore(key, next ? 'put' : 'delete', next);
+      draft = next;
+      readView();
+      status.textContent = next ? 'Saved in this browser.' : 'Original panel restored.';
+      close();
+    } catch {
+      status.textContent = 'Could not save here. Your changes are still in the editor.';
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  edit.addEventListener('click', () => {
+    form.reset();
+    pendingImage = draft?.image;
+    form.elements.description.value = draft?.text ?? originalText;
+    form.elements.caption.value = draft?.caption || '';
+    figureOptions.hidden = !pendingImage;
+    restore.hidden = !draft;
+    status.textContent = '';
+    edit.hidden = true;
+    text.hidden = true;
+    form.hidden = false;
+    form.elements.description.focus();
+  });
+
+  form.elements.figure.addEventListener('change', () => {
+    const file = form.elements.figure.files[0];
+    if (!file) return;
+    pendingImage = file;
+    figureOptions.hidden = false;
+  });
+  panel.querySelector('.lab-panel-use-original').addEventListener('click', () => {
+    pendingImage = undefined;
+    form.elements.figure.value = '';
+    form.elements.caption.value = '';
+    figureOptions.hidden = true;
+    form.elements.figure.focus();
+  });
+  panel.querySelector('.lab-panel-cancel').addEventListener('click', () => {
+    status.textContent = '';
+    close();
+  });
+  restore.addEventListener('click', () => save(undefined));
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const newText = form.elements.description.value.trim();
+    const newCaption = pendingImage ? form.elements.caption.value.trim() : '';
+    const next = newText === originalText && !pendingImage
+      ? undefined
+      : { text: newText, image: pendingImage, caption: newCaption };
+    save(next);
+  });
+
+  // Load the saved panel before accepting an edit to avoid overwriting a draft.
+  panelStore(key, 'get').then(saved => {
+    draft = saved;
+    if (draft) readView();
+  }).catch(() => {
+    status.textContent = 'Browser storage is unavailable.';
+  }).finally(() => { edit.hidden = false; });
+}
+
 function selectExperiment() {
   const [key, encodedFile] = location.hash.slice(1).split('/');
   const goal = goals.find(item => item.id === key) || goals.find(item => item.hasAttribute('data-goal'));
@@ -89,6 +253,7 @@ function selectExperiment() {
   }
   activeExperiment = selected;
   fitDiagrams(selected);
+  for (const panel of selected.querySelectorAll("[data-entry-panel]")) setupPanel(selected, panel);
   if (filename && !selectedLeaf) {
     const part = document.getElementById(goal.id + '/' + filename);
     if (part?.hasAttribute('data-home-part')) {

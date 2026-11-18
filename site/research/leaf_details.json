@@ -66,7 +66,7 @@
   "filter_tissue_patches.py": {
     "title": "Filter empty background tiles",
     "role": "Keep squares with ≥ 50% tissue",
-    "input": "Eight squares from a generated mask and a minimum tissue fraction.",
+    "input": "I used a generated mask to illustrate the filter. Each of its eight tiles is kept if at least half of it contains tissue.",
     "framing": "A full bounding grid over a circular core cuts across empty glass as well as tissue. Which grid squares contain enough tissue (≥ 50%) to keep?"
   },
   "summarise_patch_counts.py": {

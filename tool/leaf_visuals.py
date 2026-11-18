@@ -456,7 +456,7 @@ def leaf_visuals(filename, examples, demo, captured):
                 ("x=12 (2 patches)", 0, "0% · Skip", "#8a998e"),
             ),
             max_val=100,
-            note="Columns x=8 (25% tissue) and x=12 (0% background) fall below the 50% threshold and are rejected.",
+            note="Columns x=8 (25% tissue) and x=12 (0% tissue) fall below the 50% threshold and are rejected.",
         )
         return inp, out
 

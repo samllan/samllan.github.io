@@ -26,7 +26,7 @@
   },
   {
     "title": "1. Prepare tissue scales",
-    "summary": "Before testing any model hypothesis, multi-gigabyte whole-slide scans had to be turned into uniform cores, background-filtered patches and segmented single cells that fit on disk and kept their exact scan coordinates.",
+    "summary": "First I located and cropped the tissue cores. Each crop could then be divided into patches or individual cells. I kept the scan coordinates with each image and reduced the files so they were practical to use.",
     "goals": [
       {
         "id": "crop",
@@ -43,7 +43,7 @@
         "default_file": "crop_benchmark.csv",
         "links": [["Compare all 4 methods","crop/crop_benchmark.csv"],["Try the 1-click crop demo","crop/prepare_image_regions.py"],["Next: Extract traceable crops","prepare"]],
         "files": [
-          ["select_core_rectangles.py","Aug 2020","1.00 precision/recall at 6 s/core, with uneven pixel dimensions across hand-drawn boxes."],
+          ["select_core_rectangles.py","Aug 2020","In the thesis comparison, hand-drawn boxes took 6 seconds per core and found every target core with no false selections. The boxes varied in size."],
           ["interpolate_core_grid.py","Aug 2020","0.5 s/core and 1.00 recall from 2 corner clicks, dropping to 0.98 precision when cores drift off the grid line."],
           ["prepare_image_regions.py","Aug 2020–Nov 2023","3 s/core and 1.00 precision/recall using 1 centre click and a fixed square crop (shifting inward at edges)."],
           ["crop_benchmark.csv","Jun 2026 thesis","Thesis Table 2.5 comparing speed, precision, recall and manual effort across all 4 core extraction methods."],
@@ -53,12 +53,11 @@
       {
         "id": "prepare",
         "title": "Extract traceable crops",
-        "parent": "crop",
-        "description": "How do we cut out each marked core so downstream patch and cell predictions can always be placed back on the full scan?",
+        "description": "How can a crop point back to the exact place it came from on the scan?",
         "story": {
-          "tried": "Saved each core crop alongside a CSV manifest of scan origins and 4× downsample factors.",
-          "found": "Scan = Origin + Scale × Local mapped any reduced crop box back to exact full-scan pixels.",
-          "next": "Fed traceable cores into patch tiling (#patches) and single-cell segmentation (#cells)."
+          "tried": "Saved each crop with its starting position on the full scan and the scale used to make the preview.",
+          "found": "The scale tells us how far to move, and the saved starting position tells us where to start. Together they put a box from the preview back on the full scan.",
+          "next": "The same crops supplied both the patch tiles (#patches) and individual cell images (#cells)."
         },
         "files": [
           ["extract_labelled_crops.py","08/2020 - 03/2023","Cuts out one image per marked region and writes crops.csv linking filenames to source scan coordinates."],
@@ -68,15 +67,14 @@
       {
         "id": "patches",
         "title": "Tile into patches",
-        "parent": "prepare",
-        "description": "How do we tile each core into regular squares while discarding empty glass background and catching cores with zero usable patches?",
+        "description": "Can we cut each core into usable squares and catch any core that yields none?",
         "story": {
-          "tried": "Tiled full core bounding boxes, applied ≥ 50% Otsu tissue filtering, and logged 0-patch cores.",
-          "found": "Retained 229,683 tissue patches (207 ± 61/core) while catching empty/damaged cores before training.",
-          "next": "Saved accepted patch images with core IDs, pixel bounds and tissue coverage fractions."
+          "tried": "Divided each core into squares and used a tissue mask to estimate how much tissue each square contained. I also recorded cores that yielded no usable squares.",
+          "found": "The thesis pipeline kept 229,683 patches, averaging 207 per core. The counts also made it possible to spot cores with no usable patches before training.",
+          "next": "Saved each accepted patch with how much tissue it contained and where it came from on the core."
         },
         "files": [
-          ["filter_tissue_patches.py","11/2023 - 07/2025","Computes tissue coverage per grid square and keeps only squares meeting the ≥ 50% tissue threshold."],
+          ["filter_tissue_patches.py","11/2023 - 07/2025","Four of eight tiles met the 50% tissue threshold. The next step saves accepted tiles with coordinates so they can be traced back to the scan."],
           ["summarise_patch_counts.py","04/2023 - 08/2026","Counts retained patches for every expected core, keeping 0-count cores visible to flag missing tissue."],
           ["extract_patch_images.py","03/2023 - 07/2025","Writes accepted patch images and a patches.csv manifest with source core, bounds and tissue fraction."]
         ]
@@ -84,7 +82,6 @@
       {
         "id": "cells",
         "title": "Segment single cells",
-        "parent": "prepare",
         "description": "Can we extract millions of individual cells with their scan coordinates and check whether a few cores dominate the cell count?",
         "related": ["autoencoder","features"],
         "story": {
@@ -237,7 +234,6 @@
       {
         "id": "grading-models",
         "title": "Compare scale graders",
-        "parent": "grading-splits",
         "description": "Which biological scale—whole core, tissue patch or single cell—most accurately reproduces expert staining grades on held-out cases?",
         "story": {
           "tried": "Trained core, patch and cell graders on shared splits, saved out-of-fold predictions, and broke down signed bias by grade.",
@@ -344,7 +340,6 @@
         "id": "subtype-ablations",
         "next_label": "Next test",
         "title": "Test position & hierarchy",
-        "parent": "interpret",
         "description": "Does giving the transformer 2D spatial patch coordinates or pooling cells within patches first improve subtype prediction?",
         "related": ["cost","explain"],
         "story": {
@@ -520,7 +515,6 @@
       {
         "id": "pcam-benchmarks",
         "title": "Compare bag encoders",
-        "parent": "pcam-bags",
         "description": "When we hold the train/test bag manifests and max-pooling rule fixed, how clearly does the benchmark separate a signal encoder from noise?",
         "story": {
           "tried": "Scored a signal encoder and a random-noise encoder on the exact same 8 train and 8 test bags using max pooling.",
