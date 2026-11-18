@@ -312,10 +312,23 @@ def render_goal_overview(ancestors, goal, titles, descriptions, children, detail
     return "\n".join(line.rstrip() for line in markup.splitlines())
 
 
+def icon_button(css_class, label, icon):
+    glyph = {
+        "pencil": '<path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/>',
+        "upload": '<path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/>',
+    }[icon]
+    label = escape(label, quote=True)
+    return (
+        f'<button type="button" class="{css_class} lab-icon-button" aria-label="{label}" title="{label}" hidden>'
+        f'<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" '
+        f'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">{glyph}</svg></button>'
+    )
+
+
 def render_panel(key, title, text, visual, links):
     return f"""<section class="lab-io-card lab-{key}" data-entry-panel="{key}">
   <div class="lab-io-head">
-    <h3>{title}</h3><button type="button" class="lab-panel-edit" aria-label="Edit {title.lower()}" hidden>Edit</button>
+    <h3>{title}</h3>{icon_button("lab-panel-edit", f"Edit {title.lower()}", "pencil")}
   </div>
   <div class="lab-panel-text">{text}</div>
   <form class="lab-panel-form lab-panel-text-form" hidden>
@@ -327,7 +340,7 @@ def render_panel(key, title, text, visual, links):
   </form>
   <small class="lab-panel-status" role="status"></small>
   <div class="lab-figure-actions">
-    <button type="button" class="lab-panel-figure-edit" aria-label="Change figure for {title.lower()}" hidden>Change figure</button>
+    {icon_button("lab-panel-figure-edit", f"Change figure for {title.lower()}", "upload")}
   </div>
   <form class="lab-panel-form lab-panel-figure-form" hidden>
     <label>Image file<input type="file" name="figure" accept="image/png,image/jpeg,image/webp,image/gif"></label>
@@ -402,7 +415,7 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downs
     <h2 tabindex="-1">{escape(title)}</h2>
   </div>
   <section class="lab-framing" aria-label="Research question">
-    <div class="lab-framing-head"><h3>Question</h3><button type="button" class="lab-edit" hidden>Edit</button></div>
+    <div class="lab-framing-head"><h3>Question</h3>{icon_button("lab-edit", "Edit question", "pencil")}</div>
     <p class="lab-framing-text">{framing}</p>
     {situation_html}
     <form class="lab-framing-form" hidden>
@@ -417,7 +430,7 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downs
     <a class="lab-script-name" data-preview href="{path}" title="{source_action}"><code>{escape(filename)}</code></a>
     <span class="lab-script-meta">{escape(date_label(date))}</span>
     <div class="lab-source-actions">
-      <button type="button" class="lab-source-change" hidden>Change file</button>
+      {icon_button("lab-source-change", "Change file", "upload")}
       <button type="button" class="lab-source-restore" hidden>Use original file</button>
       <input type="file" class="lab-source-picker" hidden>
     </div>

@@ -177,7 +177,10 @@ function setupPanel(entry, panel) {
     caption.hidden = !draft?.caption;
     figure.hidden = !imageUrl;
     visual.hidden = Boolean(imageUrl);
-    figureEdit.textContent = imageUrl || visual.childElementCount ? 'Change figure' : 'Add figure';
+    const action = imageUrl || visual.childElementCount ? 'Change figure' : 'Add figure';
+    const label = action + ' for ' + panel.querySelector('h3').textContent.toLowerCase();
+    figureEdit.title = label;
+    figureEdit.setAttribute('aria-label', label);
     updateCropControls(entry);
     fitDiagrams(panel);
   }
@@ -267,13 +270,12 @@ function setupPanel(entry, panel) {
 
   panelStore(key, 'get').then(saved => {
     draft = saved;
-    if (draft) readView();
+    readView();
   }).catch(() => {
     textStatus.textContent = 'Browser storage is unavailable.';
   }).finally(() => {
     edit.hidden = false;
     figureEdit.hidden = false;
-    if (!visual.childElementCount && !draft?.image) figureEdit.textContent = 'Add figure';
   });
 }
 

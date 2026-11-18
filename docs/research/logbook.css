@@ -287,3 +287,13 @@
   .lab-script-banner { flex-wrap: wrap; }
   .lab-source-actions { flex: none; }
 }
+.lab .lab-icon-button {
+  display: inline-grid; place-items: center; flex: none;
+  width: 34px; height: 34px; padding: 0;
+}
+.lab-icon-button svg { width: 17px; height: 17px; }
+.lab .lab-icon-button:hover:not(:disabled) { background: #e4ebe0; }
+.lab .lab-icon-button:focus-visible { outline: 2px solid var(--lab-green); outline-offset: 2px; }
+@media (max-width: 700px) {
+  .lab .lab-icon-button { width: 40px; height: 40px; }
+}
