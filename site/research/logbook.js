@@ -86,12 +86,64 @@ function updateCropControls(entry) {
   note.hidden = !replaced;
 }
 
+const replacementSources = new WeakMap();
+const preparedSources = new WeakSet();
+
+function setupSource(entry) {
+  if (preparedSources.has(entry)) return;
+  preparedSources.add(entry);
+  const key = JSON.stringify([location.pathname, entry.id, 'source']);
+  const link = entry.querySelector('.lab-script-name');
+  const name = link.querySelector('code');
+  const originalName = name.textContent;
+  const date = entry.querySelector('.lab-script-meta');
+  const change = entry.querySelector('.lab-source-change');
+  const restore = entry.querySelector('.lab-source-restore');
+  const picker = entry.querySelector('.lab-source-picker');
+  const status = entry.querySelector('.lab-source-status');
+
+  function show(file) {
+    if (file) replacementSources.set(link, file);
+    else replacementSources.delete(link);
+    name.textContent = file?.name || originalName;
+    date.hidden = Boolean(file);
+    restore.hidden = !file;
+  }
+
+  async function commit(file) {
+    change.disabled = restore.disabled = true;
+    try {
+      await panelStore(key, file ? 'put' : 'delete', file);
+      show(file);
+      status.textContent = file ? 'File saved in this browser.' : 'Original file restored.';
+    } catch {
+      status.textContent = 'Could not save the file in this browser.';
+    } finally {
+      change.disabled = restore.disabled = false;
+      change.focus();
+    }
+  }
+
+  change.addEventListener('click', () => picker.click());
+  picker.addEventListener('change', () => {
+    const file = picker.files[0];
+    picker.value = '';
+    if (file) commit(file);
+  });
+  restore.addEventListener('click', () => commit(undefined));
+  panelStore(key, 'get').then(show).catch(() => {
+    status.textContent = 'Browser storage is unavailable.';
+  }).finally(() => { change.hidden = false; });
+}
+
 function setupPanel(entry, panel) {
   if (preparedPanels.has(panel)) return;
   preparedPanels.add(panel);
   const key = JSON.stringify([location.pathname, entry.id, panel.dataset.entryPanel]);
   const edit = panel.querySelector('.lab-panel-edit');
-  const form = panel.querySelector('.lab-panel-form');
+  const textForm = panel.querySelector('.lab-panel-text-form');
+  const figureEdit = panel.querySelector('.lab-panel-figure-edit');
+  const figureForm = panel.querySelector('.lab-panel-figure-form');
   const text = panel.querySelector('.lab-panel-text');
   const originalText = [...text.querySelectorAll('p')].map(p => p.textContent.trim()).join('\n\n');
   const originalHTML = text.innerHTML;
@@ -99,11 +151,11 @@ function setupPanel(entry, panel) {
   const figure = panel.querySelector('.lab-panel-replacement');
   const image = figure.querySelector('img');
   const caption = figure.querySelector('figcaption');
-  const figureOptions = panel.querySelector('.lab-panel-figure-options');
-  const status = panel.querySelector('.lab-panel-status');
-  const restore = panel.querySelector('.lab-panel-reset');
+  const textStatus = panel.querySelector('.lab-panel-status');
+  const figureStatus = panel.querySelector('.lab-panel-figure-status');
+  const restoreText = textForm.querySelector('.lab-panel-reset');
+  const restoreFigure = figureForm.querySelector('.lab-panel-use-original');
   let draft;
-  let pendingImage;
   let imageUrl;
   let busy = false;
 
@@ -125,27 +177,24 @@ function setupPanel(entry, panel) {
     caption.hidden = !draft?.caption;
     figure.hidden = !imageUrl;
     visual.hidden = Boolean(imageUrl);
+    figureEdit.textContent = imageUrl || visual.childElementCount ? 'Change figure' : 'Add figure';
     updateCropControls(entry);
     fitDiagrams(panel);
   }
 
-  function close() {
-    edit.hidden = false;
-    text.hidden = false;
+  function close(form, button) {
+    button.hidden = false;
+    if (form === textForm) text.hidden = false;
     form.hidden = true;
-    edit.focus();
+    button.focus();
   }
 
-  function setBusy(value) {
-    busy = value;
-    for (const control of form.elements) control.disabled = value;
-  }
-
-  async function save(next) {
+  async function save(next, form, button, status) {
     if (busy) return;
-    setBusy(true);
+    busy = true;
+    for (const control of [...textForm.elements, ...figureForm.elements]) control.disabled = true;
     try {
-      if (next?.image && next.image !== draft?.image) {
+      if (next.image && next.image !== draft?.image) {
         const url = URL.createObjectURL(next.image);
         try {
           const test = new Image();
@@ -158,67 +207,74 @@ function setupPanel(entry, panel) {
           URL.revokeObjectURL(url);
         }
       }
-      await panelStore(key, next ? 'put' : 'delete', next);
-      draft = next;
+      const hasChanges = next.text !== originalText || next.image;
+      await panelStore(key, hasChanges ? 'put' : 'delete', next);
+      draft = hasChanges ? next : undefined;
       readView();
-      status.textContent = next ? 'Saved in this browser.' : 'Original panel restored.';
-      close();
+      status.textContent = 'Saved in this browser.';
+      close(form, button);
     } catch {
       status.textContent = 'Could not save here. Your changes are still in the editor.';
     } finally {
-      setBusy(false);
+      busy = false;
+      for (const control of [...textForm.elements, ...figureForm.elements]) control.disabled = false;
     }
   }
 
   edit.addEventListener('click', () => {
-    form.reset();
-    pendingImage = draft?.image;
-    form.elements.description.value = draft?.text ?? originalText;
-    form.elements.caption.value = draft?.caption || '';
-    figureOptions.hidden = !pendingImage;
-    restore.hidden = !draft;
-    status.textContent = '';
+    textForm.elements.description.value = draft?.text ?? originalText;
+    restoreText.hidden = !draft || draft.text === originalText;
+    textStatus.textContent = '';
     edit.hidden = true;
     text.hidden = true;
-    form.hidden = false;
-    form.elements.description.focus();
+    textForm.hidden = false;
+    textForm.elements.description.focus();
   });
 
-  form.elements.figure.addEventListener('change', () => {
-    const file = form.elements.figure.files[0];
-    if (!file) return;
-    pendingImage = file;
-    figureOptions.hidden = false;
+  figureEdit.addEventListener('click', () => {
+    figureForm.reset();
+    figureForm.elements.caption.value = draft?.caption || '';
+    restoreFigure.hidden = !draft?.image;
+    figureStatus.textContent = '';
+    figureEdit.hidden = true;
+    figureForm.hidden = false;
+    figureForm.elements.figure.focus();
   });
-  panel.querySelector('.lab-panel-use-original').addEventListener('click', () => {
-    pendingImage = undefined;
-    form.elements.figure.value = '';
-    form.elements.caption.value = '';
-    figureOptions.hidden = true;
-    form.elements.figure.focus();
-  });
-  panel.querySelector('.lab-panel-cancel').addEventListener('click', () => {
-    status.textContent = '';
-    close();
-  });
-  restore.addEventListener('click', () => save(undefined));
-  form.addEventListener('submit', event => {
+
+  textForm.querySelector('.lab-panel-cancel').addEventListener('click', () => close(textForm, edit));
+  figureForm.querySelector('.lab-panel-cancel').addEventListener('click', () => close(figureForm, figureEdit));
+  restoreText.addEventListener('click', () => save({ ...draft, text: originalText }, textForm, edit, textStatus));
+  restoreFigure.addEventListener('click', () => save(
+    { text: draft?.text ?? originalText }, figureForm, figureEdit, figureStatus
+  ));
+  textForm.addEventListener('submit', event => {
     event.preventDefault();
-    const newText = form.elements.description.value.trim();
-    const newCaption = pendingImage ? form.elements.caption.value.trim() : '';
-    const next = newText === originalText && !pendingImage
-      ? undefined
-      : { text: newText, image: pendingImage, caption: newCaption };
-    save(next);
+    save({ ...draft, text: textForm.elements.description.value.trim() }, textForm, edit, textStatus);
+  });
+  figureForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const file = figureForm.elements.figure.files[0] || draft?.image;
+    if (!file) {
+      figureStatus.textContent = 'Choose an image file first.';
+      return;
+    }
+    save({
+      text: draft?.text ?? originalText,
+      image: file,
+      caption: figureForm.elements.caption.value.trim(),
+    }, figureForm, figureEdit, figureStatus);
   });
 
-  // Load the saved panel before accepting an edit to avoid overwriting a draft.
   panelStore(key, 'get').then(saved => {
     draft = saved;
     if (draft) readView();
   }).catch(() => {
-    status.textContent = 'Browser storage is unavailable.';
-  }).finally(() => { edit.hidden = false; });
+    textStatus.textContent = 'Browser storage is unavailable.';
+  }).finally(() => {
+    edit.hidden = false;
+    figureEdit.hidden = false;
+    if (!visual.childElementCount && !draft?.image) figureEdit.textContent = 'Add figure';
+  });
 }
 
 function selectExperiment() {
@@ -253,7 +309,10 @@ function selectExperiment() {
   }
   activeExperiment = selected;
   fitDiagrams(selected);
-  for (const panel of selected.querySelectorAll("[data-entry-panel]")) setupPanel(selected, panel);
+  if (selected.hasAttribute('data-experiment')) {
+    setupSource(selected);
+    for (const panel of selected.querySelectorAll('[data-entry-panel]')) setupPanel(selected, panel);
+  }
   if (filename && !selectedLeaf) {
     const part = document.getElementById(goal.id + '/' + filename);
     if (part?.hasAttribute('data-home-part')) {
@@ -348,6 +407,7 @@ const previewContent = document.querySelector('#preview-content');
 const previewOpen = document.querySelector('#preview-open');
 const sourceDirectory = document.querySelector('.lab-source').href.replace('/tree/', '/blob/');
 let previewRequest;
+let previewLocalUrl;
 
 function filePreview(text, url) {
   if (!url.endsWith('.md')) {
@@ -380,27 +440,34 @@ async function previewFile(link) {
   previewRequest?.abort();
   const request = new AbortController();
   previewRequest = request;
-  document.querySelector('#preview-title').textContent = link.closest('[data-experiment]').dataset.experiment;
+  if (previewLocalUrl) URL.revokeObjectURL(previewLocalUrl);
+  previewLocalUrl = undefined;
+  const localFile = replacementSources.get(link);
+  const filename = localFile?.name || link.closest('[data-experiment]').dataset.experiment;
+  document.querySelector('#preview-title').textContent = filename;
   const isScript = link.href.endsWith('.py');
   previewOpen.href = isScript ? sourceDirectory + '/' + link.href.split('/').pop() : link.href;
-  previewOpen.textContent = isScript ? 'Open on GitHub ↗' : 'Open file ↗';
-  document.querySelector('#preview-download').href = link.href;
+  previewOpen.textContent = localFile ? 'Open original file ↗' : isScript ? 'Open on GitHub ↗' : 'Open file ↗';
+  const download = document.querySelector('#preview-download');
+  if (localFile) previewLocalUrl = URL.createObjectURL(localFile);
+  download.href = previewLocalUrl || link.href;
+  download.download = filename;
   previewContent.textContent = 'Loading file…';
   dialog.showModal();
 
-  if (link.href.endsWith('.png') || link.href.endsWith('.svg')) {
+  if (localFile ? /^image\/(?:png|jpeg|gif|webp)$/.test(localFile.type) : /\.(?:png|svg)$/.test(link.href)) {
     const image = new Image();
     image.alt = document.querySelector('#preview-title').textContent;
-    image.src = link.href;
+    image.src = previewLocalUrl || link.href;
     previewContent.replaceChildren(image);
     return;
   }
 
   try {
-    const response = await fetch(link.href, { signal: request.signal });
-    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const response = localFile || await fetch(link.href, { signal: request.signal });
+    if (!localFile && !response.ok) throw new Error('HTTP ' + response.status);
     const text = await response.text();
-    if (!request.signal.aborted) previewContent.replaceChildren(filePreview(text, link.href));
+    if (!request.signal.aborted) previewContent.replaceChildren(filePreview(text, filename));
   } catch (error) {
     if (!request.signal.aborted) previewContent.textContent = 'Preview unavailable. Use the links below.';
   }
@@ -427,7 +494,11 @@ logbook.addEventListener('click', event => {
     selectExperiment();
   }
 });
-dialog.addEventListener('close', () => previewRequest?.abort());
+dialog.addEventListener('close', () => {
+  previewRequest?.abort();
+  if (previewLocalUrl) URL.revokeObjectURL(previewLocalUrl);
+  previewLocalUrl = undefined;
+});
 
 function setupCropDemo() {
   const scene = document.querySelector('#crop-image');

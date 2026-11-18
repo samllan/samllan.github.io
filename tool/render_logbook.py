@@ -318,22 +318,26 @@ def render_panel(key, title, text, visual, links):
     <h3>{title}</h3><button type="button" class="lab-panel-edit" aria-label="Edit {title.lower()}" hidden>Edit</button>
   </div>
   <div class="lab-panel-text">{text}</div>
-  <form class="lab-panel-form" hidden>
+  <form class="lab-panel-form lab-panel-text-form" hidden>
     <label>Text<textarea name="description" rows="4"></textarea></label>
-    <label class="lab-panel-file-label">Add or replace figure
-      <input type="file" name="figure" accept="image/png,image/jpeg,image/webp,image/gif">
-    </label>
-    <div class="lab-panel-figure-options" hidden>
-      <label>Caption and image description<input name="caption" type="text"></label>
-      <button type="button" class="lab-panel-use-original">Use original figure</button>
-    </div>
     <div class="lab-form-actions">
-      <button type="submit">Save</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-reset" hidden>Restore original panel</button>
-      <small>Changes save in this browser.</small>
+      <button type="submit">Save text</button><button type="button" class="lab-panel-cancel">Cancel</button>
+      <button type="button" class="lab-panel-reset" hidden>Restore original text</button>
     </div>
   </form>
   <small class="lab-panel-status" role="status"></small>
+  <div class="lab-figure-actions">
+    <button type="button" class="lab-panel-figure-edit" aria-label="Change figure for {title.lower()}" hidden>Change figure</button>
+  </div>
+  <form class="lab-panel-form lab-panel-figure-form" hidden>
+    <label>Image file<input type="file" name="figure" accept="image/png,image/jpeg,image/webp,image/gif"></label>
+    <label>Caption and image description<input name="caption" type="text"></label>
+    <div class="lab-form-actions">
+      <button type="submit">Save figure</button><button type="button" class="lab-panel-cancel">Cancel</button>
+      <button type="button" class="lab-panel-use-original" hidden>Use original figure</button>
+    </div>
+  </form>
+  <small class="lab-panel-figure-status" role="status"></small>
   <div class="lab-panel-visual">{visual}</div>
   <figure class="lab-figure lab-panel-replacement" hidden>
     <img alt=""><figcaption></figcaption>
@@ -408,12 +412,17 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downs
     </form>
     <small class="lab-framing-status" role="status"></small>
   </section>
-  <a class="lab-script-banner" data-preview href="{path}">
+  <div class="lab-script-banner">
     <span class="lab-script-tag" aria-hidden="true">{source_tag}</span>
-    <code>{escape(filename)}</code>
+    <a class="lab-script-name" data-preview href="{path}" title="{source_action}"><code>{escape(filename)}</code></a>
     <span class="lab-script-meta">{escape(date_label(date))}</span>
-    <span class="lab-script-cta">{source_action} ↗</span>
-  </a>
+    <div class="lab-source-actions">
+      <button type="button" class="lab-source-change" hidden>Change file</button>
+      <button type="button" class="lab-source-restore" hidden>Use original file</button>
+      <input type="file" class="lab-source-picker" hidden>
+    </div>
+  </div>
+  <small class="lab-source-status" role="status"></small>
   <div class="lab-io">
     {method_panel}
     {result_panel}

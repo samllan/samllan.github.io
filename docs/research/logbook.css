@@ -149,11 +149,6 @@
 }
 .lab-script-banner code { font: 600 13.5px 'Cascadia Code', Consolas, monospace; color: #193325; }
 .lab-script-meta { font-size: 13px; color: #485b4e; }
-.lab-script-cta {
-  margin-left: auto; padding: 4px 10px; border-radius: 4px;
-  background: var(--lab-surface); border: 1px solid #b3c4b7;
-  font-size: 12.5px; font-weight: 650; color: var(--lab-green);
-}
 .lab-framing-head, .lab-io-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .lab-framing h3, .lab-io h3, .lab-experiment-notes h3 {
   margin: 0; font-weight: 650; font-size: 16px; color: #274034;
@@ -253,7 +248,6 @@
   .lab-script-banner { padding: 5px 9px; gap: 4px 8px; flex-wrap: nowrap; }
   .lab-script-banner code { min-width: 0; font-size: 12px; }
   .lab-script-banner .lab-script-meta, .lab-script-tag { display: none; }
-  .lab-script-cta { flex: none; white-space: nowrap; font-size: 12px; padding: 4px 6px; }
   .lab-arc-table { display: block; }
   .lab-arc-table caption { display: block; }
   .lab-arc-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
@@ -281,7 +275,15 @@
 }
 .lab-panel-form textarea { resize: vertical; }
 .lab-panel-form input[type="file"] { margin-top: 5px; }
-.lab-panel-figure-options { margin-bottom: 10px; }
 .lab-panel-status { display: block; color: #536052; }
 .lab-panel-status:empty { display: none; }
 .lab-panel-replacement img { max-width: 100%; max-height: 65vh; object-fit: contain; }
+.lab-script-name { min-width: 0; text-underline-offset: 3px; }
+.lab-source-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 5px; margin-left: auto; }
+.lab-figure-actions { display: flex; justify-content: flex-end; padding-top: 8px; margin-top: 10px; border-top: 1px solid var(--lab-rule); }
+.lab-source-status, .lab-panel-figure-status { display: block; margin-bottom: 6px; color: #536052; }
+.lab-source-status:empty, .lab-panel-figure-status:empty { display: none; }
+@media (max-width: 700px) {
+  .lab-script-banner { flex-wrap: wrap; }
+  .lab-source-actions { flex: none; }
+}
