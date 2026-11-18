@@ -113,6 +113,7 @@ logbook.addEventListener('change', event => {
 window.addEventListener('hashchange', selectExperiment);
 const dialog = document.querySelector('#file-preview');
 const previewContent = document.querySelector('#preview-content');
+const editMarkdown = dialog.querySelector('.lab-edit-markdown');
 let previewRequest;
 
 function filePreview(text, url) {
@@ -147,6 +148,7 @@ async function previewFile(link) {
   const request = new AbortController();
   previewRequest = request;
   const filename = link.closest('[data-experiment]').dataset.experiment;
+  editMarkdown.hidden = !filename.toLowerCase().endsWith('.md');
   document.querySelector('#preview-title').textContent = filename;
   previewContent.textContent = 'Loading file…';
   dialog.showModal();

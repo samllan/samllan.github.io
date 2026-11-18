@@ -204,7 +204,7 @@ def render_project_home(goal, context, research, setup):
     alias = f'{goal["id"]}/{escape(setup["questions_file"], quote=True)}' if setup else goal["id"] + "/overview"
     return f"""<article class="lab-experiment lab-goal-overview lab-project-home" data-goal-overview>
   <div class="lab-experiment-head" id="{alias}" data-home-part>
-    <h2 tabindex="-1">{escape(goal["title"])}</h2>
+    {editable_heading(goal["title"])}
     <p class="lab-lede">{escape(goal["description"])}</p>
   </div>
   {context}
@@ -246,7 +246,7 @@ def render_group_overview(root_crumb, group_id, group, titles, *, project_sample
 <article class="lab-experiment lab-goal-overview" data-group-overview>
   <div class="lab-experiment-head">
     {kicker}
-    <h2 tabindex="-1">{escape(label)}</h2>
+    {editable_heading(label)}
     <p class="lab-lede">{escape(summary)}</p>
   </div>
   {tentpole}
@@ -295,7 +295,7 @@ def render_goal_overview(ancestors, goal, titles, descriptions, children, detail
     markup = f"""<article class="lab-experiment lab-goal-overview" data-goal-overview>
   <div class="lab-experiment-head">
     {kicker}
-    <h2 tabindex="-1">{escape(goal["title"])}</h2>
+    {editable_heading(goal["title"])}
     <p class="lab-lede">{escape(goal["description"])}</p>
   </div>
   {tentpole}
@@ -312,17 +312,23 @@ def render_goal_overview(ancestors, goal, titles, descriptions, children, detail
     return "\n".join(line.rstrip() for line in markup.splitlines())
 
 
-def icon_button(css_class, label, icon):
+def icon_button(css_class, label, icon, *, owner_only=True):
     glyph = {
         "pencil": '<path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/>',
         "upload": '<path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/>',
     }[icon]
     label = escape(label, quote=True)
+    access = ' data-owner-action' if owner_only else ''
     return (
-        f'<button type="button" class="{css_class} lab-icon-button" aria-label="{label}" title="{label}" data-owner-action>'
+        f'<button type="button" class="{css_class} lab-icon-button" aria-label="{label}" title="{label}"{access}>'
         f'<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" '
         f'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">{glyph}</svg></button>'
     )
+
+
+def editable_heading(title):
+    pencil = icon_button("lab-edit-page", "Edit page", "pencil")
+    return f'<div class="lab-heading-row"><h2 tabindex="-1">{escape(title)}</h2>{pencil}</div>'
 
 
 def render_panel(key, title, text, visual, links):
@@ -583,6 +589,8 @@ def render_logbook(research, *, project=None):
     unused = details.keys() - file_names
     if unused:
         raise ValueError(f"Experiment details without an entry: {', '.join(sorted(unused))}")
-    return template.replace("<!-- goal navigation -->", "\n".join(navigation)).replace(
+    return template.replace("<!-- edit Markdown -->", icon_button("lab-edit-markdown", "Edit Markdown", "pencil")).replace(
+        "<!-- goal navigation -->", "\n".join(navigation)
+    ).replace(
         "<!-- experiments -->", "\n".join(panels)
     )

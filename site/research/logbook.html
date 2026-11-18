@@ -28,7 +28,13 @@
     </div>
   </dialog>
   <dialog id="file-preview" aria-labelledby="preview-title">
-    <div class="preview-head"><h2 id="preview-title"></h2><form method="dialog"><button type="submit">Close</button></form></div>
+    <div class="preview-head">
+      <h2 id="preview-title"></h2>
+      <div class="preview-actions">
+        <!-- edit Markdown -->
+        <form method="dialog"><button type="submit">Close</button></form>
+      </div>
+    </div>
     <div id="preview-content"></div>
   </dialog>
 </main>

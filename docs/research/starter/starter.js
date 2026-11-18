@@ -12,6 +12,7 @@ const get = id => document.getElementById('draft-' + id);
 const form = get('form');
 const nav = get('goals');
 const reading = get('reading');
+const editSection = document.querySelector('.draft-edit-section');
 const editor = get('editor');
 const rootDrop = get('root-drop');
 const collapsed = new Set();
@@ -177,6 +178,7 @@ function show() {
     return;
   }
   get('section-fields').hidden = page.type !== 'section';
+  editSection.hidden = page.type !== 'section';
   get('entry-fields').hidden = page.type !== 'entry';
   for (const field of fields[page.type]) form.elements[field].value = page[field];
   const moves = get('move');
@@ -197,7 +199,7 @@ function show() {
 
 function setEditing(editing) {
   editor.hidden = !editing;
-  reading.hidden = editing;
+  get('preview-pane').hidden = editing;
   get('preview').setAttribute('aria-pressed', String(!editing));
   get('preview').textContent = editing ? 'Preview' : 'Continue editing';
 }
@@ -237,6 +239,10 @@ form.addEventListener('submit', event => event.preventDefault());
 get('preview').addEventListener('click', () => {
   reading.innerHTML = markup(locate(selection).page);
   setEditing(editor.hidden);
+});
+editSection.addEventListener('click', () => {
+  setEditing(true);
+  form.elements.body.focus();
 });
 
 nav.addEventListener('click', event => {

@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 import shutil
 
-from render_logbook import render_logbook
+from render_logbook import icon_button, render_logbook
 
 ROOT = Path(__file__).resolve().parents[1]
 STYLE_VERSION = hashlib.sha256((ROOT / 'tool' / 'style.css').read_bytes()).hexdigest()[:10]
@@ -241,7 +241,9 @@ for name in ('starter.css', 'starter.js'):
 (public_starter / 'index.html').write_text(document(
     'Research logbook',
     'Start a blank research logbook, record results and download a shareable copy.',
-    (starter / 'starter.html').read_text(encoding='utf-8'), '../../',
+    (starter / 'starter.html').read_text(encoding='utf-8').replace(
+        '<!-- edit section -->', icon_button('draft-edit-section', 'Edit section', 'pencil', owner_only=False)
+    ), '../../',
     f'<script src="starter.js?v={versions["starter.js"]}" defer></script>',
     f'<link rel="stylesheet" href="../logbook.css?v={versions["logbook.css"]}">'
     f'<link rel="stylesheet" href="starter.css?v={versions["starter.css"]}">',

@@ -32,6 +32,7 @@
 .draft .draft-files p { font-size: 13px; color: #536052; margin: 0 0 8px; }
 .draft .draft-actions { display: flex; flex-wrap: wrap; gap: 6px 8px; }
 .draft #draft-reading section { margin-top: 14px; }
+.draft #draft-preview-pane:not([hidden]) { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: start; }
 .draft #draft-reading h3 { margin: 0; font-size: 16px; color: #274034; }
 .draft #draft-reading p { margin: 4px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 @media (max-width: 700px) {
