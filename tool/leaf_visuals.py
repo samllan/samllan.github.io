@@ -404,12 +404,12 @@ def leaf_visuals(filename, examples, demo, captured):
             '<svg viewBox="0 0 330 106" class="lab-diagram" role="img" aria-label="Downsampled crop box mapped by 4x scale and offset">'
             '<rect x="14" y="18" width="84" height="72" rx="4" fill="#e2e8dc" stroke="#527c67"/>'
             '<rect x="34" y="34" width="36" height="36" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
-            '<text x="14" y="13" font-size="10.5" fill="#244035" font-weight="bold">4× downsampled crop · box 20 × 20 px</text>'
+            '<text x="14" y="13" font-size="10.5" fill="#244035" font-weight="bold">Crop · 20 × 20 px</text>'
             '<text x="112" y="50" font-size="12" fill="#205841" font-weight="bold">×4 scale</text>'
             '<text x="108" y="66" font-size="10" fill="#536052">+ (1200, 800)</text>'
             '<rect x="190" y="14" width="116" height="80" rx="4" fill="#f5f0e2" stroke="#527c67"/>'
             '<rect x="216" y="30" width="54" height="48" fill="#c98ca7" stroke="#205841" stroke-width="2"/>'
-            '<text x="190" y="11" font-size="10.5" fill="#244035" font-weight="bold">Full scan · 80 × 80 px</text>'
+            '<text x="190" y="11" font-size="10.5" fill="#244035" font-weight="bold">Scan · 80 × 80 px</text>'
             "</svg>"
         )
         out = (
@@ -489,10 +489,10 @@ def leaf_visuals(filename, examples, demo, captured):
             '<line x1="50" y1="12" x2="50" y2="84" stroke="#244035" stroke-width="1.2"/>'
             '<line x1="14" y1="48" x2="86" y2="48" stroke="#244035" stroke-width="1.2"/>'
             '<rect x="114" y="18" width="44" height="44" fill="#bd7896" stroke="#205841" stroke-width="2"/>'
-            '<text x="108" y="76" font-size="10" fill="#244035">patch-x0-y0 (100%)</text>'
+            '<text x="108" y="76" font-size="10" fill="#244035">100% tissue</text>'
             '<rect x="194" y="18" width="44" height="44" fill="#eef1eb" stroke="#205841" stroke-width="2"/>'
             '<rect x="194" y="18" width="22" height="44" fill="#bd7896"/>'
-            '<text x="188" y="76" font-size="10" fill="#244035">patch-x8-y0 (50%)</text>'
+            '<text x="188" y="76" font-size="10" fill="#244035">50% tissue</text>'
             "</svg>"
         )
         out = mini_table(
@@ -937,11 +937,16 @@ def leaf_visuals(filename, examples, demo, captured):
             '<svg viewBox="0 0 310 112" class="lab-diagram" role="img" aria-label="2D PCA scatter plot of three samples with variance explained on each axis">'
             '<rect x="36" y="10" width="244" height="78" rx="4" fill="#f7f4ea" stroke="#9ab0a2"/>'
             '<line x1="36" y1="49" x2="280" y2="49" stroke="#d0d8cd" stroke-dasharray="3 3"/>'
-            '<circle cx="74" cy="34" r="5.5" fill="#205841"/><text x="83" y="37" font-size="10" fill="#205841" font-weight="bold">S1 (-0.359, +0.080)</text>'
-            '<circle cx="88" cy="66" r="5.5" fill="#205841"/><text x="97" y="69" font-size="10" fill="#205841" font-weight="bold">S2 (-0.282, -0.086)</text>'
-            '<circle cx="242" cy="48" r="5.5" fill="#8a5a19"/><text x="148" y="44" font-size="10" fill="#8a5a19" font-weight="bold">S3 (+0.640, +0.007)</text>'
+            '<circle cx="74" cy="34" r="5.5" fill="#205841"/><text x="83" y="37" font-size="10" fill="#205841" font-weight="bold">S1</text>'
+            '<circle cx="88" cy="66" r="5.5" fill="#205841"/><text x="97" y="69" font-size="10" fill="#205841" font-weight="bold">S2</text>'
+            '<circle cx="242" cy="48" r="5.5" fill="#8a5a19"/><text x="250" y="44" font-size="10" fill="#8a5a19" font-weight="bold">S3</text>'
             '<text x="54" y="104" font-size="10" fill="#244035" font-weight="bold">PC1: 97.8% variance · PC2: 2.2% variance</text>'
             "</svg>"
+            + mini_table(
+                "Projected coordinates",
+                ("Sample", "PC1", "PC2"),
+                (("S1", "−0.359", "+0.080"), ("S2", "−0.282", "−0.086"), ("S3", "+0.640", "+0.007")),
+            )
         )
         return inp, out
 
@@ -974,17 +979,12 @@ def leaf_visuals(filename, examples, demo, captured):
 
     # --- Goal: feature-export (Keep vector coordinates) ---
     if filename == "export_feature_vectors.py":
-        inp = (
-            '<svg viewBox="0 0 295 76" class="lab-diagram" role="img" aria-label="Two adjacent 4x4 patches on an 8x4 grid with their IDs and bounds">'
-            '<rect x="14" y="12" width="52" height="52" fill="#d5e5dc" stroke="#205841" stroke-width="2"/>'
-            '<text x="18" y="34" font-size="9.5" fill="#1b3126" font-weight="bold">patch-x0-y0</text>'
-            '<text x="18" y="48" font-size="9" fill="#536052">(0, 0, 4, 4)</text>'
-            '<rect x="66" y="12" width="52" height="52" fill="#f7e7ba" stroke="#8a5a19" stroke-width="2"/>'
-            '<text x="70" y="34" font-size="9.5" fill="#1b3126" font-weight="bold">patch-x4-y0</text>'
-            '<text x="70" y="48" font-size="9" fill="#536052">(4, 0, 8, 4)</text>'
-            '<text x="130" y="34" font-size="10.5" fill="#244035" font-weight="bold">+ 2 features per row</text>'
-            '<text x="130" y="50" font-size="9.5" fill="#536052">Coordinates travel with vector</text>'
-            "</svg>"
+        inp = swatch_chart(
+            "Two regions with two features each",
+            (
+                ("patch-x0-y0", "Bounds (0, 0, 4, 4)", "#d5e5dc", "#205841"),
+                ("patch-x4-y0", "Bounds (4, 0, 8, 4)", "#f7e7ba", "#8a5a19"),
+            ),
         )
         out = mini_table(
             "Exported CSV rows keeping bounds and features together",

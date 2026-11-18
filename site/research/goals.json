@@ -46,8 +46,8 @@
           ["select_core_rectangles.py","Aug 2020","1.00 precision/recall at 6 s/core, with uneven pixel dimensions across hand-drawn boxes."],
           ["interpolate_core_grid.py","Aug 2020","0.5 s/core and 1.00 recall from 2 corner clicks, dropping to 0.98 precision when cores drift off the grid line."],
           ["prepare_image_regions.py","Aug 2020–Nov 2023","3 s/core and 1.00 precision/recall using 1 centre click and a fixed square crop (shifting inward at edges)."],
-          ["crop_benchmark.csv","2026 thesis","Thesis Table 2.5 comparing speed, precision, recall and manual effort across all 4 core extraction methods."],
-          ["record_crop_marks.py","2020–2023","Saves point centres and rectangle bounds to a portable CSV manifest before pixel extraction."]
+          ["crop_benchmark.csv","Jun 2026 thesis","Thesis Table 2.5 comparing speed, precision, recall and manual effort across all 4 core extraction methods."],
+          ["record_crop_marks.py","08/2020 - 03/2023","Saves point centres and rectangle bounds to a portable CSV manifest before pixel extraction."]
         ]
       },
       {
@@ -61,8 +61,8 @@
           "next": "Fed traceable cores into patch tiling (#patches) and single-cell segmentation (#cells)."
         },
         "files": [
-          ["extract_labelled_crops.py","2020–2023","Cuts out one image per marked region and writes crops.csv linking filenames to source scan coordinates."],
-          ["map_crop_to_scan.py","2020–2023","Converts a 20 × 20 px box on a 4× downsampled crop back to its 80 × 80 px full-scan coordinates."]
+          ["extract_labelled_crops.py","08/2020 - 03/2023","Cuts out one image per marked region and writes crops.csv linking filenames to source scan coordinates."],
+          ["map_crop_to_scan.py","08/2020 - 05/2023","Converts a 20 × 20 px box on a 4× downsampled crop back to its 80 × 80 px full-scan coordinates."]
         ]
       },
       {
@@ -76,9 +76,9 @@
           "next": "Saved accepted patch images with core IDs, pixel bounds and tissue coverage fractions."
         },
         "files": [
-          ["filter_tissue_patches.py","2023–2025","Computes tissue coverage per grid square and keeps only squares meeting the ≥ 50% tissue threshold."],
-          ["summarise_patch_counts.py","2023–2026","Counts retained patches for every expected core, keeping 0-count cores visible to flag missing tissue."],
-          ["extract_patch_images.py","2023–2025","Writes accepted patch images and a patches.csv manifest with source core, bounds and tissue fraction."]
+          ["filter_tissue_patches.py","11/2023 - 07/2025","Computes tissue coverage per grid square and keeps only squares meeting the ≥ 50% tissue threshold."],
+          ["summarise_patch_counts.py","04/2023 - 08/2026","Counts retained patches for every expected core, keeping 0-count cores visible to flag missing tissue."],
+          ["extract_patch_images.py","03/2023 - 07/2025","Writes accepted patch images and a patches.csv manifest with source core, bounds and tissue fraction."]
         ]
       },
       {
@@ -93,10 +93,10 @@
           "next": "Enforced ≥ 1,000 cells/core and ≤ 220 px diameter gates for cell-scale grading and subtyping."
         },
         "files": [
-          ["extract_cell_crops.py","2023–2026","Extracts size-filtered 8 × 8 px cell crops from segmented instances while rejecting tiny specks or clumps."],
-          ["index_segmented_cells.py","2021–2026","Adds each cell's local offset to its core origin to record exact full-scan (x, y) coordinates."],
-          ["package_cell_arrays.py","2021–2025","Packs aligned cell IDs, coordinates and features into one compressed archive with verified row order."],
-          ["summarise_cells_by_core.py","2026 thesis","Reports cell counts, median cells per core and largest-core share (75% in demo) plus 0-cell cores."]
+          ["extract_cell_crops.py","??/2023 - ??/2026","Extracts size-filtered 8 × 8 px cell crops from segmented instances while rejecting tiny specks or clumps."],
+          ["index_segmented_cells.py","11/2021 - 01/2026","Adds each cell's local offset to its core origin to record exact full-scan (x, y) coordinates."],
+          ["package_cell_arrays.py","11/2021 - 10/2025","Packs aligned cell IDs, coordinates and features into one compressed archive with verified row order."],
+          ["summarise_cells_by_core.py","Jun 2026 thesis","Reports cell counts, median cells per core and largest-core share (75% in demo) plus 0-cell cores."]
         ]
       },
       {
@@ -121,8 +121,8 @@
         },
         "files": [
           ["compare_image_encodings.py","Apr 2024","Measures byte size and decoded RGB channel difference for PNG vs WebP on the same patch."],
-          ["audit_dataset_structure.py","2024–2025","Flags missing files, unexpected spillover files and mismatched array shapes before training starts."],
-          ["measure_storage_reads.py","2024–2025","Times reading 12,288 identical bytes from 20 separate files versus a single contiguous bundle."]
+          ["audit_dataset_structure.py","10/2024 - 09/2025","Flags missing files, unexpected spillover files and mismatched array shapes before training starts."],
+          ["measure_storage_reads.py","10/2024 - 10/2025","Times reading 12,288 identical bytes from 20 separate files versus a single contiguous bundle."]
         ]
       }
     ]
@@ -141,10 +141,10 @@
           "next": "Tested self-supervised Barlow Twins (#features) and frozen pretrained backbones (#frozen-features)."
         },
         "files": [
-          ["fit_linear_autoencoder.py","2021–2024","Compresses 3-value patches into a 2-number latent code and reconstructs the inputs."],
-          ["score_reconstructions.py","2021–2024","Ranks held-out samples worst-first by mean squared error so high-residual cases are inspected first."],
-          ["compare_bottleneck_sizes.py","2021–2024","Measures the trade-off between code byte size (16 B vs 32 B) and held-out MSE across bottleneck widths."],
-          ["score_variational_reconstruction.py","2026 thesis","Separates pixel reconstruction error (0.387) from the β-weighted KL code penalty (0.5 × 0.083 = 0.042)."]
+          ["fit_linear_autoencoder.py","10/2021 - 04/2024","Compresses 3-value patches into a 2-number latent code and reconstructs the inputs."],
+          ["score_reconstructions.py","08/2021 - ??/2024","Ranks held-out samples worst-first by mean squared error so high-residual cases are inspected first."],
+          ["compare_bottleneck_sizes.py","08/2021 - ??/2024","Measures the trade-off between code byte size (16 B vs 32 B) and held-out MSE across bottleneck widths."],
+          ["score_variational_reconstruction.py","Jun 2026 thesis","Separates pixel reconstruction error (0.387) from the β-weighted KL code penalty (0.5 × 0.083 = 0.042)."]
         ]
       },
       {
@@ -159,9 +159,9 @@
         "default_file": "fit_shared_view_encoder.py",
         "files": [
           ["learn_image_features.py","Oct 2025","Shows how off-diagonal redundancy penalises duplicated feature columns even when view agreement is 0.000."],
-          ["prepare_paired_views.py","2023–2025","Applies random horizontal flips and brightness gains to produce two views linked by the same patch ID."],
-          ["audit_feature_variation.py","2023–2025","Flags zero-variance (collapsed) columns and near-duplicate correlated column pairs (|r| ≥ 0.99)."],
-          ["fit_shared_view_encoder.py","2026 thesis","Updates one shared weight matrix over 40 steps, reducing the Barlow Twins objective from 0.1938 to 0.0003."]
+          ["prepare_paired_views.py","04/2023 - 10/2025","Applies random horizontal flips and brightness gains to produce two views linked by the same patch ID."],
+          ["audit_feature_variation.py","04/2023 - 10/2025","Flags zero-variance (collapsed) columns and near-duplicate correlated column pairs (|r| ≥ 0.99)."],
+          ["fit_shared_view_encoder.py","Jun 2026 thesis","Updates one shared weight matrix over 40 steps, reducing the Barlow Twins objective from 0.1938 to 0.0003."]
         ]
       },
       {
@@ -174,9 +174,9 @@
           "next": "Benchmarked frozen ResNet-50 and UNI vectors alongside learned features (#feature-benchmarks)."
         },
         "files": [
-          ["batch_frozen_features.py","2024–2025","Extracts one feature vector per patch in batches while keeping patch IDs in their exact input order."],
-          ["compare_encoder_dimensions.py","2025","Compares in-memory float32 byte footprints (1,920 B vs 7,680 B) across 16-D and 64-D encoders on 30 examples."],
-          ["standardise_encoder_inputs.py","2024–2025","Resizes RGB images and normalises channels to the target mean and standard deviation expected by a fixed encoder."]
+          ["batch_frozen_features.py","09/2024 - 07/2025","Extracts one feature vector per patch in batches while keeping patch IDs in their exact input order."],
+          ["compare_encoder_dimensions.py","06/2025 - 06/2025","Compares in-memory float32 byte footprints (1,920 B vs 7,680 B) across 16-D and 64-D encoders on 30 examples."],
+          ["standardise_encoder_inputs.py","09/2024 - 07/2025","Resizes RGB images and normalises channels to the target mean and standard deviation expected by a fixed encoder."]
         ]
       },
       {
@@ -189,10 +189,10 @@
           "next": "Carried instance-sensitive attention/max pooling into Task 1 grading and Task 2 subtyping."
         },
         "files": [
-          ["benchmark_frozen_features.py","2025–2026","Compares candidate feature sets on the exact same held-out test split (100% vs 50% accuracy in demo)."],
-          ["measure_feature_separation.py","2021–2026","Computes per-sample silhouette scores (0.85–0.87) comparing within-group vs nearest other-group distance."],
-          ["project_feature_space.py","2021–2025","Projects 3D feature vectors onto 2 principal axes explaining 97.8% and 2.2% of variance."],
-          ["check_bag_classifier_on_known_signal.py","2026 thesis","Shows max pooling (0.999 AUC) beating mean pooling (0.830 AUC) when 1 of 12 patches in a positive bag carries the signal."]
+          ["benchmark_frozen_features.py","06/2025 - ??/2026","Compares candidate feature sets on the exact same held-out test split (100% vs 50% accuracy in demo)."],
+          ["measure_feature_separation.py","11/2021 - 04/2026","Computes per-sample silhouette scores (0.85–0.87) comparing within-group vs nearest other-group distance."],
+          ["project_feature_space.py","11/2021 - 06/2025","Projects 3D feature vectors onto 2 principal axes explaining 97.8% and 2.2% of variance."],
+          ["check_bag_classifier_on_known_signal.py","Jun 2026 thesis","Shows max pooling (0.999 AUC) beating mean pooling (0.830 AUC) when 1 of 12 patches in a positive bag carries the signal."]
         ]
       },
       {
@@ -206,8 +206,8 @@
         },
         "files": [
           ["export_feature_vectors.py","Sep–Oct 2025","Writes each feature vector beside its region_id and (left, top, right, bottom) pixel bounds."],
-          ["align_features_to_regions.py","2025","Joins region coordinates and feature vectors by ID across reordered inputs and flags any missing IDs."],
-          ["check_feature_cache.py","2025","Verifies cached vector shape, encoder name and ID ordering against the experiment specification."]
+          ["align_features_to_regions.py","09/2025 - 10/2025","Joins region coordinates and feature vectors by ID across reordered inputs and flags any missing IDs."],
+          ["check_feature_cache.py","09/2025 - 09/2025","Verifies cached vector shape, encoder name and ID ordering against the experiment specification."]
         ]
       }
     ]
@@ -230,8 +230,8 @@
         "default_file": "assign_validation_folds.py",
         "links": [["Next: Compare scale graders","grading-models/save_held_out_grades.py"]],
         "files": [
-          ["prepare_reference_grades.py","2026 thesis","Computes mean reference grade alongside rating count (n) and rater spread (max − min)."],
-          ["assign_validation_folds.py","2024–2025","Assigns sample groups to folds so related samples (g1: a, b) never cross the train/test boundary."]
+          ["prepare_reference_grades.py","Jun 2026 thesis","Computes mean reference grade alongside rating count (n) and rater spread (max − min)."],
+          ["assign_validation_folds.py","09/2024 - 07/2025","Assigns sample groups to folds so related samples (g1: a, b) never cross the train/test boundary."]
         ]
       },
       {
@@ -248,9 +248,9 @@
         "default_file": "save_held_out_grades.py",
         "links": [["Compare with expert disagreement","agreement"],["Run end-to-end Case S02 trace","figures/run_grading_example.py"]],
         "files": [
-          ["train_scale_graders.py","2022–2026","Fits separate scale models on shared training IDs and compares predictions on the same held-out sample."],
-          ["save_held_out_grades.py","2025–2026","Writes out-of-fold predictions alongside reference grades so every case is scored unseen."],
-          ["summarise_errors_by_grade.py","2026 thesis","Breaks error into signed bias (+0.45 at Grade 0 vs −0.55 at Grade 3) and absolute error by ordinal grade."]
+          ["train_scale_graders.py","02/2022 - ??/2026","Fits separate scale models on shared training IDs and compares predictions on the same held-out sample."],
+          ["save_held_out_grades.py","??/2025 - 08/2026","Writes out-of-fold predictions alongside reference grades so every case is scored unseen."],
+          ["summarise_errors_by_grade.py","Jun 2026 thesis","Breaks error into signed bias (+0.45 at Grade 0 vs −0.55 at Grade 3) and absolute error by ordinal grade."]
         ]
       },
       {
@@ -267,9 +267,9 @@
         "default_file": "summarise_matched_training_traces.py",
         "files": [
           ["compare_experiments.py","Sep 2026","Pairs runs by fold and seed to report mean % change in error (+3.1%), time (−43.9%) and memory (−35.0%)."],
-          ["plan_matched_runs.py","2025–2026","Expands baseline and single-parameter variants across shared folds and random seeds (12-run grid)."],
-          ["verify_run_configuration.py","2026","Flags runs where an effective startup setting differed from the plan or was absent from the log."],
-          ["summarise_matched_training_traces.py","2026 thesis","Compares mean balanced accuracy (0.760 vs 0.770) and elapsed time (66 s vs 51 s) over a fixed final epoch window."]
+          ["plan_matched_runs.py","08/2025 - 09/2026","Expands baseline and single-parameter variants across shared folds and random seeds (12-run grid)."],
+          ["verify_run_configuration.py","09/2026 - 09/2026","Flags runs where an effective startup setting differed from the plan or was absent from the log."],
+          ["summarise_matched_training_traces.py","Jun 2026 thesis","Compares mean balanced accuracy (0.760 vs 0.770) and elapsed time (66 s vs 51 s) over a fixed final epoch window."]
         ]
       },
       {
@@ -284,8 +284,8 @@
         },
         "links": [["See hybrid sampling weights","sampling/weight_grading_examples.py"],["See Gaussian noise probe","sampling/probe_grading_model_with_noise.py"]],
         "files": [
-          ["weight_grading_examples.py","2026 thesis","Combines inverse class frequency, training loss and previous weights (Appendix A, Algorithm 3)."],
-          ["probe_grading_model_with_noise.py","2026 thesis","Compares null-class probability on generated signal bags (0.009 median, 0/12 calls) vs noise bags (0.683, 12/12 calls)."]
+          ["weight_grading_examples.py","Jun 2026 thesis","Combines inverse class frequency, training loss and previous weights (Appendix A, Algorithm 3)."],
+          ["probe_grading_model_with_noise.py","Jun 2026 thesis","Compares null-class probability on generated signal bags (0.009 median, 0/12 calls) vs noise bags (0.683, 12/12 calls)."]
         ]
       },
       {
@@ -299,8 +299,8 @@
           "source": "Submitted thesis, Chapter 3, Fig. 3.10, p. 127."
         },
         "files": [
-          ["compare_assessor_errors.py","2026","Computes assessor-to-assessor gap (0.50 in demo; 0.382 in thesis) alongside model-to-consensus MAE (0.15 in demo; 0.238 in thesis)."],
-          ["score_ordinal_agreement.py","2026","Computes quadratic-weighted κ (0.90 on 4 paired grades), penalising multi-grade jumps more heavily than 1-grade misses."]
+          ["compare_assessor_errors.py","08/2026 - 08/2026","Computes assessor-to-assessor gap (0.50 in demo; 0.382 in thesis) alongside model-to-consensus MAE (0.15 in demo; 0.238 in thesis)."],
+          ["score_ordinal_agreement.py","08/2026 - 08/2026","Computes quadratic-weighted κ (0.90 on 4 paired grades), penalising multi-grade jumps more heavily than 1-grade misses."]
         ]
       }
     ]
@@ -320,8 +320,8 @@
           "next": "Held the 962-core curated cohort fixed across all pooling, positional and encoder comparisons."
         },
         "files": [
-          ["join_subtype_labels.py","2026","Matches image IDs to allowed {'ABC', 'GCB'} labels and flags unrecognised or missing entries for review."],
-          ["audit_cohort_filters.py","2026 thesis","Records pass/fail status across label, required-stain and minimum-patch rules for each specimen."]
+          ["join_subtype_labels.py","10/2026 - 10/2026","Matches image IDs to allowed {'ABC', 'GCB'} labels and flags unrecognised or missing entries for review."],
+          ["audit_cohort_filters.py","Jun 2026 thesis","Records pass/fail status across label, required-stain and minimum-patch rules for each specimen."]
         ]
       },
       {
@@ -335,9 +335,9 @@
           "next": "Tested whether 2D spatial patch coordinates or cell-to-patch hierarchy improved bag predictions (#subtype-ablations)."
         },
         "files": [
-          ["pool_patch_evidence.py","2022–2026","Compares mean, maximum and softmax-attention summaries on the same 3-patch bag."],
-          ["batch_variable_patch_sets.py","2026 thesis","Sorts specimens by patch count before batching to minimise masked dummy padding slots."],
-          ["predict_subtypes_from_bags.py","2026 thesis","Fits a bag-level centroid classifier on training specimens and scores held-out specimen bags."]
+          ["pool_patch_evidence.py","04/2022 - ??/2026","Compares mean, maximum and softmax-attention summaries on the same 3-patch bag."],
+          ["batch_variable_patch_sets.py","Jun 2026 thesis","Sorts specimens by patch count before batching to minimise masked dummy padding slots."],
+          ["predict_subtypes_from_bags.py","Jun 2026 thesis","Fits a bag-level centroid classifier on training specimens and scores held-out specimen bags."]
         ]
       },
       {
@@ -356,8 +356,8 @@
         "default_file": "compare_spatial_attention.py",
         "links": [["Read study limits & next tests","limits"]],
         "files": [
-          ["compare_spatial_attention.py","2026 thesis","Isolates the effect of 2D rotary position encoding on a pooled attention score (0.500 off vs 0.369 on) while masking padded slots."],
-          ["compare_flat_and_hierarchical_pooling.py","2026 thesis","Shows why flat cell averaging (0.25) weights dense patches more heavily than hierarchical patch-then-core averaging (0.50)."]
+          ["compare_spatial_attention.py","Jun 2026 thesis","Isolates the effect of 2D rotary position encoding on a pooled attention score (0.500 off vs 0.369 on) while masking padded slots."],
+          ["compare_flat_and_hierarchical_pooling.py","Jun 2026 thesis","Shows why flat cell averaging (0.25) weights dense patches more heavily than hierarchical patch-then-core averaging (0.50)."]
         ]
       },
       {
@@ -378,8 +378,8 @@
         },
         "files": [
           ["summarise_validation.py","Feb–Sep 2026","Reports fold-by-fold grading MAE (0.25, 0.30) and subtype accuracy (100%, 50%) so weak folds are never hidden by averages."],
-          ["evaluate_subtype_roc.py","2026","Traces true vs false positive rates across score thresholds (handling tied scores at 0.60) to compute ROC AUC (0.875)."],
-          ["compare_fold_class_recall.py","2026","Reports ABC and GCB recall per fold alongside explicit correct/total counts."]
+          ["evaluate_subtype_roc.py","02/2026 - 02/2026","Traces true vs false positive rates across score thresholds (handling tied scores at 0.60) to compute ROC AUC (0.875)."],
+          ["compare_fold_class_recall.py","02/2026 - 09/2026","Reports ABC and GCB recall per fold alongside explicit correct/total counts."]
         ]
       },
       {
@@ -393,8 +393,8 @@
         },
         "files": [
           ["estimate_representation_cost.py","Apr 2026","Shows 500 regions shrinking from 75.26 MB (224 × 224 RGB) to 0.51 MB (256-D float32 vectors)."],
-          ["rank_accuracy_compute_tradeoffs.py","2026","Identifies undominated Pareto-frontier models (wide, small) and drops candidates beaten on all three axes (slow)."],
-          ["audit_compute_measurements.py","2026","Flags runs with missing memory logs or absent run records before plotting compute trade-offs."]
+          ["rank_accuracy_compute_tradeoffs.py","02/2026 - 04/2026","Identifies undominated Pareto-frontier models (wide, small) and drops candidates beaten on all three axes (slow)."],
+          ["audit_compute_measurements.py","02/2026 - 04/2026","Flags runs with missing memory logs or absent run records before plotting compute trade-offs."]
         ]
       }
     ]
@@ -414,9 +414,9 @@
           "next": "Paired visual heatmaps with ROI coverage receipts and dimming controls (#explain)."
         },
         "files": [
-          ["map_patch_scores.py","2024–2025","Places patch scores onto a 4 × 3 coordinate grid, averaging overlaps (0.60) and marking uncovered cells as NaN."],
-          ["render_score_overlay.py","2024–2026","Renders a shared-scale heatmap over a 64 × 48 px image with overlapping patches averaged to 0.55 and unscored areas hatched."],
-          ["summarise_overlay_coverage.py","2026","Reports scored ROI coverage (2 of 3 points, 66.7%), median score (0.60) and range (0.40–0.80)."]
+          ["map_patch_scores.py","09/2024 - 07/2025","Places patch scores onto a 4 × 3 coordinate grid, averaging overlaps (0.60) and marking uncovered cells as NaN."],
+          ["render_score_overlay.py","??/2024 - 09/2026","Renders a shared-scale heatmap over a 64 × 48 px image with overlapping patches averaged to 0.55 and unscored areas hatched."],
+          ["summarise_overlay_coverage.py","01/2026 - 01/2026","Reports scored ROI coverage (2 of 3 points, 66.7%), median score (0.60) and range (0.40–0.80)."]
         ]
       },
       {
@@ -431,8 +431,8 @@
         "files": [
           ["explain_prediction.py","Feb 2026","Fits separate bounded brightness masks for Class A and Class B against a fixed model."],
           ["model_explanations.md","Nov 2026","Sets out how to test explanation masks with controls and why biological meaning requires separate evidence."],
-          ["test_mask_score_changes.py","2026","Compares targeted spatial dimming (Δ −0.576) against a uniform control mask at identical 0.80 mean brightness (Δ −0.164)."],
-          ["compare_patch_perturbations.py","2026 thesis","Measures class score shifts when removing each patch vs repeating only that patch."]
+          ["test_mask_score_changes.py","02/2026 - 02/2026","Compares targeted spatial dimming (Δ −0.576) against a uniform control mask at identical 0.80 mean brightness (Δ −0.164)."],
+          ["compare_patch_perturbations.py","Jun 2026 thesis","Measures class score shifts when removing each patch vs repeating only that patch."]
         ]
       },
       {
@@ -446,8 +446,8 @@
           "next": "Reconciled finished cluster outputs against the manifest before building tables (#run-results)."
         },
         "files": [
-          ["build_cluster_run_manifest.py","2026 thesis","Expands 2 configs × 2 folds × 2 seeds into 8 jobs with deterministic SHA-256 run IDs."],
-          ["resume_chunked_experiment.py","2026 archive","Commits completed chunks atomically so an interrupted run reuses [4] and recomputes only unfinished chunks [9, 16]."]
+          ["build_cluster_run_manifest.py","Jun 2026 thesis","Expands 2 configs × 2 folds × 2 seeds into 8 jobs with deterministic SHA-256 run IDs."],
+          ["resume_chunked_experiment.py","09/2026 - 09/2026 archive","Commits completed chunks atomically so an interrupted run reuses [4] and recomputes only unfinished chunks [9, 16]."]
         ]
       },
       {
@@ -460,8 +460,8 @@
           "next": "Passed only complete, verified run matrices to the figure and table builders (#figures)."
         },
         "files": [
-          ["collect_fold_results.py","2026","Merges result CSVs by (configuration, fold, seed) and rejects duplicate keys before averaging."],
-          ["find_incomplete_runs.py","2026","Compares planned jobs against observed states to flag runs with missing metrics or no run record."]
+          ["collect_fold_results.py","09/2026 - 10/2026","Merges result CSVs by (configuration, fold, seed) and rejects duplicate keys before averaging."],
+          ["find_incomplete_runs.py","09/2026 - 09/2026","Compares planned jobs against observed states to flag runs with missing metrics or no run record."]
         ]
       },
       {
@@ -475,12 +475,12 @@
         },
         "default_file": "run_grading_example.py",
         "files": [
-          ["build_grading_table.py","2025–2026","Aggregates out-of-fold predictions into per-scale MAE summaries after checking sample alignment."],
-          ["render_grading_figure.py","2026","Renders per-scale MAE summaries directly into a clean, reproducible SVG bar chart."],
-          ["run_grading_example.py","2026 thesis","Replays the full grading workflow on 12 synthetic cases, tracing Case S02 from ratings (2, 3) to the final chart."],
-          ["bin_patch_distribution.py","2026","Bins per-core patch counts into half-open intervals [0–49, 50–99, 100–199, 200+] for distribution figures."],
+          ["build_grading_table.py","08/2025 - 08/2026","Aggregates out-of-fold predictions into per-scale MAE summaries after checking sample alignment."],
+          ["render_grading_figure.py","08/2026 - 08/2026","Renders per-scale MAE summaries directly into a clean, reproducible SVG bar chart."],
+          ["run_grading_example.py","Jun 2026 thesis","Replays the full grading workflow on 12 synthetic cases, tracing Case S02 from ratings (2, 3) to the final chart."],
+          ["bin_patch_distribution.py","08/2026 - 08/2026","Bins per-core patch counts into half-open intervals [0–49, 50–99, 100–199, 200+] for distribution figures."],
           ["grading_figure.svg","Nov 2026","The rendered 3-scale grading error chart produced from the 36 synthetic held-out predictions."],
-          ["verify_report_assets.py","2026 archive","Computes SHA-256 fingerprints for expected report tables and flags any missing figure files."]
+          ["verify_report_assets.py","??/2026 - ??/2026 archive","Computes SHA-256 fingerprints for expected report tables and flags any missing figure files."]
         ]
       },
       {
@@ -514,7 +514,7 @@
           "next": "Fed the fixed bag manifests to candidate encoders in Compare bag encoders (#pcam-benchmarks)."
         },
         "files": [
-          ["build_benchmark_bags.py","2026 archive","Generates reproducible 4-patch positive and negative bag manifests for train (seed 11) and test (seed 23) splits."]
+          ["build_benchmark_bags.py","09/2026 - 10/2026 archive","Generates reproducible 4-patch positive and negative bag manifests for train (seed 11) and test (seed 23) splits."]
         ]
       },
       {
@@ -528,7 +528,7 @@
           "next": "Verified the MIL bag benchmark pipeline before comparing pretrained histology backbones."
         },
         "files": [
-          ["compare_benchmark_encoders.py","2026 archive","Compares two encoders on identical train/test bag manifests using max pooling and balanced accuracy (1.000 vs 0.625)."]
+          ["compare_benchmark_encoders.py","10/2026 - 10/2026 archive","Compares two encoders on identical train/test bag manifests using max pooling and balanced accuracy (1.000 vs 0.625)."]
         ]
       }
     ]

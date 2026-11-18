@@ -143,13 +143,20 @@ def narrative(goal, targets, examples, titles):
 
 
 def date_label(date):
+    years = re.findall(r"\b\d{4}\b", date)
+    if not years:
+        return date
     months = {name: f"{number:02d}" for number, name in enumerate(month_abbr) if name}
-    numeric = re.sub(
-        r"\b([A-Z][a-z]{2}) (\d{4})\b",
-        lambda match: f"{months[match[1]]}/{match[2]}" if match[1] in months else match[0],
-        date,
-    )
-    return numeric.replace("–", " – ")
+    tokens = re.split(r"\s*[–-]\s*", re.sub(r" (?:thesis|archive)$", "", date))
+
+    def endpoint(token, year):
+        numeric = re.fullmatch(r"(\d{2}|\?\?)/\d{4}", token)
+        month = token.split()[0]
+        return f"{numeric[1] if numeric else months.get(month, '??')}/{year}"
+
+    first = endpoint(tokens[0], years[0])
+    last = endpoint(tokens[-1], years[-1])
+    return f"{first} - {last}"
 
 
 def load_leaf_details(project):
@@ -402,7 +409,7 @@ def render_logbook(research, *, project=None):
         "back url": "../projects/phd.html",
         "source url": "https://github.com/samllan/samllan.github.io/tree/main/site/research/examples",
     }
-    settings.setdefault("date note", "Dates refer to saved research versions or the thesis. The scripts are runnable adaptations using generated data."
+    settings.setdefault("date note", "Dates mark saved versions or the thesis date. ?? means the source gives a year but no verified month. The scripts are runnable adaptations with generated data."
                         if project_samples else "Dates give the context of the recorded work.")
     root_label = settings.setdefault("root label", re.sub(r"^The\s+", "", settings["project title"]))
     root_crumb = ("question", root_label)
@@ -497,7 +504,7 @@ def render_logbook(research, *, project=None):
                 audit = f' data-open-goal="{key}"' if filename.endswith(".py") else ""
                 script_links.append(
                     f'<li><a class="lab-file lab-script"{audit} href="{leaf_href(target)}">'
-                    f'<code>{escape(filename)}</code> <small>({escape(date_label(date))})</small></a></li>'
+                    f'<code>{escape(filename)}</code> <small title="{escape(date, quote=True)}">({escape(date_label(date))})</small></a></li>'
                 )
                 leaves.append(render_leaf(ancestors, goal, file, details.get(filename, {}), snapshots,
                                           examples, demo, downstream, labels,
