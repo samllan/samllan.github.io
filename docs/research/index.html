@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The PhD logbook — Samuel Llanwarne</title><meta name="description" content="A browsable record of the research questions, code and experiments behind the doctoral thesis.">
-<link rel="stylesheet" href="../style.css?v=2c230f6c43"><link rel="stylesheet" href="logbook.css?v=b63f4a3895"></head><body><a class="skip" href="#main">Skip to content</a>
+<link rel="stylesheet" href="../style.css?v=2c230f6c43"><link rel="stylesheet" href="logbook.css?v=70b2789da0"></head><body><a class="skip" href="#main">Skip to content</a>
 <main id="main" class="lab">
   <div class="lab-toolbar">
     <a class="lab-back" href="../projects/phd.html">← PhD project</a>
@@ -13,12 +13,13 @@
   <div class="lab-layout">
     <nav id="lab-goals" class="lab-goals" aria-label="Research goals">
       <h2><a class="lab-home-link" href="#question">PhD logbook</a></h2>
-      <ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Goals under 1. Prepare tissue scales" aria-expanded="true" aria-controls="branch-section-1-prepare-tissue-scales" hidden></button><a class="lab-node-link lab-group-link" href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a></div><div id="branch-section-1-prepare-tissue-scales" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Locate tissue cores" aria-expanded="true" aria-controls="branch-crop" hidden></button><a class="lab-node-link" href="#crop">Locate tissue cores</a></div><div id="branch-crop" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="crop" href="#crop/select_core_rectangles.py"><code>select_core_rectangles.py</code> <small title="Aug 2020">(08/2020 - 08/2020)</small></a></li><li><a class="lab-file lab-script" data-open-goal="crop" href="#crop/interpolate_core_grid.py"><code>interpolate_core_grid.py</code> <small title="Aug 2020">(08/2020 - 08/2020)</small></a></li><li><a class="lab-file lab-script" data-open-goal="crop" href="#crop/prepare_image_regions.py"><code>prepare_image_regions.py</code> <small title="Aug 2020–Nov 2023">(08/2020 - 11/2023)</small></a></li><li><a class="lab-file lab-script" href="#crop/crop_benchmark.csv"><code>crop_benchmark.csv</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="crop" href="#crop/record_crop_marks.py"><code>record_crop_marks.py</code> <small title="08/2020 - 03/2023">(08/2020 - 03/2023)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Extract traceable crops" aria-expanded="true" aria-controls="branch-prepare" hidden></button><a class="lab-node-link" href="#prepare">Extract traceable crops</a></div><div id="branch-prepare" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="prepare" href="#prepare/extract_labelled_crops.py"><code>extract_labelled_crops.py</code> <small title="08/2020 - 03/2023">(08/2020 - 03/2023)</small></a></li><li><a class="lab-file lab-script" data-open-goal="prepare" href="#prepare/map_crop_to_scan.py"><code>map_crop_to_scan.py</code> <small title="08/2020 - 05/2023">(08/2020 - 05/2023)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Tile into patches" aria-expanded="true" aria-controls="branch-patches" hidden></button><a class="lab-node-link" href="#patches">Tile into patches</a></div><div id="branch-patches" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="patches" href="#patches/filter_tissue_patches.py"><code>filter_tissue_patches.py</code> <small title="11/2023 - 07/2025">(11/2023 - 07/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="patches" href="#patches/summarise_patch_counts.py"><code>summarise_patch_counts.py</code> <small title="04/2023 - 08/2026">(04/2023 - 08/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="patches" href="#patches/extract_patch_images.py"><code>extract_patch_images.py</code> <small title="03/2023 - 07/2025">(03/2023 - 07/2025)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Segment single cells" aria-expanded="true" aria-controls="branch-cells" hidden></button><a class="lab-node-link" href="#cells">Segment single cells</a></div><div id="branch-cells" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="cells" href="#cells/extract_cell_crops.py"><code>extract_cell_crops.py</code> <small title="??/2023 - ??/2026">(??/2023 - ??/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="cells" href="#cells/index_segmented_cells.py"><code>index_segmented_cells.py</code> <small title="11/2021 - 01/2026">(11/2021 - 01/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="cells" href="#cells/package_cell_arrays.py"><code>package_cell_arrays.py</code> <small title="11/2021 - 10/2025">(11/2021 - 10/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="cells" href="#cells/summarise_cells_by_core.py"><code>summarise_cells_by_core.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Compress &amp; audit storage" aria-expanded="true" aria-controls="branch-storage" hidden></button><a class="lab-node-link" href="#storage">Compress &amp; audit storage</a></div><div id="branch-storage" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="storage" href="#storage/compare_image_encodings.py"><code>compare_image_encodings.py</code> <small title="Apr 2024">(04/2024 - 04/2024)</small></a></li><li><a class="lab-file lab-script" data-open-goal="storage" href="#storage/audit_dataset_structure.py"><code>audit_dataset_structure.py</code> <small title="10/2024 - 09/2025">(10/2024 - 09/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="storage" href="#storage/measure_storage_reads.py"><code>measure_storage_reads.py</code> <small title="10/2024 - 10/2025">(10/2024 - 10/2025)</small></a></li></ul></div></li></ul></div></li></ul>
-<ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Goals under 2. Compress into features" aria-expanded="true" aria-controls="branch-section-2-compress-into-features" hidden></button><a class="lab-node-link lab-group-link" href="#section-2-compress-into-features">2. Compress into features</a></div><div id="branch-section-2-compress-into-features" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Autoencoder reconstruction" aria-expanded="true" aria-controls="branch-autoencoder" hidden></button><a class="lab-node-link" href="#autoencoder">Autoencoder reconstruction</a></div><div id="branch-autoencoder" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="autoencoder" href="#autoencoder/fit_linear_autoencoder.py"><code>fit_linear_autoencoder.py</code> <small title="10/2021 - 04/2024">(10/2021 - 04/2024)</small></a></li><li><a class="lab-file lab-script" data-open-goal="autoencoder" href="#autoencoder/score_reconstructions.py"><code>score_reconstructions.py</code> <small title="08/2021 - ??/2024">(08/2021 - ??/2024)</small></a></li><li><a class="lab-file lab-script" data-open-goal="autoencoder" href="#autoencoder/compare_bottleneck_sizes.py"><code>compare_bottleneck_sizes.py</code> <small title="08/2021 - ??/2024">(08/2021 - ??/2024)</small></a></li><li><a class="lab-file lab-script" data-open-goal="autoencoder" href="#autoencoder/score_variational_reconstruction.py"><code>score_variational_reconstruction.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Contrastive view learning" aria-expanded="true" aria-controls="branch-features" hidden></button><a class="lab-node-link" href="#features">Contrastive view learning</a></div><div id="branch-features" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="features" href="#features/learn_image_features.py"><code>learn_image_features.py</code> <small title="Oct 2025">(10/2025 - 10/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="features" href="#features/prepare_paired_views.py"><code>prepare_paired_views.py</code> <small title="04/2023 - 10/2025">(04/2023 - 10/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="features" href="#features/audit_feature_variation.py"><code>audit_feature_variation.py</code> <small title="04/2023 - 10/2025">(04/2023 - 10/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="features" href="#features/fit_shared_view_encoder.py"><code>fit_shared_view_encoder.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Pretrained encoders" aria-expanded="true" aria-controls="branch-frozen-features" hidden></button><a class="lab-node-link" href="#frozen-features">Pretrained encoders</a></div><div id="branch-frozen-features" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="frozen-features" href="#frozen-features/batch_frozen_features.py"><code>batch_frozen_features.py</code> <small title="09/2024 - 07/2025">(09/2024 - 07/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="frozen-features" href="#frozen-features/compare_encoder_dimensions.py"><code>compare_encoder_dimensions.py</code> <small title="06/2025 - 06/2025">(06/2025 - 06/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="frozen-features" href="#frozen-features/standardise_encoder_inputs.py"><code>standardise_encoder_inputs.py</code> <small title="09/2024 - 07/2025">(09/2024 - 07/2025)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Benchmark feature quality" aria-expanded="true" aria-controls="branch-feature-benchmarks" hidden></button><a class="lab-node-link" href="#feature-benchmarks">Benchmark feature quality</a></div><div id="branch-feature-benchmarks" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="#feature-benchmarks/benchmark_frozen_features.py"><code>benchmark_frozen_features.py</code> <small title="06/2025 - ??/2026">(06/2025 - ??/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="#feature-benchmarks/measure_feature_separation.py"><code>measure_feature_separation.py</code> <small title="11/2021 - 04/2026">(11/2021 - 04/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="#feature-benchmarks/project_feature_space.py"><code>project_feature_space.py</code> <small title="11/2021 - 06/2025">(11/2021 - 06/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="#feature-benchmarks/check_bag_classifier_on_known_signal.py"><code>check_bag_classifier_on_known_signal.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Keep vector coordinates" aria-expanded="true" aria-controls="branch-feature-export" hidden></button><a class="lab-node-link" href="#feature-export">Keep vector coordinates</a></div><div id="branch-feature-export" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="feature-export" href="#feature-export/export_feature_vectors.py"><code>export_feature_vectors.py</code> <small title="Sep–Oct 2025">(09/2025 - 10/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="feature-export" href="#feature-export/align_features_to_regions.py"><code>align_features_to_regions.py</code> <small title="09/2025 - 10/2025">(09/2025 - 10/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="feature-export" href="#feature-export/check_feature_cache.py"><code>check_feature_cache.py</code> <small title="09/2025 - 09/2025">(09/2025 - 09/2025)</small></a></li></ul></div></li></ul></div></li></ul>
-<ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Goals under 3. Task 1: Staining grades" aria-expanded="true" aria-controls="branch-section-3-task-1-staining-grades" hidden></button><a class="lab-node-link lab-group-link" href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a></div><div id="branch-section-3-task-1-staining-grades" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Reference grades &amp; splits" aria-expanded="true" aria-controls="branch-grading-splits" hidden></button><a class="lab-node-link" href="#grading-splits">Reference grades &amp; splits</a></div><div id="branch-grading-splits" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="grading-splits" href="#grading-splits/prepare_reference_grades.py"><code>prepare_reference_grades.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="grading-splits" href="#grading-splits/assign_validation_folds.py"><code>assign_validation_folds.py</code> <small title="09/2024 - 07/2025">(09/2024 - 07/2025)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Compare scale graders" aria-expanded="true" aria-controls="branch-grading-models" hidden></button><a class="lab-node-link" href="#grading-models">Compare scale graders</a></div><div id="branch-grading-models" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="grading-models" href="#grading-models/train_scale_graders.py"><code>train_scale_graders.py</code> <small title="02/2022 - ??/2026">(02/2022 - ??/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="grading-models" href="#grading-models/save_held_out_grades.py"><code>save_held_out_grades.py</code> <small title="??/2025 - 08/2026">(??/2025 - 08/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="grading-models" href="#grading-models/summarise_errors_by_grade.py"><code>summarise_errors_by_grade.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Matched ablation runs" aria-expanded="true" aria-controls="branch-compare" hidden></button><a class="lab-node-link" href="#compare">Matched ablation runs</a></div><div id="branch-compare" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="compare" href="#compare/compare_experiments.py"><code>compare_experiments.py</code> <small title="Sep 2026">(09/2026 - 09/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="compare" href="#compare/plan_matched_runs.py"><code>plan_matched_runs.py</code> <small title="08/2025 - 09/2026">(08/2025 - 09/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="compare" href="#compare/verify_run_configuration.py"><code>verify_run_configuration.py</code> <small title="09/2026 - 09/2026">(09/2026 - 09/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="compare" href="#compare/summarise_matched_training_traces.py"><code>summarise_matched_training_traces.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Sample rare &amp; hard cases" aria-expanded="true" aria-controls="branch-sampling" hidden></button><a class="lab-node-link" href="#sampling">Sample rare &amp; hard cases</a></div><div id="branch-sampling" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="sampling" href="#sampling/weight_grading_examples.py"><code>weight_grading_examples.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="sampling" href="#sampling/probe_grading_model_with_noise.py"><code>probe_grading_model_with_noise.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Model vs expert gap" aria-expanded="true" aria-controls="branch-agreement" hidden></button><a class="lab-node-link" href="#agreement">Model vs expert gap</a></div><div id="branch-agreement" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="agreement" href="#agreement/compare_assessor_errors.py"><code>compare_assessor_errors.py</code> <small title="08/2026 - 08/2026">(08/2026 - 08/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="agreement" href="#agreement/score_ordinal_agreement.py"><code>score_ordinal_agreement.py</code> <small title="08/2026 - 08/2026">(08/2026 - 08/2026)</small></a></li></ul></div></li></ul></div></li></ul>
-<ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Goals under 4. Task 2: Subtype labels" aria-expanded="true" aria-controls="branch-section-4-task-2-subtype-labels" hidden></button><a class="lab-node-link lab-group-link" href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a></div><div id="branch-section-4-task-2-subtype-labels" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Curate subtype cohort" aria-expanded="true" aria-controls="branch-subtype-cohort" hidden></button><a class="lab-node-link" href="#subtype-cohort">Curate subtype cohort</a></div><div id="branch-subtype-cohort" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="subtype-cohort" href="#subtype-cohort/join_subtype_labels.py"><code>join_subtype_labels.py</code> <small title="10/2026 - 10/2026">(10/2026 - 10/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="subtype-cohort" href="#subtype-cohort/audit_cohort_filters.py"><code>audit_cohort_filters.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Pool patches per case" aria-expanded="true" aria-controls="branch-interpret" hidden></button><a class="lab-node-link" href="#interpret">Pool patches per case</a></div><div id="branch-interpret" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="interpret" href="#interpret/pool_patch_evidence.py"><code>pool_patch_evidence.py</code> <small title="04/2022 - ??/2026">(04/2022 - ??/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="interpret" href="#interpret/batch_variable_patch_sets.py"><code>batch_variable_patch_sets.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="interpret" href="#interpret/predict_subtypes_from_bags.py"><code>predict_subtypes_from_bags.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Test position &amp; hierarchy" aria-expanded="true" aria-controls="branch-subtype-ablations" hidden></button><a class="lab-node-link" href="#subtype-ablations">Test position &amp; hierarchy</a></div><div id="branch-subtype-ablations" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="subtype-ablations" href="#subtype-ablations/compare_spatial_attention.py"><code>compare_spatial_attention.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="subtype-ablations" href="#subtype-ablations/compare_flat_and_hierarchical_pooling.py"><code>compare_flat_and_hierarchical_pooling.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Cross-fold ROC &amp; recall" aria-expanded="true" aria-controls="branch-validation" hidden></button><a class="lab-node-link" href="#validation">Cross-fold ROC &amp; recall</a></div><div id="branch-validation" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="validation" href="#validation/summarise_validation.py"><code>summarise_validation.py</code> <small title="Feb–Sep 2026">(02/2026 - 09/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="validation" href="#validation/evaluate_subtype_roc.py"><code>evaluate_subtype_roc.py</code> <small title="02/2026 - 02/2026">(02/2026 - 02/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="validation" href="#validation/compare_fold_class_recall.py"><code>compare_fold_class_recall.py</code> <small title="02/2026 - 09/2026">(02/2026 - 09/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Accuracy vs compute cost" aria-expanded="true" aria-controls="branch-cost" hidden></button><a class="lab-node-link" href="#cost">Accuracy vs compute cost</a></div><div id="branch-cost" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="cost" href="#cost/estimate_representation_cost.py"><code>estimate_representation_cost.py</code> <small title="Apr 2026">(04/2026 - 04/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="cost" href="#cost/rank_accuracy_compute_tradeoffs.py"><code>rank_accuracy_compute_tradeoffs.py</code> <small title="02/2026 - 04/2026">(02/2026 - 04/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="cost" href="#cost/audit_compute_measurements.py"><code>audit_compute_measurements.py</code> <small title="02/2026 - 04/2026">(02/2026 - 04/2026)</small></a></li></ul></div></li></ul></div></li></ul>
-<ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Goals under 5. Explain &amp; verify" aria-expanded="true" aria-controls="branch-section-5-explain-verify" hidden></button><a class="lab-node-link lab-group-link" href="#section-5-explain-verify">5. Explain &amp; verify</a></div><div id="branch-section-5-explain-verify" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Spatial score heatmaps" aria-expanded="true" aria-controls="branch-heatmaps" hidden></button><a class="lab-node-link" href="#heatmaps">Spatial score heatmaps</a></div><div id="branch-heatmaps" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="heatmaps" href="#heatmaps/map_patch_scores.py"><code>map_patch_scores.py</code> <small title="09/2024 - 07/2025">(09/2024 - 07/2025)</small></a></li><li><a class="lab-file lab-script" data-open-goal="heatmaps" href="#heatmaps/render_score_overlay.py"><code>render_score_overlay.py</code> <small title="??/2024 - 09/2026">(??/2024 - 09/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="heatmaps" href="#heatmaps/summarise_overlay_coverage.py"><code>summarise_overlay_coverage.py</code> <small title="01/2026 - 01/2026">(01/2026 - 01/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Dimming &amp; perturbation" aria-expanded="true" aria-controls="branch-explain" hidden></button><a class="lab-node-link" href="#explain">Dimming &amp; perturbation</a></div><div id="branch-explain" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="explain" href="#explain/explain_prediction.py"><code>explain_prediction.py</code> <small title="Feb 2026">(02/2026 - 02/2026)</small></a></li><li><a class="lab-file lab-script" href="#explain/model_explanations.md"><code>model_explanations.md</code> <small title="Nov 2026">(11/2026 - 11/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="explain" href="#explain/test_mask_score_changes.py"><code>test_mask_score_changes.py</code> <small title="02/2026 - 02/2026">(02/2026 - 02/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="explain" href="#explain/compare_patch_perturbations.py"><code>compare_patch_perturbations.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Schedule &amp; resume jobs" aria-expanded="true" aria-controls="branch-cluster-runs" hidden></button><a class="lab-node-link" href="#cluster-runs">Schedule &amp; resume jobs</a></div><div id="branch-cluster-runs" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="cluster-runs" href="#cluster-runs/build_cluster_run_manifest.py"><code>build_cluster_run_manifest.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="cluster-runs" href="#cluster-runs/resume_chunked_experiment.py"><code>resume_chunked_experiment.py</code> <small title="09/2026 - 09/2026 archive">(09/2026 - 09/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Audit completed runs" aria-expanded="true" aria-controls="branch-run-results" hidden></button><a class="lab-node-link" href="#run-results">Audit completed runs</a></div><div id="branch-run-results" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="run-results" href="#run-results/collect_fold_results.py"><code>collect_fold_results.py</code> <small title="09/2026 - 10/2026">(09/2026 - 10/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="run-results" href="#run-results/find_incomplete_runs.py"><code>find_incomplete_runs.py</code> <small title="09/2026 - 09/2026">(09/2026 - 09/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Reproduce thesis figures" aria-expanded="true" aria-controls="branch-figures" hidden></button><a class="lab-node-link" href="#figures">Reproduce thesis figures</a></div><div id="branch-figures" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="figures" href="#figures/build_grading_table.py"><code>build_grading_table.py</code> <small title="08/2025 - 08/2026">(08/2025 - 08/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="figures" href="#figures/render_grading_figure.py"><code>render_grading_figure.py</code> <small title="08/2026 - 08/2026">(08/2026 - 08/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="figures" href="#figures/run_grading_example.py"><code>run_grading_example.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="figures" href="#figures/bin_patch_distribution.py"><code>bin_patch_distribution.py</code> <small title="08/2026 - 08/2026">(08/2026 - 08/2026)</small></a></li><li><a class="lab-file lab-script" href="#figures/grading_figure.svg"><code>grading_figure.svg</code> <small title="Nov 2026">(11/2026 - 11/2026)</small></a></li><li><a class="lab-file lab-script" data-open-goal="figures" href="#figures/verify_report_assets.py"><code>verify_report_assets.py</code> <small title="??/2026 - ??/2026 archive">(??/2026 - ??/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Study limits &amp; next tests" aria-expanded="true" aria-controls="branch-limits" hidden></button><a class="lab-node-link" href="#limits">Study limits &amp; next tests</a></div><div id="branch-limits" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" href="#limits/research_limits.md"><code>research_limits.md</code> <small title="Nov 2026">(11/2026 - 11/2026)</small></a></li></ul></div></li></ul></div></li></ul>
-<ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Goals under 6. Appendix: PCam benchmark" aria-expanded="true" aria-controls="branch-section-6-appendix-pcam-benchmark" hidden></button><a class="lab-node-link lab-group-link" href="#section-6-appendix-pcam-benchmark">6. Appendix: PCam benchmark</a></div><div id="branch-section-6-appendix-pcam-benchmark" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Assemble benchmark bags" aria-expanded="true" aria-controls="branch-pcam-bags" hidden></button><a class="lab-node-link" href="#pcam-bags">Assemble benchmark bags</a></div><div id="branch-pcam-bags" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="pcam-bags" href="#pcam-bags/build_benchmark_bags.py"><code>build_benchmark_bags.py</code> <small title="09/2026 - 10/2026 archive">(09/2026 - 10/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-branch-toggle" aria-label="Entries under Compare bag encoders" aria-expanded="true" aria-controls="branch-pcam-benchmarks" hidden></button><a class="lab-node-link" href="#pcam-benchmarks">Compare bag encoders</a></div><div id="branch-pcam-benchmarks" class="lab-children"><ul class="lab-script-list"><li><a class="lab-file lab-script" data-open-goal="pcam-benchmarks" href="#pcam-benchmarks/compare_benchmark_encoders.py"><code>compare_benchmark_encoders.py</code> <small title="10/2026 - 10/2026 archive">(10/2026 - 10/2026)</small></a></li></ul></div></li></ul></div></li></ul>
+      <ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move 1. Prepare tissue scales" title="Move 1. Prepare tissue scales" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Goals under 1. Prepare tissue scales" aria-expanded="true" aria-controls="branch-section-1-prepare-tissue-scales" hidden></button><a class="lab-node-link lab-group-link" href="#section-1-prepare-tissue-scales">1. Prepare tissue scales</a></div><div id="branch-section-1-prepare-tissue-scales" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Locate tissue cores" title="Move Locate tissue cores" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Locate tissue cores" aria-expanded="true" aria-controls="branch-crop" hidden></button><a class="lab-node-link" href="#crop">Locate tissue cores</a></div><div id="branch-crop" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move select_core_rectangles.py" title="Move select_core_rectangles.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="crop" href="#crop/select_core_rectangles.py"><code>select_core_rectangles.py</code> <small title="Aug 2020">(08/2020 - 08/2020)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move interpolate_core_grid.py" title="Move interpolate_core_grid.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="crop" href="#crop/interpolate_core_grid.py"><code>interpolate_core_grid.py</code> <small title="Aug 2020">(08/2020 - 08/2020)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move prepare_image_regions.py" title="Move prepare_image_regions.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="crop" href="#crop/prepare_image_regions.py"><code>prepare_image_regions.py</code> <small title="Aug 2020–Nov 2023">(08/2020 - 11/2023)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move crop_benchmark.csv" title="Move crop_benchmark.csv" data-owner-action></button><a class="lab-file lab-script" href="#crop/crop_benchmark.csv"><code>crop_benchmark.csv</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move record_crop_marks.py" title="Move record_crop_marks.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="crop" href="#crop/record_crop_marks.py"><code>record_crop_marks.py</code> <small title="08/2020 - 03/2023">(08/2020 - 03/2023)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Extract traceable crops" title="Move Extract traceable crops" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Extract traceable crops" aria-expanded="true" aria-controls="branch-prepare" hidden></button><a class="lab-node-link" href="#prepare">Extract traceable crops</a></div><div id="branch-prepare" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move extract_labelled_crops.py" title="Move extract_labelled_crops.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="prepare" href="#prepare/extract_labelled_crops.py"><code>extract_labelled_crops.py</code> <small title="08/2020 - 03/2023">(08/2020 - 03/2023)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move map_crop_to_scan.py" title="Move map_crop_to_scan.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="prepare" href="#prepare/map_crop_to_scan.py"><code>map_crop_to_scan.py</code> <small title="08/2020 - 05/2023">(08/2020 - 05/2023)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Tile into patches" title="Move Tile into patches" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Tile into patches" aria-expanded="true" aria-controls="branch-patches" hidden></button><a class="lab-node-link" href="#patches">Tile into patches</a></div><div id="branch-patches" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move filter_tissue_patches.py" title="Move filter_tissue_patches.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="patches" href="#patches/filter_tissue_patches.py"><code>filter_tissue_patches.py</code> <small title="11/2023 - 07/2025">(11/2023 - 07/2025)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move summarise_patch_counts.py" title="Move summarise_patch_counts.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="patches" href="#patches/summarise_patch_counts.py"><code>summarise_patch_counts.py</code> <small title="04/2023 - 08/2026">(04/2023 - 08/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move extract_patch_images.py" title="Move extract_patch_images.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="patches" href="#patches/extract_patch_images.py"><code>extract_patch_images.py</code> <small title="03/2023 - 07/2025">(03/2023 - 07/2025)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Segment single cells" title="Move Segment single cells" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Segment single cells" aria-expanded="true" aria-controls="branch-cells" hidden></button><a class="lab-node-link" href="#cells">Segment single cells</a></div><div id="branch-cells" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move extract_cell_crops.py" title="Move extract_cell_crops.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="cells" href="#cells/extract_cell_crops.py"><code>extract_cell_crops.py</code> <small title="??/2023 - ??/2026">(??/2023 - ??/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move index_segmented_cells.py" title="Move index_segmented_cells.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="cells" href="#cells/index_segmented_cells.py"><code>index_segmented_cells.py</code> <small title="11/2021 - 01/2026">(11/2021 - 01/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move package_cell_arrays.py" title="Move package_cell_arrays.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="cells" href="#cells/package_cell_arrays.py"><code>package_cell_arrays.py</code> <small title="11/2021 - 10/2025">(11/2021 - 10/2025)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move summarise_cells_by_core.py" title="Move summarise_cells_by_core.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="cells" href="#cells/summarise_cells_by_core.py"><code>summarise_cells_by_core.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Compress &amp; audit storage" title="Move Compress &amp; audit storage" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Compress &amp; audit storage" aria-expanded="true" aria-controls="branch-storage" hidden></button><a class="lab-node-link" href="#storage">Compress &amp; audit storage</a></div><div id="branch-storage" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move compare_image_encodings.py" title="Move compare_image_encodings.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="storage" href="#storage/compare_image_encodings.py"><code>compare_image_encodings.py</code> <small title="Apr 2024">(04/2024 - 04/2024)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move audit_dataset_structure.py" title="Move audit_dataset_structure.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="storage" href="#storage/audit_dataset_structure.py"><code>audit_dataset_structure.py</code> <small title="10/2024 - 09/2025">(10/2024 - 09/2025)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move measure_storage_reads.py" title="Move measure_storage_reads.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="storage" href="#storage/measure_storage_reads.py"><code>measure_storage_reads.py</code> <small title="10/2024 - 10/2025">(10/2024 - 10/2025)</small></a></li></ul></div></li></ul></div></li></ul>
+<ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move 2. Compress into features" title="Move 2. Compress into features" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Goals under 2. Compress into features" aria-expanded="true" aria-controls="branch-section-2-compress-into-features" hidden></button><a class="lab-node-link lab-group-link" href="#section-2-compress-into-features">2. Compress into features</a></div><div id="branch-section-2-compress-into-features" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Autoencoder reconstruction" title="Move Autoencoder reconstruction" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Autoencoder reconstruction" aria-expanded="true" aria-controls="branch-autoencoder" hidden></button><a class="lab-node-link" href="#autoencoder">Autoencoder reconstruction</a></div><div id="branch-autoencoder" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move fit_linear_autoencoder.py" title="Move fit_linear_autoencoder.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="autoencoder" href="#autoencoder/fit_linear_autoencoder.py"><code>fit_linear_autoencoder.py</code> <small title="10/2021 - 04/2024">(10/2021 - 04/2024)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move score_reconstructions.py" title="Move score_reconstructions.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="autoencoder" href="#autoencoder/score_reconstructions.py"><code>score_reconstructions.py</code> <small title="08/2021 - ??/2024">(08/2021 - ??/2024)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move compare_bottleneck_sizes.py" title="Move compare_bottleneck_sizes.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="autoencoder" href="#autoencoder/compare_bottleneck_sizes.py"><code>compare_bottleneck_sizes.py</code> <small title="08/2021 - ??/2024">(08/2021 - ??/2024)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move score_variational_reconstruction.py" title="Move score_variational_reconstruction.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="autoencoder" href="#autoencoder/score_variational_reconstruction.py"><code>score_variational_reconstruction.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Contrastive view learning" title="Move Contrastive view learning" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Contrastive view learning" aria-expanded="true" aria-controls="branch-features" hidden></button><a class="lab-node-link" href="#features">Contrastive view learning</a></div><div id="branch-features" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move learn_image_features.py" title="Move learn_image_features.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="features" href="#features/learn_image_features.py"><code>learn_image_features.py</code> <small title="Oct 2025">(10/2025 - 10/2025)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move prepare_paired_views.py" title="Move prepare_paired_views.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="features" href="#features/prepare_paired_views.py"><code>prepare_paired_views.py</code> <small title="04/2023 - 10/2025">(04/2023 - 10/2025)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move audit_feature_variation.py" title="Move audit_feature_variation.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="features" href="#features/audit_feature_variation.py"><code>audit_feature_variation.py</code> <small title="04/2023 - 10/2025">(04/2023 - 10/2025)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move fit_shared_view_encoder.py" title="Move fit_shared_view_encoder.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="features" href="#features/fit_shared_view_encoder.py"><code>fit_shared_view_encoder.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Pretrained encoders" title="Move Pretrained encoders" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Pretrained encoders" aria-expanded="true" aria-controls="branch-frozen-features" hidden></button><a class="lab-node-link" href="#frozen-features">Pretrained encoders</a></div><div id="branch-frozen-features" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move batch_frozen_features.py" title="Move batch_frozen_features.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="frozen-features" href="#frozen-features/batch_frozen_features.py"><code>batch_frozen_features.py</code> <small title="09/2024 - 07/2025">(09/2024 - 07/2025)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move compare_encoder_dimensions.py" title="Move compare_encoder_dimensions.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="frozen-features" href="#frozen-features/compare_encoder_dimensions.py"><code>compare_encoder_dimensions.py</code> <small title="06/2025 - 06/2025">(06/2025 - 06/2025)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move standardise_encoder_inputs.py" title="Move standardise_encoder_inputs.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="frozen-features" href="#frozen-features/standardise_encoder_inputs.py"><code>standardise_encoder_inputs.py</code> <small title="09/2024 - 07/2025">(09/2024 - 07/2025)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Benchmark feature quality" title="Move Benchmark feature quality" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Benchmark feature quality" aria-expanded="true" aria-controls="branch-feature-benchmarks" hidden></button><a class="lab-node-link" href="#feature-benchmarks">Benchmark feature quality</a></div><div id="branch-feature-benchmarks" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move benchmark_frozen_features.py" title="Move benchmark_frozen_features.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="#feature-benchmarks/benchmark_frozen_features.py"><code>benchmark_frozen_features.py</code> <small title="06/2025 - ??/2026">(06/2025 - ??/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move measure_feature_separation.py" title="Move measure_feature_separation.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="#feature-benchmarks/measure_feature_separation.py"><code>measure_feature_separation.py</code> <small title="11/2021 - 04/2026">(11/2021 - 04/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move project_feature_space.py" title="Move project_feature_space.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="#feature-benchmarks/project_feature_space.py"><code>project_feature_space.py</code> <small title="11/2021 - 06/2025">(11/2021 - 06/2025)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move check_bag_classifier_on_known_signal.py" title="Move check_bag_classifier_on_known_signal.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="feature-benchmarks" href="#feature-benchmarks/check_bag_classifier_on_known_signal.py"><code>check_bag_classifier_on_known_signal.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Keep vector coordinates" title="Move Keep vector coordinates" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Keep vector coordinates" aria-expanded="true" aria-controls="branch-feature-export" hidden></button><a class="lab-node-link" href="#feature-export">Keep vector coordinates</a></div><div id="branch-feature-export" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move export_feature_vectors.py" title="Move export_feature_vectors.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="feature-export" href="#feature-export/export_feature_vectors.py"><code>export_feature_vectors.py</code> <small title="Sep–Oct 2025">(09/2025 - 10/2025)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move align_features_to_regions.py" title="Move align_features_to_regions.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="feature-export" href="#feature-export/align_features_to_regions.py"><code>align_features_to_regions.py</code> <small title="09/2025 - 10/2025">(09/2025 - 10/2025)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move check_feature_cache.py" title="Move check_feature_cache.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="feature-export" href="#feature-export/check_feature_cache.py"><code>check_feature_cache.py</code> <small title="09/2025 - 09/2025">(09/2025 - 09/2025)</small></a></li></ul></div></li></ul></div></li></ul>
+<ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move 3. Task 1: Staining grades" title="Move 3. Task 1: Staining grades" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Goals under 3. Task 1: Staining grades" aria-expanded="true" aria-controls="branch-section-3-task-1-staining-grades" hidden></button><a class="lab-node-link lab-group-link" href="#section-3-task-1-staining-grades">3. Task 1: Staining grades</a></div><div id="branch-section-3-task-1-staining-grades" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Reference grades &amp; splits" title="Move Reference grades &amp; splits" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Reference grades &amp; splits" aria-expanded="true" aria-controls="branch-grading-splits" hidden></button><a class="lab-node-link" href="#grading-splits">Reference grades &amp; splits</a></div><div id="branch-grading-splits" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move prepare_reference_grades.py" title="Move prepare_reference_grades.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="grading-splits" href="#grading-splits/prepare_reference_grades.py"><code>prepare_reference_grades.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move assign_validation_folds.py" title="Move assign_validation_folds.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="grading-splits" href="#grading-splits/assign_validation_folds.py"><code>assign_validation_folds.py</code> <small title="09/2024 - 07/2025">(09/2024 - 07/2025)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Compare scale graders" title="Move Compare scale graders" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Compare scale graders" aria-expanded="true" aria-controls="branch-grading-models" hidden></button><a class="lab-node-link" href="#grading-models">Compare scale graders</a></div><div id="branch-grading-models" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move train_scale_graders.py" title="Move train_scale_graders.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="grading-models" href="#grading-models/train_scale_graders.py"><code>train_scale_graders.py</code> <small title="02/2022 - ??/2026">(02/2022 - ??/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move save_held_out_grades.py" title="Move save_held_out_grades.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="grading-models" href="#grading-models/save_held_out_grades.py"><code>save_held_out_grades.py</code> <small title="??/2025 - 08/2026">(??/2025 - 08/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move summarise_errors_by_grade.py" title="Move summarise_errors_by_grade.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="grading-models" href="#grading-models/summarise_errors_by_grade.py"><code>summarise_errors_by_grade.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Matched ablation runs" title="Move Matched ablation runs" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Matched ablation runs" aria-expanded="true" aria-controls="branch-compare" hidden></button><a class="lab-node-link" href="#compare">Matched ablation runs</a></div><div id="branch-compare" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move compare_experiments.py" title="Move compare_experiments.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="compare" href="#compare/compare_experiments.py"><code>compare_experiments.py</code> <small title="Sep 2026">(09/2026 - 09/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move plan_matched_runs.py" title="Move plan_matched_runs.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="compare" href="#compare/plan_matched_runs.py"><code>plan_matched_runs.py</code> <small title="08/2025 - 09/2026">(08/2025 - 09/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move verify_run_configuration.py" title="Move verify_run_configuration.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="compare" href="#compare/verify_run_configuration.py"><code>verify_run_configuration.py</code> <small title="09/2026 - 09/2026">(09/2026 - 09/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move summarise_matched_training_traces.py" title="Move summarise_matched_training_traces.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="compare" href="#compare/summarise_matched_training_traces.py"><code>summarise_matched_training_traces.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Sample rare &amp; hard cases" title="Move Sample rare &amp; hard cases" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Sample rare &amp; hard cases" aria-expanded="true" aria-controls="branch-sampling" hidden></button><a class="lab-node-link" href="#sampling">Sample rare &amp; hard cases</a></div><div id="branch-sampling" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move weight_grading_examples.py" title="Move weight_grading_examples.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="sampling" href="#sampling/weight_grading_examples.py"><code>weight_grading_examples.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move probe_grading_model_with_noise.py" title="Move probe_grading_model_with_noise.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="sampling" href="#sampling/probe_grading_model_with_noise.py"><code>probe_grading_model_with_noise.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Model vs expert gap" title="Move Model vs expert gap" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Model vs expert gap" aria-expanded="true" aria-controls="branch-agreement" hidden></button><a class="lab-node-link" href="#agreement">Model vs expert gap</a></div><div id="branch-agreement" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move compare_assessor_errors.py" title="Move compare_assessor_errors.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="agreement" href="#agreement/compare_assessor_errors.py"><code>compare_assessor_errors.py</code> <small title="08/2026 - 08/2026">(08/2026 - 08/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move score_ordinal_agreement.py" title="Move score_ordinal_agreement.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="agreement" href="#agreement/score_ordinal_agreement.py"><code>score_ordinal_agreement.py</code> <small title="08/2026 - 08/2026">(08/2026 - 08/2026)</small></a></li></ul></div></li></ul></div></li></ul>
+<ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move 4. Task 2: Subtype labels" title="Move 4. Task 2: Subtype labels" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Goals under 4. Task 2: Subtype labels" aria-expanded="true" aria-controls="branch-section-4-task-2-subtype-labels" hidden></button><a class="lab-node-link lab-group-link" href="#section-4-task-2-subtype-labels">4. Task 2: Subtype labels</a></div><div id="branch-section-4-task-2-subtype-labels" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Curate subtype cohort" title="Move Curate subtype cohort" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Curate subtype cohort" aria-expanded="true" aria-controls="branch-subtype-cohort" hidden></button><a class="lab-node-link" href="#subtype-cohort">Curate subtype cohort</a></div><div id="branch-subtype-cohort" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move join_subtype_labels.py" title="Move join_subtype_labels.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="subtype-cohort" href="#subtype-cohort/join_subtype_labels.py"><code>join_subtype_labels.py</code> <small title="10/2026 - 10/2026">(10/2026 - 10/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move audit_cohort_filters.py" title="Move audit_cohort_filters.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="subtype-cohort" href="#subtype-cohort/audit_cohort_filters.py"><code>audit_cohort_filters.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Pool patches per case" title="Move Pool patches per case" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Pool patches per case" aria-expanded="true" aria-controls="branch-interpret" hidden></button><a class="lab-node-link" href="#interpret">Pool patches per case</a></div><div id="branch-interpret" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move pool_patch_evidence.py" title="Move pool_patch_evidence.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="interpret" href="#interpret/pool_patch_evidence.py"><code>pool_patch_evidence.py</code> <small title="04/2022 - ??/2026">(04/2022 - ??/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move batch_variable_patch_sets.py" title="Move batch_variable_patch_sets.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="interpret" href="#interpret/batch_variable_patch_sets.py"><code>batch_variable_patch_sets.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move predict_subtypes_from_bags.py" title="Move predict_subtypes_from_bags.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="interpret" href="#interpret/predict_subtypes_from_bags.py"><code>predict_subtypes_from_bags.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Test position &amp; hierarchy" title="Move Test position &amp; hierarchy" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Test position &amp; hierarchy" aria-expanded="true" aria-controls="branch-subtype-ablations" hidden></button><a class="lab-node-link" href="#subtype-ablations">Test position &amp; hierarchy</a></div><div id="branch-subtype-ablations" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move compare_spatial_attention.py" title="Move compare_spatial_attention.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="subtype-ablations" href="#subtype-ablations/compare_spatial_attention.py"><code>compare_spatial_attention.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move compare_flat_and_hierarchical_pooling.py" title="Move compare_flat_and_hierarchical_pooling.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="subtype-ablations" href="#subtype-ablations/compare_flat_and_hierarchical_pooling.py"><code>compare_flat_and_hierarchical_pooling.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Cross-fold ROC &amp; recall" title="Move Cross-fold ROC &amp; recall" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Cross-fold ROC &amp; recall" aria-expanded="true" aria-controls="branch-validation" hidden></button><a class="lab-node-link" href="#validation">Cross-fold ROC &amp; recall</a></div><div id="branch-validation" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move summarise_validation.py" title="Move summarise_validation.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="validation" href="#validation/summarise_validation.py"><code>summarise_validation.py</code> <small title="Feb–Sep 2026">(02/2026 - 09/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move evaluate_subtype_roc.py" title="Move evaluate_subtype_roc.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="validation" href="#validation/evaluate_subtype_roc.py"><code>evaluate_subtype_roc.py</code> <small title="02/2026 - 02/2026">(02/2026 - 02/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move compare_fold_class_recall.py" title="Move compare_fold_class_recall.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="validation" href="#validation/compare_fold_class_recall.py"><code>compare_fold_class_recall.py</code> <small title="02/2026 - 09/2026">(02/2026 - 09/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Accuracy vs compute cost" title="Move Accuracy vs compute cost" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Accuracy vs compute cost" aria-expanded="true" aria-controls="branch-cost" hidden></button><a class="lab-node-link" href="#cost">Accuracy vs compute cost</a></div><div id="branch-cost" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move estimate_representation_cost.py" title="Move estimate_representation_cost.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="cost" href="#cost/estimate_representation_cost.py"><code>estimate_representation_cost.py</code> <small title="Apr 2026">(04/2026 - 04/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move rank_accuracy_compute_tradeoffs.py" title="Move rank_accuracy_compute_tradeoffs.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="cost" href="#cost/rank_accuracy_compute_tradeoffs.py"><code>rank_accuracy_compute_tradeoffs.py</code> <small title="02/2026 - 04/2026">(02/2026 - 04/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move audit_compute_measurements.py" title="Move audit_compute_measurements.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="cost" href="#cost/audit_compute_measurements.py"><code>audit_compute_measurements.py</code> <small title="02/2026 - 04/2026">(02/2026 - 04/2026)</small></a></li></ul></div></li></ul></div></li></ul>
+<ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move 5. Explain &amp;amp; verify" title="Move 5. Explain &amp;amp; verify" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Goals under 5. Explain &amp; verify" aria-expanded="true" aria-controls="branch-section-5-explain-verify" hidden></button><a class="lab-node-link lab-group-link" href="#section-5-explain-verify">5. Explain &amp; verify</a></div><div id="branch-section-5-explain-verify" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Spatial score heatmaps" title="Move Spatial score heatmaps" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Spatial score heatmaps" aria-expanded="true" aria-controls="branch-heatmaps" hidden></button><a class="lab-node-link" href="#heatmaps">Spatial score heatmaps</a></div><div id="branch-heatmaps" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move map_patch_scores.py" title="Move map_patch_scores.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="heatmaps" href="#heatmaps/map_patch_scores.py"><code>map_patch_scores.py</code> <small title="09/2024 - 07/2025">(09/2024 - 07/2025)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move render_score_overlay.py" title="Move render_score_overlay.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="heatmaps" href="#heatmaps/render_score_overlay.py"><code>render_score_overlay.py</code> <small title="??/2024 - 09/2026">(??/2024 - 09/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move summarise_overlay_coverage.py" title="Move summarise_overlay_coverage.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="heatmaps" href="#heatmaps/summarise_overlay_coverage.py"><code>summarise_overlay_coverage.py</code> <small title="01/2026 - 01/2026">(01/2026 - 01/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Dimming &amp; perturbation" title="Move Dimming &amp; perturbation" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Dimming &amp; perturbation" aria-expanded="true" aria-controls="branch-explain" hidden></button><a class="lab-node-link" href="#explain">Dimming &amp; perturbation</a></div><div id="branch-explain" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move explain_prediction.py" title="Move explain_prediction.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="explain" href="#explain/explain_prediction.py"><code>explain_prediction.py</code> <small title="Feb 2026">(02/2026 - 02/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move model_explanations.md" title="Move model_explanations.md" data-owner-action></button><a class="lab-file lab-script" href="#explain/model_explanations.md"><code>model_explanations.md</code> <small title="Nov 2026">(11/2026 - 11/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move test_mask_score_changes.py" title="Move test_mask_score_changes.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="explain" href="#explain/test_mask_score_changes.py"><code>test_mask_score_changes.py</code> <small title="02/2026 - 02/2026">(02/2026 - 02/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move compare_patch_perturbations.py" title="Move compare_patch_perturbations.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="explain" href="#explain/compare_patch_perturbations.py"><code>compare_patch_perturbations.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Schedule &amp; resume jobs" title="Move Schedule &amp; resume jobs" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Schedule &amp; resume jobs" aria-expanded="true" aria-controls="branch-cluster-runs" hidden></button><a class="lab-node-link" href="#cluster-runs">Schedule &amp; resume jobs</a></div><div id="branch-cluster-runs" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move build_cluster_run_manifest.py" title="Move build_cluster_run_manifest.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="cluster-runs" href="#cluster-runs/build_cluster_run_manifest.py"><code>build_cluster_run_manifest.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move resume_chunked_experiment.py" title="Move resume_chunked_experiment.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="cluster-runs" href="#cluster-runs/resume_chunked_experiment.py"><code>resume_chunked_experiment.py</code> <small title="09/2026 - 09/2026 archive">(09/2026 - 09/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Audit completed runs" title="Move Audit completed runs" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Audit completed runs" aria-expanded="true" aria-controls="branch-run-results" hidden></button><a class="lab-node-link" href="#run-results">Audit completed runs</a></div><div id="branch-run-results" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move collect_fold_results.py" title="Move collect_fold_results.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="run-results" href="#run-results/collect_fold_results.py"><code>collect_fold_results.py</code> <small title="09/2026 - 10/2026">(09/2026 - 10/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move find_incomplete_runs.py" title="Move find_incomplete_runs.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="run-results" href="#run-results/find_incomplete_runs.py"><code>find_incomplete_runs.py</code> <small title="09/2026 - 09/2026">(09/2026 - 09/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Reproduce thesis figures" title="Move Reproduce thesis figures" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Reproduce thesis figures" aria-expanded="true" aria-controls="branch-figures" hidden></button><a class="lab-node-link" href="#figures">Reproduce thesis figures</a></div><div id="branch-figures" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move build_grading_table.py" title="Move build_grading_table.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="figures" href="#figures/build_grading_table.py"><code>build_grading_table.py</code> <small title="08/2025 - 08/2026">(08/2025 - 08/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move render_grading_figure.py" title="Move render_grading_figure.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="figures" href="#figures/render_grading_figure.py"><code>render_grading_figure.py</code> <small title="08/2026 - 08/2026">(08/2026 - 08/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move run_grading_example.py" title="Move run_grading_example.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="figures" href="#figures/run_grading_example.py"><code>run_grading_example.py</code> <small title="Jun 2026 thesis">(06/2026 - 06/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move bin_patch_distribution.py" title="Move bin_patch_distribution.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="figures" href="#figures/bin_patch_distribution.py"><code>bin_patch_distribution.py</code> <small title="08/2026 - 08/2026">(08/2026 - 08/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move grading_figure.svg" title="Move grading_figure.svg" data-owner-action></button><a class="lab-file lab-script" href="#figures/grading_figure.svg"><code>grading_figure.svg</code> <small title="Nov 2026">(11/2026 - 11/2026)</small></a></li><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move verify_report_assets.py" title="Move verify_report_assets.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="figures" href="#figures/verify_report_assets.py"><code>verify_report_assets.py</code> <small title="??/2026 - ??/2026 archive">(??/2026 - ??/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Study limits &amp; next tests" title="Move Study limits &amp; next tests" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Study limits &amp; next tests" aria-expanded="true" aria-controls="branch-limits" hidden></button><a class="lab-node-link" href="#limits">Study limits &amp; next tests</a></div><div id="branch-limits" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move research_limits.md" title="Move research_limits.md" data-owner-action></button><a class="lab-file lab-script" href="#limits/research_limits.md"><code>research_limits.md</code> <small title="Nov 2026">(11/2026 - 11/2026)</small></a></li></ul></div></li></ul></div></li></ul>
+<ul class="lab-tree lab-group"><li class="lab-node lab-group-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move 6. Appendix: PCam benchmark" title="Move 6. Appendix: PCam benchmark" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Goals under 6. Appendix: PCam benchmark" aria-expanded="true" aria-controls="branch-section-6-appendix-pcam-benchmark" hidden></button><a class="lab-node-link lab-group-link" href="#section-6-appendix-pcam-benchmark">6. Appendix: PCam benchmark</a></div><div id="branch-section-6-appendix-pcam-benchmark" class="lab-children"><ul class="lab-group-tree"><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Assemble benchmark bags" title="Move Assemble benchmark bags" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Assemble benchmark bags" aria-expanded="true" aria-controls="branch-pcam-bags" hidden></button><a class="lab-node-link" href="#pcam-bags">Assemble benchmark bags</a></div><div id="branch-pcam-bags" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move build_benchmark_bags.py" title="Move build_benchmark_bags.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="pcam-bags" href="#pcam-bags/build_benchmark_bags.py"><code>build_benchmark_bags.py</code> <small title="09/2026 - 10/2026 archive">(09/2026 - 10/2026)</small></a></li></ul></div></li><li class="lab-node"><div class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move Compare bag encoders" title="Move Compare bag encoders" data-owner-action></button><button type="button" class="lab-branch-toggle" aria-label="Entries under Compare bag encoders" aria-expanded="true" aria-controls="branch-pcam-benchmarks" hidden></button><a class="lab-node-link" href="#pcam-benchmarks">Compare bag encoders</a></div><div id="branch-pcam-benchmarks" class="lab-children"><ul class="lab-script-list"><li class="lab-row"><button type="button" class="lab-tree-handle" draggable="true" aria-label="Move compare_benchmark_encoders.py" title="Move compare_benchmark_encoders.py" data-owner-action></button><a class="lab-file lab-script" data-open-goal="pcam-benchmarks" href="#pcam-benchmarks/compare_benchmark_encoders.py"><code>compare_benchmark_encoders.py</code> <small title="10/2026 - 10/2026 archive">(10/2026 - 10/2026)</small></a></li></ul></div></li></ul></div></li></ul>
+      <button type="button" class="lab-add-page" data-owner-action>+ Add page</button>
     </nav>
 
     <div class="lab-content">
@@ -105,7 +106,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -157,7 +157,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -209,7 +208,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -271,7 +269,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -323,7 +320,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -395,7 +391,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -447,7 +442,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -519,7 +513,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -571,7 +564,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -623,7 +615,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -695,7 +686,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -747,7 +737,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -799,7 +788,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -851,7 +839,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -926,7 +913,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -978,7 +964,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1030,7 +1015,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1119,7 +1103,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1171,7 +1154,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1223,7 +1205,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1275,7 +1256,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1347,7 +1327,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1399,7 +1378,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1451,7 +1429,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1503,7 +1480,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1575,7 +1551,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1627,7 +1602,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1679,7 +1653,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1751,7 +1724,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1803,7 +1775,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1855,7 +1826,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1907,7 +1877,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -1979,7 +1948,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2031,7 +1999,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2083,7 +2050,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2174,7 +2140,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2226,7 +2191,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2300,7 +2264,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2352,7 +2315,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2404,7 +2366,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2477,7 +2438,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2529,7 +2489,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2581,7 +2540,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2633,7 +2591,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2706,7 +2663,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2758,7 +2714,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2831,7 +2786,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2883,7 +2837,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -2972,7 +2925,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3024,7 +2976,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3096,7 +3047,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3148,7 +3098,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3200,7 +3149,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3274,7 +3222,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3326,7 +3273,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3400,7 +3346,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3452,7 +3397,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3504,7 +3448,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3576,7 +3519,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3628,7 +3570,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3680,7 +3621,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3769,7 +3709,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3821,7 +3760,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3873,7 +3811,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3945,7 +3882,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -3997,7 +3933,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4049,7 +3984,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4101,7 +4035,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4173,7 +4106,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4225,7 +4157,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4297,7 +4228,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4349,7 +4279,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4421,7 +4350,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4473,7 +4401,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4525,7 +4452,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4577,7 +4503,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4629,7 +4554,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4681,7 +4605,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4754,7 +4677,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4843,7 +4765,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4915,7 +4836,6 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -4979,4 +4899,4 @@ Add a link to the evidence (a file, figure, notes or another entry).</pre>
     <div class="preview-links"><a id="preview-open" target="_blank" rel="noopener">Open file ↗</a><a id="preview-download" download>Download</a></div>
   </dialog>
 </main>
-<script src="logbook.js?v=b4a02744af" defer></script></body></html>
+<script src="logbook.js?v=0f1508511d" defer></script></body></html>

@@ -8,21 +8,31 @@
     <aside class="lab-goals" aria-label="Research goals">
       <label for="draft-title">Project name</label>
       <input id="draft-title" placeholder="Name your project" maxlength="160">
-      <div class="draft-goal-heading"><h2>Goals</h2><button type="button" id="draft-add-goal">Add goal</button></div>
-      <nav id="draft-goals" aria-label="Goals and entries"></nav>
+      <h2 class="draft-goal-heading">Pages</h2>
+      <nav aria-label="Logbook pages">
+        <ul id="draft-goals"></ul>
+        <div id="draft-root-drop" hidden>Drop here to move to the top level</div>
+        <details class="draft-add">
+          <summary class="lab-add-page">+ Add page</summary>
+          <button type="button" data-add-page="entry"><strong>Entry</strong><span>Question, method and result</span></button>
+          <button type="button" data-add-page="section"><strong>Section</strong><span>Notes and child pages</span></button>
+        </details>
+      </nav>
     </aside>
     <div class="lab-content">
       <div class="lab-experiment draft-entry">
         <section id="draft-editor" aria-labelledby="draft-entry-heading">
           <div class="draft-intro">
             <h2 id="draft-entry-heading">Research entry</h2>
-            <p>Start with a question. Come back to add what you did and what happened.</p>
           </div>
           <form id="draft-form">
-            <label for="draft-goal">Goal</label>
-            <input id="draft-goal" name="goal" placeholder="What bigger question does this contribute to?">
-            <label for="draft-entry-title">Entry title</label>
+            <label for="draft-entry-title">Title</label>
             <input id="draft-entry-title" name="title" placeholder="Give this step a short name">
+            <div id="draft-section-fields" hidden>
+              <label for="draft-body">Notes <span>(Markdown)</span></label>
+              <textarea id="draft-body" name="body" rows="9" placeholder="What connects the pages in this section?"></textarea>
+            </div>
+            <div id="draft-entry-fields">
             <label for="draft-question">Question</label>
             <textarea id="draft-question" name="question" rows="2" placeholder="What am I trying to find out?"></textarea>
             <label for="draft-method">What I did</label>
@@ -31,11 +41,16 @@
             <textarea id="draft-result" name="result" rows="3" placeholder="What happened? What will I try or decide next?"></textarea>
             <label for="draft-evidence">Evidence <span>(optional)</span></label>
             <input id="draft-evidence" name="evidence" placeholder="Link, file name or reference">
-            <div id="draft-move-row" hidden>
-              <label for="draft-move">Move to another goal</label>
-              <select id="draft-move"></select>
             </div>
-            <button type="button" id="draft-delete">Delete entry</button>
+            <div id="draft-move-row" hidden tabindex="-1">
+              <label for="draft-move">Move to</label>
+              <select id="draft-move"></select>
+              <div class="draft-actions">
+                <button type="button" id="draft-up">Move up</button>
+                <button type="button" id="draft-down">Move down</button>
+              </div>
+            </div>
+            <button type="button" id="draft-delete">Delete page</button>
           </form>
         </section>
         <section id="draft-reading" aria-label="Entry preview" hidden></section>

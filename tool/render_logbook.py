@@ -393,7 +393,6 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downs
       <details class="lab-page-menu">
         <summary aria-label="Page actions" title="Page actions">⋯</summary>
         <div class="lab-page-actions">
-          <button type="button" data-owner-action>Add entry here</button>
           <button type="button" data-owner-action>Move to another goal</button>
           <button type="button" data-owner-action>Delete entry</button>
         </div>
@@ -419,6 +418,14 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downs
   </div>
 </article>"""
     return "\n".join(line.rstrip() for line in markup.splitlines())
+
+
+def move_handle(title):
+    label = escape(f"Move {title}", quote=True)
+    return (
+        f'<button type="button" class="lab-tree-handle" draggable="true" '
+        f'aria-label="{label}" title="{label}" data-owner-action></button>'
+    )
 
 
 def render_logbook(research, *, project=None):
@@ -528,7 +535,7 @@ def render_logbook(research, *, project=None):
                 target = f"{key}/{filename}"
                 audit = f' data-open-goal="{key}"' if filename.endswith(".py") else ""
                 script_links.append(
-                    f'<li><a class="lab-file lab-script"{audit} href="{leaf_href(target)}">'
+                    f'<li class="lab-row">{move_handle(filename)}<a class="lab-file lab-script"{audit} href="{leaf_href(target)}">'
                     f'<code>{escape(filename)}</code> <small title="{escape(date, quote=True)}">({escape(date_label(date))})</small></a></li>'
                 )
                 leaves.append(render_leaf(ancestors, goal, file, details.get(filename, {}), snapshots,
@@ -544,7 +551,7 @@ def render_logbook(research, *, project=None):
             for key in children[parent]:
                 title, scripts = sidebar[key]
                 items.append(
-                    f'<li class="lab-node"><div class="lab-row">'
+                    f'<li class="lab-node"><div class="lab-row">{move_handle(titles[key])}'
                     f'<button type="button" class="lab-branch-toggle" aria-label="Entries under {title}" '
                     f'aria-expanded="true" aria-controls="branch-{key}" hidden></button>'
                     f'<a class="lab-node-link" href="#{key}">{title}</a></div>'
@@ -558,7 +565,7 @@ def render_logbook(research, *, project=None):
         if label:
             tree = (
                 f'<ul class="lab-tree lab-group">'
-                f'<li class="lab-node lab-group-node"><div class="lab-row">'
+                f'<li class="lab-node lab-group-node"><div class="lab-row">{move_handle(label)}'
                 f'<button type="button" class="lab-branch-toggle" aria-label="Goals under {label}" '
                 f'aria-expanded="true" aria-controls="branch-{group_id}" hidden></button>'
                 f'<a class="lab-node-link lab-group-link" href="#{group_id}">{label}</a></div>'

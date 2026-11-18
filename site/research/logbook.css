@@ -30,6 +30,18 @@
 .lab-goals li + li { margin-top: 2px; }
 .lab-goals li { position: relative; }
 .lab-goals .lab-row { display: flex; align-items: flex-start; gap: 3px; }
+.lab-goals .lab-tree-handle {
+  flex: none; display: grid; place-items: center; width: 18px; min-height: 29px;
+  padding: 0; border: 0; border-radius: 4px; background: transparent; color: #526a5b;
+  cursor: grab; opacity: .55;
+}
+.lab-tree-handle::before {
+  content: ''; width: 9px; height: 13px;
+  background: radial-gradient(circle, currentColor 1px, transparent 1.3px) 0 0 / 4.5px 4.33px;
+}
+.lab-goals .lab-row:hover > .lab-tree-handle, .lab-goals .lab-tree-handle:focus-visible { opacity: 1; }
+.lab-goals .lab-tree-handle:hover { background: #e4ebe0; }
+.lab-add-page { margin-top: 12px; }
 .lab-goals a { display: block; flex: 1; min-width: 0; padding: 6px 8px; border-radius: 3px; color: #38463c; font-weight: 600; line-height: 1.4; }
 .lab-goals .lab-group-link { font-size: 13px; font-weight: 650; color: #334d40; }
 .lab-goals .lab-children a.lab-node-link { font-weight: 550; }

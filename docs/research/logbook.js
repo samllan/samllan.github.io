@@ -185,12 +185,19 @@ function closePageMenu() {
   if (menu) menu.open = false;
 }
 
-logbook.addEventListener('click', event => {
-  const action = event.target.closest('[data-owner-action]');
+function requestOwnerAccess(action) {
   if (!action || !publicEditNotice.showModal) return;
   ownerAction = action.closest('.lab-page-menu')?.querySelector('summary') || action;
   closePageMenu();
   if (!publicEditNotice.open) publicEditNotice.showModal();
+}
+
+logbook.addEventListener('click', event => requestOwnerAccess(event.target.closest('[data-owner-action]')));
+tree.addEventListener('dragstart', event => {
+  const handle = event.target.closest('.lab-tree-handle');
+  if (!handle) return;
+  event.preventDefault();
+  requestOwnerAccess(handle);
 });
 
 publicEditNotice.addEventListener('close', () => {
