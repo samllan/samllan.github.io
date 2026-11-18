@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reading room logbook — Samuel Llanwarne</title><meta name="description" content="A fictional pilot showing how to reuse the research logbook pattern.">
-<link rel="stylesheet" href="../../style.css?v=2c230f6c43"><link rel="stylesheet" href="../logbook.css?v=29e95441aa"></head><body><a class="skip" href="#main">Skip to content</a>
+<link rel="stylesheet" href="../../style.css?v=2c230f6c43"><link rel="stylesheet" href="../logbook.css?v=435c3aacb1"></head><body><a class="skip" href="#main">Skip to content</a>
 <main id="main" class="lab">
   <div class="lab-toolbar">
     <a class="lab-back" href="../">← PhD logbook</a>
@@ -53,6 +53,12 @@
     </form>
     <small class="lab-framing-status" role="status"></small>
   </section>
+  <a class="lab-script-banner" data-preview href="examples/README.md">
+    <span class="lab-script-tag" aria-hidden="true">File</span>
+    <code>README.md</code>
+    <span class="lab-script-meta">Template</span>
+    <span class="lab-script-cta">Open file ↗</span>
+  </a>
   <div class="lab-io">
     <section class="lab-io-card lab-input"><h3>What we did</h3>
       <p class="lab-io-description">A fictional reading room pilot and a reusable project structure.</p><figure class="lab-chart"><figcaption>Four JSON/Markdown files define any logbook project</figcaption><dl class="lab-swatches"><div style="--swatch:#e2e8dc;--swatch-line:#205841"><dt>project.json</dt><dd>Title &amp; links</dd></div><div style="--swatch:#d5e5dc;--swatch-line:#205841"><dt>goals.json</dt><dd>Tree &amp; stories</dd></div><div style="--swatch:#f7e7ba;--swatch-line:#8a5a19"><dt>leaf_details</dt><dd>Inputs &amp; links</dd></div></dl></figure>
@@ -62,10 +68,6 @@
       <div class="lab-evidence-table"><table class="lab-result-table lab-stack-table" role="table"><caption>Files that define a logbook project folder</caption><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Project file</th><th scope="col" role="columnheader">Role</th></tr></thead><tbody role="rowgroup"><tr role="row"><td role="cell" data-label="Project file">project.json</td><td role="cell" data-label="Role">Sets project title, description, back link and source repository URL.</td></tr><tr role="row"><td role="cell" data-label="Project file">goals.json</td><td role="cell" data-label="Role">Defines the goal hierarchy, narrative stories, tables, revisions and file lists.</td></tr><tr role="row"><td role="cell" data-label="Project file">leaf_details.json</td><td role="cell" data-label="Role">Holds per-entry titles, inputs, questions, methods and upstream links.</td></tr><tr role="row"><td role="cell" data-label="Project file">row_examples.json</td><td role="cell" data-label="Role">Stores captured script outputs and headline metric badges.</td></tr></tbody></table></div>
     </section>
   </div>
-  <section class="lab-experiment-notes" aria-label="Evidence">
-    <a class="lab-entry-source" data-preview href="examples/README.md">Open file <code>README.md</code> ↗</a>
-
-  </section>
 </article></div>
 </section>
 <section id="section-the-pilot" class="lab-goal" data-group-section>
@@ -121,6 +123,12 @@
     </form>
     <small class="lab-framing-status" role="status"></small>
   </section>
+  <a class="lab-script-banner" data-preview href="examples/trial_waits.csv">
+    <span class="lab-script-tag" aria-hidden="true">File</span>
+    <code>trial_waits.csv</code>
+    <span class="lab-script-meta">Fictional pilot</span>
+    <span class="lab-script-cta">Open file ↗</span>
+  </a>
   <div class="lab-io">
     <section class="lab-io-card lab-input"><h3>What we did</h3>
       <p class="lab-io-description">Four arrivals using a paper list and four using a prepared arrival list.</p><figure class="lab-chart"><figcaption>Observed visitor wait times (minutes, lower is faster)</figcaption><ul class="lab-chart-bars"><li><span>Paper list (AM)</span><strong>8 min median</strong><span class="lab-chart-track" aria-hidden="true"><i style="--bar-start:0.000%;--bar-width:80.000%;--bar-colour:#8a5a19"></i></span></li><li><span>Arrival list (PM)</span><strong>4 min median</strong><span class="lab-chart-track" aria-hidden="true"><i style="--bar-start:0.000%;--bar-width:40.000%;--bar-colour:#205841"></i></span></li></ul></figure>
@@ -130,10 +138,6 @@
       <ul class="lab-metrics"><li>8 observations</li><li>4 per method</li></ul><div class="lab-evidence-table"><table class="lab-result-table lab-stack-table" role="table"><caption>Recorded wait times (fictional pilot)</caption><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Method</th><th scope="col" role="columnheader">Session</th><th scope="col" role="columnheader">Observed waits (min)</th><th scope="col" role="columnheader">Median</th></tr></thead><tbody role="rowgroup"><tr role="row"><td role="cell" data-label="Method">Paper list</td><td role="cell" data-label="Session">Morning</td><td role="cell" data-label="Observed waits (min)">7, 8, 9, 12</td><td role="cell" data-label="Median">8 min</td></tr><tr role="row"><td role="cell" data-label="Method">Prepared arrival list</td><td role="cell" data-label="Session">Afternoon</td><td role="cell" data-label="Observed waits (min)">3, 4, 4, 6</td><td role="cell" data-label="Median">4 min</td></tr></tbody></table></div><div class="lab-connections"><p>Later in the workflow</p><a href="#trial/summarise_waits.py">Compare the median waits</a></div>
     </section>
   </div>
-  <section class="lab-experiment-notes" aria-label="Evidence">
-    <a class="lab-entry-source" data-preview href="examples/trial_waits.csv">Open file <code>trial_waits.csv</code> ↗</a>
-
-  </section>
 </article><article class="lab-experiment" id="trial/summarise_waits.py" data-experiment="summarise_waits.py">
   <div class="lab-experiment-head">
     <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">Reading room logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-the-pilot">The pilot</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#trial">Measure the wait</a></nav>
@@ -150,6 +154,12 @@
     </form>
     <small class="lab-framing-status" role="status"></small>
   </section>
+  <a class="lab-script-banner" data-preview href="examples/summarise_waits.py">
+    <span class="lab-script-tag" aria-hidden="true">Script</span>
+    <code>summarise_waits.py</code>
+    <span class="lab-script-meta">Fictional pilot</span>
+    <span class="lab-script-cta">View script ↗</span>
+  </a>
   <div class="lab-io">
     <section class="lab-io-card lab-input"><h3>What we did</h3>
       <p class="lab-io-description">Eight fictional waits, in minutes, grouped by sign-in method.</p><figure class="lab-chart"><figcaption>Two groups of 4 observations</figcaption><dl class="lab-swatches"><div style="--swatch:#f7e7ba;--swatch-line:#8a5a19"><dt>Paper list</dt><dd>7, 8, 9, 12 min</dd></div><div style="--swatch:#d5e5dc;--swatch-line:#205841"><dt>Prepared list</dt><dd>3, 4, 4, 6 min</dd></div></dl></figure><div class="lab-connections"><p>Earlier in the workflow</p><a href="#trial/trial_waits.csv">Record the two groups of waits</a></div>
@@ -159,11 +169,6 @@
       <ul class="lab-metrics"><li>Median wait 8 and 4 minutes</li></ul><figure class="lab-chart"><figcaption>Recomputed median wait from CSV</figcaption><ul class="lab-chart-bars"><li><span>Paper list</span><strong>8 min (n=4)</strong><span class="lab-chart-track" aria-hidden="true"><i style="--bar-start:0.000%;--bar-width:80.000%;--bar-colour:#8a5a19"></i></span></li><li><span>Prepared list</span><strong>4 min (n=4)</strong><span class="lab-chart-track" aria-hidden="true"><i style="--bar-start:0.000%;--bar-width:40.000%;--bar-colour:#205841"></i></span></li></ul><p class="lab-card-note">The session notes show the two methods ran at different times of day.</p></figure><div class="lab-connections"><p>Later in the workflow</p><a href="#decision/decision.md">Choose a fairer follow-up test</a></div>
     </section>
   </div>
-  <section class="lab-experiment-notes" aria-label="Evidence">
-    <a class="lab-entry-source" data-preview href="examples/summarise_waits.py">View script <code>summarise_waits.py</code> ↗</a>
-    <details class="lab-detail"><summary>Saved run output</summary><div class="lab-output-content"><pre>Paper list: 8 min (n=4)
-Prepared list: 4 min (n=4)</pre></div></details>
-  </section>
 </article></div>
 </section>
 <section id="decision" class="lab-goal" data-goal>
@@ -201,6 +206,12 @@ Prepared list: 4 min (n=4)</pre></div></details>
     </form>
     <small class="lab-framing-status" role="status"></small>
   </section>
+  <a class="lab-script-banner" data-preview href="examples/decision.md">
+    <span class="lab-script-tag" aria-hidden="true">File</span>
+    <code>decision.md</code>
+    <span class="lab-script-meta">Fictional review</span>
+    <span class="lab-script-cta">Open file ↗</span>
+  </a>
   <div class="lab-io">
     <section class="lab-io-card lab-input"><h3>What we did</h3>
       <p class="lab-io-description">The two median waits and the session notes showing the groups arrived at different times.</p><figure class="lab-chart"><figcaption>Confounded pilot vs balanced follow-up design</figcaption><dl class="lab-swatches"><div style="--swatch:#f5d0c5;--swatch-line:#b3472a"><dt>Pilot 1</dt><dd>AM vs PM (confounded)</dd></div><div style="--swatch:#d5e5dc;--swatch-line:#205841"><dt>Pilot 2</dt><dd>Matched time slots</dd></div></dl></figure><div class="lab-connections"><p>Earlier in the workflow</p><a href="#trial/summarise_waits.py">Compare the median waits</a></div>
@@ -210,10 +221,6 @@ Prepared list: 4 min (n=4)</pre></div></details>
       <div class="lab-evidence-table"><table class="lab-result-table lab-stack-table" role="table"><caption>What changed between the first pilot summary and the review</caption><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Stage</th><th scope="col" role="columnheader">Observation</th><th scope="col" role="columnheader">Conclusion</th></tr></thead><tbody role="rowgroup"><tr role="row"><td role="cell" data-label="Stage">Initial pilot</td><td role="cell" data-label="Observation">Median wait dropped from 8 min to 4 min</td><td role="cell" data-label="Conclusion">Draft decision: adopt prepared arrival list</td></tr><tr role="row" class="lab-row-highlight"><td role="cell" data-label="Stage">Session audit</td><td role="cell" data-label="Observation">Paper list ran in morning; arrival list in afternoon</td><td role="cell" data-label="Conclusion">Revised decision: alternate methods in matched time slots</td></tr></tbody></table></div>
     </section>
   </div>
-  <section class="lab-experiment-notes" aria-label="Evidence">
-    <a class="lab-entry-source" data-preview href="examples/decision.md">Open file <code>decision.md</code> ↗</a>
-
-  </section>
 </article></div>
 </section>
     </div>

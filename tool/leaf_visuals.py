@@ -1873,7 +1873,7 @@ def leaf_visuals(filename, examples, demo, captured):
         out = (
             f'<label class="lab-scale-picker">Image scale <select data-image-scale>{selector}</select></label>'
             f'<div aria-live="polite">{panels}</div>'
-            '<p class="lab-card-note">Case S02 is 1 of 12 synthetic cases (36 predictions across 3 scales) feeding the chart below.</p>'
+            '<p class="lab-card-note">Case S02 is 1 of 12 synthetic cases (36 predictions across 3 scales) that feed the linked grading chart.</p>'
         )
         return inp, out
 

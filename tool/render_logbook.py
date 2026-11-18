@@ -78,14 +78,6 @@ def example_markup(examples, filename, captured, *, project_samples=False):
     if project_samples and filename == "render_grading_figure.py":
         encoded = quote(output, safe="")
         return f'<img src="data:image/svg+xml,{encoded}" alt="Example grading error bars by image scale">'
-    if project_samples and filename == "run_grading_example.py":
-        worked_case = evidence_table(captured["table"], examples) if "table" in captured else ""
-        files = "".join(
-            f'<a href="examples/{quote(file)}">{escape(label)}</a>' for label, file in captured.get("assets", ())
-        )
-        return (worked_case + (f'<div class="lab-start">{files}</div>' if files else "") +
-                '<img src="examples/grading_figure.svg" alt="Grading workflow figure for its 36 synthetic predictions">'
-                f'<pre>{escape(output)}</pre>')
     note = captured.get("note")
     note_html = f'<p>{escape(note)}</p>' if note else ""
     visual = figure_markup(captured["figure"]) if "figure" in captured else ""
@@ -339,13 +331,18 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downs
     upstream = connections(details.get("from", ()), "Earlier in the workflow")
     onward = connections(downstream.get(target, ()), "Later in the workflow")
     input_visual, output_visual = visual_pair(filename, examples, demo, captured) if illustrate else ("", "")
-    captured_html = example_markup(examples, filename, captured, project_samples=project_samples)
-    quantities = captured.get("quantity", "")
-    recorded = ""
     if not output_visual:
+        captured_html = example_markup(examples, filename, captured, project_samples=project_samples)
         output_visual = f'<div class="lab-output-content">{captured_html}</div>'
-    elif captured.get("stdout"):
-        recorded = f'<details class="lab-detail"><summary>Saved run output</summary><div class="lab-output-content">{captured_html}</div></details>'
+    resources = list(captured.get("assets", ()))
+    case_csv = captured.get("table", {}).get("csv")
+    if case_csv:
+        resources.insert(0, ("Case trace (CSV)", case_csv))
+    evidence_links = "".join(
+        f'<a href="examples/{quote(file)}">{escape(label)}</a>' for label, file in resources
+    )
+    evidence = f'<div class="lab-connections">{evidence_links}</div>' if evidence_links else ""
+    quantities = captured.get("quantity", "")
     if filename == "prepare_image_regions.py" and demo:
         quantities = ""
     if quantities:
@@ -353,6 +350,7 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downs
         output_visual = f'<ul class="lab-metrics">{metrics}</ul>{output_visual}'
     input_text = f'<p class="lab-io-description">{escape(details["input"])}</p>' if details.get("input") else ""
     source_action = "View script" if filename.endswith(".py") else "Open file"
+    source_tag = "Script" if filename.endswith(".py") else "File"
     experiment = escape(target, quote=True)
     kicker = breadcrumb_markup([*ancestors, (key, goal["title"])])
     markup = f"""<article class="lab-experiment" id="{experiment}" data-experiment="{escape(filename, quote=True)}">
@@ -371,19 +369,21 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downs
     </form>
     <small class="lab-framing-status" role="status"></small>
   </section>
+  <a class="lab-script-banner" data-preview href="{path}">
+    <span class="lab-script-tag" aria-hidden="true">{source_tag}</span>
+    <code>{escape(filename)}</code>
+    <span class="lab-script-meta">{escape(date_label(date))}</span>
+    <span class="lab-script-cta">{source_action} ↗</span>
+  </a>
   <div class="lab-io">
     <section class="lab-io-card lab-input"><h3>What we did</h3>
       {input_text}{method_html}{input_visual}{upstream}
     </section>
     <section class="lab-io-card lab-result"><div class="lab-io-head"><h3>Result and next step</h3><span>{kind}</span></div>
       <p class="lab-io-description">{escape(outcome)}</p>
-      {output_visual}{onward}
+      {output_visual}{evidence}{onward}
     </section>
   </div>
-  <section class="lab-experiment-notes" aria-label="Evidence">
-    <a class="lab-entry-source" data-preview href="{path}">{source_action} <code>{escape(filename)}</code> ↗</a>
-    {recorded}
-  </section>
 </article>"""
     return "\n".join(line.rstrip() for line in markup.splitlines())
 
