@@ -10,13 +10,23 @@
     <nav id="lab-goals" class="lab-goals" aria-label="Research goals">
       <h2><a class="lab-home-link" href="#question"><!-- root label --></a></h2>
       <!-- goal navigation -->
-      <p class="lab-date-note"><!-- date note --></p>
     </nav>
 
     <div class="lab-content">
       <!-- experiments -->
     </div>
   </div>
+  <dialog id="public-edit-notice" aria-labelledby="public-edit-title" aria-describedby="public-edit-copy">
+    <div class="lab-public-edit-body">
+      <h2 id="public-edit-title">You’re viewing the published logbook</h2>
+      <p id="public-edit-copy">Only the owner can update the published version. You can try an edit here and save it in this browser.</p>
+      <div class="lab-public-edit-actions">
+        <form method="dialog"><button type="submit" autofocus>Close</button></form>
+        <a href="<!-- starter url -->">Start your own logbook</a>
+        <button type="button" id="public-edit-continue">Edit on this device</button>
+      </div>
+    </div>
+  </dialog>
   <dialog id="file-preview" aria-labelledby="preview-title">
     <div class="preview-head"><h2 id="preview-title"></h2><form method="dialog"><button type="submit">Close</button></form></div>
     <div id="preview-content"></div>

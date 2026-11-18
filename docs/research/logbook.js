@@ -475,6 +475,37 @@ async function previewFile(link) {
   }
 }
 
+const publicEditNotice = document.querySelector('#public-edit-notice');
+const editActions = '.lab-edit, .lab-panel-edit, .lab-panel-figure-edit, .lab-source-change, .lab-source-restore';
+let pendingEdit;
+let confirmedEdit;
+
+logbook.addEventListener('click', event => {
+  const action = event.target.closest(editActions);
+  if (!action || action === confirmedEdit || !publicEditNotice.showModal) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  pendingEdit = action;
+  if (!publicEditNotice.open) publicEditNotice.showModal();
+}, true);
+
+document.querySelector('#public-edit-continue').addEventListener('click', () => {
+  const action = pendingEdit;
+  pendingEdit = undefined;
+  publicEditNotice.close();
+  if (!action) return;
+  confirmedEdit = action;
+  try {
+    action.click();
+  } finally {
+    confirmedEdit = undefined;
+  }
+});
+
+publicEditNotice.addEventListener('close', () => {
+  if (!publicEditNotice.open) pendingEdit = undefined;
+});
+
 logbook.addEventListener('click', event => {
   if (event.defaultPrevented || event.button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
   const link = event.target.closest('a');

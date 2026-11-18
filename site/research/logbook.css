@@ -20,7 +20,6 @@
 .lab-goals h2 a.lab-home-link { padding: 6px 10px; color: #2b4a3a; font-weight: 700; text-decoration: none; }
 .lab-goals h2 a.lab-home-link:hover { background: #e4ebe0; text-decoration: underline; }
 .lab-group { border-top: 1px solid var(--lab-rule); margin-top: 6px; padding-top: 4px; }
-.lab-date-note { max-width: 29ch; margin: 16px 10px 3px; color: #536052; font-size: 12px; line-height: 1.5; }
 .lab-goals ul { list-style: none; margin: 0; padding: 0; }
 .lab-goals .lab-children {
   margin: 2px 0 4px 11px;
@@ -297,3 +296,12 @@
 @media (max-width: 700px) {
   .lab .lab-icon-button { width: 40px; height: 40px; }
 }
+
+#public-edit-notice { padding: 0; color: #24332b; background: var(--lab-surface); border: 1px solid var(--lab-rule); border-radius: 8px; width: min(490px, calc(100% - 32px)); }
+#public-edit-notice::backdrop { background: rgb(25 39 29 / 40%); }
+.lab-public-edit-body { padding: 20px 22px; }
+.lab-public-edit-body h2 { margin: 0; font-size: 21px; line-height: 1.3; }
+.lab-public-edit-body p { margin: 8px 0 16px; color: #4b5c51; line-height: 1.5; }
+.lab-public-edit-actions { display: flex; gap: 8px 12px; align-items: center; flex-wrap: wrap; }
+.lab-public-edit-actions a { color: var(--lab-green); font-size: 13px; font-weight: 650; }
+.lab-public-edit-actions #public-edit-continue { margin-left: auto; background: #e6efe6; }

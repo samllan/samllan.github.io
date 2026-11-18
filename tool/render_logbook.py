@@ -459,8 +459,7 @@ def render_logbook(research, *, project=None):
         "back url": "../projects/phd.html",
         "source url": "https://github.com/samllan/samllan.github.io/tree/main/site/research/examples",
     }
-    settings.setdefault("date note", "Dates mark saved versions or the thesis date. ?? means the source gives a year but no verified month. The scripts are runnable adaptations with generated data."
-                        if project_samples else "Dates give the context of the recorded work.")
+    settings.setdefault("starter url", "starter/" if project_samples else "../starter/")
     root_label = settings.setdefault("root label", re.sub(r"^The\s+", "", settings["project title"]))
     root_crumb = ("question", root_label)
     groups = json.loads((project / "goals.json").read_text(encoding="utf-8"))
