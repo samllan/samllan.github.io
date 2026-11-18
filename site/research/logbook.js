@@ -57,228 +57,6 @@ function fitDiagrams(container) {
   }
 }
 
-const preparedPanels = new WeakSet();
-let panelDatabase;
-
-function panelStore(key, action, draft) {
-  panelDatabase ??= new Promise((resolve, reject) => {
-    const request = indexedDB.open('research-logbook-panels', 1);
-    request.onupgradeneeded = () => request.result.createObjectStore('drafts');
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
-
-  return panelDatabase.then(database => new Promise((resolve, reject) => {
-    const transaction = database.transaction('drafts', action === 'get' ? 'readonly' : 'readwrite');
-    const store = transaction.objectStore('drafts');
-    const request = action === 'put' ? store.put(draft, key) : store[action](key);
-    transaction.oncomplete = () => resolve(request.result);
-    transaction.onabort = () => reject(transaction.error);
-  }));
-}
-
-function updateCropControls(entry) {
-  const note = entry.querySelector('[data-crop-replacement-note]');
-  if (!note) return;
-  const visuals = [...entry.querySelectorAll('.lab-panel-visual')];
-  const replaced = visuals.some(visual => visual.hidden);
-  for (const visual of visuals) visual.inert = replaced;
-  note.hidden = !replaced;
-}
-
-const replacementSources = new WeakMap();
-const preparedSources = new WeakSet();
-
-function setupSource(entry) {
-  if (preparedSources.has(entry)) return;
-  preparedSources.add(entry);
-  const key = JSON.stringify([location.pathname, entry.id, 'source']);
-  const link = entry.querySelector('.lab-script-name');
-  const name = link.querySelector('code');
-  const originalName = name.textContent;
-  const date = entry.querySelector('.lab-script-meta');
-  const change = entry.querySelector('.lab-source-change');
-  const restore = entry.querySelector('.lab-source-restore');
-  const picker = entry.querySelector('.lab-source-picker');
-  const status = entry.querySelector('.lab-source-status');
-
-  function show(file) {
-    if (file) replacementSources.set(link, file);
-    else replacementSources.delete(link);
-    name.textContent = file?.name || originalName;
-    date.hidden = Boolean(file);
-    restore.hidden = !file;
-  }
-
-  async function commit(file) {
-    change.disabled = restore.disabled = true;
-    try {
-      await panelStore(key, file ? 'put' : 'delete', file);
-      show(file);
-      status.textContent = file ? 'File saved in this browser.' : 'Original file restored.';
-    } catch {
-      status.textContent = 'Could not save the file in this browser.';
-    } finally {
-      change.disabled = restore.disabled = false;
-      change.focus();
-    }
-  }
-
-  change.addEventListener('click', () => picker.click());
-  picker.addEventListener('change', () => {
-    const file = picker.files[0];
-    picker.value = '';
-    if (file) commit(file);
-  });
-  restore.addEventListener('click', () => commit(undefined));
-  panelStore(key, 'get').then(show).catch(() => {
-    status.textContent = 'Browser storage is unavailable.';
-  }).finally(() => { change.hidden = false; });
-}
-
-function setupPanel(entry, panel) {
-  if (preparedPanels.has(panel)) return;
-  preparedPanels.add(panel);
-  const key = JSON.stringify([location.pathname, entry.id, panel.dataset.entryPanel]);
-  const edit = panel.querySelector('.lab-panel-edit');
-  const textForm = panel.querySelector('.lab-panel-text-form');
-  const figureEdit = panel.querySelector('.lab-panel-figure-edit');
-  const figureForm = panel.querySelector('.lab-panel-figure-form');
-  const text = panel.querySelector('.lab-panel-text');
-  const originalText = [...text.querySelectorAll('p')].map(p => p.textContent.trim()).join('\n\n');
-  const originalHTML = text.innerHTML;
-  const visual = panel.querySelector('.lab-panel-visual');
-  const figure = panel.querySelector('.lab-panel-replacement');
-  const image = figure.querySelector('img');
-  const caption = figure.querySelector('figcaption');
-  const textStatus = panel.querySelector('.lab-panel-status');
-  const figureStatus = panel.querySelector('.lab-panel-figure-status');
-  const restoreText = textForm.querySelector('.lab-panel-reset');
-  const restoreFigure = figureForm.querySelector('.lab-panel-use-original');
-  let draft;
-  let imageUrl;
-  let busy = false;
-
-  function readView() {
-    if (!draft || draft.text === originalText) {
-      if (text.querySelector('.lab-panel-draft')) text.innerHTML = originalHTML;
-    } else {
-      const p = document.createElement('p');
-      p.className = 'lab-panel-draft';
-      p.textContent = draft.text;
-      text.replaceChildren(p);
-    }
-    if (imageUrl) URL.revokeObjectURL(imageUrl);
-    imageUrl = draft?.image ? URL.createObjectURL(draft.image) : undefined;
-    if (imageUrl) image.src = imageUrl;
-    else image.removeAttribute('src');
-    image.alt = draft?.caption || 'Figure added to this panel';
-    caption.textContent = draft?.caption || '';
-    caption.hidden = !draft?.caption;
-    figure.hidden = !imageUrl;
-    visual.hidden = Boolean(imageUrl);
-    const action = imageUrl || visual.childElementCount ? 'Change figure' : 'Add figure';
-    const label = action + ' for ' + panel.querySelector('h3').textContent.toLowerCase();
-    figureEdit.title = label;
-    figureEdit.setAttribute('aria-label', label);
-    updateCropControls(entry);
-    fitDiagrams(panel);
-  }
-
-  function close(form, button) {
-    button.hidden = false;
-    if (form === textForm) text.hidden = false;
-    form.hidden = true;
-    button.focus();
-  }
-
-  async function save(next, form, button, status) {
-    if (busy) return;
-    busy = true;
-    for (const control of [...textForm.elements, ...figureForm.elements]) control.disabled = true;
-    try {
-      if (next.image && next.image !== draft?.image) {
-        const url = URL.createObjectURL(next.image);
-        try {
-          const test = new Image();
-          test.src = url;
-          await test.decode();
-        } catch {
-          status.textContent = 'This image could not be opened. Choose a PNG, JPEG, WebP or GIF.';
-          return;
-        } finally {
-          URL.revokeObjectURL(url);
-        }
-      }
-      const hasChanges = next.text !== originalText || next.image;
-      await panelStore(key, hasChanges ? 'put' : 'delete', next);
-      draft = hasChanges ? next : undefined;
-      readView();
-      status.textContent = 'Saved in this browser.';
-      close(form, button);
-    } catch {
-      status.textContent = 'Could not save here. Your changes are still in the editor.';
-    } finally {
-      busy = false;
-      for (const control of [...textForm.elements, ...figureForm.elements]) control.disabled = false;
-    }
-  }
-
-  edit.addEventListener('click', () => {
-    textForm.elements.description.value = draft?.text ?? originalText;
-    restoreText.hidden = !draft || draft.text === originalText;
-    textStatus.textContent = '';
-    edit.hidden = true;
-    text.hidden = true;
-    textForm.hidden = false;
-    textForm.elements.description.focus();
-  });
-
-  figureEdit.addEventListener('click', () => {
-    figureForm.reset();
-    figureForm.elements.caption.value = draft?.caption || '';
-    restoreFigure.hidden = !draft?.image;
-    figureStatus.textContent = '';
-    figureEdit.hidden = true;
-    figureForm.hidden = false;
-    figureForm.elements.figure.focus();
-  });
-
-  textForm.querySelector('.lab-panel-cancel').addEventListener('click', () => close(textForm, edit));
-  figureForm.querySelector('.lab-panel-cancel').addEventListener('click', () => close(figureForm, figureEdit));
-  restoreText.addEventListener('click', () => save({ ...draft, text: originalText }, textForm, edit, textStatus));
-  restoreFigure.addEventListener('click', () => save(
-    { text: draft?.text ?? originalText }, figureForm, figureEdit, figureStatus
-  ));
-  textForm.addEventListener('submit', event => {
-    event.preventDefault();
-    save({ ...draft, text: textForm.elements.description.value.trim() }, textForm, edit, textStatus);
-  });
-  figureForm.addEventListener('submit', event => {
-    event.preventDefault();
-    const file = figureForm.elements.figure.files[0] || draft?.image;
-    if (!file) {
-      figureStatus.textContent = 'Choose an image file first.';
-      return;
-    }
-    save({
-      text: draft?.text ?? originalText,
-      image: file,
-      caption: figureForm.elements.caption.value.trim(),
-    }, figureForm, figureEdit, figureStatus);
-  });
-
-  panelStore(key, 'get').then(saved => {
-    draft = saved;
-    readView();
-  }).catch(() => {
-    textStatus.textContent = 'Browser storage is unavailable.';
-  }).finally(() => {
-    edit.hidden = false;
-    figureEdit.hidden = false;
-  });
-}
-
 function selectExperiment() {
   const [key, encodedFile] = location.hash.slice(1).split('/');
   const goal = goals.find(item => item.id === key) || goals.find(item => item.hasAttribute('data-goal'));
@@ -292,9 +70,7 @@ function selectExperiment() {
       || entries.find(item => item.dataset.experiment === defaultFile))
     : null;
   const selected = selectedLeaf || overview || entries[0];
-  if (activeExperiment && activeExperiment !== selected && activeExperiment.hasAttribute('data-experiment')) {
-    closeEditor(activeExperiment);
-  }
+  if (activeExperiment !== selected) closePageMenu();
   goals.forEach(item => { item.hidden = item !== goal; });
   if (overview) overview.hidden = selected !== overview;
   for (const item of entries) item.hidden = item !== selected;
@@ -311,10 +87,6 @@ function selectExperiment() {
   }
   activeExperiment = selected;
   fitDiagrams(selected);
-  if (selected.hasAttribute('data-experiment')) {
-    setupSource(selected);
-    for (const panel of selected.querySelectorAll('[data-entry-panel]')) setupPanel(selected, panel);
-  }
   if (filename && !selectedLeaf) {
     const part = document.getElementById(goal.id + '/' + filename);
     if (part?.hasAttribute('data-home-part')) {
@@ -326,77 +98,12 @@ function selectExperiment() {
   toggledByRowClick = false;
 }
 
-function framingKey(entry) {
-  return 'research-logbook:framing:' + location.pathname + ':' + entry.id;
-}
-
-function savedFraming(entry) {
-  try { return localStorage.getItem(framingKey(entry)); } catch { return null; }
-}
-
-function closeEditor(entry) {
-  entry.querySelector('.lab-framing-form').hidden = true;
-  entry.querySelector('.lab-framing-text').hidden = false;
-  entry.querySelector('.lab-edit').hidden = false;
-}
-
-function setupFraming(entry) {
-  const text = entry.querySelector('.lab-framing-text');
-  const original = text.textContent;
-  const edit = entry.querySelector('.lab-edit');
-  const form = entry.querySelector('.lab-framing-form');
-  const field = form.elements.framing;
-  const restore = form.querySelector('[data-restore]');
-  const status = entry.querySelector('.lab-framing-status');
-  const saved = savedFraming(entry);
-  if (saved !== null) {
-    text.textContent = saved;
-    status.textContent = 'Edited in this browser';
-  }
-  edit.hidden = false;
-  edit.addEventListener('click', () => {
-    field.value = text.textContent;
-    restore.hidden = savedFraming(entry) === null;
-    form.hidden = false;
-    edit.hidden = true;
-    text.hidden = true;
-    field.focus();
-  });
-
-  function save(value) {
-    try {
-      if (value === original) localStorage.removeItem(framingKey(entry));
-      else localStorage.setItem(framingKey(entry), value);
-    } catch {
-      status.textContent = 'Browser storage is unavailable. Your text is still in the editor.';
-      return;
-    }
-    text.textContent = value;
-    status.textContent = value === original ? 'Original framing restored' : 'Saved in this browser';
-    closeEditor(entry);
-    edit.focus();
-  }
-
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    const value = field.value.trim();
-    if (value) save(value);
-    else status.textContent = 'Enter a note before saving.';
-  });
-  form.querySelector('[data-cancel]').addEventListener('click', () => {
-    closeEditor(entry);
-    edit.focus();
-  });
-  restore.addEventListener('click', () => save(original));
-}
-
 logbook.classList.add('enhanced');
 for (const button of tree.querySelectorAll('.lab-branch-toggle')) {
   button.hidden = false;
   setBranch(button, false);
   button.addEventListener('click', () => setBranch(button, button.getAttribute('aria-expanded') !== 'true'));
 }
-for (const entry of logbook.querySelectorAll('[data-experiment]')) setupFraming(entry);
 logbook.addEventListener('change', event => {
   if (!event.target.matches('[data-image-scale]')) return;
   for (const result of event.target.closest('.lab-io-card').querySelectorAll('[data-scale-result]')) {
@@ -409,7 +116,6 @@ const previewContent = document.querySelector('#preview-content');
 const previewOpen = document.querySelector('#preview-open');
 const sourceDirectory = document.querySelector('.lab-source').href.replace('/tree/', '/blob/');
 let previewRequest;
-let previewLocalUrl;
 
 function filePreview(text, url) {
   if (!url.endsWith('.md')) {
@@ -442,32 +148,28 @@ async function previewFile(link) {
   previewRequest?.abort();
   const request = new AbortController();
   previewRequest = request;
-  if (previewLocalUrl) URL.revokeObjectURL(previewLocalUrl);
-  previewLocalUrl = undefined;
-  const localFile = replacementSources.get(link);
-  const filename = localFile?.name || link.closest('[data-experiment]').dataset.experiment;
+  const filename = link.closest('[data-experiment]').dataset.experiment;
   document.querySelector('#preview-title').textContent = filename;
   const isScript = link.href.endsWith('.py');
   previewOpen.href = isScript ? sourceDirectory + '/' + link.href.split('/').pop() : link.href;
-  previewOpen.textContent = localFile ? 'Open original file ↗' : isScript ? 'Open on GitHub ↗' : 'Open file ↗';
+  previewOpen.textContent = isScript ? 'Open on GitHub ↗' : 'Open file ↗';
   const download = document.querySelector('#preview-download');
-  if (localFile) previewLocalUrl = URL.createObjectURL(localFile);
-  download.href = previewLocalUrl || link.href;
+  download.href = link.href;
   download.download = filename;
   previewContent.textContent = 'Loading file…';
   dialog.showModal();
 
-  if (localFile ? /^image\/(?:png|jpeg|gif|webp)$/.test(localFile.type) : /\.(?:png|svg)$/.test(link.href)) {
+  if (/\.(?:png|svg)$/.test(link.href)) {
     const image = new Image();
     image.alt = document.querySelector('#preview-title').textContent;
-    image.src = previewLocalUrl || link.href;
+    image.src = link.href;
     previewContent.replaceChildren(image);
     return;
   }
 
   try {
-    const response = localFile || await fetch(link.href, { signal: request.signal });
-    if (!localFile && !response.ok) throw new Error('HTTP ' + response.status);
+    const response = await fetch(link.href, { signal: request.signal });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
     const text = await response.text();
     if (!request.signal.aborted) previewContent.replaceChildren(filePreview(text, filename));
   } catch (error) {
@@ -476,34 +178,36 @@ async function previewFile(link) {
 }
 
 const publicEditNotice = document.querySelector('#public-edit-notice');
-const editActions = '.lab-edit, .lab-panel-edit, .lab-panel-figure-edit, .lab-source-change, .lab-source-restore';
-let pendingEdit;
-let confirmedEdit;
+let ownerAction;
+
+function closePageMenu() {
+  const menu = activeExperiment?.querySelector('.lab-page-menu[open]');
+  if (menu) menu.open = false;
+}
 
 logbook.addEventListener('click', event => {
-  const action = event.target.closest(editActions);
-  if (!action || action === confirmedEdit || !publicEditNotice.showModal) return;
-  event.preventDefault();
-  event.stopImmediatePropagation();
-  pendingEdit = action;
+  const action = event.target.closest('[data-owner-action]');
+  if (!action || !publicEditNotice.showModal) return;
+  ownerAction = action.closest('.lab-page-menu')?.querySelector('summary') || action;
+  closePageMenu();
   if (!publicEditNotice.open) publicEditNotice.showModal();
-}, true);
-
-document.querySelector('#public-edit-continue').addEventListener('click', () => {
-  const action = pendingEdit;
-  pendingEdit = undefined;
-  publicEditNotice.close();
-  if (!action) return;
-  confirmedEdit = action;
-  try {
-    action.click();
-  } finally {
-    confirmedEdit = undefined;
-  }
 });
 
 publicEditNotice.addEventListener('close', () => {
-  if (!publicEditNotice.open) pendingEdit = undefined;
+  ownerAction?.focus();
+  ownerAction = undefined;
+});
+
+document.addEventListener('click', event => {
+  if (!event.target.closest('.lab-page-menu')) closePageMenu();
+});
+logbook.addEventListener('keydown', event => {
+  const menu = event.target.closest('.lab-page-menu[open]');
+  if (event.key === 'Escape' && menu) {
+    event.preventDefault();
+    closePageMenu();
+    menu.querySelector('summary').focus();
+  }
 });
 
 logbook.addEventListener('click', event => {
@@ -527,11 +231,7 @@ logbook.addEventListener('click', event => {
     selectExperiment();
   }
 });
-dialog.addEventListener('close', () => {
-  previewRequest?.abort();
-  if (previewLocalUrl) URL.revokeObjectURL(previewLocalUrl);
-  previewLocalUrl = undefined;
-});
+dialog.addEventListener('close', () => previewRequest?.abort());
 
 function setupCropDemo() {
   const scene = document.querySelector('#crop-image');

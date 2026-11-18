@@ -319,7 +319,7 @@ def icon_button(css_class, label, icon):
     }[icon]
     label = escape(label, quote=True)
     return (
-        f'<button type="button" class="{css_class} lab-icon-button" aria-label="{label}" title="{label}" hidden>'
+        f'<button type="button" class="{css_class} lab-icon-button" aria-label="{label}" title="{label}" data-owner-action>'
         f'<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" '
         f'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">{glyph}</svg></button>'
     )
@@ -331,30 +331,10 @@ def render_panel(key, title, text, visual, links):
     <h3>{title}</h3>{icon_button("lab-panel-edit", f"Edit {title.lower()}", "pencil")}
   </div>
   <div class="lab-panel-text">{text}</div>
-  <form class="lab-panel-form lab-panel-text-form" hidden>
-    <label>Text<textarea name="description" rows="4"></textarea></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save text</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-reset" hidden>Restore original text</button>
-    </div>
-  </form>
-  <small class="lab-panel-status" role="status"></small>
   <div class="lab-figure-actions">
-    {icon_button("lab-panel-figure-edit", f"Change figure for {title.lower()}", "upload")}
+    {icon_button("lab-panel-figure-edit", f'{"Change" if visual else "Add"} figure for {title.lower()}', "upload")}
   </div>
-  <form class="lab-panel-form lab-panel-figure-form" hidden>
-    <label>Image file<input type="file" name="figure" accept="image/png,image/jpeg,image/webp,image/gif"></label>
-    <label>Caption and image description<input name="caption" type="text"></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save figure</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-use-original" hidden>Use original figure</button>
-    </div>
-  </form>
-  <small class="lab-panel-figure-status" role="status"></small>
   <div class="lab-panel-visual">{visual}</div>
-  <figure class="lab-figure lab-panel-replacement" hidden>
-    <img alt=""><figcaption></figcaption>
-  </figure>
   {links}
 </section>"""
 
@@ -405,25 +385,25 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downs
     method_panel = render_panel("input", "What we did", input_text + method_html, input_visual, upstream)
     result_panel = render_panel("result", "Result and next step", f'<p class="lab-io-description">{escape(outcome)}</p>',
                                 output_visual, evidence + onward)
-    crop_note = (
-        '<p class="lab-card-note" data-crop-replacement-note hidden>Restore both figures to use the crop demo.</p>'
-        if filename == "prepare_image_regions.py" and demo else ""
-    )
     markup = f"""<article class="lab-experiment" id="{experiment}" data-experiment="{escape(filename, quote=True)}">
   <div class="lab-experiment-head">
     {kicker}
-    <h2 tabindex="-1">{escape(title)}</h2>
+    <div class="lab-entry-heading">
+      <h2 tabindex="-1">{escape(title)}</h2>
+      <details class="lab-page-menu">
+        <summary aria-label="Page actions" title="Page actions">⋯</summary>
+        <div class="lab-page-actions">
+          <button type="button" data-owner-action>Add entry here</button>
+          <button type="button" data-owner-action>Move to another goal</button>
+          <button type="button" data-owner-action>Delete entry</button>
+        </div>
+      </details>
+    </div>
   </div>
   <section class="lab-framing" aria-label="Research question">
     <div class="lab-framing-head"><h3>Question</h3>{icon_button("lab-edit", "Edit question", "pencil")}</div>
     <p class="lab-framing-text">{framing}</p>
     {situation_html}
-    <form class="lab-framing-form" hidden>
-      <textarea aria-label="Question" name="framing" rows="4" required></textarea>
-      <div class="lab-form-actions"><button type="submit">Save</button><button type="button" data-cancel>Cancel</button>
-      <button type="button" data-restore hidden>Restore original</button><small>Saved in this browser only.</small></div>
-    </form>
-    <small class="lab-framing-status" role="status"></small>
   </section>
   <div class="lab-script-banner">
     <span class="lab-script-tag" aria-hidden="true">{source_tag}</span>
@@ -431,16 +411,12 @@ def render_leaf(ancestors, goal, file, details, snapshots, examples, demo, downs
     <span class="lab-script-meta">{escape(date_label(date))}</span>
     <div class="lab-source-actions">
       {icon_button("lab-source-change", "Change file", "upload")}
-      <button type="button" class="lab-source-restore" hidden>Use original file</button>
-      <input type="file" class="lab-source-picker" hidden>
     </div>
   </div>
-  <small class="lab-source-status" role="status"></small>
   <div class="lab-io">
     {method_panel}
     {result_panel}
   </div>
-  {crop_note}
 </article>"""
     return "\n".join(line.rstrip() for line in markup.splitlines())
 

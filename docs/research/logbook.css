@@ -153,14 +153,6 @@
   margin: 0; font-weight: 650; font-size: 16px; color: #274034;
 }
 .lab-framing-text { margin: 5px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
-.lab-framing-status { display: block; margin-top: 4px; color: #536052; }
-.lab-framing-status:empty { display: none; }
-.lab-framing-form textarea {
-  width: 100%; padding: 9px 12px; margin-top: 8px; font: inherit; color: #25352b;
-  border: 1px solid #aebeb1; border-radius: 4px; background: var(--lab-surface); resize: vertical;
-}
-.lab-form-actions { display: flex; align-items: center; gap: 7px 10px; flex-wrap: wrap; }
-.lab-form-actions small { color: #536052; }
 .lab-io { display: grid; gap: 13px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .lab-io-card { min-width: 0; border: 1px solid #d0d9ce; border-radius: 8px; padding: clamp(13px, 2vw, 22px); }
 .lab-input { background: #f0eee6; }
@@ -261,27 +253,12 @@
 .lab-home-detail .lab-command { white-space: pre-wrap; overflow-wrap: anywhere; }
 .lab-goals .lab-home-link { display: inline-block; padding: 0; }
 .lab-goals .lab-home-link[aria-current="page"] { background: transparent; text-underline-offset: 3px; text-decoration: underline; }
-.lab-framing-text, .lab-framing > .lab-card-note, .lab-framing-form { max-width: 76ch; }
+.lab-framing-text, .lab-framing > .lab-card-note { max-width: 76ch; }
 .lab-panel-text { margin: 8px 0; overflow-wrap: anywhere; }
 .lab-panel-text > :first-child { margin-top: 0; }
-.lab-panel-draft { white-space: pre-wrap; }
-.lab-panel-form { margin: 10px 0; }
-.lab-panel-form label { display: block; margin-bottom: 9px; color: #294535; font-size: 13px; font-weight: 650; }
-.lab-panel-form :is(textarea, input) { display: block; box-sizing: border-box; width: 100%; font: inherit; }
-.lab-panel-form :is(textarea, input[type="text"]) {
-  margin-top: 4px; padding: 7px 9px; color: #25352b;
-  background: var(--lab-surface); border: 1px solid #aebeb1; border-radius: 4px;
-}
-.lab-panel-form textarea { resize: vertical; }
-.lab-panel-form input[type="file"] { margin-top: 5px; }
-.lab-panel-status { display: block; color: #536052; }
-.lab-panel-status:empty { display: none; }
-.lab-panel-replacement img { max-width: 100%; max-height: 65vh; object-fit: contain; }
 .lab-script-name { min-width: 0; text-underline-offset: 3px; }
 .lab-source-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 5px; margin-left: auto; }
 .lab-figure-actions { display: flex; justify-content: flex-end; padding-top: 8px; margin-top: 10px; border-top: 1px solid var(--lab-rule); }
-.lab-source-status, .lab-panel-figure-status { display: block; margin-bottom: 6px; color: #536052; }
-.lab-source-status:empty, .lab-panel-figure-status:empty { display: none; }
 @media (max-width: 700px) {
   .lab-script-banner { flex-wrap: wrap; }
   .lab-source-actions { flex: none; }
@@ -302,6 +279,24 @@
 .lab-public-edit-body { padding: 20px 22px; }
 .lab-public-edit-body h2 { margin: 0; font-size: 21px; line-height: 1.3; }
 .lab-public-edit-body p { margin: 8px 0 16px; color: #4b5c51; line-height: 1.5; }
-.lab-public-edit-actions { display: flex; gap: 8px 12px; align-items: center; flex-wrap: wrap; }
+.lab-public-edit-actions { display: flex; gap: 8px 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
 .lab-public-edit-actions a { color: var(--lab-green); font-size: 13px; font-weight: 650; }
-.lab-public-edit-actions #public-edit-continue { margin-left: auto; background: #e6efe6; }
+
+.lab-entry-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.lab-entry-heading h2 { min-width: 0; overflow-wrap: anywhere; }
+.lab-page-menu { position: relative; flex: none; }
+.lab-page-menu summary {
+  display: grid; place-items: center; list-style: none; width: 34px; height: 34px;
+  border: 1px solid #b3c0b5; border-radius: 4px; background: var(--lab-surface);
+  color: var(--lab-green); font-size: 21px; line-height: 1; cursor: pointer;
+}
+.lab-page-menu summary::-webkit-details-marker { display: none; }
+.lab-page-menu summary:hover, .lab-page-menu[open] summary { background: #e4ebe0; }
+.lab-page-actions {
+  position: absolute; z-index: 2; inset: calc(100% + 5px) 0 auto auto;
+  width: max-content; padding: 4px; border: 1px solid var(--lab-rule); border-radius: 5px;
+  background: var(--lab-surface); box-shadow: 0 4px 12px rgb(24 50 35 / 12%);
+}
+.lab .lab-page-actions button { display: block; width: 100%; border: 0; text-align: left; }
+.lab .lab-page-actions button:hover { background: #e4ebe0; }
+.lab:not(.enhanced) [data-owner-action], .lab:not(.enhanced) .lab-page-menu { visibility: hidden; }

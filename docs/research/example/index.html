@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reading room logbook — Samuel Llanwarne</title><meta name="description" content="A fictional pilot showing how to reuse the research logbook pattern.">
-<link rel="stylesheet" href="../../style.css?v=2c230f6c43"><link rel="stylesheet" href="../logbook.css?v=53621a1c4e"></head><body><a class="skip" href="#main">Skip to content</a>
+<link rel="stylesheet" href="../../style.css?v=2c230f6c43"><link rel="stylesheet" href="../logbook.css?v=b63f4a3895"></head><body><a class="skip" href="#main">Skip to content</a>
 <main id="main" class="lab">
   <div class="lab-toolbar">
     <a class="lab-back" href="../">← PhD logbook</a>
@@ -39,95 +39,55 @@
 <div data-default-file="README.md"><article class="lab-experiment" id="question/README.md" data-experiment="README.md">
   <div class="lab-experiment-head">
     <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">Can an arrival list shorten the reading room queue?</a></nav>
-    <h2 tabindex="-1">Start a reading room logbook</h2>
+    <div class="lab-entry-heading">
+      <h2 tabindex="-1">Start a reading room logbook</h2>
+      <details class="lab-page-menu">
+        <summary aria-label="Page actions" title="Page actions">⋯</summary>
+        <div class="lab-page-actions">
+          <button type="button" data-owner-action>Add entry here</button>
+          <button type="button" data-owner-action>Move to another goal</button>
+          <button type="button" data-owner-action>Delete entry</button>
+        </div>
+      </details>
+    </div>
   </div>
   <section class="lab-framing" aria-label="Research question">
-    <div class="lab-framing-head"><h3>Question</h3><button type="button" class="lab-edit lab-icon-button" aria-label="Edit question" title="Edit question" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button></div>
+    <div class="lab-framing-head"><h3>Question</h3><button type="button" class="lab-edit lab-icon-button" aria-label="Edit question" title="Edit question" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button></div>
     <p class="lab-framing-text">This fictional pilot shows how the same logbook can track a different project. A small library wants to help booked visitors get seated sooner.</p>
 
-    <form class="lab-framing-form" hidden>
-      <textarea aria-label="Question" name="framing" rows="4" required></textarea>
-      <div class="lab-form-actions"><button type="submit">Save</button><button type="button" data-cancel>Cancel</button>
-      <button type="button" data-restore hidden>Restore original</button><small>Saved in this browser only.</small></div>
-    </form>
-    <small class="lab-framing-status" role="status"></small>
   </section>
   <div class="lab-script-banner">
     <span class="lab-script-tag" aria-hidden="true">File</span>
     <a class="lab-script-name" data-preview href="examples/README.md" title="Open file"><code>README.md</code></a>
     <span class="lab-script-meta">Template</span>
     <div class="lab-source-actions">
-      <button type="button" class="lab-source-change lab-icon-button" aria-label="Change file" title="Change file" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
-      <button type="button" class="lab-source-restore" hidden>Use original file</button>
-      <input type="file" class="lab-source-picker" hidden>
+      <button type="button" class="lab-source-change lab-icon-button" aria-label="Change file" title="Change file" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
     </div>
   </div>
-  <small class="lab-source-status" role="status"></small>
   <div class="lab-io">
     <section class="lab-io-card lab-input" data-entry-panel="input">
   <div class="lab-io-head">
-    <h3>What we did</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit what we did" title="Edit what we did" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
+    <h3>What we did</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit what we did" title="Edit what we did" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
   </div>
   <div class="lab-panel-text"><p class="lab-io-description">A fictional reading room pilot and a reusable project structure.</p></div>
-  <form class="lab-panel-form lab-panel-text-form" hidden>
-    <label>Text<textarea name="description" rows="4"></textarea></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save text</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-reset" hidden>Restore original text</button>
-    </div>
-  </form>
-  <small class="lab-panel-status" role="status"></small>
   <div class="lab-figure-actions">
-    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for what we did" title="Change figure for what we did" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
+    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for what we did" title="Change figure for what we did" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
   </div>
-  <form class="lab-panel-form lab-panel-figure-form" hidden>
-    <label>Image file<input type="file" name="figure" accept="image/png,image/jpeg,image/webp,image/gif"></label>
-    <label>Caption and image description<input name="caption" type="text"></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save figure</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-use-original" hidden>Use original figure</button>
-    </div>
-  </form>
-  <small class="lab-panel-figure-status" role="status"></small>
   <div class="lab-panel-visual"><figure class="lab-chart"><figcaption>Four JSON/Markdown files define any logbook project</figcaption><dl class="lab-swatches"><div style="--swatch:#e2e8dc;--swatch-line:#205841"><dt>project.json</dt><dd>Title &amp; links</dd></div><div style="--swatch:#d5e5dc;--swatch-line:#205841"><dt>goals.json</dt><dd>Tree &amp; stories</dd></div><div style="--swatch:#f7e7ba;--swatch-line:#8a5a19"><dt>leaf_details</dt><dd>Inputs &amp; links</dd></div></dl></figure></div>
-  <figure class="lab-figure lab-panel-replacement" hidden>
-    <img alt=""><figcaption></figcaption>
-  </figure>
 
 </section>
     <section class="lab-io-card lab-result" data-entry-panel="result">
   <div class="lab-io-head">
-    <h3>Result and next step</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit result and next step" title="Edit result and next step" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
+    <h3>Result and next step</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit result and next step" title="Edit result and next step" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
   </div>
   <div class="lab-panel-text"><p class="lab-io-description">Shows how to reuse the logbook structure for another project.</p></div>
-  <form class="lab-panel-form lab-panel-text-form" hidden>
-    <label>Text<textarea name="description" rows="4"></textarea></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save text</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-reset" hidden>Restore original text</button>
-    </div>
-  </form>
-  <small class="lab-panel-status" role="status"></small>
   <div class="lab-figure-actions">
-    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for result and next step" title="Change figure for result and next step" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
+    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for result and next step" title="Change figure for result and next step" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
   </div>
-  <form class="lab-panel-form lab-panel-figure-form" hidden>
-    <label>Image file<input type="file" name="figure" accept="image/png,image/jpeg,image/webp,image/gif"></label>
-    <label>Caption and image description<input name="caption" type="text"></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save figure</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-use-original" hidden>Use original figure</button>
-    </div>
-  </form>
-  <small class="lab-panel-figure-status" role="status"></small>
   <div class="lab-panel-visual"><div class="lab-evidence-table"><table class="lab-result-table lab-stack-table" role="table"><caption>Files that define a logbook project folder</caption><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Project file</th><th scope="col" role="columnheader">Role</th></tr></thead><tbody role="rowgroup"><tr role="row"><td role="cell" data-label="Project file">project.json</td><td role="cell" data-label="Role">Sets project title, description, back link and source repository URL.</td></tr><tr role="row"><td role="cell" data-label="Project file">goals.json</td><td role="cell" data-label="Role">Defines the goal hierarchy, narrative stories, tables, revisions and file lists.</td></tr><tr role="row"><td role="cell" data-label="Project file">leaf_details.json</td><td role="cell" data-label="Role">Holds per-entry titles, inputs, questions, methods and upstream links.</td></tr><tr role="row"><td role="cell" data-label="Project file">row_examples.json</td><td role="cell" data-label="Role">Stores captured script outputs and headline metric badges.</td></tr></tbody></table></div></div>
-  <figure class="lab-figure lab-panel-replacement" hidden>
-    <img alt=""><figcaption></figcaption>
-  </figure>
 
 </section>
   </div>
-
 </article></div>
 </section>
 <section id="section-the-pilot" class="lab-goal" data-group-section>
@@ -170,187 +130,107 @@
 <div data-default-file="trial_waits.csv"><article class="lab-experiment" id="trial/trial_waits.csv" data-experiment="trial_waits.csv">
   <div class="lab-experiment-head">
     <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">Reading room logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-the-pilot">The pilot</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#trial">Measure the wait</a></nav>
-    <h2 tabindex="-1">Record the two groups of waits</h2>
+    <div class="lab-entry-heading">
+      <h2 tabindex="-1">Record the two groups of waits</h2>
+      <details class="lab-page-menu">
+        <summary aria-label="Page actions" title="Page actions">⋯</summary>
+        <div class="lab-page-actions">
+          <button type="button" data-owner-action>Add entry here</button>
+          <button type="button" data-owner-action>Move to another goal</button>
+          <button type="button" data-owner-action>Delete entry</button>
+        </div>
+      </details>
+    </div>
   </div>
   <section class="lab-framing" aria-label="Research question">
-    <div class="lab-framing-head"><h3>Question</h3><button type="button" class="lab-edit lab-icon-button" aria-label="Edit question" title="Edit question" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button></div>
+    <div class="lab-framing-head"><h3>Question</h3><button type="button" class="lab-edit lab-icon-button" aria-label="Edit question" title="Edit question" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button></div>
     <p class="lab-framing-text">How long did visitors wait under each sign-in method?</p>
 
-    <form class="lab-framing-form" hidden>
-      <textarea aria-label="Question" name="framing" rows="4" required></textarea>
-      <div class="lab-form-actions"><button type="submit">Save</button><button type="button" data-cancel>Cancel</button>
-      <button type="button" data-restore hidden>Restore original</button><small>Saved in this browser only.</small></div>
-    </form>
-    <small class="lab-framing-status" role="status"></small>
   </section>
   <div class="lab-script-banner">
     <span class="lab-script-tag" aria-hidden="true">File</span>
     <a class="lab-script-name" data-preview href="examples/trial_waits.csv" title="Open file"><code>trial_waits.csv</code></a>
     <span class="lab-script-meta">Fictional pilot</span>
     <div class="lab-source-actions">
-      <button type="button" class="lab-source-change lab-icon-button" aria-label="Change file" title="Change file" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
-      <button type="button" class="lab-source-restore" hidden>Use original file</button>
-      <input type="file" class="lab-source-picker" hidden>
+      <button type="button" class="lab-source-change lab-icon-button" aria-label="Change file" title="Change file" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
     </div>
   </div>
-  <small class="lab-source-status" role="status"></small>
   <div class="lab-io">
     <section class="lab-io-card lab-input" data-entry-panel="input">
   <div class="lab-io-head">
-    <h3>What we did</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit what we did" title="Edit what we did" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
+    <h3>What we did</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit what we did" title="Edit what we did" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
   </div>
   <div class="lab-panel-text"><p class="lab-io-description">Four arrivals using a paper list and four using a prepared arrival list.</p></div>
-  <form class="lab-panel-form lab-panel-text-form" hidden>
-    <label>Text<textarea name="description" rows="4"></textarea></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save text</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-reset" hidden>Restore original text</button>
-    </div>
-  </form>
-  <small class="lab-panel-status" role="status"></small>
   <div class="lab-figure-actions">
-    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for what we did" title="Change figure for what we did" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
+    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for what we did" title="Change figure for what we did" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
   </div>
-  <form class="lab-panel-form lab-panel-figure-form" hidden>
-    <label>Image file<input type="file" name="figure" accept="image/png,image/jpeg,image/webp,image/gif"></label>
-    <label>Caption and image description<input name="caption" type="text"></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save figure</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-use-original" hidden>Use original figure</button>
-    </div>
-  </form>
-  <small class="lab-panel-figure-status" role="status"></small>
   <div class="lab-panel-visual"><figure class="lab-chart"><figcaption>Observed visitor wait times (minutes, lower is faster)</figcaption><ul class="lab-chart-bars"><li><span>Paper list (AM)</span><strong>8 min median</strong><span class="lab-chart-track" aria-hidden="true"><i style="--bar-start:0.000%;--bar-width:80.000%;--bar-colour:#8a5a19"></i></span></li><li><span>Arrival list (PM)</span><strong>4 min median</strong><span class="lab-chart-track" aria-hidden="true"><i style="--bar-start:0.000%;--bar-width:40.000%;--bar-colour:#205841"></i></span></li></ul></figure></div>
-  <figure class="lab-figure lab-panel-replacement" hidden>
-    <img alt=""><figcaption></figcaption>
-  </figure>
 
 </section>
     <section class="lab-io-card lab-result" data-entry-panel="result">
   <div class="lab-io-head">
-    <h3>Result and next step</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit result and next step" title="Edit result and next step" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
+    <h3>Result and next step</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit result and next step" title="Edit result and next step" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
   </div>
   <div class="lab-panel-text"><p class="lab-io-description">Lists the individual waits used in the comparison.</p></div>
-  <form class="lab-panel-form lab-panel-text-form" hidden>
-    <label>Text<textarea name="description" rows="4"></textarea></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save text</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-reset" hidden>Restore original text</button>
-    </div>
-  </form>
-  <small class="lab-panel-status" role="status"></small>
   <div class="lab-figure-actions">
-    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for result and next step" title="Change figure for result and next step" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
+    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for result and next step" title="Change figure for result and next step" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
   </div>
-  <form class="lab-panel-form lab-panel-figure-form" hidden>
-    <label>Image file<input type="file" name="figure" accept="image/png,image/jpeg,image/webp,image/gif"></label>
-    <label>Caption and image description<input name="caption" type="text"></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save figure</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-use-original" hidden>Use original figure</button>
-    </div>
-  </form>
-  <small class="lab-panel-figure-status" role="status"></small>
   <div class="lab-panel-visual"><ul class="lab-metrics"><li>8 observations</li><li>4 per method</li></ul><div class="lab-evidence-table"><table class="lab-result-table lab-stack-table" role="table"><caption>Recorded wait times (fictional pilot)</caption><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Method</th><th scope="col" role="columnheader">Session</th><th scope="col" role="columnheader">Observed waits (min)</th><th scope="col" role="columnheader">Median</th></tr></thead><tbody role="rowgroup"><tr role="row"><td role="cell" data-label="Method">Paper list</td><td role="cell" data-label="Session">Morning</td><td role="cell" data-label="Observed waits (min)">7, 8, 9, 12</td><td role="cell" data-label="Median">8 min</td></tr><tr role="row"><td role="cell" data-label="Method">Prepared arrival list</td><td role="cell" data-label="Session">Afternoon</td><td role="cell" data-label="Observed waits (min)">3, 4, 4, 6</td><td role="cell" data-label="Median">4 min</td></tr></tbody></table></div></div>
-  <figure class="lab-figure lab-panel-replacement" hidden>
-    <img alt=""><figcaption></figcaption>
-  </figure>
   <div class="lab-connections"><p>Later in the workflow</p><a href="#trial/summarise_waits.py">Compare the median waits</a></div>
 </section>
   </div>
-
 </article><article class="lab-experiment" id="trial/summarise_waits.py" data-experiment="summarise_waits.py">
   <div class="lab-experiment-head">
     <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">Reading room logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-the-pilot">The pilot</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#trial">Measure the wait</a></nav>
-    <h2 tabindex="-1">Compare the median waits</h2>
+    <div class="lab-entry-heading">
+      <h2 tabindex="-1">Compare the median waits</h2>
+      <details class="lab-page-menu">
+        <summary aria-label="Page actions" title="Page actions">⋯</summary>
+        <div class="lab-page-actions">
+          <button type="button" data-owner-action>Add entry here</button>
+          <button type="button" data-owner-action>Move to another goal</button>
+          <button type="button" data-owner-action>Delete entry</button>
+        </div>
+      </details>
+    </div>
   </div>
   <section class="lab-framing" aria-label="Research question">
-    <div class="lab-framing-head"><h3>Question</h3><button type="button" class="lab-edit lab-icon-button" aria-label="Edit question" title="Edit question" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button></div>
+    <div class="lab-framing-head"><h3>Question</h3><button type="button" class="lab-edit lab-icon-button" aria-label="Edit question" title="Edit question" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button></div>
     <p class="lab-framing-text">How long did visitors wait under each sign-in method?</p>
 
-    <form class="lab-framing-form" hidden>
-      <textarea aria-label="Question" name="framing" rows="4" required></textarea>
-      <div class="lab-form-actions"><button type="submit">Save</button><button type="button" data-cancel>Cancel</button>
-      <button type="button" data-restore hidden>Restore original</button><small>Saved in this browser only.</small></div>
-    </form>
-    <small class="lab-framing-status" role="status"></small>
   </section>
   <div class="lab-script-banner">
     <span class="lab-script-tag" aria-hidden="true">Script</span>
     <a class="lab-script-name" data-preview href="examples/summarise_waits.py" title="View script"><code>summarise_waits.py</code></a>
     <span class="lab-script-meta">Fictional pilot</span>
     <div class="lab-source-actions">
-      <button type="button" class="lab-source-change lab-icon-button" aria-label="Change file" title="Change file" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
-      <button type="button" class="lab-source-restore" hidden>Use original file</button>
-      <input type="file" class="lab-source-picker" hidden>
+      <button type="button" class="lab-source-change lab-icon-button" aria-label="Change file" title="Change file" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
     </div>
   </div>
-  <small class="lab-source-status" role="status"></small>
   <div class="lab-io">
     <section class="lab-io-card lab-input" data-entry-panel="input">
   <div class="lab-io-head">
-    <h3>What we did</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit what we did" title="Edit what we did" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
+    <h3>What we did</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit what we did" title="Edit what we did" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
   </div>
   <div class="lab-panel-text"><p class="lab-io-description">Eight fictional waits, in minutes, grouped by sign-in method.</p></div>
-  <form class="lab-panel-form lab-panel-text-form" hidden>
-    <label>Text<textarea name="description" rows="4"></textarea></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save text</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-reset" hidden>Restore original text</button>
-    </div>
-  </form>
-  <small class="lab-panel-status" role="status"></small>
   <div class="lab-figure-actions">
-    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for what we did" title="Change figure for what we did" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
+    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for what we did" title="Change figure for what we did" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
   </div>
-  <form class="lab-panel-form lab-panel-figure-form" hidden>
-    <label>Image file<input type="file" name="figure" accept="image/png,image/jpeg,image/webp,image/gif"></label>
-    <label>Caption and image description<input name="caption" type="text"></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save figure</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-use-original" hidden>Use original figure</button>
-    </div>
-  </form>
-  <small class="lab-panel-figure-status" role="status"></small>
   <div class="lab-panel-visual"><figure class="lab-chart"><figcaption>Two groups of 4 observations</figcaption><dl class="lab-swatches"><div style="--swatch:#f7e7ba;--swatch-line:#8a5a19"><dt>Paper list</dt><dd>7, 8, 9, 12 min</dd></div><div style="--swatch:#d5e5dc;--swatch-line:#205841"><dt>Prepared list</dt><dd>3, 4, 4, 6 min</dd></div></dl></figure></div>
-  <figure class="lab-figure lab-panel-replacement" hidden>
-    <img alt=""><figcaption></figcaption>
-  </figure>
   <div class="lab-connections"><p>Earlier in the workflow</p><a href="#trial/trial_waits.csv">Record the two groups of waits</a></div>
 </section>
     <section class="lab-io-card lab-result" data-entry-panel="result">
   <div class="lab-io-head">
-    <h3>Result and next step</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit result and next step" title="Edit result and next step" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
+    <h3>Result and next step</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit result and next step" title="Edit result and next step" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
   </div>
   <div class="lab-panel-text"><p class="lab-io-description">Recomputes the two medians from the CSV.</p></div>
-  <form class="lab-panel-form lab-panel-text-form" hidden>
-    <label>Text<textarea name="description" rows="4"></textarea></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save text</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-reset" hidden>Restore original text</button>
-    </div>
-  </form>
-  <small class="lab-panel-status" role="status"></small>
   <div class="lab-figure-actions">
-    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for result and next step" title="Change figure for result and next step" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
+    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for result and next step" title="Change figure for result and next step" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
   </div>
-  <form class="lab-panel-form lab-panel-figure-form" hidden>
-    <label>Image file<input type="file" name="figure" accept="image/png,image/jpeg,image/webp,image/gif"></label>
-    <label>Caption and image description<input name="caption" type="text"></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save figure</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-use-original" hidden>Use original figure</button>
-    </div>
-  </form>
-  <small class="lab-panel-figure-status" role="status"></small>
   <div class="lab-panel-visual"><ul class="lab-metrics"><li>Median wait 8 and 4 minutes</li></ul><figure class="lab-chart"><figcaption>Recomputed median wait from CSV</figcaption><ul class="lab-chart-bars"><li><span>Paper list</span><strong>8 min (n=4)</strong><span class="lab-chart-track" aria-hidden="true"><i style="--bar-start:0.000%;--bar-width:80.000%;--bar-colour:#8a5a19"></i></span></li><li><span>Prepared list</span><strong>4 min (n=4)</strong><span class="lab-chart-track" aria-hidden="true"><i style="--bar-start:0.000%;--bar-width:40.000%;--bar-colour:#205841"></i></span></li></ul><p class="lab-card-note">The session notes show the two methods ran at different times of day.</p></figure></div>
-  <figure class="lab-figure lab-panel-replacement" hidden>
-    <img alt=""><figcaption></figcaption>
-  </figure>
   <div class="lab-connections"><p>Later in the workflow</p><a href="#decision/decision.md">Choose a fairer follow-up test</a></div>
 </section>
   </div>
-
 </article></div>
 </section>
 <section id="decision" class="lab-goal" data-goal>
@@ -375,107 +255,66 @@
 <div data-default-file="decision.md"><article class="lab-experiment" id="decision/decision.md" data-experiment="decision.md">
   <div class="lab-experiment-head">
     <nav class="lab-kicker" aria-label="Breadcrumb"><a href="#question">Reading room logbook</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#section-the-pilot">The pilot</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#trial">Measure the wait</a> <span class="lab-crumb-sep" aria-hidden="true">/</span> <a href="#decision">Review the decision</a></nav>
-    <h2 tabindex="-1">Choose a fairer follow-up test</h2>
+    <div class="lab-entry-heading">
+      <h2 tabindex="-1">Choose a fairer follow-up test</h2>
+      <details class="lab-page-menu">
+        <summary aria-label="Page actions" title="Page actions">⋯</summary>
+        <div class="lab-page-actions">
+          <button type="button" data-owner-action>Add entry here</button>
+          <button type="button" data-owner-action>Move to another goal</button>
+          <button type="button" data-owner-action>Delete entry</button>
+        </div>
+      </details>
+    </div>
   </div>
   <section class="lab-framing" aria-label="Research question">
-    <div class="lab-framing-head"><h3>Question</h3><button type="button" class="lab-edit lab-icon-button" aria-label="Edit question" title="Edit question" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button></div>
+    <div class="lab-framing-head"><h3>Question</h3><button type="button" class="lab-edit lab-icon-button" aria-label="Edit question" title="Edit question" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button></div>
     <p class="lab-framing-text">The shorter wait is promising enough to justify a better comparison.</p>
 
-    <form class="lab-framing-form" hidden>
-      <textarea aria-label="Question" name="framing" rows="4" required></textarea>
-      <div class="lab-form-actions"><button type="submit">Save</button><button type="button" data-cancel>Cancel</button>
-      <button type="button" data-restore hidden>Restore original</button><small>Saved in this browser only.</small></div>
-    </form>
-    <small class="lab-framing-status" role="status"></small>
   </section>
   <div class="lab-script-banner">
     <span class="lab-script-tag" aria-hidden="true">File</span>
     <a class="lab-script-name" data-preview href="examples/decision.md" title="Open file"><code>decision.md</code></a>
     <span class="lab-script-meta">Fictional review</span>
     <div class="lab-source-actions">
-      <button type="button" class="lab-source-change lab-icon-button" aria-label="Change file" title="Change file" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
-      <button type="button" class="lab-source-restore" hidden>Use original file</button>
-      <input type="file" class="lab-source-picker" hidden>
+      <button type="button" class="lab-source-change lab-icon-button" aria-label="Change file" title="Change file" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
     </div>
   </div>
-  <small class="lab-source-status" role="status"></small>
   <div class="lab-io">
     <section class="lab-io-card lab-input" data-entry-panel="input">
   <div class="lab-io-head">
-    <h3>What we did</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit what we did" title="Edit what we did" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
+    <h3>What we did</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit what we did" title="Edit what we did" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
   </div>
   <div class="lab-panel-text"><p class="lab-io-description">The two median waits and the session notes showing the groups arrived at different times.</p></div>
-  <form class="lab-panel-form lab-panel-text-form" hidden>
-    <label>Text<textarea name="description" rows="4"></textarea></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save text</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-reset" hidden>Restore original text</button>
-    </div>
-  </form>
-  <small class="lab-panel-status" role="status"></small>
   <div class="lab-figure-actions">
-    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for what we did" title="Change figure for what we did" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
+    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for what we did" title="Change figure for what we did" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
   </div>
-  <form class="lab-panel-form lab-panel-figure-form" hidden>
-    <label>Image file<input type="file" name="figure" accept="image/png,image/jpeg,image/webp,image/gif"></label>
-    <label>Caption and image description<input name="caption" type="text"></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save figure</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-use-original" hidden>Use original figure</button>
-    </div>
-  </form>
-  <small class="lab-panel-figure-status" role="status"></small>
   <div class="lab-panel-visual"><figure class="lab-chart"><figcaption>Confounded pilot vs balanced follow-up design</figcaption><dl class="lab-swatches"><div style="--swatch:#f5d0c5;--swatch-line:#b3472a"><dt>Pilot 1</dt><dd>AM vs PM (confounded)</dd></div><div style="--swatch:#d5e5dc;--swatch-line:#205841"><dt>Pilot 2</dt><dd>Matched time slots</dd></div></dl></figure></div>
-  <figure class="lab-figure lab-panel-replacement" hidden>
-    <img alt=""><figcaption></figcaption>
-  </figure>
   <div class="lab-connections"><p>Earlier in the workflow</p><a href="#trial/summarise_waits.py">Compare the median waits</a></div>
 </section>
     <section class="lab-io-card lab-result" data-entry-panel="result">
   <div class="lab-io-head">
-    <h3>Result and next step</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit result and next step" title="Edit result and next step" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
+    <h3>Result and next step</h3><button type="button" class="lab-panel-edit lab-icon-button" aria-label="Edit result and next step" title="Edit result and next step" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 6.5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></svg></button>
   </div>
   <div class="lab-panel-text"><p class="lab-io-description">Records the follow-up and why the draft rollout decision changed.</p></div>
-  <form class="lab-panel-form lab-panel-text-form" hidden>
-    <label>Text<textarea name="description" rows="4"></textarea></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save text</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-reset" hidden>Restore original text</button>
-    </div>
-  </form>
-  <small class="lab-panel-status" role="status"></small>
   <div class="lab-figure-actions">
-    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for result and next step" title="Change figure for result and next step" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
+    <button type="button" class="lab-panel-figure-edit lab-icon-button" aria-label="Change figure for result and next step" title="Change figure for result and next step" data-owner-action><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></button>
   </div>
-  <form class="lab-panel-form lab-panel-figure-form" hidden>
-    <label>Image file<input type="file" name="figure" accept="image/png,image/jpeg,image/webp,image/gif"></label>
-    <label>Caption and image description<input name="caption" type="text"></label>
-    <div class="lab-form-actions">
-      <button type="submit">Save figure</button><button type="button" class="lab-panel-cancel">Cancel</button>
-      <button type="button" class="lab-panel-use-original" hidden>Use original figure</button>
-    </div>
-  </form>
-  <small class="lab-panel-figure-status" role="status"></small>
   <div class="lab-panel-visual"><div class="lab-evidence-table"><table class="lab-result-table lab-stack-table" role="table"><caption>What changed between the first pilot summary and the review</caption><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Stage</th><th scope="col" role="columnheader">Observation</th><th scope="col" role="columnheader">Conclusion</th></tr></thead><tbody role="rowgroup"><tr role="row"><td role="cell" data-label="Stage">Initial pilot</td><td role="cell" data-label="Observation">Median wait dropped from 8 min to 4 min</td><td role="cell" data-label="Conclusion">Draft decision: adopt prepared arrival list</td></tr><tr role="row" class="lab-row-highlight"><td role="cell" data-label="Stage">Session audit</td><td role="cell" data-label="Observation">Paper list ran in morning; arrival list in afternoon</td><td role="cell" data-label="Conclusion">Revised decision: alternate methods in matched time slots</td></tr></tbody></table></div></div>
-  <figure class="lab-figure lab-panel-replacement" hidden>
-    <img alt=""><figcaption></figcaption>
-  </figure>
 
 </section>
   </div>
-
 </article></div>
 </section>
     </div>
   </div>
   <dialog id="public-edit-notice" aria-labelledby="public-edit-title" aria-describedby="public-edit-copy">
     <div class="lab-public-edit-body">
-      <h2 id="public-edit-title">You’re viewing the published logbook</h2>
-      <p id="public-edit-copy">Only the owner can update the published version. You can try an edit here and save it in this browser.</p>
+      <h2 id="public-edit-title">Owner access required</h2>
+      <p id="public-edit-copy">You’re viewing the published logbook. Only its owner can edit the content or organise its pages.</p>
       <div class="lab-public-edit-actions">
         <form method="dialog"><button type="submit" autofocus>Close</button></form>
         <a href="../starter/">Start your own logbook</a>
-        <button type="button" id="public-edit-continue">Edit on this device</button>
       </div>
     </div>
   </dialog>
@@ -485,4 +324,4 @@
     <div class="preview-links"><a id="preview-open" target="_blank" rel="noopener">Open file ↗</a><a id="preview-download" download>Download</a></div>
   </dialog>
 </main>
-<script src="../logbook.js?v=dba1887fe6" defer></script></body></html>
+<script src="../logbook.js?v=b4a02744af" defer></script></body></html>
