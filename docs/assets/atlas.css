@@ -67,3 +67,6 @@
   .atlas-map-top {inset: 12px 10px auto;}
   .atlas-canvas-wrap {height: 340px;}
 }
+
+.atlas-dialog .atlas-comparison-lead {font-size: 1rem; line-height: 1.6; max-width: 670px; margin: 0 0 16px;}
+.atlas-dialog .atlas-record-label {font-weight: 700; color: var(--teal); margin: 0;}

@@ -263,12 +263,13 @@
     get('empty').hidden = false;
   }
 
-  function summary(i) {
+  function summary(i, index) {
     const [id, name, year, reach] = data.records[i];
     const card = node('article'), heading = node('h3'), link = node('a', name);
     link.href = (paper() ? 'https://pubmed.ncbi.nlm.nih.gov/' : 'https://simple.wikipedia.org/?curid=') + id;
     heading.append(link);
     const units = paper() ? ' citations' : (data.reachWindow === 'hour' ? ' page views in the sampled hour' : ' page views');
+    if (basket().size > 1) card.append(node('p', (paper() ? 'Paper ' : 'Page ') + (index + 1), 'atlas-record-label'));
     card.append(node('p', [year, reach == null ? '' : format.format(reach) + units].filter(Boolean).join(' · ')), heading);
     const checked = data.checked?.[id];
     if (!checked) {
@@ -291,7 +292,11 @@
     grid.append(...selected.map(summary));
     get('dialog-title').textContent = selected.length === 1 ? 'Record summary' : 'Comparison';
     const content = get('dialog-content');
-    content.replaceChildren(grid);
+    content.replaceChildren();
+    if (selected.length === 3 && selected.every(i => data.checked?.[data.records[i][0]])) {
+      content.append(node('p', 'All three study the same biomarker. Two ask how well it distinguishes groups today. The third asks what it can tell us about later outcomes.', 'atlas-comparison-lead'));
+    }
+    content.append(grid);
     const pairs = [];
     selected.forEach((left, a) => selected.slice(a + 1).forEach((right, index) => {
       const key = [data.records[left][0], data.records[right][0]].sort().join('/');
