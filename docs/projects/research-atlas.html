@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Atlas prototype — Samuel Llanwarne</title><meta name="description" content="Explore a map of research and compare what papers found.">
+<link rel="stylesheet" href="../style.css?v=2c230f6c43"><link rel="stylesheet" href="../assets/atlas.css?v=0ce6d9e03a"></head><body><a class="skip" href="#main">Skip to content</a>
+<header><a class="brand" href="../index.html">Samuel Llanwarne</a><nav aria-label="Main"><a href="../index.html#work">Work</a><a href="../index.html#about">About</a><a href="https://github.com/samllan">GitHub ↗</a></nav></header><main id="main" class="project atlas">
+  <a class="back" href="../index.html#work">All work</a>
+  <section class="project-intro atlas-intro">
+    <h1>Research Atlas <em>prototype</em></h1>
+    <p class="intro">A map for finding related work and comparing what it found. Start with a dot, or follow three studies on the same Alzheimer’s biomarker.</p>
+  </section>
+  <section class="atlas-shell" aria-label="Interactive research map">
+    <div class="atlas-toolbar">
+      <div class="atlas-sources" role="group" aria-label="Collection">
+        <button type="button" data-source="papers" aria-pressed="true">Research papers</button>
+        <button type="button" data-source="wiki" aria-pressed="false">Wikipedia</button>
+      </div>
+      <label class="atlas-arrange">Arrange by
+        <select id="atlas-method">
+          <option value="blend">Text and references</option><option value="text">Text similarity</option>
+          <option value="topics">Topic mixtures</option><option value="links">Citation proximity</option>
+        </select>
+      </label>
+    </div>
+    <div class="atlas-grid">
+      <div class="atlas-map">
+        <div id="atlas-canvas-wrap" class="atlas-canvas-wrap">
+          <canvas id="atlas-canvas" aria-label="Map of the selected collection. Use the title filter to find and select records with a keyboard."></canvas>
+          <div class="atlas-map-top"><span id="atlas-count" role="status">Loading map…</span><span id="atlas-map-hint">Select a dot to compare</span></div>
+          <div id="atlas-tooltip" class="atlas-tooltip" hidden></div>
+          <div class="atlas-zoom" role="group" aria-label="Map zoom">
+            <button id="atlas-minus" type="button" aria-label="Zoom out">−</button>
+            <button id="atlas-plus" type="button" aria-label="Zoom in">+</button>
+            <button id="atlas-reset" type="button">Reset view</button>
+          </div>
+        </div>
+        <div class="atlas-key" id="atlas-key"></div>
+      </div>
+      <aside class="atlas-side" aria-label="Find and compare records">
+        <label class="atlas-filter" for="atlas-query">Find by title</label>
+        <input type="search" id="atlas-query" placeholder="Try amyloid or sleep" autocomplete="off">
+        <div id="atlas-results" class="atlas-results" hidden></div>
+        <div class="atlas-compare-head"><h2>Compare</h2><span id="atlas-pick-count" aria-live="polite">0 of 3</span></div>
+        <p class="atlas-empty" id="atlas-empty">Pick up to three dots, or choose a match from the title search.</p>
+        <ol class="atlas-picks" id="atlas-picks"></ol>
+        <p id="atlas-status" role="status" class="atlas-status"></p>
+        <button id="atlas-open" class="atlas-primary" type="button" disabled>View summary</button>
+        <button id="atlas-example" class="atlas-example" type="button">Try the three-paper example</button>
+      </aside>
+    </div>
+  </section>
+  <details class="atlas-methods">
+    <summary>How the map is made</summary>
+    <p id="atlas-explanation"></p>
+    <p>The snapshots contain PubMed papers on dementia and cognition, with citation data from NIH iCite, and Simple English Wikipedia pages. The comparison includes three summaries checked against the abstracts. Other records link to the source. Structured AI summaries and reader or author input are future directions.</p>
+  </details>
+  <p class="atlas-credit">This project follows on from the exploration patterns in <a href="words.html">A map of words</a>, the visualisation I built with Nina Sushko at St Andrews.</p>
+  <dialog class="atlas-dialog" id="atlas-dialog" aria-labelledby="atlas-dialog-title">
+    <div class="atlas-dialog-head"><h2 id="atlas-dialog-title">Comparison</h2><form method="dialog"><button type="submit" autofocus>Close</button></form></div>
+    <div id="atlas-dialog-content"></div>
+  </dialog>
+  <noscript><p>The interactive map requires JavaScript.</p></noscript>
+</main>
+<footer><span>Samuel Llanwarne</span><span>Research and personal projects</span><a href="https://github.com/samllan">Find me on GitHub ↗</a></footer><script src="../assets/atlas.js?v=0ce6d9e03a" defer></script></body></html>

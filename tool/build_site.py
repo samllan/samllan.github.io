@@ -74,6 +74,8 @@ PROJECTS = [
          result='The prototype explores a subset of 484 words. Distance represents shared synonym relationships; size communicates frequency and precision. Search and graph rendering have been checked on the live site.',
          lesson='A network can turn looking up one word into discovering a neighbourhood of related meanings. It represents synonym relationships, not a historical family tree.',
          links=[('Explore the live word map', 'https://samllan.github.io/Words/'), ('Read the source', 'https://github.com/samllan/Words')], visual='words'),
+    dict(id='research-atlas', title='Research Atlas prototype', category='Research tools · Interactive visualisation',
+         image='research-atlas.webp', line='Explore a map of research and compare what papers found.', colour='teal'),
     dict(id='weather', title='The shape of a season', category='AA · Applied mathematics', image='weather.webp',
          line='Modelling seasonal weather with Fourier curves.', colour='ochre',
          intro='At the AA, I used Fourier techniques to model seasonal weather patterns. A year repeats; a seasonal model should be able to join December back to January naturally.',
@@ -193,6 +195,17 @@ def work_card(href, classes, category, title, line, image):
 cards = []
 for p in PROJECTS:
     cards.append(work_card(f"projects/{p['id']}.html", f"{p['colour']} {p['id']}", p['category'], p['title'], p['line'], p['image']))
+    if p['id'] == 'research-atlas':
+        atlas = ROOT / 'site' / 'research-atlas'
+        version = hashlib.sha256(b''.join((atlas / name).read_bytes() for name in ('atlas.css', 'atlas.js'))).hexdigest()[:10]
+        for name in ('atlas.css', 'atlas.js'):
+            shutil.copyfile(atlas / name, OUT / 'assets' / name)
+        body = (atlas / 'page.html').read_text(encoding='utf-8')
+        stylesheet = f'<link rel="stylesheet" href="../assets/atlas.css?v={version}">'
+        script = f'<script src="../assets/atlas.js?v={version}" defer></script>'
+        (OUT / 'projects' / 'research-atlas.html').write_text(
+            document(p['title'], p['line'], body, '../', script, stylesheet), encoding='utf-8')
+        continue
     links = ''.join(f'<a class="button" href="{url}">{label} ↗</a>' for label, url in p['links'])
     if p['id'] == 'phd':
         links += '<a class="button" href="../research/">Explore the research logbook →</a>'
