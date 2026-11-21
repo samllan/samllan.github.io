@@ -74,7 +74,7 @@ PROJECTS = [
          result='The prototype explores a subset of 484 words. Distance represents shared synonym relationships; size communicates frequency and precision. Search and graph rendering have been checked on the live site.',
          lesson='A network can turn looking up one word into discovering a neighbourhood of related meanings. It represents synonym relationships, not a historical family tree.',
          links=[('Explore the live word map', 'https://samllan.github.io/Words/'), ('Read the source', 'https://github.com/samllan/Words')], visual='words'),
-    dict(id='research-atlas', title='Research Atlas prototype', category='Research tools · Interactive visualisation',
+    dict(id='research-atlas', title='Research mapping prototype', category='Research tools · Interactive visualisation',
          image='research-atlas.webp', line='Explore a map of research and compare what papers found.', colour='teal'),
     dict(id='weather', title='The shape of a season', category='AA · Applied mathematics', image='weather.webp',
          line='Modelling seasonal weather with Fourier curves.', colour='ochre',
